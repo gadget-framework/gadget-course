@@ -1,0 +1,32 @@
+---
+title: "A course on Gadget"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+# Preamble
+
+---
+
+
+### Your a priori homework
+
+**Prior to the course** make sure your operating system is a unix derivative, such as linux or macosx, as the code and examples in this course is only tested against these operating systems. Windows should in theory work, but issues related to Windows line endings are known to cause random issues in Gadget. 
+
+To install Gadget follow the [installation guide]
+
+
+# Draft workplan
+
+### Monday
+
+### Tuesday
+
+### Wednesday
+
+### Thursday
+
+### Friday

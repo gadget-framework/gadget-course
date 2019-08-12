@@ -235,39 +235,41 @@ different stages of the life history of a particular species would be
 represented as separate stocks and individuals ``moved'' between
 stocks when required. The simulation takes place in a set number of
 **years** or **observations** and **time-steps** within
-an observation. The time-steps within the observations allow for the
+an observation. Years can be broken down into a maximum of 12 time-steps. 
+The time-steps within the observations allow for the
 emulation of the annual cycles of the ecosystem, such as recruitment
 and stock migrations.
 
 The stock unit within Gadget is simply a representation of the total
-number of individuals in a certain age and length group within a
-certain area. The stocks live in an area, or areas, where they
-optionally migrate to and from. In this setup processes such as fleet
+number of individuals within a certain age and length group from one or 
+more certain area. When stocks live in multiple areas, they
+optionally migrate among areas during definable time-steps. 
+In this setup, processes such as fleet
 harvest or recruitment can be restricted to take place only in certain
 areas. Harvesting of the substocks is defined through fleets that fish
 according to effort and (length--based) selection functions.
 
 Gadget's likelihood module processes the output from the ecosystem
-simulation based on aggregate dimensions. Within the likelihood module
+simulation after aggregating across certain dimensions. Within the likelihood module,
 a number of datasets can be compared to the model output. In addition
 to a suite of functions designed to work with different types of
-survey indices, length distributions, tagging data, age and length
-distribution and maturity data, to name a few, can be contrasted to
-the model output. Each data set is included at its own aggregation
+survey indices, various other types of data , can be contrasted to
+the model output including compositional data (such as length distributions, age distributions, age- and length-distribution, or proportions mature) or tagging data to name a few. Each dataset is compared to model output at its own aggregation
 level, with missing data handled in a robust manner.
 
-In contrast with Gadget, age based or stock production type stock
+In contrast with Gadget, age-based or stock production type stock
 assessments require data in a fairly processed form. For instance when
 using VPA one requires the total catch in numbers of individuals by
 age. However, apart from catches of fin whales in the North Atlantic
 @iwcistfin2015, one rarely has all catches by numbers at
 age. Therefore the age distribution of catches needs to be
 approximated using some combination of age readings, length
-distributions, total catches in tons and weight at age [as noted
-in @hirst2005estimating]. Essentially using VPA requires a two
-step modelling process.
+distributions, total catches in tonnes and weight at age [as noted
+in @hirst2005estimating]. Essentially using VPA requires a two-step
+modelling process.
 
-Gadget's function minimizer, based on the negative log--likelihood, varies the
+Gadget's function minimizer, based on the negative log--likelihood
+(but implemented as a simple sum of squares), varies the
 model parameters, runs a full simulation, and calculates a new
 output. This process is repeated until a minimum is obtained.  The
 model has three alternative optimising algorithms linked to it, a wide
@@ -277,12 +279,12 @@ a local search *Hooke and Jeeves algorithm*
 Broyden-Fletcher-Goldfarb-Shanno algorithm (*BFGS*).
 
 The simulated annealing and Hooke-Jeeves algorithms are not gradient
-based, and there is therefore no requirement fir the likelihood
+based, and there is therefore no requirement for the likelihood
 surface to be smooth. Consequently neither of the two algorithms
 returns estimates of the Hessian matrix. Simulated annealing is more
 robust than Hooke and Jeeves and can find a global optima where there
 are multiple optima but needs about 2-3 times the order of magnitude
-number of iterations than the Hooke and Jeeves algorithm.
+in iterations than the Hooke and Jeeves algorithm to converge.
 
 BFGS is a quasi-Newton optimisation method that
 uses information about the gradient of the function at the current
@@ -303,7 +305,9 @@ different components.  The estimation could be difficult due to groups
 of correlated parameters or multiple local optima.  Therefore the
 optimisation procedure often involves a combination of the more robust
 simulated annealing, to make the results less sensitive to the initial
-(starting) values, and to the local search algorithms (Hooke and
-Jeeves and BFGS) in the neighborhood of the global optima.
+(starting) values, and the local search algorithms (Hooke and
+Jeeves and BFGS), to obtain more accurate final values in the 
+neighborhood of the global optimum.
+
 
 # Bibliography

@@ -9,11 +9,41 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Getting started
 
+Install devtools and Rgadget. Rgadget is under constant construction so please remember to update it regularly (e.g., monthly).
+
 ```{r}
+install.packages('devtools')
+devtools::install_github('hafro/rgadget')
 library(Rgadget)
-library(mfdb)
+#library(mfdb)
 ```
 
+# What is Rgadget?
+
+Gadget was created long before R or even Windows (?), and therefore lacks by itself a
+user-friendly GUI. It is a collection of C++ scripts that comprise its own program,
+similar to how models created using ADMB function. However, running a Gadget 
+requires providing a rather large set of individual text files that specify model
+settings and data. In addition, because it was originally designed as an ecosystem
+simulator, Gadget already has a number of optional features structurally integrated 
+with basic population dynamics, making it extremely flexible for representing a wide
+variety of real-life biological scenarios (e.g., substock structure, length-based
+processes, predator-prey dynamics, temperature-dependent growth). As a result, creating
+more complex models involving a large set of similarly input text files can become
+tedious and error-prone, and can impair reproducability.
+
+Rgadget was intended to be a solution to this problem, by linking the power behind 
+Gadget with the familiar R interface. Therefore, 90% of Rgadget's functionality is file 
+and data handling: it creates files that are in the correct format for Gadget to
+understand them, creates directories for storing those files in organizes sense, takes 
+care of most file dependencies and compatibility issues between files, and creates a
+direct way to input data into such files. It additionally runs Gadget, implements an
+iterative reweighting algorithm to aid with data weighting issues when there are 
+multiple sources of data, reads file output, and merges input and output data so that 
+meaningful illustrative and diagnostic figures can be made (a variety of which come 
+predefined). Rgadget is your friend.
+
+# Using Rgadget
 
 Set up a Gadget directory:
 
@@ -22,7 +52,7 @@ gd <- gadget_directory('simple_model')
 gd
 ```
 
-You will notice that `gd` is just a simple list with the location of the model and what is called the `mainfile`. The main file the root of the Gadget input file structure, specifiying all the paths to the defintition of the ecosystem that is being simulated, such as the stocks and time period. 
+You will notice that `gd` is just a simple list with the location of the model and what is called the `mainfile`. The main file is the root of the Gadget input file structure, specifiying all the paths to the definition of the ecosystem that is being simulated, such as the stocks and time period. 
 
 ```{r engine='tikz', echo=FALSE}
 \usetikzlibrary{arrows,decorations.pathmorphing,decorations.footprints,

@@ -61,6 +61,15 @@ Insert link to 'getting_started.Rmd'?
 
 ### Monday
 
+In next example consider using these headings to be consistent with material 
+getting_started.Rmd:
+## Create new Gadget model input files 
+## Run initial Gadget simulation
+## Modify some Gadget model files
+## Fit initial Gadget statistical model to generate starting values
+## Set optimisation function parameters and fit Gadget statistical model
+## Visualize Gadget statistical model fit
+
 ### Tuesday
 
 ### Wednesday

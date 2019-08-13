@@ -20,7 +20,8 @@ library(Rgadget)
 
 # What is Rgadget?
 
-Gadget was created long before R or even Windows (?), and therefore lacks by itself a
+Gadget was created when Unix workstations were the most powerful and popular operating
+systems available, and therefore lacks by itself a
 user-friendly GUI. It is a collection of C++ scripts that comprise its own program,
 similar to how models created using ADMB function. However, running a Gadget 
 requires providing a rather large set of individual text files that specify model
@@ -34,16 +35,51 @@ tedious and error-prone, and can impair reproducability.
 
 Rgadget was intended to be a solution to this problem, by linking the power behind 
 Gadget with the familiar R interface. Therefore, 90% of Rgadget's functionality is file 
-and data handling: it creates files that are in the correct format for Gadget to
-understand them, creates directories for storing those files in organizes sense, takes 
-care of most file dependencies and compatibility issues between files, and creates a
-direct way to input data into such files. It additionally runs Gadget, implements an
-iterative reweighting algorithm to aid with data weighting issues when there are 
-multiple sources of data, reads file output, and merges input and output data so that 
-meaningful illustrative and diagnostic figures can be made (a variety of which come 
-predefined). Rgadget is your friend.
+and data handling: it creates files that are in a correct format that Gadget understands them, creates directories for storing those files in organizes sense, takes 
+care of main file dependencies and compatibility issues among files, and creates a
+direct pipeline for inserting data into such files. It additionally runs Gadget,
+implements aniterative reweighting algorithm to aid with data weighting issues when
+there are multiple sources of data, reads file output, and merges input and output data
+so that meaningful illustrative and diagnostic figures can be made (a variety of which
+comepredefined). Rgadget is your best friend if you want to quickly make reproducable,
+trackable, and sharable models using Gadget.
+
+Gadget has a variety of convenience functions included that will become more visible
+as examples are walked through, but the main types of functions to recognize include:
+
+1. file creation functions (e.g, gadgetstock, gadgettime, gadgetfleet,
+gadgetlikelihood, gadgetfile, gadgetdata, etc.), 
+2. file I/O functions (e.g.,write.gadget.file, read.gadget.file, read.gadget.data,
+read.gadget.likelihood, etc.), 
+3. file modification functions (e.g., init_guess, gadget_update), 
+4. functions that run Gadget (e.g., callGadget, gadget.iterative, gadget.forward), 
+5. functions that compile input and output and create plots to analyze model fits 
+(e.g., gadget.fit, bind.gadget.fit).
+
+Using this set of functions, the general work flow for using Gadget to fit a statistical
+model via Rgadget is demonstrated in our examples and follows the pattern:
+
+1. Create new Gadget input file objects within R and write them to disk to comprise an
+initial Gadget model structure.
+2. Run an initial Gadget simulation to test files and conveniently create input
+paramater files. 
+3. Read certain Gadget model files back into R, so that they can be modified and then
+overwritten. 
+4. Run an initial Gadget fitting procedure to conveniently create more input files
+(i.e., decent starting values).
+5. Set optimisation function parameters and run a statistical Gadget model run using
+reiteraive weighting to determine relative contribution of each data source to the
+objective function.
+6. Visualize the model fit.
+
+As most programming errors and debugging occur in steps 1 - 4, 90% of this course will
+focus on these steps. Statistical model fitting and visualization will be demonstrated,
+but details regarding the statistical theory behind fitting procedures, analysis of
+model fit, and diagnostics are beyond the scope of this course.
 
 # Using Rgadget
+
+## Create new Gadget model input files 
 
 Set up a Gadget directory:
 
@@ -133,4 +169,21 @@ gadgetfile('Modelfiles/time',
 ```
 
 
-areas on which the model will operate. 
+areas on which the model will operate. ]
+
+## Run initial Gadget simulation
+
+
+
+
+This section has demonstrated a simple implementation of steps 1 - 2. A more complex 
+implementation using all steps will be presented in the next sections of the course.
+
+## Modify some Gadget model files
+
+## Fit initial Gadget statistical model to generate starting values
+
+## Set optimisation function parameters and fit Gadget statistical model
+
+## Visualize Gadget statistical model fit
+

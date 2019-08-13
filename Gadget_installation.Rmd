@@ -1,0 +1,84 @@
+---
+title: "Gadget installation"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Gadget is housed on the MFRI github site https://github.com/Hafro/gadget. Basic
+installation instructions can be found there, below they are given step-by-step. Notice
+that the extremely useful resource 'Gadget User Guide' is included with the installation.
+
+# Prerequisites
+
+To compile Gadget one needs a working C++ compiler and a version of Make installed on the
+computer.
+
+## Linux
+
+The compiler and Make should be installed automatically on most linux distributions but on ubuntu one needs to install build-essentials:
+```
+sudo apt-get install build-essential
+```
+
+## Mac
+
+It should be sufficient to install XCode through the Appstore and through XCode's preferences install commandline tools.
+
+## Windows
+
+The easiest way is to install uses
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/) . During the install process 
+allow the installer to append to the system path.
+
+# Download, compile and install
+
+## Standard procedure
+
+To install Gadget you can simply click the "download as a zip file" button. Unzip this file and within command prompt/terminal application make your way to the resulting folder, typically called gadget-master, and simply type:
+```
+make
+```
+Recommended: for convenience you may want to install the resulting gadget executable to a location in the system path, thus allowing the gadget executable to called in any directory. On *nix based system you can simply type:
+```
+sudo make install
+```
+Be aware of where your gadget executable is located (for example by searching for
+'gadget' on your computer). Whenever Gadget is run via Rgadget, this executable will be
+called, so Gadget's path should be listed within R as a search path. This should be
+automatic if installed using 'sudo'.
+
+## Recommended: via Git
+
+We recommend installing via Git because it provides for easy updating and if you don't
+already use git, then this is a good time to start: can be extremely useful later for
+version control and sharing of your Gadget models while under development. This subject
+will be touched upon on the last day of the course. To download and/or install Git, follow the instructions found
+[here](https://www.linode.com/docs/development/version-control/how-to-install-git-on-linux-mac-and-windows/). 
+Note that Git comes prepackaged with Linux systems so it only needs to be installed via 
+the instructions on that website.
+
+Next, Gadget can be cloned (rather than downloaded) from the github website using Git. 
+From terminal, use: [IS AN ACCOUNT NECESSARY FOR THIS?]
+
+```
+git clone git@github.com:Hafro/gadget.git
+```
+Navigate to the gadget directory, then install:
+```
+cd <gadget path>
+cd gadget
+make -j 8 [is this necessary?]
+sudo make install
+```
+To check that gadget is installed, you can try opening the manual:
+```
+man gadget
+```
+To update, navigate to the gadget directory then use:
+```
+git pull
+make
+```

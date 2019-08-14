@@ -8,7 +8,7 @@ bibliography: library.bib
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-# General context of Gadget models
+# General context of Gadget
 
 Ecosystem considerations appear to be an obvious, and necessary part,
 of the management of marine resources. Several international

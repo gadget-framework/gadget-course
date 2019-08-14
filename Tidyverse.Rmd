@@ -1,8 +1,6 @@
 ---
   title: "Tidyverse"
-author: "Pamela J. Woods"
-date: "13/08/2019"
-output: html_document
+  output: html_document
 ---
 
 ```{r setup, include=FALSE}
@@ -32,17 +30,19 @@ aids reproducability of any project as well as the ability to collaborate on a p
 
 ## Tibbles
 
-First we need to indstall and load Tidyverse. After that we can have a look at what at 
+First we need to install and load Tidyverse. After that we can have a look at what at 
 the main form of data storage, called a tibble:
-```{r tidyverse}
+```{r tidyverse, eval = FALSE}
 install.packages('tidyverse')
 install.packages('nycflights13') # this is an example data package
 ```
 
-```{r tibble}
+```{r tibble, echo = FALSE}
 library(tidyverse)
+```
+
+```{r tibble2}
 library(nycflights13)
-flights
 ```
 
 Note that a tibble is essentially the same as a data frame (for example made with data.frame) but with some useful information printed (e.g., dimensions and data types), as well as some restrictions placed on how it an be manipulated. These help prevent common errors. For example, recycling is possible as it is in data frames but less flexible:
@@ -50,7 +50,7 @@ Note that a tibble is essentially the same as a data frame (for example made wit
 ```{r tibbleerror}
 
 flights$year <- c(2013, 2014)
-flights$year <- rep(2014, 7)
+try(flights$year <- rep(2014, 7))
 
 ```
 
@@ -93,16 +93,16 @@ flights %>%
 ```
 In the above code, the flight tibble was piped into the 'select' function, which indexed
 its 15th and 16th rows only. 'Select' does not require an argument where flights is
-referenced because it comes from within tidyverse, so comes already compatible with 
-piping. Note that selecting by column name (no quotations needed) is also possible and
+referenced because it was built to accept a piped argument implicitly. Note that
+selecting by column name (no quotations needed) is also possible and
 more useful in most cases. After being piped to 'select', the result was then piped to 
-the function 'apply'. 'Apply' is an old function that is not pipe-friendly; therefore, 
-it requires the placeholder '.', which represents 'that which is piped', to be placed 
+the function 'apply'. 'Apply' is an older function that is not built to implicitly
+accept piped objects; therefore, it requires the placeholder '.' to be placed 
 where the input data frame is expected. Finally, this modified data frame 
 is assigned to 'sub' at the end, but alternatively it could have been assigned at the 
 beginning as in the non-piped version.
 
-#The power of tidyverse: all you need in a handful of functions
+# The power of tidyverse: all you need in a handful of functions
 
 As in the 'select' function, there are a variety of functions that come with the
 tidyverse package, but only a small set are needed to do almost any kind of data 
@@ -127,7 +127,7 @@ certain criteria that define how rows are compatible (i.e., joining in relationa
 databases)
 
 Below is an example of how the function 'apply' in the previous example can be replaced
-using tidverse commands, as well as functions such as 'aggregate' using 'group_by' and 'summarise'
+using tidyverse commands, as well as functions such as 'aggregate' using 'group_by' and 'summarise'
 
 ```{r replace}
   flights %>%
@@ -135,7 +135,7 @@ using tidverse commands, as well as functions such as 'aggregate' using 'group_b
   summarise(mn_airtime = mean(air_time, na.rm = T),
             mn_distance = mean(distance))
 
- # or if the operation should occur within groups:
+ # or if the operation should occur by groupings:
   flights %>%
   select(dest, air_time, distance) %>%
   group_by(dest) %>% 
@@ -144,239 +144,379 @@ using tidverse commands, as well as functions such as 'aggregate' using 'group_b
 ```
 
 Here is a smattering of demonstrations on how to use the other important functions and their equivalents in base R:
-```{r smattering}
+
+### filter()
+```{r smat filter}
 
 #filter()
 flights[flights$month==3 & flights$dest=="DEN",]
 
 flights %>% 
   filter(month == 3, dest == "DEN")
+```
 
-#arrange()
-o <- order(flights$weight_gutted)
-flights[o,]
+### arrange()
+```{r smat arrange}
+o <- order(flights$distance)
+flights[o,c('year','month','day','distance')]
+flights[rev(o),c('year','month','day','distance')]
 
 flights %>% 
-  arrange(desc(weight_gutted))
+  select(year, month, day, distance) %>% 
+  arrange(distance)
 
-#rename()
+flights %>% 
+  select(year, month, day, distance) %>% 
+  arrange(desc(distance))
+```
+
+### rename()
+```{r smat rename}
 flights2 <- data.frame(flights, year2 = flights$year)
-flights2 <- as.tibble(flights2[c(dim(flights2)[2],2:(dim(flights2)[2]-1))])
+flights2 <- as_tibble(flights2[c(dim(flights2)[2],2:(dim(flights2)[2]-1))])
+flights2
 
 flights2 <- 
   flights %>% 
   rename(year2 = year)
+flights2
+```
 
-#mutate()
-flights2 <- data.frame(flights, air_time_hr = flights$air_time/60, distance_1000m = flights$distance/1000)
+### mutate()
+```{r smat mutate}
+flights2 <- as_tibble(data.frame(flights, air_time_hr = flights$air_time/60, distance_1000m = flights$distance/1000))
+
 
 flights2 <-
   flights %>% 
   mutate(air_time_hr = air_time/60, distance_1000m = distance/1000)
+flights2
+```
+### group_by() with count()
+```{r smat count}
 
 #count() with group_by()
+#this yields data in a 'long' format
 flights2a <- t(table(flights[,c('origin', 'dest')]))
-
+head(flights2a)
+#this yields 'tidy' data
 flights2 <- 
   flights %>% 
   group_by(origin, dest) %>% 
   count()
-
-#using spread() / gather() to get into the same tidy format generated by count():
-flights2 <-
-  flights2a %>% 
-  as.tibble() %>% 
-  gather(key = origin, value = n, -c(dest))
+flights2
+```
+### spread() / gather() to convert between long and tidy formats:
+```{r smat spread}
   
+flights2b <-
+  flights2 %>% 
+  as_tibble() %>% 
+  spread(key = origin, value = n, fill = 0)
 
-is.na(c(NA,'2','3'))
-dat5 <- data.frame(x = c(NA,'2','3'), y = 1:3)
-dat5 %>% 
-  #filter(x == NA) # doesn't work!
-  filter(is.na(x))
-dat5[-3,]
-dat5[!is.na(dat5$x),]
+#result in the same formats 
+flights2b
+head(flights2a) 
 
-summary(dat)
+flights2b %>% 
+  gather(key = origin, value = n, -dest) %>% 
+  filter(n!=0)
+head(flights2)
 
-gear_table<-
-  data.frame(
-    gear=as.factor(c(1,2,73)), 
-    gear_name=c('gill', 'line', 'trawl')
-  )
+```
 
-flights %>% 
-  left_join(gear_table) %>% 
-  View()
+## Plotting in tidyverse
 
-flights %>% 
-  left_join(
-    flights %>% 
-      group_by(rect) %>% 
-      summarise(length_mn = mean(length))
-  ) %>% 
-  View()
+Tidyverse also uses ggplot2, which is intended to simplify the process of creating plots
+so that data can be quickly and easily visualized as an iterative component of the
+exploratory analysis process. Some advantages include an clear method for translating
+data to visuals, having many preconfigured attributes available, and being able to build
+and modify previously stored plot objects without needing to recreate them. A downside
+is that to take advantage of the full power and flexibility of ggplot2 requires a wide
+knowledge of what is available as options to include in graphics, and therefore involve
+a long learning curve. However, the ultimate results are well worth the 
+learning investment. For a basic explanation and cheat sheet see
+[here](https://ggplot2.tidyverse.org/)
 
+# ggplot: Key components
 
-#general population processes?
-par(mfrow = c(1,1))
-plot(liver_weight ~ weight_ungutted, data = dat)
+ggplot has __three__ key components: 
 
-plot(log(liver_weight) ~ log(weight_gutted), data = dat, cex = 0.2)
+1.  __data__, this must be a `data.frame`
 
-log(c(1,2,3,4,5))
-exp(c(9,10))
+2. A set of aesthetic mappings (`aes`) between variables in the data and 
+   visual properties, and 
 
-plot(log(weight_gutted) ~ log(liver_weight), dat = dat, cex = 0.2)
-points(log(weight_ungutted) ~ log(liver_weight), dat = dat, cex = 0.2, col='red')
+3. At least one `layer` which describes how to render each observation.
 
-plot(log(weight_gutted) ~log(weight_ungutted), dat = dat, cex = 0.2, col = 'blue')
-
-#spatial variation?
-
-plot(log(weight_gutted) ~ log(weight_ungutted), data = dat, cex = 0.2, type = 'n')
-
-for(i in unique(flights$rect)){
-  
-  points(log(weight_gutted) ~ log(weight_ungutted), 
-         dat = flights[flights$rect==i,],
-         cex = 0.2, col = i)
-
-}
-
-#simulate spatial variation...
-spat <- ifelse(flights$rect %in% 
-                 as.character(c(321, 322, 363, 364, 370, 371, 372, 374)), 
-               1000, 0)
-
-dat <- data.frame(dat, spat)
-
-#spatial variation?
-
-plot(log(weight_gutted) ~ log(weight_ungutted), dat = dat, cex = 0.2, type = 'n')
-for(i in unique(flights$rect)){
-  points(log(weight_gutted + spat) ~ log(weight_ungutted), 
-         data = flights[flights$rect==i,], cex = 0.2, col = i)
-}
-
-boxplot(log(weight_gutted)~rect, data = dat)
-
-#biological 
-
-plot(weight_gutted ~ length, dat = dat, cex = 0.2, type = 'n')
-points(weight_gutted ~ length, data = dat, cex = 0.2, col=2)
-
-plot(log(weight_gutted) ~ log(length), dat = dat, cex = 0.2, type = 'n')
-points(log(weight_gutted) ~ log(length), data = dat, cex = 0.2, col=2)
-
-
-plot(log(weight_gutted) ~ log(length), dat = dat, cex = 0.2, type = 'n')
-for(i in unique(flights$rect)){
-  points(log(weight_gutted) ~ log(length), 
-         data = flights[flights$rect==i,], cex = 0.2, col = i)
-}
-
-boxplot(log(length)~rect, data = dat)
-
-plot(length ~ age, dat = dat, cex = 0.2, type = 'n')
-for(i in unique(flights$rect)){
-  points(length ~ age, 
-         data = flights[flights$rect==i,], cex = 0.2, col = i)
-}
-
-#Does liver weight, given body weight vary spatially?
-par(mfrow=c(1,1))
-plot(liver_weight ~ weight_gutted, dat = dat, cex = 0.2)
-plot(liver_weight ~ log(weight_gutted), dat = dat, cex = 0.2)
-plot(log(liver_weight) ~ log(weight_gutted), dat = dat, cex = 0.2)
-
-hist(flights$liver_weight/flights$weight_gutted)
-hist(log(flights$liver_weight)/log(flights$weight_gutted))
-
-liv1.lm<- lm(log(liver_weight) ~ log(weight_gutted), dat = dat)
-summary(liv1.lm)
-
-liv1.lm<- lm(log(liver_weight) ~ log(weight_gutted) + rect, dat = dat)
-summary(liv1.lm)
-
-liv1.lm<- lm(log(liver_weight) ~ log(weight_gutted)*gender, dat = dat)
-summary(liv1.lm)
-
-
-
-
-#Exporting plots
-
-pdf(paste(exportto, 'PrettyPlot.pdf', sep = ''), width = 8, height = 4)
-
-df <- layout(
-  matrix(3:1, nrow = 1, ncol = 3)
-  )
-#layout.show(df)
-
-par(mar = c(0,0,0,0), oma = c(3,3,1,1))
-
-#div <- as.factor(floor(flights$rect/100)
-#blank plot
-plot(c(liver_weight^(1/3)) ~ c(weight_gutted^(1/3)), data = dat, 
-     cex = 0.2, xlab = '', ylab = '', xaxt = 'n', yaxt = 'n', bty = 'L')
-
-#add data
-for(i in levels(flights$rect)){
-  points(c( liver_weight^(1/3) ) ~ c( weight_gutted^(1/3) ), 
-         data = flights[flights$rect==i,],
-         cex = 0.2, col = i)
-}
-
-#add features
-axis(1, labels = c(5,10,15,20)^3, at = c(5,10,15,20))
-axis(2, labels = seq(2,12,2)^3, at = seq(2,12,2))
-mtext('Gutted weight (g)', 1, 2)
-mtext('Liver weight', 2, 2)
-
-plot(1:3, 1:3)
-
-plot(5:2, 2:5)
-
-
-dev.off()
-
-###Check out ggplot2
-plot1 <-
+```{r}
+sub <- 
   flights %>% 
-  mutate(rect2 = as.factor(floor(as.numeric(rect)/10))) %>% 
-  ggplot(aes(length, weight_gutted, color = gender)) + 
+  sample_n(100, replace = F) %>% 
+  filter(!is.na(distance), !is.na(air_time), !is.na(origin), !is.na(month), !is.na(dest))
+
+ggplot(data = sub, aes(x = distance, y = air_time)) + geom_point()
+```
+
+Different syntax, equivalent outcome:
+
+```{r, eval = FALSE}
+ggplot(sub, aes(distance, air_time)) + geom_point()
+ggplot()                    + geom_point(data = sub, aes(distance, air_time))
+ggplot(data = sub)            + geom_point(aes(x = distance, y = air_time))
+ggplot(sub)                   + geom_point(aes(distance, air_time))
+```
+
+Can be stored as an object for later use. This is a useful feature of Rgadget: because 
+default plots are created in ggplot, they can be stored and modified by the user at a
+later point.
+
+```{r}
+p <- ggplot(sub, aes(distance, air_time)) + geom_point()
+```
+
+The class:
+```{r}
+class(p)
+```
+The structure (a bit of Latin - not run here):
+```{r, eval = FALSE}
+str(p)
+```
+
+# aesthetic
+
+Adding more variables to a two dimensional scatterplot can be done by mapping the variables to an aesthetic (colour, fill, size, shape, alpha)
+
+### colour
+
+```{r, out.width = "50%", fig.show = "hold"}
+p <- ggplot(sub, aes(distance, air_time))
+p + geom_point(aes(colour = origin))
+p + geom_point(aes(colour = dest))
+```
+
+Manual control of colours or other palette schemes (here brewer):
+```{r, out.width = "50%", fig.show = "hold"}
+p + geom_point(aes(colour = origin)) +
+  scale_colour_manual(values = c("orange","brown","green"))
+p + geom_point(aes(colour = dest)) +
+  scale_colour_brewer(palette = "Set1")
+```
+
+Note, to view all the brewer palettes do:
+```{r, eval = FALSE}
+RColorBrewer::display.brewer.all()
+```
+
+
+
+### shape
+
+```{r}
+p + geom_point(aes(distance, air_time, shape = origin))
+```
+
+### size
+
+```{r}
+p + geom_point(aes(distance, air_time, size = month))
+```
+
+One can also "fix" the aesthetic manually, e.g.:
+
+```{r}
+ggplot(sub, aes(distance, air_time)) + geom_point(colour = "blue", shape = 8, size = 10)
+```
+
+Note here that the call to colour, shape, etc. is done outside the `aes`-call. One can also combine calls inside and outside the `aes`-function (here we showing overlay of adjacent datapoints):
+```{r}
+p + geom_point(aes(distance, air_time, size = month), alpha = 0.3, col = "red")
+```
+
+
+# Facetting
+
+Splitting a graph into subsets based on a categorical variable. 
+
+```{r}
+ggplot(sub) + 
+  geom_point(aes(distance, air_time, colour = as.factor(year))) + 
+  facet_wrap(~ origin)
+```
+
+One can also split the plot using two variables using the function `facet_grid`:
+
+```{r}
+ggplot(sub) +
+  geom_point(aes(distance, air_time)) +
+  facet_grid(as.factor(year) ~ origin)
+```
+
+# Adding layers
+
+The power of ggplot comes into place when one adds layers on top of other layers. Let's for now look at only at two examples.
+
+### Add a line to a scatterplot
+
+```{r}
+ggplot(sub, aes(distance, air_time)) +
   geom_point() +
-  facet_wrap(~rect2)
-
-plot2 <-
-  plot1 + 
-  geom_hline(aes(yintercept = mn_wt_gutted),
-             data = 
-               flights %>% 
-               mutate(rect2 = as.factor(floor(as.numeric(rect)/10))) %>% 
-               group_by(rect2) %>% 
-               summarise(mn_wt_gutted = mean(weight_gutted),
-                         mn_length = mean(length)))
-
-pdf(paste(exportto, 'PrettyPlot2.pdf', sep = ''), width = 4, height = 4)
-    
-  print(plot2)
-    
-dev.off()
-
-summary(liv1.lm)
-
-qqnorm(liv1.lm$res); qqline(liv1.lm$residuals)
-
+  geom_line()
 ```
 
-## Including Plots
+### Add a smoother to a scatterplot
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
+```{r, out.width = "33%", fig.show = "hold"}
+p <- ggplot(sub, aes(distance, air_time))
+p + geom_point() + geom_smooth()
+p + geom_point() + geom_smooth(method = "lm")
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r, echo = FALSE}
+ggplot(sub, aes(distance, air_time, colour = origin)) + 
+  geom_point() + 
+  geom_smooth() +
+  facet_wrap(~ as.factor(year)) +
+  scale_colour_brewer(palette = "Set1")
+```
+
+
+# Statistical summary graphs
+___
+
+There are some useful *inbuilt* routines within the ggplot2-packages which allows one to create some simple summary plots of the raw data.
+
+### bar plot
+
+One can create bar graph for discrete data using the `geom_bar`
+
+```{r}
+ggplot(sub, aes(dest)) + geom_bar()
+```
+
+The graph shows the number of observations we have of each destination. The original data is first transformed behind the scene into a table of counts, before being rendered. 
+
+### histograms
+
+For continuous data one uses the `geom_histogram`-function (left default bin-number, right bindwith specified as 50 mins): 
+
+```{r, out.width = "50%", fig.show = "hold"}
+p <- ggplot(sub, aes(air_time))
+p + geom_histogram()
+p + geom_histogram(binwidth = 50)
+```
+
+One can add another variable (left) or better use facet (right):
+
+```{r, out.width = "50%", fig.show = "hold"}
+p + geom_histogram(aes(fill = origin))
+p + geom_histogram() + facet_wrap(~ origin, ncol = 1)
+```
+
+### Frequency polygons
+
+Alternatives to histograms for continuous data are frequency polygons:
+```{r, out.width = "50%", fig.show = "hold"}
+p + geom_freqpoly(lwd = 1)
+p + geom_freqpoly(aes(colour = origin), lwd = 1)
+```
+
+### Box-plots
+
+Boxplots, which are more condensed summaries of the data than histograms, are called using `geom_boxplot`. Here two versions of the same graph are used, the one on the left is the default, but on the right we have reordered the maturity variable on the x-axis such that the median value of length increases from left to right:
+```{r, out.width = "50%", fig.show = "hold"}
+ggplot(sub, aes(dest, air_time)) + geom_boxplot()
+p <- ggplot(sub, aes(reorder(dest, air_time), air_time)) + geom_boxplot()
+p
+```
+
+It is sometimes useful to plot the "raw" data over summary plots. Using `geom_point` as an overlay is sometimes not very useful when points overlap too much; `geom_jitter` can sometimes be more useful:
+
+```{r, out.width = "50%", fig.show = "hold"}
+p + geom_point(colour = "red", alpha = 0.5, size = 1)
+p + geom_jitter(colour = "red", alpha = 0.5, size = 1)
+```
+
+Read the help on `geom_violin` and create a code that results in this plot:
+
+```{r, echo = FALSE}
+ggplot(sub, aes(reorder(dest, air_time), air_time)) + 
+  geom_violin(scale = "width") +
+  geom_jitter(col = "red", alpha = 0.5, size = 1)
+```
+
+</div>
+</div>
+### Other statistical summaries
+
+Using `stat_summary` one can call specific summary statistics. Here are examples of 4 plots, going from top-left to bottom right we have:
+
+* Raw data with median length at age (red) superimposed
+* A pointrange plot showing the mean and the range
+* A pointrange plot showing the mean and the standard error
+* A pointrange plot showing the bootstrap mean and standard error
+
+```{r, out.width = "50%", fig.show = "hold"}
+sub$distance <- round(sub$distance)
+p <- ggplot(sub, aes(distance, air_time))
+p + geom_point(alpha = 0.25) + stat_summary(fun.y = "median", geom = "point", colour = "red")
+p + stat_summary(fun.y = "mean", fun.ymin = "min", fun.ymax = "max", geom = "pointrange")
+p + stat_summary(fun.data = "mean_se")
+p + stat_summary(fun.data = "mean_cl_boot")
+```
+
+# Some controls
+
+### labels
+
+```{r}
+p <- ggplot(sub, aes(distance, air_time, colour = origin)) + geom_point()
+p + labs(x = "Distance (miles)", y = "Air time (minutes)", 
+         colour = "Origin", 
+         title = "My flight plot",
+         subtitle = "My nice subtitle",
+         caption = "My caption")
+```
+
+### Legend position
+
+```{r, out.width = "50%", fig.show = "hold"}
+p + theme(legend.position = "none")
+p <- p + theme(legend.position = c(0.8, 0.3))
+p
+```
+
+### breaks
+
+Controls which values appear as tick marks
+
+```{r}
+p +
+  scale_x_continuous(breaks = seq(5, 45, by = 10)*100) +
+  scale_y_continuous(breaks = seq(50, 400, by = 50))
+```
+
+### limits
+
+```{r, out.width = "50%", fig.show = "hold"}
+p + ylim(100, 500)
+p + ylim(NA, 500) # setting only upper limit
+```
+
+
+
+# Further readings
+___
+
+* The ggplot2 site: http://ggplot2.tidyverse.org
+* The ggplot2 book in the making: https://github.com/hadley/ggplot2-book
+    - A rendered version of the book: http://www.hafro.is/~einarhj/education/ggplot2
+        - needs to be updates
+* [R4DS - Data visualisation](http://r4ds.had.co.nz/data-visualisation.html)
+* R graphics cookbook: http://www.cookbook-r.com/Graphs
+* [Data Visualization Cheat Sheet](https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf)
+
+
+

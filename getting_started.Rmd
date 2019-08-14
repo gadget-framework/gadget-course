@@ -92,7 +92,7 @@ Gadget with the familiar R interface. Therefore, 90% of Rgadget's functionality 
 and data handling: it creates files that are in a correct format that Gadget understands them, creates directories for storing those files in organizes sense, takes 
 care of main file dependencies and compatibility issues among files, and creates a
 direct pipeline for inserting data into such files. It additionally runs Gadget,
-implements aniterative reweighting algorithm to aid with data weighting issues when
+implements an iterative reweighting algorithm to aid with data weighting issues when
 there are multiple sources of data, reads file output, and merges input and output data
 so that meaningful illustrative and diagnostic figures can be made (a variety of which
 comepredefined). Rgadget is your best friend if you want to quickly make reproducable,
@@ -101,10 +101,9 @@ trackable, and sharable models using Gadget.
 Gadget has a variety of convenience functions included that will become more visible
 as examples are walked through, but the main types of functions to recognize include:
 
-1. file creation functions (e.g, gadgetstock, gadgettime, gadgetfleet,
-gadgetlikelihood, gadgetfile, gadgetdata, etc.), 
-2. file I/O functions (e.g.,write.gadget.file, read.gadget.file, read.gadget.data,
-read.gadget.likelihood, etc.), 
+1. file creation functions (e.g, gadgetfile, gadgetstock, gadgettime, gadgetfleet,
+gadgetlikelihood, gadgetdata, etc.), 
+2. file I/O functions (e.g.,write.gadget.file, read.gadget.file, etc.), 
 3. file modification functions (e.g., init_guess, gadget_update), 
 4. functions that run Gadget (e.g., callGadget, gadget.iterative, gadget.forward), 
 5. functions that compile input and output and create plots to analyze model fits 
@@ -136,7 +135,13 @@ As always you will need to load it into memory:
 ```{r}
 library(Rgadget)
 ```
-For convenience Rgadget will also load the tidverse package as it is used extensively when interacting with Gadget.  
+For convenience Rgadget will also load the tidverse package as it is used extensively when interacting with Gadget. We will introduce the functions in Rgadget as we go through the tutorial. Now we will focus on setting up a simple dummy model using the `gadgetfile` function and related functions. `gadgetfile` creates new files in a format that coheres to the Gadget file format. 
+```{r}
+gadgetfile('test',file_type = 'generic', 
+           components = list(a=list(bla=1),
+                             b=list(ble=1)))
+```
+The file type argument allows function to customize the output depending to the various quirks of the file. The output can then subsequently be written to a file using `write.gadget.file`. 
 
 ## Create new Gadget model input files 
 
@@ -157,7 +162,7 @@ schedule <-
   arrange(year)
 ```
 
-and create a new `time` file:
+and create a new `time` file using `gadgetfile` by explicitly setting the file type as 'time':
 
 ```{r}
 ## think about writing a special function for this using the schedule data.frame
@@ -173,25 +178,47 @@ gadgetfile('Modelfiles/time',
 ```
 
 
-Since Gadget allows for simulation in multiple areas these need to be explicitly defined. Various processes, such as fleet operations and migrations, in the model can then be explicitly defined by area. The areas are defined similarly:
+Since Gadget allows for simulations in multiple areas these need to be explicitly defined. Various processes, such as fleet operations and migrations, in the model can then be explicitly defined by area. As for the time file the areas are defined in the area file which you can create using `gadgetfile`:
 
 ```{r}
 gadgetfile('Modelfiles/area',
            file_type = 'area',
-           list(list(areas = 1,
-                     size = 1,
-                     temperature= schedule %>% mutate(area = 1, temperature = 5)))) %>% 
+           components = list(list(areas = 1,
+                                  size = 1,
+                                  temperature= schedule %>% mutate(area = 1, temperature = 5)))) %>% 
   write.gadget.file(gd)
 ```
 The areas are defined with attributes, size of the area and average temperature for each time step. Note although these attributes are rarely used in practice they will need to by defined for all areas and time steps in order for the simulation to run.  
 
-Now we will create a simple stock that does not do much:
+Rgadget has a number of convenience functions when dealing with more complicated files. These functions are all derivatives of `gadgetfile` and thus can be written to file using `write.gadget.file`. We will start off by creating a skeleton stock file:
+
 ```{r}
-gadgetstock('simple_stock',gd,missingOkay = TRUE) %>% 
+stock <- gadgetstock('simple_stock',gd,missingOkay = TRUE)
+stock
+```
+
+This stock file is not a valid file so we will need to edit the `stock` object. This is done using `gadget_update` which, as the name suggests, allows to you to update individual components of the file. The first argument to `gadget_update` after the stock file is the name of the component you want update followed by the variables within the component you want to update. So let's start by setting mininum and maximum age and other similar attributes in the stock component:
+
+```{r}
+  stock %>% 
   gadget_update('stock',
                 livesonareas = 1,
-                minage = 1,
                 maxage = 1,
+                minage = 1,
+                minlength = 0,
+                maxlength = 2,
+                dl = 1)
+```
+
+We can of course do multiple edits using `gadget_update` in one go:
+
+```{r}
+stock <- 
+  stock %>% 
+  gadget_update('stock',
+                livesonareas = 1,
+                maxage = 1,
+                minage = 1,
                 minlength = 0,
                 maxlength = 2,
                 dl = 1) %>% 
@@ -206,11 +233,15 @@ gadgetstock('simple_stock',gd,missingOkay = TRUE) %>%
                                      mean = 1,
                                      stddev = .1,
                                      alpha = 1,
-                                     beta = 1)) %>% 
+                                     beta = 1))
+stock %>% 
   write.gadget.file(gd)
+stock
 ```
 
-This essentially creates a stock with 1 fish that does not grow, consume or die for the duration of the simulation. Behind the scenes R has created a folder named `simple_model` with all the necessary files:
+
+
+This essentially creates a stock with 1000 fish that do not grow, consume or die for the duration of the simulation. Behind the scenes R has created a folder named `simple_model` with all the necessary files:
 ```{r}
 fs::dir_ls(gd)
 ```
@@ -230,6 +261,14 @@ This gives you a warning that no understocking likelihood is available. The unde
 read_lines(paste(gd,'simple_log',sep='/')) 
 ```
 If and when you have errors the log file is the best place to start trying to figure out where the error occurs. 
+
+We can now gather the output from the model using `gadget.fit`:
+```{r}
+fit <- gadget.fit(wgts = NULL,gd = list(dir=gd))
+fit
+```
+
+
 
 ## Run initial Gadget simulation
 

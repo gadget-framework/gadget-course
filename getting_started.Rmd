@@ -11,11 +11,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Install devtools and Rgadget. Rgadget is under constant construction so please remember to update it regularly (e.g., monthly).
 
-```{r}
+```{r setupRgadget, eval=FALSE}
 install.packages('devtools')
 devtools::install_github('hafro/rgadget')
-library(Rgadget)
-#library(mfdb)
 ```
 
 # What is Rgadget?
@@ -33,64 +31,7 @@ processes, predator-prey dynamics, temperature-dependent growth). As a result, c
 more complex models involving a large set of similarly input text files can become
 tedious and error-prone, and can impair reproducability.
 
-Rgadget was intended to be a solution to this problem, by linking the power behind 
-Gadget with the familiar R interface. Therefore, 90% of Rgadget's functionality is file 
-and data handling: it creates files that are in a correct format that Gadget understands them, creates directories for storing those files in organizes sense, takes 
-care of main file dependencies and compatibility issues among files, and creates a
-direct pipeline for inserting data into such files. It additionally runs Gadget,
-implements aniterative reweighting algorithm to aid with data weighting issues when
-there are multiple sources of data, reads file output, and merges input and output data
-so that meaningful illustrative and diagnostic figures can be made (a variety of which
-comepredefined). Rgadget is your best friend if you want to quickly make reproducable,
-trackable, and sharable models using Gadget.
-
-Gadget has a variety of convenience functions included that will become more visible
-as examples are walked through, but the main types of functions to recognize include:
-
-1. file creation functions (e.g, gadgetstock, gadgettime, gadgetfleet,
-gadgetlikelihood, gadgetfile, gadgetdata, etc.), 
-2. file I/O functions (e.g.,write.gadget.file, read.gadget.file, read.gadget.data,
-read.gadget.likelihood, etc.), 
-3. file modification functions (e.g., init_guess, gadget_update), 
-4. functions that run Gadget (e.g., callGadget, gadget.iterative, gadget.forward), 
-5. functions that compile input and output and create plots to analyze model fits 
-(e.g., gadget.fit, bind.gadget.fit).
-
-Using this set of functions, the general work flow for using Gadget to fit a statistical
-model via Rgadget is demonstrated in our examples and follows the pattern:
-
-1. Create new Gadget input file objects within R and write them to disk to comprise an
-initial Gadget model structure.
-2. Run an initial Gadget simulation to test files and conveniently create input
-paramater files. 
-3. Read certain Gadget model files back into R, so that they can be modified and then
-overwritten. 
-4. Run an initial Gadget fitting procedure to conveniently create more input files
-(i.e., decent starting values).
-5. Set optimisation function parameters and run a statistical Gadget model run using
-reiteraive weighting to determine relative contribution of each data source to the
-objective function.
-6. Visualize the model fit.
-
-As most programming errors and debugging occur in steps 1 - 4, 90% of this course will
-focus on these steps. Statistical model fitting and visualization will be demonstrated,
-but details regarding the statistical theory behind fitting procedures, analysis of
-model fit, and diagnostics are beyond the scope of this course.
-
-# Using Rgadget
-
-## Create new Gadget model input files 
-
-Set up a Gadget directory:
-
-```{r}
-gd <- gadget_directory('simple_model')
-gd
-```
-
-You will notice that `gd` is just a simple list with the location of the model and what is called the `mainfile`. The main file is the root of the Gadget input file structure, specifiying all the paths to the definition of the ecosystem that is being simulated, such as the stocks and time period. 
-
-```{r engine='tikz', echo=FALSE}
+```{r engine='tikz', echo=FALSE,eval=FALSE}
 \usetikzlibrary{arrows,decorations.pathmorphing,decorations.footprints,
 fadings,calc,trees,mindmap,shadows,decorations.text,patterns,positioning,shapes,matrix,fit,backgrounds}
  \begin{tikzpicture}[xscale = .9,yscale = .9]
@@ -146,18 +87,81 @@ fadings,calc,trees,mindmap,shadows,decorations.text,patterns,positioning,shapes,
     \end{tikzpicture}
 ```
 
-By invoking the `gadget_directory` command a new folder for the model is created and subsequent edits to the `gd` object will update the main file as necessary. 
+Rgadget was intended to be a solution to this problem, by linking the power behind 
+Gadget with the familiar R interface. Therefore, 90% of Rgadget's functionality is file 
+and data handling: it creates files that are in a correct format that Gadget understands them, creates directories for storing those files in organizes sense, takes 
+care of main file dependencies and compatibility issues among files, and creates a
+direct pipeline for inserting data into such files. It additionally runs Gadget,
+implements aniterative reweighting algorithm to aid with data weighting issues when
+there are multiple sources of data, reads file output, and merges input and output data
+so that meaningful illustrative and diagnostic figures can be made (a variety of which
+comepredefined). Rgadget is your best friend if you want to quickly make reproducable,
+trackable, and sharable models using Gadget.
 
-First we will define the time period, and number of intervals, for the projection. We do so by creating a data frame setting up the schedule for the simulation:
+Gadget has a variety of convenience functions included that will become more visible
+as examples are walked through, but the main types of functions to recognize include:
+
+1. file creation functions (e.g, gadgetstock, gadgettime, gadgetfleet,
+gadgetlikelihood, gadgetfile, gadgetdata, etc.), 
+2. file I/O functions (e.g.,write.gadget.file, read.gadget.file, read.gadget.data,
+read.gadget.likelihood, etc.), 
+3. file modification functions (e.g., init_guess, gadget_update), 
+4. functions that run Gadget (e.g., callGadget, gadget.iterative, gadget.forward), 
+5. functions that compile input and output and create plots to analyze model fits 
+(e.g., gadget.fit, bind.gadget.fit).
+
+Using this set of functions, the general work flow for using Gadget to fit a statistical
+model via Rgadget is demonstrated in our examples and follows the pattern:
+
+1. Create new Gadget input file objects within R and write them to disk to comprise an
+initial Gadget model structure.
+2. Run an initial Gadget simulation to test files and conveniently create input
+paramater files. 
+3. Read certain Gadget model files back into R, so that they can be modified and then
+overwritten. 
+4. Run an initial Gadget fitting procedure to conveniently create more input files
+(i.e., decent starting values).
+5. Set optimisation function parameters and run a statistical Gadget model run using
+reiterative weighting to determine relative contribution of each data source to the
+objective function.
+6. Visualize the model fit.
+
+As most programming errors and debugging occur in steps 1 - 4, 90% of this course will
+focus on these steps. Statistical model fitting and visualization will be demonstrated,
+but details regarding the statistical theory behind fitting procedures, analysis of
+model fit, and diagnostics are beyond the scope of this course.
+
+# Using Rgadget
+As always you will need to load it into memory:
+```{r}
+library(Rgadget)
+```
+For convenience Rgadget will also load the tidverse package as it is used extensively when interacting with Gadget.  
+
+## Create new Gadget model input files 
+
+Set up a Gadget directory:
+
+```{r}
+gd <- gadget.variant.dir('simple_model')
+gd
+```
+
+You will notice that `gd` is just a simple list with the location of the model and what is called the `mainfile`. The main file is the root of the Gadget input file structure, specifiying all the paths to the definition of the ecosystem that is being simulated, such as the stocks and time period. By invoking the `gadget.variant.dir` command a new folder for the model is created and subsequent edits to the `gd` object will update the main file as necessary. 
+
+Gadget is structured as a forward simulator, so in order for it to run we will first need to define the time period, and number of intra year steps, for the projection. We do so by creating a data frame setting up the schedule for the simulation:
 
 ```{r}
 schedule <- 
-  expand.grid(year = 1:10, step = 1:4) 
+  expand.grid(year = 1:10, step = 1:4) %>% 
+  arrange(year)
 ```
 
 and create a new `time` file:
 
 ```{r}
+## think about writing a special function for this using the schedule data.frame
+
 gadgetfile('Modelfiles/time',
            file_type = 'time',
            components = list(list(firstyear = min(schedule$year),
@@ -165,16 +169,69 @@ gadgetfile('Modelfiles/time',
                                   lastyear=max(schedule$year),
                                   laststep=4,
                                   notimesteps=c(4,3,3,3,3)))) %>% 
-  write.gadget.file(gd$dir)
+  write.gadget.file(gd)
 ```
 
 
-areas on which the model will operate. ]
+Since Gadget allows for simulation in multiple areas these need to be explicitly defined. Various processes, such as fleet operations and migrations, in the model can then be explicitly defined by area. The areas are defined similarly:
+
+```{r}
+gadgetfile('Modelfiles/area',
+           file_type = 'area',
+           list(list(areas = 1,
+                     size = 1,
+                     temperature= schedule %>% mutate(area = 1, temperature = 5)))) %>% 
+  write.gadget.file(gd)
+```
+The areas are defined with attributes, size of the area and average temperature for each time step. Note although these attributes are rarely used in practice they will need to by defined for all areas and time steps in order for the simulation to run.  
+
+Now we will create a simple stock that does not do much:
+```{r}
+gadgetstock('simple_stock',gd,missingOkay = TRUE) %>% 
+  gadget_update('stock',
+                livesonareas = 1,
+                minage = 1,
+                maxage = 1,
+                minlength = 0,
+                maxlength = 2,
+                dl = 1) %>% 
+  gadget_update('doesgrow',0) %>% 
+  gadget_update('naturalmortality',0) %>% 
+  gadget_update('refweight',data=tibble(length=0:2,mean=0:2)) %>% 
+  gadget_update('initialconditions',
+                normalparam = tibble(age = 1,
+                                     area = 1,
+                                     age.factor = 1,   
+                                     area.factor =1,
+                                     mean = 1,
+                                     stddev = .1,
+                                     alpha = 1,
+                                     beta = 1)) %>% 
+  write.gadget.file(gd)
+```
+
+This essentially creates a stock with 1 fish that does not grow, consume or die for the duration of the simulation. Behind the scenes R has created a folder named `simple_model` with all the necessary files:
+```{r}
+fs::dir_ls(gd)
+```
+
+
+To test if this is working we can run a single simulation first to check for any errors or warning in our setup. 
+
+```{r}
+## hide the setenv call in callGadget or create a nicer frontend to callGadget
+Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd)) 
+callGadget(s=1,main='main',ignore.stderr = FALSE,log = 'simple_log')
+```
+
+This gives you a warning that no understocking likelihood is available. The understocking likelihood is a penalty function used to prevent negative consumption, i.e. more fish being eaten and/or fished than is available. We can safely ignore this warning for the time being. After running Gadget we see that two new files have been added to the directory, the parameter file (`params.out`) and the log file (`simple_log`). We will discuss the parameter file in more detail in the following sections but for the time being lets look at the log file:
+
+```{r}
+read_lines(paste(gd,'simple_log',sep='/')) 
+```
+If and when you have errors the log file is the best place to start trying to figure out where the error occurs. 
 
 ## Run initial Gadget simulation
-
-
-
 
 This section has demonstrated a simple implementation of steps 1 - 2. A more complex 
 implementation using all steps will be presented in the next sections of the course.

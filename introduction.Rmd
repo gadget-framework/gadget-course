@@ -1,6 +1,13 @@
 ---
 title: "Introduction to Gadget"
-output: html_document
+output: 
+  html_document:
+    fig_height: 4
+    fig_width: 8
+    highlight: haddock
+    theme: united
+    toc: yes
+    toc_float: yes
 bibliography: library.bib
 ---
 

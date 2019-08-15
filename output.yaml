@@ -1,0 +1,7 @@
+html_document:
+  fig_height: 4
+  fig_width: 8
+  highlight: haddock
+  theme: united
+  toc: yes
+  toc_float: yes

@@ -1,0 +1,15 @@
+---
+output: html_document
+---
+
+... ooooops, you hit yet another 404 page
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+```{r}
+knitr::include_graphics("https://imgs.xkcd.com/comics/im_so_random.png")
+```
+
+Just so you have it, i got a [licence](https://xkcd.com/license.html). If you like this stuff, more to be found at: [xkcd](https://xkcd.com)

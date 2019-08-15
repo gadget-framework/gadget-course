@@ -1,6 +1,12 @@
 ---
 title: "Gadget installation"
-output: html_document
+html_document:
+  fig_height: 4
+  fig_width: 8
+  highlight: haddock
+  theme: united
+  toc: yes
+  toc_float: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -48,7 +54,22 @@ sudo make install
 Be aware of where your gadget executable is located (for example by searching for
 'gadget' on your computer). Whenever Gadget is run via Rgadget, this executable will be
 called, so Gadget's path should be listed within R as a search path. This should be
-automatic if installed using 'sudo'.
+take care of when installed using `sudo make install`.
+
+If it is not possible to install gadget for all users of the computer, due to lack of privileges (such as administrator rights) on the computer, one can move the gadget binary to a position on the search path. E.g. if you want to store the gadget binary a directory name `bin` on your home directory you can:
+
+```
+## if the bin directory does not exist create it
+mkdir ~/bin 
+## move the gadget binary to ~/bin
+mv gadget ~/bin
+
+## update the path (if needed)
+echo PATH=$HOME/bin:$PATH >> ~/.bash_profile
+echo export PATH >> ~/.bash_profile
+```
+
+and then Rgadget should be able to find gadget. 
 
 ## Recommended: via Git
 
@@ -61,7 +82,7 @@ Note that Git comes prepackaged with Linux systems so it only needs to be instal
 the instructions on that website.
 
 Next, Gadget can be cloned (rather than downloaded) from the github website using Git. 
-From terminal, use: [IS AN ACCOUNT NECESSARY FOR THIS?]
+From terminal, use: 
 
 ```
 git clone git@github.com:Hafro/gadget.git
@@ -70,7 +91,7 @@ Navigate to the gadget directory, then install:
 ```
 cd <gadget path>
 cd gadget
-make -j 8 [is this necessary?]
+make 
 sudo make install
 ```
 To check that gadget is installed, you can try opening the manual:
@@ -81,4 +102,5 @@ To update, navigate to the gadget directory then use:
 ```
 git pull
 make
+sudo make install
 ```

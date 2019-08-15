@@ -76,6 +76,8 @@ parse.gadget.formulae('(* #a #b)') %>%
   eval(list(a=7,b=6))
 ```
 
+#### Excercise
+* Change the initial conditions in such a way you can control the initial number of fish using the parameter file. 
 
 ## Fleet operations
 Fleet operations are defined as a separate model component. 

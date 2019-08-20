@@ -1,0 +1,16 @@
+---
+title: "Gadget troubleshooting"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Troubleshooting tips
+
+## Update Gadget and Rgadget
+
+## Look at the log after running a Gadget simulation
+
+## List of known Gadget quirks

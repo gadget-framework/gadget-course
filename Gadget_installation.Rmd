@@ -82,3 +82,5 @@ To update, navigate to the gadget directory then use:
 git pull
 make
 ```
+If using git pull shows gadget as already up-to-date but Rgadget gives an error that
+Gadget needs updating, then just delete the gadget directory and re-install.

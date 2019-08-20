@@ -18,16 +18,17 @@ devtools::install_github('hafro/rgadget')
 
 # What is Rgadget?
 
-Gadget was created when Unix workstations were the most powerful and popular operating
-systems available, and therefore lacks by itself a
-user-friendly GUI. It is a collection of C++ scripts that comprise its own program,
-similar to how models created using ADMB function. However, running a Gadget 
-requires providing a rather large set of individual text files that specify model
-settings and data. In addition, because it was originally designed as an ecosystem
+Because it was originally designed as an ecosystem
 simulator, Gadget already has a number of optional features structurally integrated 
 with basic population dynamics, making it extremely flexible for representing a wide
 variety of real-life biological scenarios (e.g., substock structure, length-based
-processes, predator-prey dynamics, temperature-dependent growth). As a result, creating
+processes, predator-prey dynamics, temperature-dependent growth). However, Gadget 
+was created when Unix workstations were the most powerful and popular operating
+systems available, and therefore lacks by itself a
+user-friendly GUI. It is a collection of C++ scripts that comprise its own program,
+similar to how models created using ADMB function. However, running Gadget 
+requires providing a rather large set of individual text files that specify model
+settings and data. As a result, creating
 more complex models involving a large set of similarly input text files can become
 tedious and error-prone, and can impair reproducability.
 
@@ -89,13 +90,14 @@ fadings,calc,trees,mindmap,shadows,decorations.text,patterns,positioning,shapes,
 
 Rgadget was intended to be a solution to this problem, by linking the power behind 
 Gadget with the familiar R interface. Therefore, 90% of Rgadget's functionality is file 
-and data handling: it creates files that are in a correct format that Gadget understands them, creates directories for storing those files in organizes sense, takes 
-care of main file dependencies and compatibility issues among files, and creates a
+and data handling: it creates files that are in a correct format that Gadget understands 
+them, creates directories for storing those files in organizes sense, takes 
+care of main file dependencies and compatibility issues, and creates a
 direct pipeline for inserting data into such files. It additionally runs Gadget,
 implements an iterative reweighting algorithm to aid with data weighting issues when
 there are multiple sources of data, reads file output, and merges input and output data
 so that meaningful illustrative and diagnostic figures can be made (a variety of which
-comepredefined). Rgadget is your best friend if you want to quickly make reproducable,
+come predefined). Rgadget is your best friend if you want to quickly make reproducable,
 trackable, and sharable models using Gadget.
 
 Gadget has a variety of convenience functions included that will become more visible
@@ -125,7 +127,7 @@ reiterative weighting to determine relative contribution of each data source to 
 objective function.
 6. Visualize the model fit.
 
-As most programming errors and debugging occur in steps 1 - 4, 90% of this course will
+As most programming errors and debugging occur in steps 1 - 4, most of this course will
 focus on these steps. Statistical model fitting and visualization will be demonstrated,
 but details regarding the statistical theory behind fitting procedures, analysis of
 model fit, and diagnostics are beyond the scope of this course.
@@ -135,7 +137,7 @@ As always you will need to load it into memory:
 ```{r}
 library(Rgadget)
 ```
-For convenience Rgadget will also load the tidverse package as it is used extensively when interacting with Gadget. We will introduce the functions in Rgadget as we go through the tutorial. Now we will focus on setting up a simple dummy model using the `gadgetfile` function and related functions. `gadgetfile` creates new files in a format that coheres to the Gadget file format. 
+For convenience Rgadget will also load the tidyverse package as it is used extensively when interacting with Gadget. We will introduce the functions in Rgadget as we go through the tutorial. Now we will focus on setting up a simple dummy model using the `gadgetfile` function and related functions. `gadgetfile` creates new files in a format that coheres to the Gadget file format by using lists embedded within lists.
 ```{r}
 gadgetfile('test',file_type = 'generic', 
            components = list(a=list(bla=1),
@@ -154,7 +156,7 @@ gd
 
 You will notice that `gd` is just a simple list with the location of the model and what is called the `mainfile`. The main file is the root of the Gadget input file structure, specifiying all the paths to the definition of the ecosystem that is being simulated, such as the stocks and time period. By invoking the `gadget.variant.dir` command a new folder for the model is created and subsequent edits to the `gd` object will update the main file as necessary. 
 
-Gadget is structured as a forward simulator, so in order for it to run we will first need to define the time period, and number of intra year steps, for the projection. We do so by creating a data frame setting up the schedule for the simulation:
+Gadget is structured as a forward simulator, so in order for it to run we will first need to define the time period ('year'), and number of subannual time steps ('step'), for the projection. We do so by creating a data frame setting up the schedule for the simulation:
 
 ```{r}
 schedule <- 
@@ -188,7 +190,7 @@ gadgetfile('Modelfiles/area',
                                   temperature= schedule %>% mutate(area = 1, temperature = 5)))) %>% 
   write.gadget.file(gd)
 ```
-The areas are defined with attributes, size of the area and average temperature for each time step. Note although these attributes are rarely used in practice they will need to by defined for all areas and time steps in order for the simulation to run.  
+The areas are defined with attributes, size of the area and average temperature for each time step. Note although these attributes are rarely used in practice they will need to by defined for all areas and time steps in order for the simulation to run. 
 
 Rgadget has a number of convenience functions when dealing with more complicated files. These functions are all derivatives of `gadgetfile` and thus can be written to file using `write.gadget.file`. We will start off by creating a skeleton stock file:
 
@@ -260,7 +262,7 @@ This gives you a warning that no understocking likelihood is available. The unde
 ```{r}
 read_lines(paste(gd,'simple_log',sep='/')) 
 ```
-If and when you have errors the log file is the best place to start trying to figure out where the error occurs. 
+**If and when you have errors the log file is the best place to start trying to figure out where the error occurs.** 
 
 We can now gather the output from the model using `gadget.fit`:
 ```{r}
@@ -271,9 +273,6 @@ fit
 
 
 ## Run initial Gadget simulation
-
-This section has demonstrated a simple implementation of steps 1 - 2. A more complex 
-implementation using all steps will be presented in the next sections of the course.
 
 ## Modify some Gadget model files
 

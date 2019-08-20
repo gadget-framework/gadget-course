@@ -1,6 +1,12 @@
 ---
 title: "Getting started"
-output: html_document
+html_document:
+  fig_height: 4
+  fig_width: 8
+  highlight: haddock
+  theme: united
+  toc: yes
+  toc_float: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -32,16 +38,15 @@ settings and data. As a result, creating
 more complex models involving a large set of similarly input text files can become
 tedious and error-prone, and can impair reproducability.
 
-```{r engine='tikz', echo=FALSE,eval=FALSE}
-\usetikzlibrary{arrows,decorations.pathmorphing,decorations.footprints,
-fadings,calc,trees,mindmap,shadows,decorations.text,patterns,positioning,shapes,matrix,fit,backgrounds}
+```{r engine='tikz',echo=FALSE}
+\usetikzlibrary{arrows,decorations.pathmorphing,decorations.footprints,fadings,calc,trees,mindmap,shadows,decorations.text,patterns,positioning,shapes,matrix,fit,backgrounds}
  \begin{tikzpicture}[xscale = .9,yscale = .9]
     \node (main)[shape=ellipse,style=dashed,draw] at (-7,-2){main};
     \node (time) at (-2,2){time};
     \node (area) at (-2,1){area};
     \node (print) at (-2,0){printfile};
     \node (out)[shape=rectangle,draw] at (2.5,2) {output};
-    \node (stock)[GenericNodeStyle] at (-2,-1){stockfiles};
+    \node (stock)[shape=rectangle,draw] at (-2,-1){stockfiles};
     \node (refw) at (4,0){reference weights};
     \node (initpop) at (4,-0.5){initial population};
     \node (rec) at (4,-1){recruitment};
@@ -49,13 +54,13 @@ fadings,calc,trees,mindmap,shadows,decorations.text,patterns,positioning,shapes,
     \node (mig) at (4,-2){migration};
     \node (spw) at (4,-2.5){spawning};
     \node (str) at (4,-3){straying};
-    \node (tagf)[GenericNodeStyle] at (-2,-2.5){tagfiles};
+    \node (tagf)[shape=rectangle,draw] at (-2,-2.5){tagfiles};
     \node (tagd) at (2.5,-4){tag data};
-    \node (oth)[GenericNodeStyle] at (-2,-4){otherfoodfiles};
+    \node (oth)[shape=rectangle,draw] at (-2,-4){otherfoodfiles};
     \node (othd) at (2.5,-5){otherfood data};
-    \node (fleet)[GenericNodeStyle] at (-2,-5.5){fleetfiles};
+    \node (fleet)[shape=rectangle,draw] at (-2,-5.5){fleetfiles};
     \node (fleetd) at (2.5,-6){fleet data};
-    \node (lik)[GenericNodeStyle] at (-2,-7){likelihoodfiles};
+    \node (lik)[shape=rectangle,draw] at (-2,-7){likelihoodfiles};
     \node (likd) at (2.5,-7){likelihood data};
    
     \node (param)[shape=ellipse,style=dashed,draw] at (-7,-4){parameters};

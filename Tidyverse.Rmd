@@ -1,10 +1,17 @@
 ---
   title: "Tidyverse"
-  output: html_document
+  output: 
+    html_document:
+      fig_height: 4
+      fig_width: 8
+      highlight: haddock
+      theme: united
+      toc: yes
+      toc_float: yes
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,cache = TRUE)
 ```
 
 ## Idealogy behind R for Data Science

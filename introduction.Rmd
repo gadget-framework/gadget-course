@@ -1,6 +1,13 @@
 ---
 title: "Introduction to Gadget"
-output: html_document
+output: 
+  html_document:
+    fig_height: 4
+    fig_width: 8
+    highlight: haddock
+    theme: united
+    toc: yes
+    toc_float: yes
 bibliography: library.bib
 ---
 
@@ -137,7 +144,8 @@ Barents sea of cod, capelin, herring and minke whales
 connection with Gadget in a harvest control simulation.
 
 
-```{r, engine="tikz", eval=FALSE}
+```{r, engine="tikz"}
+\usetikzlibrary{arrows,fit}
   \begin{tikzpicture}[auto,
     %decision/.style={diamond, draw=black, thick, fill=white,
     %text width=8em, text badly centered,

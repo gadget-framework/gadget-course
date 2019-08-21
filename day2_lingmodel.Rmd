@@ -416,7 +416,6 @@ example here do not depend on it, we provide an example in the following code fo
 gadget_update can be used to update the `'refweight'` component to provide the key as a data
 frame, which is the same for both stocks.
 
-### Potential as a fishable resource / prey
 
 ```{r}
 

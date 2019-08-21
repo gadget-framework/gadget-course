@@ -193,9 +193,36 @@ ling.mat <-
                 livesonareas = 1) 
 ```
 
-Also notice that although it is necessary to define the arguments defined above (minage,
-maxage, minlength, maxlength, dl, and livesonareas), updating the 'stock' component with
-gadget_update also sets up a few more convenient default settings in the gadget stock file.
+As described above in the **Growth** section, default settings are provided by the
+`gadgetstock` function. However, those settings give parameters that named to be
+stock-specific. To simplify the model a bit, we change the parameters to have the same 
+value in both stocks, so that both stocks are governed by the same growth equation:
+
+```{r}
+ ling.imm <-
+   ling.imm %>%
+  gadget_update('doesgrow', 
+                growthparameters=c(linf='#ling.Linf', 
+                                   k=to.gadget.formulae(quote(0.001*ling.k)),
+                                   alpha = '#ling.walpha',
+                                   beta = '#ling.wbeta'),
+                beta = to.gadget.formulae(quote(10*ling.bbin))) 
+
+  ling.mat <-
+   ling.mat %>%
+  gadget_update('doesgrow', 
+                growthparameters=c(linf='#ling.Linf', 
+                                   k=to.gadget.formulae(quote(0.001*ling.k)),
+                                   alpha = '#ling.walpha',
+                                   beta = '#ling.wbeta'),
+                beta = to.gadget.formulae(quote(10*ling.bbin))) 
+
+```
+
+Also notice that although it is necessary to define the structural arguments listed above
+(minage, maxage, minlength, maxlength, dl, and livesonareas), updating the 'stock' component
+with gadget_update also sets up a few more convenient default settings in the gadget stock
+file.
 
 ```{r}
 
@@ -274,33 +301,80 @@ ling.mat
 ```
 
 
+As Gadget is set up as a forward simulation, initial conditions need to be supplied to each
+bin defined by a stock's structure. For example, the immature stock needs 11 age x 35 length x
+1 area bins to contain initial numbers of individuals. Gadget is set up by default to put
+10,000 fish in each age group per area; however, at any point in time, including the initial
+time step of the model, the numbers at age of a real population are not expected to be equal.
+In any population with mortality, for example, there should be fewer older individuals than
+younger individuals. Similarly, differences between areas can shift all numbers at age to be
+higher or lower than those found in another area. In addition, each set of 10,000 fish, which
+correspond to an age and area, need to be assigned length bins according to a mean length, and
+some level of variability around that mean. 
 
-Now, initial conditions need to be set up for each stock. For example, the immature stock needs
-11 age bins x 35 length bins to contain initial numbers of individuals. Gadget is set up to put
-10,000 fish in each age group per area, but to be distributed across the 35 length bins, they
-also need to be assigned lengths.  Lengths are distributed by a normal distribution, to which a 
-mean per age is supplied by the user and an optional overal standard deviation. [Alternatively,
-it is possible to supply the numbers that make up the stock distribution, but implementation of 
-this method should be referred to in the Gadget User Guide.]
+These two attributes, numbers for each age x area group and distribution of those numbers
+across length bins, are controlled by using `gadget_update` to modify the `'initialconditions'`
+component of the stock file. In our ling example, this is done by supplying a data frame to an
+argument called `normparam`. Calling the `normparam` argument specifies the distribution of
+lengths to be according to a normal parameteric distribution, and that weights are calculated
+from these are according to an exponential equation of the same form as supplied in under the
+section **Growth**. Alternatively, it is possible to implement weights according to condition
+factor and length-weight key, or supply the numbers that make up the stock distribution rather
+than a theoretical distribution, but implementation methods for these should be referred to in
+the Gadget User Guide.
 
-Yesterday, we saw that these can be set very simply as a number, but that we can also replace
-numbers with parameters and even formulas. Today we will use this capability to set the initial 
-conditions of the ling model to have two more realistic properties. We know 1) that there should
-be fewer older individuals than younger individuals, corresponding to the total mortality 
-experienced by the population at the beginning of the time series, and 2) older individuals 
-should have larger bodies than younger individuals, as specified by a Von Bertalanffy relationship. 
+The data frame supplied to `normparam` needs one row per age x area combination; therefore the 
+first two columns specify ages found in the stock, all with an area set to 1. [That is, using
+the `.` placeholder passes the ling.imm object to that location, where minage and maxage 
+information is extracted]. The next two columns implement differences among ages and 
+differences among areas respectively, by supplying age- and area-specific factors against 
+which the 10,000 initial fish will be multiplied. These columns are called 'age.factor' and 
+'area.factor', respectively, and must correspond with the area and age columns such that the 
+same ages in two different areas will have the same age.factor and two different ages within 
+the same area have the same area.factor. IS THIS RIGHT?. The next two columns reflect the mean 
+length and standard deviation that will be used to distribute lengths for that age x area 
+combination. Note that although different lengths at age could in theory be supplied for 
+different areas, only one growth function is supplied for all areas, so justifying the utility 
+of different lengths at age among different areas for only the initial time step may be 
+difficult. Standard deviations are supplied by age age x area groups. Along with the 
+parameters used to describe the exponential length-weight relationship (alpha and beta, last
+columns of the data frame, these are all empirically derived constants. However, in the code
+below, we supply standard deviations as numerical values but alpha and beta as switches, as 
+the latter are also used in other components of the stock file (growth).
 
-To update the initial conditions to reflect these patterns, we use gadget_update, followed by 
-the component title `'initialconditions'`, and the key normalparam that will be updated with a 
-data frame. The first column is for age, which includes a sequence of those ages already specified within ling.imm. [That is, using the `.` placeholder passes the ling.imm object to that location, where minage and maxage information is extracted]. The second column assigns all ages to area 1. The column `age.factor` contains code that creates a different formula for each age. It 
+The data_frame described above can be filled with constants, but as we saw on Day 1, we can
+also replace these constants with parameter switches whose values can be controlled within the
+parameter file, or even formulas containing constants, switches, or both. Today we will use
+this capability to set the initial conditions of the ling model to have two properties that aid
+in realism and internal consistency. First, we would like numbers at age to be distributed
+according to a total mortality experienced by the population at the beginning of the time
+series. Second, we would like to set mean lengths of the age groups to be those expected by the
+same Von Bertalanffy relationship implemented under the **Growth** section. 
 
-It also shows how to translate
-lengths into weights via a constant length-weight key, provided under the `'refweight'` 
-component, which is the same for both stocks.
+To implement the first pattern via the age.factor column, a different equation per age is supplied. Each equation is based on an age-specific intial number parameter (e.g.,
+'lingimm.init.3' for age 3), which is then multiplied times the exponent of negative total
+mortality rate times the number of annual time steps since recruitment (i.e., the age). To
+calculate total mortality, the presupplied natural mortality parameter 'lingimm.M' is added to
+an addition user-defined parameter 'ling.init.F', that represents an initial level of fishing
+mortality experienced before the first time step of the model. Under this transformation, all
+initial parameters ('lingimm.init.3', 'lingimm.init.4', etc.) have the same interpretation:
+they are the back-calculated recruitment values for the year classes to which the observed 
+ages correspond. Implementing the intial parameters with a consistent interpretation yields 
+the benefits of expecting their values to be on roughly the same scale and fosters easier
+communication (e.g., fixing all age-specific parameters to the same value would denote fixed
+recruitment during the years prior to the time series).
+
+To implement the second pattern, in mean lengths-at-age provided, we can borrow an Rgadget
+convenience function 'von_b_formula' that writes out the `lengthvbsimple` equations as Gadget.
+To be internally consistent, the parameters supplied to this convenience function, as well as
+the alpha and beta columns defined in the `normalparam` data frame, are set to be the same as
+those used when implementing growth in the `doesgrow` component above. Notice one more
+parameter called 'ling.recl' is also supplied for internal consistency with recruitment
+settings, which are explained in the next section.
+
 ```{r}
 
-lw_pars <- c(0.0001, 3)
-
+init_sigmas <- rep(1, length(ling.imm[[1]]$minage:ling.imm[[1]]$maxage))
 
  ling.imm <-
    ling.imm %>%
@@ -312,12 +386,9 @@ lw_pars <- c(0.0001, 3)
                                            unlist(),   
                                          area.factor = '#lingimm.init.scalar',
                                          mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
-                                         stddev = init.sigma$ms[age],
-                                         alpha = '#lingimm.walpha',
-                                         beta = '#lingimm.wbeta')) %>% 
-  gadget_update('refweight',
-                data=data_frame(length=seq(.[[1]]$minlength,.[[1]]$maxlength,.[[1]]$dl),
-                                mean=lw_pars[1]*length^lw_pars[2])) 
+                                         stddev = init_sigmas,
+                                         alpha = '#ling.walpha',
+                                         beta = '#ling.wbeta')) 
 
 ling.mat <-
   ling.mat %>% 
@@ -331,25 +402,26 @@ ling.mat <-
                                          mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
                                          stddev = init.sigma$ms[age],
                                          alpha = '#lingmat.walpha',
-                                         beta = '#lingmat.wbeta'))%>% 
-  gadget_update('refweight',
-                data=data_frame(length=seq(.[[1]]$minlength,.[[1]]$maxlength,.[[1]]$dl),
-                                mean=lw_pars[1]*length^lw_pars[2]))  
+                                         beta = '#lingmat.wbeta'))  
 ```
 
 
+### Recruitment
+
+### Reference Weight
+
+Finally, some implementations of the initial conditions and growth functions translate between
+lengths and weights via a constant length-weight key. Although the functions provided in our
+example here do not depend on it, we provide an example in the following code for how
+gadget_update can be used to update the `'refweight'` component to provide the key as a data
+frame, which is the same for both stocks.
+
 ```{r}
+
+lw_pars <- c(0.0001, 3) #parameters defining the length-weight exponential relationship
+
  ling.imm <-
    ling.imm %>%
-  gadget_update('doesgrow', ## note to self the order of these parameters make difference
-                growthparameters=c(linf='#ling.Linf', 
-                                   k=to.gadget.formulae(quote(0.001*ling.k)),
-                                   alpha = '#lingimm.walpha',
-                                   beta = '#lingimm.wbeta'),
-                beta = to.gadget.formulae(quote(10*ling.bbin))) %>% 
-  gadget_update('refweight',
-                data=data_frame(length=seq(.[[1]]$minlength,.[[1]]$maxlength,.[[1]]$dl),
-                                mean=lw.constants$estimate[1]*length^lw.constants$estimate[2])) %>% 
   gadget_update('iseaten',1) %>% 
   gadget_update('doesrenew',
                 normalparam = data_frame(year = year_range,
@@ -362,23 +434,20 @@ ling.mat <-
                                          mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
                                          stddev = '#ling.rec.sd',
                                          alpha = '#lingimm.walpha',
-                                         beta = '#lingimm.wbeta')) 
+                                         beta = '#lingimm.wbeta')) %>% 
+  gadget_update('refweight',
+                data=data_frame(length=seq(.[[1]]$minlength,.[[1]]$maxlength,.[[1]]$dl),
+                                mean=lw_pars[1]*length^lw_pars[2]))
 
 
 
 
 ling.mat <-
-  ling.mat
-  gadget_update('doesgrow', ## note to self the order of these parameters make difference
-                growthparameters=c(linf='#ling.Linf', 
-                                   k=to.gadget.formulae(quote(0.001*ling.k)),
-                                   alpha = '#lingimm.walpha',
-                                   beta = '#lingimm.wbeta'),
-                beta = to.gadget.formulae(quote(10*ling.bbin))) %>% 
+  ling.mat %>% 
+  gadget_update('iseaten',1) %>% 
   gadget_update('refweight',
                 data=data_frame(length=seq(.[[1]]$minlength,.[[1]]$maxlength,.[[1]]$dl),
-                                mean=lw.constants$estimate[1]*length^lw.constants$estimate[2])) %>% 
-  gadget_update('iseaten',1) 
+                                mean=lw_pars[1]*length^lw_pars[2]))
 
 
 ## write to file
@@ -391,12 +460,4 @@ ling.mat %>%
 
 ```
 
-## Including Plots
 
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.

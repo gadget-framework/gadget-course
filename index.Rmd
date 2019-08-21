@@ -67,12 +67,10 @@ Insert link to 'getting_started.html'?
 
 Deal with installation issues
 
-LUNCH?
 
 Fleets, etc
 Insert link to 'simple model' 
 
-=======
 ### Tuesday
 * Recap and examples 
 * More complicated models

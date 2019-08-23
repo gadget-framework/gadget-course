@@ -55,7 +55,7 @@ peak at our example model data [here])
 
 # Draft workplan
 
-### Monday
+### Monday - PJW
 
 Internet access
 
@@ -71,23 +71,27 @@ Deal with installation issues
 Fleets, etc
 Insert link to 'simple model' 
 
-### Tuesday
+### Tuesday - PJW
 * Recap and examples 
-* More complicated models
-  + Spawning and recruitment
+* More complicated models: Ling in Iceland
   + Growth
+  + Maturation as a multi-'stock' process
+  + Initial conditions
+  + Recruitment
   + Fleet operations
+* Alternate structures - SHOULD THIS MOVE TO THURSDAY MORNING?
+  + Spawning
+  + Multiple areas
   + Multiple stocks
-  + Maturation
-* Case study: Ling in Iceland
 
-### Wednesday
+### Wednesday - PJW / BÞE
+* Introducing likelihood functions and iterative reweighting
+* Incorporating data (Ling case study cont.)
 * Set optimisation function parameters and fit Gadget statistical model
 * Visualize Gadget statistical model fit
-* Case study: Ling (cont.)
 * Own projects
 
-### Thursday
+### Thursday - BÞE
 * Stock interactions
   + Migration
   + Straying
@@ -96,6 +100,6 @@ Insert link to 'simple model'
 * Version control
 * Own projects
 
-### Friday
+### Friday - BÞE
 * MSE using Gadget: Ling (cont.)
 * Wrap up

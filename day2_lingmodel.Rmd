@@ -231,13 +231,21 @@ ling.imm
 print('Mature')
 ling.mat
 
+## write to file
+ling.imm %>% 
+  write.gadget.file(gd$dir)
+
+ling.mat %>% 
+  write.gadget.file(gd$dir)
+
+
 ```
 
-In particular, `growthandeatlengths` has been supplied with a file path name	'Aggfiles/lingmat.stock.len.agg', which corresponds with a file that will be automatically generated once the stock file is written. This new aggregation file (or 'Aggfile') is required by Gadget, and contains information on how to aggregate true lengths into length bins as individuals are tracked through the model. In the default case, these bins are simply defined by minlength, maxlength, and dl, but in theory they could also be set at a higher resolution to conserve memory. IS THIS RIGHT? It also becomes important for the purposes of comparing simulations to data, so this file will be revisited later on Day 3 when model-fitting procedures are introduced. 
+In particular, `growthandeatlengths` has been supplied with a file path name	'Aggfiles/lingmat.stock.len.agg', which corresponds with a file that will be automatically generated once the stock file is written [check it out in your folders]. This new aggregation file (or 'Aggfile') is required by Gadget, and contains information on how to aggregate true lengths into length bins as individuals are tracked through the model. In the default case, these bins are simply defined by minlength, maxlength, and dl, but in theory they could also be set at a higher resolution to conserve memory. IS THIS RIGHT? It also becomes important for the purposes of comparing simulations to data, so this file will be revisited later on Day 3 when model-fitting procedures are introduced. 
 
 In addition, natural mortality parameters have been supplied as automatically named switches ('lingimm.M' or 'lingmat.M') for every age. In the default case, mortality is not age-dependent so the same stock-specific name is given for every age.
 
-#### Maturation
+#### Maturation process and timing
 
 To implement maturation, we only want the immature stock to be able to mature and 
 transition to the mature stock. Therefore, `doesmove` and `doesmature` components are both
@@ -374,10 +382,12 @@ settings, which are explained in the next section.
 
 ```{r}
 
-init_sigmas <- rep(1, length(ling.imm[[1]]$minage:ling.imm[[1]]$maxage))
+#taken from data analyses
+init_sigmas <- rep(2, length(ling.imm[[1]]$minage:ling.imm[[1]]$maxage))
 
- ling.imm <-
-   ling.imm %>%
+
+ling.imm <-
+  ling.imm %>%
   gadget_update('initialconditions',
                 normalparam = data_frame(age = .[[1]]$minage:.[[1]]$maxage,
                                          area = 1,
@@ -403,23 +413,140 @@ ling.mat <-
                                          stddev = init.sigma$ms[age],
                                          alpha = '#lingmat.walpha',
                                          beta = '#lingmat.wbeta'))  
+## write to file
+ling.imm %>% 
+  write.gadget.file(gd$dir)
+
+ling.mat %>% 
+  write.gadget.file(gd$dir)
+
 ```
 
+Note that the new files 'Modelfiles/lingimm.init.normalparam' and 
+'Modelfiles/lingmat.init.normalparam' are created to hold the information in the data 
+frames. 
 
 ### Recruitment
 
+Recruitment can be thought of as another type of Initial Condition. In addition to numbers-at-age and their length distributions being needed for all ages in the first time 
+step of the model, each year forward also needs individuals to populate the youngest age 
+of each stock. Mature stocks are populated by the immature stocks through maturation, but 
+the immature stocks requires inputted individuals from a recruitment process. The process 
+could bemodeled as a stock-recruitment relationship, but for ling we actually keep it more
+simple and simply provide switches for each year's number at the youngest age. That way, 
+these can either be inputted as values through a params file or they can be estimated at a
+later stage. 
+
+To incorporate recruitment, `gadget_update` is used to switch on the `doesrenew` argument to
+have a value of 1 in the stock file, and a data frame very similar to the initial conditions
+data frame is provided, except that it includes a year and step column to specify when the
+recruitment occurs. An area and age combination need to be provided as in initial conditions,
+so that 10,000 fish can be supplied to this combination, and lengths distributed to these
+10,000 fish in a similar manner as in initial conditions (i.e., via a parameteric 
+distribution or a numerical distribution). A factor is then supplied under the column 
+'number' that scales these 10,000 fish up or down relative to other among year x timestep
+combinations. Below, we have provided a knew parameter for each year (beginning with
+`'ling.rec'`), each of which are multiplied by the scalar `'ling.rec.scalar'` which can be
+used to scale the whole series. Here, lengths are supplied via a normal parametric 
+distribution (as under initial conditions), so a column is also provided for mean and stddev
+to designate the parametric distribution. Just as in initial conditions, the mean was set 
+using the same Von Bertalanffy equation and parameters, including the `'ling.recl'`, which
+represents a length at age 0. In the last columns, the same `'ling.walpha'` and `'ling.wbeta'` 
+parameters are provided for translation into biomass.
+
+```{r}
+ ling.imm <-
+   ling.imm %>%
+  gadget_update('doesrenew',
+                normalparam = data_frame(year = year_range,
+                                         step = 1,
+                                         area = 1,
+                                         age = .[[1]]$minage,
+                                         number = parse(text=sprintf('ling.rec.scalar*ling.rec.%s',year)) %>% 
+                                           map(to.gadget.formulae) %>% 
+                                           unlist(),
+                                         mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
+                                         stddev = '#ling.rec.sd',
+                                         alpha = '#ling.walpha',
+                                         beta = '#ling.wbeta')) 
+
+## write to file
+ling.imm %>% 
+  write.gadget.file(gd$dir)
+
+```
+
+Note that the new files 'Modelfiles/lingimm.rec.normalparam' is created to hold the 
+information in the data frame. 
+
 ### Reference Weight
 
-Finally, some implementations of the initial conditions and growth functions translate between
+Some implementations of the initial conditions and growth functions translate between
 lengths and weights via a constant length-weight key. Although the functions provided in our
 example here do not depend on it, we provide an example in the following code for how
 gadget_update can be used to update the `'refweight'` component to provide the key as a data
 frame, which is the same for both stocks.
 
+```{r}
+
+#For internal consistency, these parameter values should be the
+#same as those c(ling.walpha, ling.wbeta)
+lw_pars <- c(0.0001, 3) 
+
+ ling.imm <-
+   ling.imm %>%
+  gadget_update('iseaten',1) %>%  
+  gadget_update('refweight',
+                data=data_frame(length=seq(.[[1]]$minlength,.[[1]]$maxlength,.[[1]]$dl),
+                                mean=lw_pars[1]*length^lw_pars[2]))
+ling.mat <-
+  ling.mat %>% 
+  gadget_update('iseaten',1) %>% 
+  gadget_update('refweight',
+                data=data_frame(length=seq(.[[1]]$minlength,.[[1]]$maxlength,.[[1]]$dl),
+                                mean=lw_pars[1]*length^lw_pars[2]))
+
+
+## write to file
+ling.imm %>% 
+  write.gadget.file(gd$dir)
+
+ling.mat %>% 
+  write.gadget.file(gd$dir)
+
+
+```
+Note that the new files 'Modelfiles/lingimm.refwgt' and 'Modelfiles/lingmat.refwgt' 
+are created to hold the information in the data frames. 
+
+
+### Is fished / eaten
+
+Finally, it is important to designate the component `'iseaten'` to have
+a value of 1, if the stock is to be consumed by other species or by 
+fished by fleets. In Gadget, fishing is considered to be one of many forms of 
+consumption.
 
 ```{r}
 
-lw_pars <- c(0.0001, 3) #parameters defining the length-weight exponential relationship
+ ling.imm <-
+   ling.imm %>%
+  gadget_update('iseaten',1)
+
+ling.mat <-
+  ling.mat %>% 
+  gadget_update('iseaten',1) 
+
+## write to file
+ling.imm %>% 
+  write.gadget.file(gd$dir)
+
+ling.mat %>% 
+  write.gadget.file(gd$dir)
+
+```
+
+```{r}
 
  ling.imm <-
    ling.imm %>%
@@ -461,4 +588,8 @@ ling.mat %>%
 
 ```
 
+### Set up fleets using catch data
 
+
+
+## Run the simulation using pre-determined parameters 

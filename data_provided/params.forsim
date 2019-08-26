@@ -1,0 +1,91 @@
+; Gadget version 2.2.00-BETA running on hafbjarmi Fri Apr  5 23:31:22 2019
+; Simulated Annealing algorithm ran for 396720 function evaluations
+; and stopped when the likelihood value was 13093.82
+; because the convergence criteria were met
+; Hooke & Jeeves algorithm ran for 36193 function evaluations
+; and stopped when the likelihood value was 13039.607
+; because the convergence criteria were met
+; BFGS algorithm ran for 1440 function evaluations
+; and stopped when the likelihood value was 13039.396
+; because the accuracy limit for the gradient calculation was reached
+switch	value		lower	upper	optimise
+ling.Linf	   163.33485	     100      200        1
+ling.k	   96.165103	      40      100        1
+ling.walpha	2.2756744e-06	   1e-10        1        0
+ling.wbeta	   3.2020045	       2        4        0
+ling.bbin	   26.691413	   1e-08      100        1
+lingimm.M	        0.15	   0.001        1        0
+lingimm.init.scalar	   1.6617371	       1      300        1
+ling.init.F	   0.2193912	     0.1        1        1
+lingimm.init.3	   366.33755	   0.001     1000        1
+lingimm.init.4	   377.29127	   0.001     1000        1
+lingimm.init.5	  0.28207724	   0.001     1000        1
+lingimm.init.6	0.0010000001	   0.001     1000        1
+lingimm.init.7	0.0010000033	   0.001     1000        1
+lingimm.init.8	0.0010000093	   0.001     1000        1
+lingimm.init.9	0.0010000282	   0.001     1000        1
+lingimm.init.10	   337.97483	   0.001     1000        1
+ling.recl	    7.721304	       4       20        1
+ling.mat1	   57.172951	      10      200        1
+ling.mat2	   56.250828	   56.25    93.75        1
+ling.rec.scalar	   2.1582383	       1      500        1
+ling.rec.1982	   123.05199	   0.001     1000        1
+ling.rec.sd	           4	       4       20        1
+ling.rec.1983	   84.943374	   0.001     1000        1
+ling.rec.1984	   153.92095	   0.001     1000        1
+ling.rec.1985	   132.37148	   0.001     1000        1
+ling.rec.1986	   113.60781	   0.001     1000        1
+ling.rec.1987	   90.411616	   0.001     1000        1
+ling.rec.1988	   129.32352	   0.001     1000        1
+ling.rec.1989	   211.01045	   0.001     1000        1
+ling.rec.1990	   160.51624	   0.001     1000        1
+ling.rec.1991	    86.65102	   0.001     1000        1
+ling.rec.1992	   106.56877	   0.001     1000        1
+ling.rec.1993	   121.76727	   0.001     1000        1
+ling.rec.1994	   105.30026	   0.001     1000        1
+ling.rec.1995	    138.6769	   0.001     1000        1
+ling.rec.1996	    99.96185	   0.001     1000        1
+ling.rec.1997	   105.51581	   0.001     1000        1
+ling.rec.1998	   94.747762	   0.001     1000        1
+ling.rec.1999	   138.49866	   0.001     1000        1
+ling.rec.2000	   133.41509	   0.001     1000        1
+ling.rec.2001	   189.36863	   0.001     1000        1
+ling.rec.2002	   157.33287	   0.001     1000        1
+ling.rec.2003	   208.69026	   0.001     1000        1
+ling.rec.2004	   245.46341	   0.001     1000        1
+ling.rec.2005	    317.8273	   0.001     1000        1
+ling.rec.2006	   306.65121	   0.001     1000        1
+ling.rec.2007	   467.05261	   0.001     1000        1
+ling.rec.2008	   437.04008	   0.001     1000        1
+ling.rec.2009	   511.96574	   0.001     1000        1
+ling.rec.2010	   526.33166	   0.001     1000        1
+ling.rec.2011	   353.22765	   0.001     1000        1
+ling.rec.2012	    255.0495	   0.001     1000        1
+ling.rec.2013	   140.13073	   0.001     1000        1
+ling.rec.2014	    142.2836	   0.001     1000        1
+ling.rec.2015	   113.28193	   0.001     1000        1
+ling.rec.2016	   149.75762	   0.001     1000        1
+ling.rec.2017	   179.07028	   0.001     1000        1
+ling.rec.2018	   261.33876	   0.001     1000        1
+ling.rec.2019	   203.74794	   0.001     1000        1
+lingmat.M	        0.15	   0.001        1        0
+lingmat.init.scalar	   106.26663	       1      300        1
+lingmat.init.5	   15.787683	   0.001     1000        1
+lingmat.init.6	0.0010000003	   0.001     1000        1
+lingmat.init.7	       0.001	   0.001     1000        1
+lingmat.init.8	0.0010000002	   0.001     1000        1
+lingmat.init.9	0.0010000003	   0.001     1000        1
+lingmat.init.10	   53.331613	   0.001     1000        1
+lingmat.init.11	   18.329409	   0.001     1000        1
+lingmat.init.12	   17.228839	   0.001     1000        1
+lingmat.init.13	   50.182935	   0.001     1000        1
+lingmat.init.14	    5.438886	   0.001     1000        1
+lingmat.init.15	0.0010000014	   0.001     1000        1
+ling.surv.alpha	 0.092711982	    0.01        3        1
+ling.surv.l50	   70.068368	      10      100        1
+ling.lln.alpha	  0.13643511	    0.01        3        1
+ling.lln.l50	   77.025733	      10      100        1
+ling.bmt.alpha	  0.14860807	    0.01        3        1
+ling.bmt.l50	   75.058008	      10      100        1
+ling.gil.alpha	  0.13693305	    0.01        3        1
+ling.gil.l50	         100	      10      100        1

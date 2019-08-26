@@ -79,10 +79,6 @@ Insert link to 'simple model'
   + Initial conditions
   + Recruitment
   + Fleet operations
-* Alternate structures - SHOULD THIS MOVE TO THURSDAY MORNING?
-  + Spawning
-  + Multiple areas
-  + Multiple stocks
 
 ### Wednesday - PJW / BÞE
 * Introducing likelihood functions and iterative reweighting
@@ -92,6 +88,10 @@ Insert link to 'simple model'
 * Own projects
 
 ### Thursday - BÞE
+* Alternate structures - SHOULD THIS MOVE TO THURSDAY MORNING?
+  + Spawning
+  + Multiple areas
+  + Multiple stocks/species
 * Stock interactions
   + Migration
   + Straying

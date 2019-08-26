@@ -1,0 +1,1814 @@
+Gadget version 2.2.00-BETA running on hafblika Mon Aug 26 10:25:21 2019
+Log file to record Gadget actions that take place during this run
+
+Starting Gadget from directory: /home/pamela/Documents/Hafro/gadget-course/ling_model/01-base
+using data from directory: /home/pamela/Documents/Hafro/gadget-course/ling_model/01-base
+
+Checking to see if file ../../data_provided/params.forsim can be opened ... OK
+Checking to see if file params.out can be opened ... OK
+
+Checking to see if file main can be opened ... OK
+Opening file main
+Checking to see if file Modelfiles/time can be opened ... OK
+Opening file Modelfiles/time
+Read time file - number of timesteps 148
+Closing file Modelfiles/time
+Checking to see if file Modelfiles/area can be opened ... OK
+Opening file Modelfiles/area
+Read temperature data - number of entries 148
+Read area file - number of areas 1
+Closing file Modelfiles/area
+Checking to see if file lingimm can be opened ... OK
+Opening file lingimm
+Checking to see if file Aggfiles/lingimm.stock.len.agg can be opened ... OK
+Opening file Aggfiles/lingimm.stock.len.agg
+Read length aggregation file - number of entries 35
+Closing file Aggfiles/lingimm.stock.len.agg
+Read basic stock data for stock lingimm
+Read growth data for stock lingimm
+Read natural mortality data for stock lingimm
+Checking to see if file Aggfiles/lingimm.stock.len.agg can be opened ... OK
+Opening file Aggfiles/lingimm.stock.len.agg
+Read length aggregation file - number of entries 35
+Closing file Aggfiles/lingimm.stock.len.agg
+Read prey data for stock lingimm
+Read predator data for stock lingimm
+Checking to see if file Modelfiles/lingimm.init.normalparam can be opened ... OK
+Opening file Modelfiles/lingimm.init.normalparam
+Read initial conditions data file - number of entries 8
+Closing file Modelfiles/lingimm.init.normalparam
+Read initial conditions data for stock lingimm
+Read migration data for stock lingimm
+Checking to see if file Modelfiles/lingimm.maturity can be opened ... OK
+Opening file Modelfiles/lingimm.maturity
+Read maturity data file
+Closing file Modelfiles/lingimm.maturity
+Read maturity data for stock lingimm
+Read transition data for stock lingimm
+Checking to see if file Modelfiles/lingimm.rec.normalparam can be opened ... OK
+Opening file Modelfiles/lingimm.rec.normalparam
+Read renewal data file - number of entries 148
+Closing file Modelfiles/lingimm.rec.normalparam
+Read renewal data for stock lingimm
+Read spawning data for stock lingimm
+Read straying data for stock lingimm
+Read stock OK - created stock lingimm
+Closing file lingimm
+Checking to see if file lingmat can be opened ... OK
+Opening file lingmat
+Checking to see if file Aggfiles/lingmat.stock.len.agg can be opened ... OK
+Opening file Aggfiles/lingmat.stock.len.agg
+Read length aggregation file - number of entries 35
+Closing file Aggfiles/lingmat.stock.len.agg
+Read basic stock data for stock lingmat
+Read growth data for stock lingmat
+Read natural mortality data for stock lingmat
+Checking to see if file Aggfiles/lingmat.stock.len.agg can be opened ... OK
+Opening file Aggfiles/lingmat.stock.len.agg
+Read length aggregation file - number of entries 35
+Closing file Aggfiles/lingmat.stock.len.agg
+Read prey data for stock lingmat
+Read predator data for stock lingmat
+Checking to see if file Modelfiles/lingmat.init.normalparam can be opened ... OK
+Opening file Modelfiles/lingmat.init.normalparam
+Read initial conditions data file - number of entries 11
+Closing file Modelfiles/lingmat.init.normalparam
+Read initial conditions data for stock lingmat
+Read migration data for stock lingmat
+Read maturity data for stock lingmat
+Read transition data for stock lingmat
+Read renewal data for stock lingmat
+Read spawning data for stock lingmat
+Read straying data for stock lingmat
+Read stock OK - created stock lingmat
+Closing file lingmat
+Checking to see if file Modelfiles/fleet can be opened ... OK
+Opening file Modelfiles/fleet
+Warning in file Modelfiles/fleet - 
+Note that this exponentiall50 has had a factor of 4 removed from the source code
+Warning in file Modelfiles/fleet - 
+Note that this exponentiall50 has had a factor of 4 removed from the source code
+Read predation data - number of preys 2
+Checking to see if file Data/fleet.surv.data can be opened ... OK
+Opening file Data/fleet.surv.data
+Read amounts data file - number of entries 37
+Closing file Data/fleet.surv.data
+Read fleet OK - created fleet surv
+Warning in file Modelfiles/fleet - 
+Note that this exponentiall50 has had a factor of 4 removed from the source code
+Warning in file Modelfiles/fleet - 
+Note that this exponentiall50 has had a factor of 4 removed from the source code
+Read predation data - number of preys 2
+Checking to see if file Data/fleet.lln.data can be opened ... OK
+Opening file Data/fleet.lln.data
+Read amounts data file - number of entries 100
+Closing file Data/fleet.lln.data
+Read fleet OK - created fleet lln
+Warning in file Modelfiles/fleet - 
+Note that this exponentiall50 has had a factor of 4 removed from the source code
+Warning in file Modelfiles/fleet - 
+Note that this exponentiall50 has had a factor of 4 removed from the source code
+Read predation data - number of preys 2
+Checking to see if file Data/fleet.bmt.data can be opened ... OK
+Opening file Data/fleet.bmt.data
+Read amounts data file - number of entries 100
+Closing file Data/fleet.bmt.data
+Read fleet OK - created fleet bmt
+Warning in file Modelfiles/fleet - 
+Note that this exponentiall50 has had a factor of 4 removed from the source code
+Warning in file Modelfiles/fleet - 
+Note that this exponentiall50 has had a factor of 4 removed from the source code
+Read predation data - number of preys 2
+Checking to see if file Data/fleet.gil.data can be opened ... OK
+Opening file Data/fleet.gil.data
+Read amounts data file - number of entries 100
+Closing file Data/fleet.gil.data
+Read fleet OK - created fleet gil
+Warning in file Modelfiles/fleet - 
+Note that this exponentiall50 has had a factor of 4 removed from the source code
+Warning in file Modelfiles/fleet - 
+Note that this exponentiall50 has had a factor of 4 removed from the source code
+Read predation data - number of preys 2
+Checking to see if file Data/fleet.foreign.data can be opened ... OK
+Opening file Data/fleet.foreign.data
+Read amounts data file - number of entries 148
+Closing file Data/fleet.foreign.data
+Read fleet OK - created fleet foreign
+Closing file Modelfiles/fleet
+Closing file main
+
+Finished reading model data files, starting to run simulation
+
+Checking to see if file ../../data_provided/params.forsim can be opened ... OK
+Opening file ../../data_provided/params.forsim
+Closing file ../../data_provided/params.forsim
+Warning in keeper - failed to match switch ling.rec.2019
+Warning in keeper - using default values for switch lingimm.walpha
+Warning in keeper - using default values for switch lingimm.wbeta
+Warning in keeper - using default values for switch lingmat.walpha
+Warning in keeper - using default values for switch lingmat.wbeta
+Warning in keeper - no boundlikelihood component found
+No penalties will be applied if any of the parameter bounds are exceeded
+
+Initialising stock lingimm
+Calculated initial condition data for stock lingimm
+Initialising stock lingmat
+Calculated initial condition data for stock lingmat
+Initialising predator surv
+Initialising predator lln
+Initialising predator bmt
+Initialising predator gil
+Initialising predator foreign
+Warning in input files - no understocking likelihood component found
+
+
+Reset time in the simulation to timestep 1
+Reset natural mortality data for stock lingimm
+Reset maturity data for stock lingimm
+Reset consumption data for prey lingimm
+Calculated initial condition data for stock lingimm
+Reset renewal data for stock lingimm
+Reset grower data for stock lingimm
+Reset transition data for stock lingimm
+Reset stock data for stock lingimm
+Reset natural mortality data for stock lingmat
+Reset consumption data for prey lingmat
+Calculated initial condition data for stock lingmat
+Reset grower data for stock lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 2
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 3
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 4
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 5
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 6
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 7
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 8
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 9
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 10
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 11
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 12
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 13
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 14
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 15
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 16
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 17
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 18
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 19
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 20
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 21
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 22
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 23
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 24
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 25
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 26
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 27
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 28
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 29
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 30
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 31
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 32
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 33
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 34
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 35
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 36
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 37
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 38
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 39
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 40
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 41
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 42
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 43
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 44
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 45
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 46
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 47
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 48
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 49
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 50
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 51
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 52
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 53
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 54
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 55
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 56
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 57
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 58
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 59
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 60
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 61
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 62
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 63
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 64
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 65
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 66
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 67
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 68
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 69
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 70
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 71
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 72
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 73
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 74
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 75
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 76
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 77
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 78
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 79
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 80
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 81
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 82
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 83
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 84
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 85
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 86
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 87
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 88
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 89
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 90
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 91
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 92
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 93
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 94
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 95
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 96
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 97
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 98
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 99
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 100
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 101
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 102
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 103
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 104
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 105
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 106
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 107
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 108
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 109
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 110
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 111
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 112
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 113
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 114
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 115
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 116
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 117
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 118
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 119
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 120
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 121
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 122
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 123
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 124
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 125
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 126
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 127
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 128
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 129
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 130
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 131
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 132
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 133
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 134
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 135
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 136
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 137
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 138
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 139
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 140
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 141
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 142
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 143
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 144
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 145
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 146
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 147
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+Increased time in the simulation to timestep 148
+Reset consumption data for prey lingimm
+Reset stock data for stock lingimm
+Reset consumption data for prey lingmat
+Reset stock data for stock lingmat
+Reset predatation data for predator surv
+Reset predatation data for predator lln
+Reset predatation data for predator bmt
+Reset predatation data for predator gil
+Reset predatation data for predator foreign
+
+The simulation has reached the last timestep for the current model run
+
+The current likelihood scores for each component are:
+
+The current overall likelihood score is 0
+
+Checking to see if file params.out can be opened ... OK
+Opening file params.out
+Closing file params.out
+
+Total number of warnings was 17
+
+Gadget simulation finished OK - runtime was 0 seconds

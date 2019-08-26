@@ -233,10 +233,10 @@ ling.mat
 
 ## write to file
 ling.imm %>% 
-  write.gadget.file(gd$dir)
+  write.gadget.file(gd)
 
 ling.mat %>% 
-  write.gadget.file(gd$dir)
+  write.gadget.file(gd)
 
 
 ```
@@ -383,7 +383,8 @@ settings, which are explained in the next section.
 ```{r}
 
 #taken from data analyses
-init_sigmas <- rep(2, length(ling.imm[[1]]$minage:ling.imm[[1]]$maxage))
+init.sigma.i <- rep(2, length(ling.imm[[1]]$minage:ling.imm[[1]]$maxage))
+init.sigma.m <- rep(2, length(ling.mat[[1]]$minage:ling.mat[[1]]$maxage))
 
 
 ling.imm <-
@@ -396,7 +397,7 @@ ling.imm <-
                                            unlist(),   
                                          area.factor = '#lingimm.init.scalar',
                                          mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
-                                         stddev = init_sigmas,
+                                         stddev = init.sigma.i,
                                          alpha = '#ling.walpha',
                                          beta = '#ling.wbeta')) 
 
@@ -410,15 +411,15 @@ ling.mat <-
                                            unlist(),
                                          area.factor = '#lingmat.init.scalar',
                                          mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
-                                         stddev = init.sigma$ms[age],
+                                         stddev = init.sigma.m,
                                          alpha = '#lingmat.walpha',
                                          beta = '#lingmat.wbeta'))  
 ## write to file
 ling.imm %>% 
-  write.gadget.file(gd$dir)
+  write.gadget.file(gd)
 
 ling.mat %>% 
-  write.gadget.file(gd$dir)
+  write.gadget.file(gd)
 
 ```
 
@@ -458,7 +459,7 @@ parameters are provided for translation into biomass.
  ling.imm <-
    ling.imm %>%
   gadget_update('doesrenew',
-                normalparam = data_frame(year = year_range,
+                normalparam = data_frame(year = schedule$year,
                                          step = 1,
                                          area = 1,
                                          age = .[[1]]$minage,
@@ -472,7 +473,7 @@ parameters are provided for translation into biomass.
 
 ## write to file
 ling.imm %>% 
-  write.gadget.file(gd$dir)
+  write.gadget.file(gd)
 
 ```
 
@@ -490,8 +491,8 @@ frame, which is the same for both stocks.
 ```{r}
 
 #For internal consistency, these parameter values should be the
-#same as those c(ling.walpha, ling.wbeta)
-lw_pars <- c(0.0001, 3) 
+#same as those for ling.walpha & ling.wbeta in the params file
+lw_pars <- c(0.00000228, 3.20) 
 
  ling.imm <-
    ling.imm %>%
@@ -509,13 +510,14 @@ ling.mat <-
 
 ## write to file
 ling.imm %>% 
-  write.gadget.file(gd$dir)
+  write.gadget.file(gd)
 
 ling.mat %>% 
-  write.gadget.file(gd$dir)
+  write.gadget.file(gd)
 
 
 ```
+
 Note that the new files 'Modelfiles/lingimm.refwgt' and 'Modelfiles/lingmat.refwgt' 
 are created to hold the information in the data frames. 
 
@@ -539,10 +541,10 @@ ling.mat <-
 
 ## write to file
 ling.imm %>% 
-  write.gadget.file(gd$dir)
+  write.gadget.file(gd)
 
 ling.mat %>% 
-  write.gadget.file(gd$dir)
+  write.gadget.file(gd)
 
 ```
 
@@ -552,7 +554,7 @@ ling.mat %>%
    ling.imm %>%
   gadget_update('iseaten',1) %>% 
   gadget_update('doesrenew',
-                normalparam = data_frame(year = year_range,
+                normalparam = data_frame(year = schedule$year,
                                          step = 1,
                                          area = 1,
                                          age = .[[1]]$minage,
@@ -580,16 +582,150 @@ ling.mat <-
 
 ## write to file
 ling.imm %>% 
-  write.gadget.file(gd$dir)
+  write.gadget.file(gd)
 
 ling.mat %>% 
-  write.gadget.file(gd$dir)
+  write.gadget.file(gd)
 
 
 ```
 
 ### Set up fleets using catch data
 
+First, catch data must be organized in the same structure as the model (units kg). Here we 
+have three fleets, longline, bottom trawl, and gillnet fleets. They are separated by gear so
+that a different selectivity curve can be implemented for each fleet. The survey is also
+treated as a fleet here so that it too can have a different selectivity curve implemented.
+However, note that because we don't want the survey to actually have any fishing impact on 
+the population, we 'trick' Gadget by only allowing it to have a 1 kg catch in within each 
+step / year combination. There will need to exist catch in these steps because later in the
+tutorial, we will declare that biological data came from these catches.
+
+Also notice that the attribute `'area_group'` need to be applied to the data frame using the 
+function `structure`. These attributes are called on by Rgadget when creating the
+appropriate aggregate files.
+
+```{r}
+
+#WILL THIS WORK WITHOUT MFDB GROUP?
+# lln.landings <- structure(read_csv('data_provided/lln.csv'),
+#             area_group = mfdb_group(`1` = 1))
+# bmt.landings <- structure(read_csv('data_provided/bmt.csv'),
+#             area_group = mfdb_group(`1` = 1))
+# gil.landings <- structure(read_csv('data_provided/gil.csv'),
+#             area_group = mfdb_group(`1` = 1))
+# surv.landings <- structure(read_csv('data_provided/surv.csv'),
+#             area_group = mfdb_group(`1` = 1))
+
+#Something weird about the levels of area_group list here
+lln.landings <- structure(read_csv('data_provided/lln.csv'),
+            area_group = list(`1` = 1))
+bmt.landings <- structure(read_csv('data_provided/bmt.csv'),
+            area_group = list(`1` = 1))
+gil.landings <- structure(read_csv('data_provided/gil.csv'),
+            area_group = list(`1` = 1))
+for.landings <- structure(read_csv('data_provided/for.csv'),
+            area_group = list(`1` = 1))
+surv.landings <- structure(read_csv('data_provided/surv.csv'),
+            area_group = list(`1` = 1))
+
+lln.landings
+surv.landings
+```
+
+After obtaining the data, it is time to create the fleet files using `gadgetfleet` and
+`gadget_update` as we have seen before. There are a variety of fleet types that can be
+implemented in Gadget depending on the purpose and data available. Below we designate 
+the fleet as a `'totalfleet'` because the data available are landings by biomass at time.
+It is an 'ouput' implementation, as is another option called `'numberfleet'`, which 
+requires landings numbers (not biomass) at time. Possible 'input' options are 
+`'linearfleet'` or `'efffortfleet'` which are implementations that control effort. The 
+last option `'quotafleet'` is more dynamic because it sets the kg taken by each fleet 
+through a simple harvest control rule based on the previous year's biomass level, then 
+splits it among the fleet.
+
+Setting up a fleet using `gadget_update` requires setting the fleet type (below to
+`'totalfleet'`), giving the fleet a name (below 'surv', 'lln','bmt', and 'foreign'),
+designating a 'suitability' function, and supplying the catch data described above.
+
+In Gadget, the fleets act as a simple predator in the model, with consumption controlled 
+by input or output data to the fleet (i.e., effort or landings), depending on the type 
+of fleet chosen.  Therefore, 'suitability' is the term Gadget uses to encompass patterns 
+of selectivity patterns related to both fleet and predator consumption. However, fleet files 
+are set up differently than predator files (designated as another 'stock') because of common
+differences in data and other settings particular to fleets. 
+
+```{r}
+
+gadgetfleet('Modelfiles/fleet',gd,missingOkay = TRUE) %>% 
+  gadget_update('totalfleet',
+                name = 'surv',
+                suitability = paste0('\n',
+                                     paste(c('lingimm','lingmat'),
+                                           'function','exponentiall50',
+                                           '#ling.surv.alpha','#ling.surv.l50',
+                                           collapse='\n')),
+                data = surv.landings) %>%
+  gadget_update('totalfleet',
+                name = 'lln',
+                suitability = 
+                  paste0('\n',
+                         paste(c('lingimm','lingmat'),
+                               'function','exponentiall50',
+                               '#ling.lln.alpha','#ling.lln.l50',
+                               collapse='\n')),
+                data = lln.landings) %>% 
+  gadget_update('totalfleet',
+                name = 'bmt',
+                suitability = paste0('\n',
+                                     paste(c('lingimm','lingmat'),
+                                           'function','exponentiall50',
+                                           '#ling.bmt.alpha','#ling.bmt.l50',
+                                           collapse='\n')),
+                data = bmt.landings) %>% 
+  gadget_update('totalfleet',
+                name = 'gil',
+                suitability = paste0('\n',
+                                     paste(c('lingimm','lingmat'),
+                                           'function','exponentiall50',
+                                           '#ling.gil.alpha','#ling.gil.l50',
+                                           collapse='\n')),
+                data = gil.landings) %>% 
+  gadget_update('totalfleet',
+                name = 'foreign',
+                suitability = 
+                  paste0('\n',
+                         paste(c('lingimm','lingmat'),
+                               'function','exponentiall50',
+                               '#ling.lln.alpha','#ling.lln.l50',
+                               #'function','andersenfleet',                              #'#ling.lln.p0',to.gadget.formulae(quote(log(180/ling.lln.lmode))),'#ling.lln.p2',
+                               #'#ling.lln.p3','#ling.lln.p4','180',
+                               collapse='\n')),
+                data = for.landings) %>% 
+  write.gadget.file(gd)
+
+```
 
 
 ## Run the simulation using pre-determined parameters 
+
+Now we run just as in the simple model example. Here we chose to set the directory to model
+location, then use `Sys.setenv` to set the Gadget working directory to the model path, and
+finally call Gadget to do a simple simulation.
+
+```{r, echo = FALSE, root.dir = 'ling_model/01-base'}
+setwd('ling_model/01-base')
+Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
+callGadget(s=1,main='main',ignore.stderr = FALSE,log = 'simple_log')
+
+```
+
+To make it a little more interesting
+
+```{r, echo = FALSE, root.dir = 'ling_model/01-base'}
+Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
+getwd()
+callGadget(s=1,main='main',ignore.stderr = FALSE,log = 'simple_log2', i='../../data_provided/params.forsim')
+
+```
+

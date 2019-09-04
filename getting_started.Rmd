@@ -1,12 +1,14 @@
 ---
 title: "Getting started"
-html_document:
-  fig_height: 4
-  fig_width: 8
-  highlight: haddock
-  theme: united
-  toc: yes
-  toc_float: yes
+output: 
+  html_document:
+    fig_height: 4
+    fig_width: 8
+    highlight: haddock
+    theme: united
+    toc: yes
+    toc_float: yes
+bibliography: library.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -39,6 +41,7 @@ more complex models involving a large set of similarly input text files can beco
 tedious and error-prone, and can impair reproducability.
 
 ```{r engine='tikz',echo=FALSE}
+
 \usetikzlibrary{arrows,decorations.pathmorphing,decorations.footprints,fadings,calc,trees,mindmap,shadows,decorations.text,patterns,positioning,shapes,matrix,fit,backgrounds}
  \begin{tikzpicture}[xscale = .9,yscale = .9]
     \node (main)[shape=ellipse,style=dashed,draw] at (-7,-2){main};
@@ -138,29 +141,84 @@ but details regarding the statistical theory behind fitting procedures, analysis
 model fit, and diagnostics are beyond the scope of this course.
 
 # Using Rgadget
-As always you will need to load it into memory:
-```{r}
+To use the Rgadget functions you will need to load it into your R workspace in the usual manner:
+```{r message=FALSE,warning=FALSE}
 library(Rgadget)
 ```
-For convenience Rgadget will also load the tidyverse package as it is used extensively when interacting with Gadget. We will introduce the functions in Rgadget as we go through the tutorial. Now we will focus on setting up a simple dummy model using the `gadgetfile` function and related functions. `gadgetfile` creates new files in a format that coheres to the Gadget file format by using lists embedded within lists.
+For convenience Rgadget will also load the tidyverse package as it is used extensively when interacting with Gadget and viewing the output. As noted above Rgadget has a number of functions and we will introduce the main functions in Rgadget as we go through the tutorial. 
+
+Here we will focus on setting up a simple dummy model using the `gadgetfile` function and functions that are its derivatives. The `gadgetfile` function is low level function that creates an R object that can be exported to files that coheres to the Gadget file format, described in the [Userguide](https://hafro.github.io/gadget/docs/userguide). Essentially a Gadget file is structured by a list of named components and within those components there are named settings. As an example of this you can your own custom Gadget file by specifying the components as named lists embedded within a named list:
 ```{r}
-gadgetfile('test',file_type = 'generic', 
-           components = list(a=list(bla=1),
-                             b=list(ble=1)))
+dummy <- 
+  gadgetfile('test',file_type = 'generic', 
+             components = list(fruit=list(apple=1,orange=5),
+                               vegetable=list(cucumber=1)))
+
+dummy
 ```
-The file type argument allows function to customize the output depending to the various quirks of the file. The output can then subsequently be written to a file using `write.gadget.file`. 
+You will note that when calling the `gadgetfile` object the printed output will be in the same format as the resulting Gadget file. This for our mainly convenience as you will be able to directly see if the format is incorrect before writing it to file. If you need however to access individual components of you can of course do so by calling the name of the component directly:
 
-## Create new Gadget model input files 
+```{r}
+dummy$fruit
+```
 
-Set up a Gadget directory:
+and if you want to investigate the structure further you can call `str` on the object:
+```{r}
+str(dummy)
+```
+
+
+The file type argument in `gadgetfile` allows the function to customize the output depending to the various quirks of the file. You can see the different file types currently allowed for by `gadgetfile` by calling `gadget_filetypes`:
+```{r echo=FALSE}
+gadget_filetypes %>% 
+  knitr::kable()
+```
+
+The output can then subsequently be written to a file using `write.gadget.file`:
+```{r eval=FALSE}
+write.gadget.file(obj=dummy,path='somewhere_over_the_rainbow')
+```
+
+
+## Creating model input files 
+
+Having described how `gadgetfile` works we can now start to define our first model, which we will refer to as the "Simple model". This simply done by first deciding where to put the model and the associated files. Rgadget helps you by creating a convenience function `gadget.variant.dir` whichs set up a working directory for the Gadget model:
 
 ```{r}
 gd <- gadget.variant.dir('simple_model')
 gd
 ```
 
-You will notice that `gd` is just a simple list with the location of the model and what is called the `mainfile`. The main file is the root of the Gadget input file structure, specifiying all the paths to the definition of the ecosystem that is being simulated, such as the stocks and time period. By invoking the `gadget.variant.dir` command a new folder for the model is created and subsequent edits to the `gd` object will update the main file as necessary. 
+You will notice that `gd` is just a simple string with the location of the model, which in this case is a folder named `simple_model` within the current working directory, and an attribute to that string called `mainfile`. The main file is, as illustrated below, the root of the Gadget input file structure, specifiying all the paths to the definition of the ecosystem that is being simulated, such as the stocks and time period. By invoking the `gadget.variant.dir` command a new folder for the model is created and subsequent edits to the `gd` object will update the main file as necessary. 
 
+```{r engine='tikz',echo=FALSE}
+\usetikzlibrary{arrows,decorations.pathmorphing,decorations.footprints,fadings,calc,trees,mindmap,shadows,decorations.text,patterns,positioning,shapes,matrix,fit,backgrounds}
+ \begin{tikzpicture}[xscale = 1.5,yscale = 1]
+    \node (main)[shape=ellipse,style=dashed,draw] at (0,0){main};
+    \node (time) at (-2,2){time};
+    \node (area) at (-2,1){area};
+    \node (print)[color=gray] at (-2,0){printfile};
+    \node (stock)[shape=rectangle,draw] at (-2,-1){stockfiles};
+    \node (tagf)[shape=rectangle,draw,color=gray] at (2,2){tagfiles};
+    \node (oth)[shape=rectangle,draw,color=gray] at (2,1){otherfoodfiles};
+    \node (fleet)[shape=rectangle,draw] at (2,0){fleetfiles};
+    \node (lik)[shape=rectangle,draw,color=gray] at (2,-1){likelihoodfiles};
+
+
+    \draw[->] (main) to (time);
+    \draw[->] (main) to (area);
+    \draw[->] (main) to (print);
+    \draw[->] (main) to (stock);
+    \draw[->] (main) to (tagf);
+    \draw[->] (main) to (oth);
+    \draw[->] (main) to (fleet);
+    \draw[->] (main) to (lik);
+    \end{tikzpicture}
+```
+
+We will now go through each of these different file types and show you how to generate them. Note that the grayed files in the illustration above will be covered at a later stage. 
+
+### Time file
 Gadget is structured as a forward simulator, so in order for it to run we will first need to define the time period ('year'), and number of subannual time steps ('step'), for the projection. We do so by creating a data frame setting up the schedule for the simulation:
 
 ```{r}
@@ -180,10 +238,12 @@ gadgetfile('Modelfiles/time',
                                   firststep=1,
                                   lastyear=max(schedule$year),
                                   laststep=4,
-                                  notimesteps=c(4,3,3,3,3)))) %>% 
+                                  notimesteps=c(4,3,3,3,3)))) %>% ## number of time steps and step length in months
   write.gadget.file(gd)
 ```
+Note that arbitrary years and timesteps can be defined for the model as appropriate for the data and the species simulated. One can for instance start the simulation in 1981 to 2019, with four timesteps with a timestep length of 1,2,4 and 5 months. Typically, though, Gadget models tend to be set up in a set number of year with quarterly timesteps. 
 
+### Area file
 
 Since Gadget allows for simulations in multiple areas these need to be explicitly defined. Various processes, such as fleet operations and migrations, in the model can then be explicitly defined by area. As for the time file the areas are defined in the area file which you can create using `gadgetfile`:
 
@@ -192,19 +252,31 @@ gadgetfile('Modelfiles/area',
            file_type = 'area',
            components = list(list(areas = 1,
                                   size = 1,
-                                  temperature= schedule %>% mutate(area = 1, temperature = 5)))) %>% 
+                                  temperature = schedule %>% 
+                                    mutate(area = 1, temperature = 5)))) %>% 
   write.gadget.file(gd)
 ```
-The areas are defined with attributes, size of the area and average temperature for each time step. Note although these attributes are rarely used in practice they will need to by defined for all areas and time steps in order for the simulation to run. 
+which will generate a file starting with:
+```{r echo=FALSE}
+gadgetfile('Modelfiles/area',
+           file_type = 'area',
+           components = list(list(areas = 1,
+                                  size = 1,
+                                  temperature = schedule %>% head(5) %>%  
+                                    mutate(area = 1, temperature = 5))))
+```
 
-Rgadget has a number of convenience functions when dealing with more complicated files. These functions are all derivatives of `gadgetfile` and thus can be written to file using `write.gadget.file`. We will start off by creating a skeleton stock file:
+The areas are defined with attributes, size of the area and average temperature for each time step. Note although these attributes are rarely used in practice they will need to by defined for all areas and, in the case of temperatrue, time steps in order for the simulation to run. 
+
+### Stockfiles
+
+Rgadget has a number of convenience functions when dealing with more complicated files. These functions are all derivatives of `gadgetfile` and thus can be written to file using `write.gadget.file`. Here we will start off by creating a skeleton stock file using the `gadgetstock` function:
 
 ```{r}
 stock <- gadgetstock('simple_stock',gd,missingOkay = TRUE)
 stock
 ```
-
-This stock file is not a valid file so we will need to edit the `stock` object. This is done using `gadget_update` which, as the name suggests, allows to you to update individual components of the file. The first argument to `gadget_update` after the stock file is the name of the component you want update followed by the variables within the component you want to update. So let's start by setting mininum and maximum age and other similar attributes in the stock component:
+This will define a stock named "simple_stock" within the "simple_model" ecosystem. This stock file is however not a complete file so we will need to edit the `stock` object by adding the necessary attributes. This is done using `gadget_update` which, as the name suggests, allows to you to update individual components of the file. The first argument to `gadget_update` after the stock file is the name of the component you want update followed by the variables within the component you want to update. So let's start by setting mininum and maximum age and other similar attributes in the stock component:
 
 ```{r}
   stock %>% 
@@ -217,7 +289,7 @@ This stock file is not a valid file so we will need to edit the `stock` object. 
                 dl = 1)
 ```
 
-We can of course do multiple edits using `gadget_update` in one go:
+As `gadget_update` was designed to allow the user to edit the Gadget file using a piping mechanism, a la tidyverse, we can of course do multiple edits using `gadget_update` in one go:
 
 ```{r}
 stock <- 
@@ -246,13 +318,21 @@ stock %>%
 stock
 ```
 
+There is a lot to digest from the code above so it is worth stopping and taking a look at each element: 
+* The first call to `gadget_update` edited the attributes to the "stock" part of the file as discussed above. 
+* The second call to "doesgrow" turned off all growth processes in the model for this stock by setting `doesgrow` to `0` (Note that we will discuss growth models in later chapters). 
+* Natural mortality was set 0, meaning that fish in the model will not die of natural causes.  
+* The weight of the fish was defined 
+* The initial number of fish and their size range at age was defined via "initalconditions". The initial number of fish is determined in multiples of 10 000 fish, so to derive the number of fish at a certain age and in a specific area you need to multiply the `area.factor` with the `age.factor`. With in the same cell you can read the mean length and standard deviation from the `mean` and `stddev` columns, and the paramters of the weight--length relationship ($w = \alpha l^\beta$) can be read from the `alpha` and `beta` columns. 
 
 
-This essentially creates a stock with 1000 fish that do not grow, consume or die for the duration of the simulation. Behind the scenes R has created a folder named `simple_model` with all the necessary files:
+The stock file essentially defines a stock with 1000 fish that do not grow, consume or die for the duration of the simulation. By writing this file to the disk R has behind the scenes created a folder named `simple_model` with all the necessary files:
 ```{r}
 fs::dir_ls(gd)
 ```
 
+
+## Starting a simulation
 
 To test if this is working we can run a single simulation first to check for any errors or warning in our setup. 
 
@@ -262,28 +342,21 @@ Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
 callGadget(s=1,main='main',ignore.stderr = FALSE,log = 'simple_log')
 ```
 
-This gives you a warning that no understocking likelihood is available. The understocking likelihood is a penalty function used to prevent negative consumption, i.e. more fish being eaten and/or fished than is available. We can safely ignore this warning for the time being. After running Gadget we see that two new files have been added to the directory, the parameter file (`params.out`) and the log file (`simple_log`). We will discuss the parameter file in more detail in the following sections but for the time being lets look at the log file:
+This gives you a warning that no understocking likelihood is available. The understocking likelihood is a penalty function used to prevent negative consumption, i.e. more fish being eaten and/or fished than is available. We can safely ignore this warning for the time being. After running Gadget we see that two new files have been added to the directory, the parameter file (`params.out`) and the log file (`simple_log`). We will discuss the parameter file in more detail in the following sections but for now lets look at the log file:
 
 ```{r}
-read_lines(paste(gd,'simple_log',sep='/')) 
+read_lines(paste(gd,'simple_log',sep='/'))[-(58:175)] 
 ```
 **If and when you have errors the log file is the best place to start trying to figure out where the error occurs.** 
 
 We can now gather the output from the model using `gadget.fit`:
 ```{r}
 fit <- gadget.fit(wgts = NULL,gd = list(dir=gd))
-fit
+plot(fit,data='res.by.year',type = 'num.total') 
+```
+and the fit object contains a number of useful datasets that can be used for further analysis:
+```{r}
+names(fit)
 ```
 
-
-
-## Run initial Gadget simulation
-
-## Modify some Gadget model files
-
-## Fit initial Gadget statistical model to generate starting values
-
-## Set optimisation function parameters and fit Gadget statistical model
-
-## Visualize Gadget statistical model fit
 

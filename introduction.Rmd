@@ -262,7 +262,9 @@ simulation after aggregating across certain dimensions. Within the likelihood mo
 a number of datasets can be compared to the model output. In addition
 to a suite of functions designed to work with different types of
 survey indices, various other types of data , can be contrasted to
-the model output including compositional data (such as length distributions, age distributions, age- and length-distribution, or proportions mature) or tagging data to name a few. Each dataset is compared to model output at its own aggregation
+the model output including compositional data (such as length distributions, 
+age distributions, age- and length-distribution, or proportions mature) or 
+tagging data to name a few. Each dataset is compared to model output at its own aggregation
 level, with missing data handled in a robust manner.
 
 In contrast with Gadget, age-based or stock production type stock

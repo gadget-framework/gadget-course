@@ -38,7 +38,10 @@ and how to personalize them
 
 ### Your a priori homework
 
-**Prior to the course** make sure your operating system is a unix derivative, such as linux or macosx, as the code and examples in this course is only tested against these operating systems. Windows should in theory work, but issues related to Windows line endings are known to cause random issues in Gadget. 
+**Prior to the course** make sure your operating system is a unix derivative, 
+such as linux or macosx, as the code and examples in this course is only tested 
+against these operating systems. Windows should in theory work, but issues related 
+to Windows line endings are known to cause random issues in Gadget. 
 
 To install Gadget follow the [installation guide]. 
 
@@ -46,39 +49,56 @@ Please also have the most recent version of R and Rstudio installed.
 
 In addition, if you plan to run a simple model using your own data, please:
 
-1. familiarize yourself with tidyverse programming[link to tidyverse.html]
+1. familiarize yourself with [tidyverse programming](tidyverse.html)
 
 2. think about your model structure/ aggregation level and have R scripts ready that 
 aggregate your data into an appropriately formatted data frame (i.e., columns of :
 year, time step, area, age bins, length bins, or age- and length-bins - have a sneak
 peak at our example model data [here])
 
+# Time and location
+___
+
+__Time__: 2019-09-30 09:00 - 2019-10-04 12:00
+
+__Location__:
+```{r, fig.width = 9, fig.height = 3, message = FALSE, echo=FALSE, warning=FALSE}
+library(leaflet)
+content <- paste(sep = "<br/>",
+  "<b><a href='http://www.hafogvatn.is'>Hafro</a></b>",
+  "Skúlagata 4",
+  "101 Reykjavík, Iceland"
+)
+leaflet() %>% 
+  addTiles() %>% 
+  setView(lng = -21.93016, lat = 64.14897, zoom = 15) %>%
+   addPopups(-21.93016,64.14897, content,
+             options = popupOptions(closeButton = FALSE))
+```
+
 # Draft workplan
 
 ### Monday - PJW
 
-Internet access
+* Internet access
+* [Introduction](introduction.html)
+* [Introduction to tidyverse](tidyverse.html)
+* Deal with installation issues
+* [Getting started](getting_started.html)
+* [Adding fleets into the model](day1_continued.html)
 
-Insert link to 'introduction.html' here?
-
-Insert link to 'tidyverse.html' here?
-
-Insert link to 'getting_started.html'?
-
-Deal with installation issues
-
-
-Fleets, etc
-Insert link to 'simple model' 
+---
 
 ### Tuesday - PJW
 * Recap and examples 
-* More complicated models: Ling in Iceland
+* More complicated models: [Ling in Iceland}(day2_lingmodel.html)
   + Growth
   + Maturation as a multi-'stock' process
   + Initial conditions
   + Recruitment
   + Fleet operations
+
+---
 
 ### Wednesday - PJW / BÞE
 * Introducing likelihood functions and iterative reweighting
@@ -86,6 +106,8 @@ Insert link to 'simple model'
 * Set optimisation function parameters and fit Gadget statistical model
 * Visualize Gadget statistical model fit
 * Own projects
+
+---
 
 ### Thursday - BÞE
 * Alternate structures - SHOULD THIS MOVE TO THURSDAY MORNING?
@@ -100,6 +122,7 @@ Insert link to 'simple model'
 * Version control
 * Own projects
 
+---
 ### Friday - BÞE
 * MSE using Gadget: Ling (cont.)
 * Wrap up

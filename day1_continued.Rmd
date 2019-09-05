@@ -76,10 +76,10 @@ Similarly if you need to log transform your variable as `log(M)`, you can use:
 ```
 (log (* 0.1 #M))
 ```
-equates to `log(0.1*M)`. This allows you to apply fairly elaborate functions to the parameter. Formulas can then be inserted where 
+equates to `log(0.1*M)`. This allows you to apply fairly elaborate functions to the parameter. And as in the case of variables formulas can then be inserted instead of numbers. 
 
 
-Rgadget further provides mechanisms to work with Gadget formulae, both allowing you to evaluate the formula using `parse.gadget.formula` and transform a R statement with `to.gadget.formulae`:
+These formulas can be fairly complex and Rgadget provides mechanisms to manipulate Gadget formulae, both allowing you to evaluate the formula using `parse.gadget.formula` and transform a R statement with `to.gadget.formulae`:
 
 ```{r}
 ## R expression to Gadget formula
@@ -93,8 +93,23 @@ parse.gadget.formulae('(* #a #b)') %>%
   eval(list(a=7,b=6))
 ```
 
+For instance if you want the mean length at age, in for instance the initial conditions, to be based on the Von Bertanlanfy growth function:
+$$l_a = L_\infty(1 - e^{-k(a - a_0)}) $$
+you can do that for age 3 as an example using the `to.gadget.formulae` in the following manner:
+
+```{r}
+to.gadget.formulae(quote(linf*(1-exp(-1*k(3-a0)))))
+```
+
+
+
 #### Exercise
-* Change the initial conditions in such a way you can control the initial number of fish using the parameter file. 
+* Change the initial conditions in such a way you can control both the initial number of fish and the natural mortality using the parameter file. What happens to your stock when you change these values?
+* Play around with the Gadget formulae functions, e.g. parse and evaluate the following formula at $\alpha = 0.1$ and $l_{50} = 75$ :
+```
+ (/ 1 (+ 1 (exp (* (* -1 #alpha) (- 50 #l50)))))
+```
+
 
 ## Fleet operations
 Fleet operations are defined as a separate model component. 
@@ -113,4 +128,5 @@ gadgetfleet('Modelfiles/fleet',gd,missingOkay = TRUE) %>%
                   data = effort) %>% 
   write.gadget.file(gd)
 ```
+
 

@@ -1,0 +1,32 @@
+---
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(Rgadget)
+```
+
+# Suitability functions
+
+As Gadget is a length based simulation model, almost all processes are modelled in terms of length of an individual in a particular stock. The rationale for this is that natural processes are better explained in terms of size, e.g. prey must fit into the mouth of the predator. Thus predation and fleet selection are modelled in terms of size. These selection processes can very between predators (and fleets) and therefore Gadget allows the user to define this relationship in a number of ways. This relationship is essentially factored into two components: 
+
+a) what the predator wants to consume and 
+b) what size ranges the predator is able to produce. 
+
+This second part is determined by *suitability* functions. These functions are:
+
+Function name  | Formula 
+------------- | -------------
+`constant`  | $S(L,l) = \alpha$ 
+`straightline`  | $S(L,l) = \alpha + \beta l$
+`exponential` | $S(L,l) = \frac{\delta}{1+e^{(-\alpha-\beta l - \gamma L)}}$
+`exponentiall50` | $S(L,l) = \frac{1}{1 + e^{-\alpha(l-l_{50})}}$
+`richards` | $S(L,l) = \left(\frac{\delta}{1+e^{(-\alpha-\beta l - \gamma L)}}\right)^\eta$
+`andersen` | $S(L,l) =  \begin{cases} \alpha + \gamma e^{-\frac{(ln(L/l)-\beta)^2}{\delta}}, & \text{if}\ a=ln(L/l) < \beta \\\alpha + \gamma e^{-\frac{(ln(L/l)-\beta)^2}{\eta}}, & \text{if}\ a=ln(L/l) > \beta \end{cases}$
+`andersenfleet` | Same as above except $L$ is a parameter
+`gamma` | $S(L,l) = \bigg(\frac{1}{(\alpha -1)\beta\gamma)}\bigg)^{(\alpha -1)}e^{(\alpha -1 -\frac{1}{\beta\gamma})}$
+
+where $L$ and $l$ are the predator and prey length respectively. Note that when defining fleets their lengths are not *well* defined and in the case of the Andersen suitability function you should use the fleet variant of that function. 
+
+As we have seen before 

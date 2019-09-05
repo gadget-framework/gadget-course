@@ -26,6 +26,7 @@ programmed using 'tidyverse', so a good understanding of how to program using
 tidyverse is a necessity. 
 
 By the end of this course you should:
+
 * correctly structure and format input files for building a simple Gadget
 model and running a simulation via R using Rgadget
 * become familiar enough with the various options in Gadget and how to implement
@@ -91,7 +92,7 @@ leaflet() %>%
 
 ### Tuesday - PJW
 * Recap and examples 
-* More complicated models: [Ling in Iceland}(day2_lingmodel.html)
+* More complicated models: [Ling in Iceland](day2_lingmodel.html)
   + Growth
   + Maturation as a multi-'stock' process
   + Initial conditions

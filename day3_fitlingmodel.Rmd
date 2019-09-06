@@ -1,0 +1,308 @@
+---
+title: "day3_fitlingmodel"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introducing likelihood functions
+
+In Gadget, a likelihood function is specified by supplying likelihood components within the likelihood
+file, which is referred to by the main file. Individual likelihood component scores are summed together 
+according to weights, and likelihood scores are defined by the type of likelihood component specified. 
+Component types define both the kind of data and likelihood function being calculated for that component.
+
+In introducing likelihood components, we will first go through those used within the ling example in detail, but only mention the other types as they follow similar patterns of implementation. To use Rgadget to set up likelihood files, the first consideration that should be made is what data are available that would be useful for creating a likelihood component. These have been provided for you here: in the data_provided folder, you will find catch data (as introduced with the fleets), as well as survey indices, catch distribution, and 'stock' distribution data. Catch distribution include numbers at length as well as numbers at age and length by fleet. These numbers are then used within Gadget to form proportions among defined bins, which are compared to the same proportions among the same bins simulated in the model. Stock distribution data are numbers within each stock, which for ling is immature or mature, but could for example be gender-specific stocks. These are similarly used to form proportions within Gadget.
+
+```{r likelihood}
+
+library(Rgadget)
+
+#assuming you are beginning in a fresh session; this information should be in an 
+#initialization script
+
+base_dir <- 'ling_model'
+vers <- c('01-base')
+gd <- gadget.variant.dir(sprintf(paste0("%s/",vers),base_dir))
+
+#data available:
+    
+
+```
+
+```{r}
+gadgetlikelihood('likelihood',gd$dir,missingOkay = TRUE) %>% 
+  ## Write a penalty component to the likelihood file
+  gadget_update("penalty",
+                name = "bounds",
+                weight = "0.5",
+                data = data.frame(
+                  switch = c("default"),
+                  power = c(2),
+                  upperW=10000,
+                  lowerW=10000,
+                  stringsAsFactors = FALSE)) %>%
+  gadget_update("understocking",
+                name = "understocking",
+                weight = "100") %>% #
+  gadget_update("catchdistribution",
+                name = "ldist.igfs",
+                weight = 1,
+                data = ldist.igfs[[1]],
+                fleetnames = c("igfs"),
+                stocknames =stock_names) %>% 
+  gadget_update("catchdistribution",
+                name = "aldist.igfs",
+                weight = 1,
+                data = aldist.igfs[[1]] %>% ## only two age samples in 1989
+                  #filter(year!=1989),
+                  filter(year>1998),
+                fleetnames = c("igfs"),
+                stocknames =stock_names) %>% 
+  gadget_update("catchdistribution",
+                name = "ldist.lln",
+                weight = 1,
+                data = ldist.lln[[1]] %>% ## tow == 60228 was wrongly assigned, omit samples from that quarter
+                  filter(!(year==1993&step==4)),
+                fleetnames = c("lln"),
+                stocknames = stock_names) %>% 
+  gadget_update("catchdistribution",
+                name = "aldist.lln",
+                weight = 1,
+                data = aldist.lln[[1]] %>%  ## only 20 fish aged taken in those quarters
+                  filter(year>1998,!((year==2002|year==2003)&step==2)),
+                fleetnames = c("lln"),
+                stocknames = stock_names) %>% 
+  gadget_update("catchdistribution",
+                name = "ldist.gil",
+                weight = 1,
+                data = ldist.gil[[1]] %>% ## only one fish lengthmeasured
+                  filter(!(year==2005&step==2)),
+                fleetnames = c("gil"),
+                stocknames = stock_names) %>% 
+  gadget_update("catchdistribution",
+                name = "aldist.gil",
+                weight = 1,
+                data = aldist.gil[[1]] %>% 
+                  filter(year>1998),
+                fleetnames = c("gil"),
+                stocknames = stock_names) %>% 
+  gadget_update("catchdistribution",
+                name = "ldist.bmt",
+                weight = 1,
+                data = ldist.bmt[[1]] %>% ## to few samples (<=20 fish lengths)
+                  filter(!(year==1982&step==4),
+                         !(year==1984&step==1),
+                         !(year==1992&step==4),
+                         !(year==1994&step==1),
+                         !(year==1998&step==3),
+                         !(year==1989&step==3)),
+                fleetnames = c("bmt"),
+                stocknames = stock_names) %>% 
+  gadget_update("catchdistribution",
+                name = "aldist.bmt",
+                weight = 1,
+                data = aldist.bmt[[1]] %>% 
+                  filter(year>1998),
+                fleetnames = c("bmt"),
+                stocknames = stock_names) %>% 
+  gadget_update("stockdistribution",
+                name = "matp.igfs",
+                weight = 1,
+                data = matp.igfs[[1]] %>% ## maturity @ length in 1985 appears to be silly and only one sample in 1989
+                  filter(year>1989),
+                fleetnames = c("igfs"),
+                stocknames =stock_names) %>% 
+  gadget_update("surveyindices",
+                name = "si.20-50",
+                weight = 1,
+                data = igfs.SI1[[1]],
+                fittype = 'loglinearfit',
+                stocknames = stock_names) %>% 
+  gadget_update("surveyindices",
+                name = "si.50-60",
+                weight = 1,
+                data = igfs.SI2a[[1]],
+                fittype = 'loglinearfit',
+                stocknames = stock_names) %>% 
+  gadget_update("surveyindices",
+                name = "si.60-70",
+                weight = 1,
+                data = igfs.SI2b[[1]],
+                fittype = 'fixedslopeloglinearfit',
+                slope=1,
+                stocknames = stock_names) %>% 
+  gadget_update("surveyindices",
+                name = "si.70-80",
+                weight = 1,
+                data = igfs.SI3a[[1]],
+                fittype = 'fixedslopeloglinearfit',
+                slope=1,
+                stocknames = stock_names) %>% 
+  gadget_update("surveyindices",
+                name = "si.80-90",
+                weight = 1,
+                data = igfs.SI3b[[1]],
+                fittype = 'fixedslopeloglinearfit',
+                slope=1,
+                stocknames = stock_names) %>% 
+  gadget_update("surveyindices",
+                name = "si.90-100",
+                weight = 1,
+                data = igfs.SI3c[[1]],
+                fittype = 'fixedslopeloglinearfit',
+                slope=1,
+                stocknames = stock_names) %>% 
+  gadget_update("surveyindices",
+                name = "si.100-160",
+                weight = 1,
+                data = igfs.SI3d[[1]],
+                fittype = 'fixedslopeloglinearfit',
+                slope=1,
+                stocknames = stock_names) %>% 
+  write.gadget.file(gd$dir)
+
+```
+
+```{r}
+gadgetlikelihood('likelihood',gd$dir,missingOkay = TRUE) %>% 
+  ## Write a penalty component to the likelihood file
+  gadget_update("penalty",
+                name = "bounds",
+                weight = "0.5",
+                data = data.frame(
+                  switch = c("default"),
+                  power = c(2),
+                  upperW=10000,
+                  lowerW=10000,
+                  stringsAsFactors = FALSE)) %>%
+  gadget_update("understocking",
+                name = "understocking",
+                weight = "100") %>% #
+  gadget_update("catchdistribution",
+                name = "ldist.igfs",
+                weight = 1,
+                data = ldist.igfs[[1]],
+                fleetnames = c("igfs"),
+                stocknames =stock_names) %>% 
+  gadget_update("catchdistribution",
+                name = "aldist.igfs",
+                weight = 1,
+                data = aldist.igfs[[1]] %>% ## only two age samples in 1989
+                  #filter(year!=1989),
+                  filter(year>1998),
+                fleetnames = c("igfs"),
+                stocknames =stock_names) %>% 
+  gadget_update("catchdistribution",
+                name = "ldist.lln",
+                weight = 1,
+                data = ldist.lln[[1]] %>% ## tow == 60228 was wrongly assigned, omit samples from that quarter
+                  filter(!(year==1993&step==4)),
+                fleetnames = c("lln"),
+                stocknames = stock_names) %>% 
+  gadget_update("catchdistribution",
+                name = "aldist.lln",
+                weight = 1,
+                data = aldist.lln[[1]] %>%  ## only 20 fish aged taken in those quarters
+                  filter(year>1998,!((year==2002|year==2003)&step==2)),
+                fleetnames = c("lln"),
+                stocknames = stock_names) %>% 
+  gadget_update("catchdistribution",
+                name = "ldist.gil",
+                weight = 1,
+                data = ldist.gil[[1]] %>% ## only one fish lengthmeasured
+                  filter(!(year==2005&step==2)),
+                fleetnames = c("gil"),
+                stocknames = stock_names) %>% 
+  gadget_update("catchdistribution",
+                name = "aldist.gil",
+                weight = 1,
+                data = aldist.gil[[1]] %>% 
+                  filter(year>1998),
+                fleetnames = c("gil"),
+                stocknames = stock_names) %>% 
+  gadget_update("catchdistribution",
+                name = "ldist.bmt",
+                weight = 1,
+                data = ldist.bmt[[1]] %>% ## to few samples (<=20 fish lengths)
+                  filter(!(year==1982&step==4),
+                         !(year==1984&step==1),
+                         !(year==1992&step==4),
+                         !(year==1994&step==1),
+                         !(year==1998&step==3),
+                         !(year==1989&step==3)),
+                fleetnames = c("bmt"),
+                stocknames = stock_names) %>% 
+  gadget_update("catchdistribution",
+                name = "aldist.bmt",
+                weight = 1,
+                data = aldist.bmt[[1]] %>% 
+                  filter(year>1998),
+                fleetnames = c("bmt"),
+                stocknames = stock_names) %>% 
+  gadget_update("stockdistribution",
+                name = "matp.igfs",
+                weight = 1,
+                data = matp.igfs[[1]] %>% ## maturity @ length in 1985 appears to be silly and only one sample in 1989
+                  filter(year>1989),
+                fleetnames = c("igfs"),
+                stocknames =stock_names) %>% 
+  gadget_update("surveyindices",
+                name = "si.20-50",
+                weight = 1,
+                data = igfs.SI1[[1]],
+                fittype = 'loglinearfit',
+                stocknames = stock_names) %>% 
+  gadget_update("surveyindices",
+                name = "si.50-60",
+                weight = 1,
+                data = igfs.SI2a[[1]],
+                fittype = 'loglinearfit',
+                stocknames = stock_names) %>% 
+  gadget_update("surveyindices",
+                name = "si.60-70",
+                weight = 1,
+                data = igfs.SI2b[[1]],
+                fittype = 'fixedslopeloglinearfit',
+                slope=1,
+                stocknames = stock_names) %>% 
+  gadget_update("surveyindices",
+                name = "si.70-80",
+                weight = 1,
+                data = igfs.SI3a[[1]],
+                fittype = 'fixedslopeloglinearfit',
+                slope=1,
+                stocknames = stock_names) %>% 
+  gadget_update("surveyindices",
+                name = "si.80-90",
+                weight = 1,
+                data = igfs.SI3b[[1]],
+                fittype = 'fixedslopeloglinearfit',
+                slope=1,
+                stocknames = stock_names) %>% 
+  gadget_update("surveyindices",
+                name = "si.90-100",
+                weight = 1,
+                data = igfs.SI3c[[1]],
+                fittype = 'fixedslopeloglinearfit',
+                slope=1,
+                stocknames = stock_names) %>% 
+  gadget_update("surveyindices",
+                name = "si.100-160",
+                weight = 1,
+                data = igfs.SI3d[[1]],
+                fittype = 'fixedslopeloglinearfit',
+                slope=1,
+                stocknames = stock_names) %>% 
+  write.gadget.file(gd$dir)
+
+```
+## Incorporating data (Ling case study cont.)
+
+## Set optimisation function parameters and fit Gadget statistical model
+
+## Visualize Gadget statistical model fit
+
+

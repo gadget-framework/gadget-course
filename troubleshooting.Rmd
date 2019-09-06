@@ -9,8 +9,48 @@ knitr::opts_chunk$set(echo = TRUE)
 
 # Troubleshooting tips
 
-## Update Gadget and Rgadget
+Uh oh. You ran callGadget and a bunch of red gibberish error message about 
+something with a null status popped out. Now what?
 
-## Look at the log after running a Gadget simulation
+First step is to print a log from a Gadget run, but ONLY when Gadget is running a **simulation**. If run while optimising, you could end up with a crashed computer as well. Open the log and see what the last line tells you. Most often it tells you that a file or data can not be found. 
+
+### File / data / Gadget cannot be found
+
+Check all directories involved:
+* What is your current R working directory in relation to your file paths?
+* What is your Gadget working directory in relation to your  model? Set the via Gadget using `Sys.setenv(GADGET_WORKING_DIR=normalizePath(pathname))`.
+* Where is your Gadget executable in relation to where callGadget thinks it is? The default can be found and changed under the `gadget.exe` argument within callGadget.
+
+### Fleet / Data / Likelihood problems
+
+#### Fleet does not exist in an area
+
+You may get an error whenever there are data assigned to a fleet that came from
+an area where that fleet does not exist. When using Rgadget, fleet catch/landings data frames need to have an attribute assigned to them that specifies the areas *in which the fleet exists*. This information is used to assign fleets to areas in
+the model. Note that it *does not matter whether data from all areas where the fleet exists are in the file or not*. So for example, a fleet assigned to areas 1
+& 2 can have data only coming from area 1, but a fleet assigned only to area 1
+cannot also have data coming from area 2. 
+
+#### Certain likelihood scores or values are not being calculated
+
+If you find that a likelihood component is not returning realistic values, it is wise first to check that temporal and spatial the structure of your model and the structure of your data match. It is also important to check that different sources of data are consistent. For example, you will run into problems if you have a catchdistribution likelihood component with catchdistribution data that comes from a time and place that does not match any catch data being extracted.
+
+### Starting value is outside the bounds of the parameter
+
+This problem is exactly as it states - check your parameter file. Sometimes this 
+happens due to a programming error, but sometimes this also happens when, after running a Gadget optimisation run, Gadget leaves you with an optimised parameter value that is ever
+so slightly beyond the bounds that you specified within the optimisation run. 
+Parameter bounds in the optimisation routine are not set as hard bounds, rather as a penalty, defined by the BoundLikelihood likelihood component, its value and weight. The penalty is calculated as the distance of the parameter value from its bound x the likelihood component value x its weight. Therefore, if the likelihood increases strongly as the bound is approached in the optimisation search, then there may be a small space beyond the bound where the optimisation algorithm could converge if the penalties or weights are not high enough. 
+
+### Update Gadget and Rgadget, restart the Rsession
 
 ## List of known Gadget quirks
+
+Once in a while, you get a far more interesting error in the log. These can be 
+difficult to figure out, but here are a few known bugs that may be causing it.
+
+* Survey indices with more than one are **must** have data for both areas within a given year, if that year is present in the data at all
+
+## Gadget is working properly, but results are strange
+
+This is most likely to be a programming error in an Rgadget script that has caused strange input or settings, so the first step is to carefully check over the Gadget files created to make sure they are

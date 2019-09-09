@@ -607,17 +607,6 @@ appropriate aggregate files.
 
 ```{r}
 
-#WILL THIS WORK WITHOUT MFDB GROUP?
-# lln.landings <- structure(read_csv('data_provided/lln.csv'),
-#             area_group = mfdb_group(`1` = 1))
-# bmt.landings <- structure(read_csv('data_provided/bmt.csv'),
-#             area_group = mfdb_group(`1` = 1))
-# gil.landings <- structure(read_csv('data_provided/gil.csv'),
-#             area_group = mfdb_group(`1` = 1))
-# surv.landings <- structure(read_csv('data_provided/surv.csv'),
-#             area_group = mfdb_group(`1` = 1))
-
-#Something weird about the levels of area_group list here
 lln.landings <- structure(read_csv('data_provided/lln.csv'),
             area_group = list(`1` = 1))
 bmt.landings <- structure(read_csv('data_provided/bmt.csv'),

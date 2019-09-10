@@ -702,19 +702,19 @@ Now we run just as in the simple model example. Here we chose to set the directo
 location, then use `Sys.setenv` to set the Gadget working directory to the model path, and
 finally call Gadget to do a simple simulation.
 
-```{r, echo = FALSE, root.dir = 'ling_model/01-base'}
+```{r, echo = FALSE}
 setwd('ling_model/01-base')
 Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
-callGadget(s=1,main='main',ignore.stderr = FALSE,log = 'simple_log')
+callGadget(s=1,log = 'simple_log')
 
+read.gadget.parameters(paste0(gd,'/params.out'))
 ```
 
-To make it a little more interesting
+As you can see above, a default simulation run uses unrealistic parameter values when none are provided. To make it a little more interesting, we change the input parameter file to one that we know contains some reasonable values.
 
-```{r, echo = FALSE, root.dir = 'ling_model/01-base'}
-Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
-getwd()
-callGadget(s=1,main='main',ignore.stderr = FALSE,log = 'simple_log2', i='../../data_provided/params.forsim')
+```{r, echo = FALSE}
+callGadget(s=1,log = 'simple_log2', i='../../data_provided/params.forsim')
 
+read.gadget.parameters('data_provided/params.forsim')
 ```
 

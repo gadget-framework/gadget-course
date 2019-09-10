@@ -56,9 +56,11 @@ create_intervals <-  function (prefix, vect) {
     
     return(x)
 }
+#just to see what this function does:
+create_intervals('len',seq(minlength, maxlength, dl)) %>% .[1:3]
+```
 
-create_intervals('len',seq(minlength, maxlength, dl))
-
+```{r}
 #catch distribution data available:
   #length distributions do not regard age bins
 ldist.surv <- structure(read_csv('data_provided/ldist_sur.csv'),
@@ -84,6 +86,10 @@ ldist.gil <- structure(read_csv('data_provided/ldist_gil.csv'),
 
 attributes(ldist.surv)
 
+```
+
+```{r}
+
 #age bins needed for age-length distributions
 aldist.surv <- structure(read_csv('data_provided/aldist_sur.csv'),
             area = list(area_file[[1]]$areas) %>% set_names(.),
@@ -107,7 +113,9 @@ aldist.gil <- structure(read_csv('data_provided/aldist_gil.csv'),
             )
 
 attributes(aldist.surv)
+```
 
+```{r}
 
 #stock distribution data available:
 matp.surv <- structure(read_csv('data_provided/matp_sur.csv'),
@@ -138,7 +146,7 @@ ldist.surv %>% mutate(length = substring(length, 4) %>% as.numeric) %>% group_by
 ```
 
 ```{r}
-# set up aggregation info for survey indices
+# set up aggregation info for length-based survey indices
 SI1 <- structure(read_csv('data_provided/SI1.csv'),
             area = list(area_file[[1]]$areas) %>% set_names(.),
             length = create_intervals('len', slices[[1]]))
@@ -163,70 +171,76 @@ SI7 <- structure(read_csv('data_provided/SI7.csv'),
 
 ```
 
-Using Rgadget, writing the files that specify the likelihood componenets is straightforward. When calling `gadgetlikilihood`, a likelihood file is created, and a reference to this likelihood file is drawn within the 'main' file. The likelihood file contains a list of likelihood component specifications, and within this list is where the likelihood function, data, and weighting of the likelihood component is specifies. 
+
+### Setting up likelihood components
+Using Rgadget, writing the files that specify the likelihood componenets is straightforward. When calling `gadgetlikelihood` and then writing it with `write.gadget.file`, a likelihood file is created within R and written to disc.  The likelihood file contains a list of likelihood component specifications, and within this list is where the likelihood function, data, and weighting of the likelihood component is specifies.
 
 Here we start with the distributional components. In all cases, each component receives a distinct name (to be referenced later so keep them short and distinct), weights (1 to yield equal weights for now), data as imported above, and the fleet names and stock names to which these data apply. As a default, Rgadget specifies a sum of squares function to calculate the likelihood score (`'sumofsquares'`), although a variety of other functions are possible, including one for stratified sum of squares (`'stratified'`), multinomial function (`'multinomial'`), pearson function (`'pearson'`), gamma function (`'gamma'`), log function (`'log'`), multivariate normal function (`'mvn'`) or a multivariate logistic function (`'mvlogistic'`). Many of these functions have been tailored for specific data situations (e.g., including tagging or predation data into a likelihood component). More on these functions can be read in the Gadget User Guide. To change the default setting to the stratified sum of squares, for example, one would include an additional argument `function = 'stratified',` to the `gadget_update` call. 
 
 ```{r}
 
 lik <-
-  gadgetlikelihood('likelihood',gd$dir,missingOkay = TRUE) %>% 
+  gadgetlikelihood('likelihood',gd,missingOkay = TRUE) %>% 
   gadget_update("catchdistribution",
                 name = "ldist.surv",
                 weight = 1,
-                data = ldist.igfs,
+                data = ldist.surv,
                 fleetnames = c("surv"),
-                stocknames =c("ling.imm","ling.mat")) %>% 
+                stocknames =c("lingimm","lingmat")) %>% 
   gadget_update("catchdistribution",
                 name = "aldist.surv",
                 weight = 1,
-                data = aldist.igfs, 
+                data = aldist.surv, 
                 fleetnames = c("surv"),
-                stocknames =c("ling.imm","ling.mat")) %>% 
+                stocknames =c("lingimm","lingmat")) %>% 
   gadget_update("catchdistribution",
                 name = "ldist.lln",
                 weight = 1,
                 data = ldist.lln, 
                 fleetnames = c("lln"),
-                stocknames = c("ling.imm","ling.mat")) %>% 
+                stocknames = c("lingimm","lingmat")) %>% 
   gadget_update("catchdistribution",
                 name = "aldist.lln",
                 weight = 1,
                   data = aldist.lln,
                 fleetnames = c("lln"),
-                stocknames = c("ling.imm","ling.mat")) %>% 
+                stocknames = c("lingimm","lingmat")) %>% 
   gadget_update("catchdistribution",
                 name = "ldist.gil",
                 weight = 1,
                 data = ldist.gil,
                 fleetnames = c("gil"),
-                stocknames = c("ling.imm","ling.mat")) %>% 
+                stocknames = c("lingimm","lingmat")) %>% 
   gadget_update("catchdistribution",
                 name = "aldist.gil",
                 weight = 1,
                 data = aldist.gil,
                 fleetnames = c("gil"),
-                stocknames = c("ling.imm","ling.mat")) %>% 
+                stocknames = c("lingimm","lingmat")) %>% 
   gadget_update("catchdistribution",
                 name = "ldist.bmt",
                 weight = 1,
                 data = ldist.bmt,
                 fleetnames = c("bmt"),
-                stocknames = c("ling.imm","ling.mat")) %>% 
+                stocknames = c("lingimm","lingmat")) %>% 
   gadget_update("catchdistribution",
                 name = "aldist.bmt",
                 weight = 1,
                 data = aldist.bmt,
                 fleetnames = c("bmt"),
-                stocknames = c("ling.imm","ling.mat")) %>% 
+                stocknames = c("lingimm","lingmat")) %>% 
   gadget_update("stockdistribution",
                 name = "matp.surv",
                 weight = 1,
                   data = matp.surv,
                 fleetnames = c("surv"),
-                stocknames =c("ling.imm","ling.mat")) 
+                stocknames =c("lingimm","lingmat")) 
+
+lik
 
 ```
+
+Note here that Rgadget automatically creates references to necessary data files ('Data/...') and aggregation files ('Agg/...') that define the bin structure as defined by data attributes (see previous section). When `write.gadget.file` is finally called after we are done adding all likelihood components, these data and agg files will be written alongside this likelihood file, and a reference to this likelihood file will also be drawn within the 'main' file. 
 
 Incorporating survey index components is very similar except that 1) the fact that the survey index is length-based is determined by the length attribute of the data frame, which sets the argument `si_type` to a value of `lengths`, and 2) a catchability function is also specified under the argument `'fittype'`. In addition, the argument `biomass` has a default setting of 0, signifying  a numbers-based index (rather than a biomass-based index, which has a value of 1). Other options for `si_type` can be read about in the Gadget User Guide, and `ages`, `fleets`, `acoustic`, and `effort`.
 
@@ -242,48 +256,49 @@ lik <-
                 weight = 1,
                 data = SI1,
                 fittype = 'loglinearfit',
-                stocknames = c("ling.imm","ling.mat")) %>% 
+                stocknames = c("lingimm","lingmat")) %>% 
   gadget_update("surveyindices",
                 name = paste0("si.", names(slices)[2]),
                 weight = 1,
                 data = SI2,
                 fittype = 'loglinearfit',
-                stocknames = c("ling.imm","ling.mat")) %>% 
+                stocknames = c("lingimm","lingmat")) %>% 
   gadget_update("surveyindices",
                 name = paste0("si.", names(slices)[3]),
                 weight = 1,
                 data = SI3,
                 fittype = 'fixedslopeloglinearfit',
                 slope=1,
-                stocknames = c("ling.imm","ling.mat")) %>% 
+                stocknames = c("lingimm","lingmat")) %>% 
   gadget_update("surveyindices",
                 name = paste0("si.", names(slices)[4]),
                 weight = 1,
                 data = SI4,
                 fittype = 'fixedslopeloglinearfit',
                 slope=1,
-                stocknames = c("ling.imm","ling.mat")) %>% 
+                stocknames = c("lingimm","lingmat")) %>% 
   gadget_update("surveyindices",
                 name = paste0("si.", names(slices)[5]),
                 weight = 1,
                 data = SI5,
                 fittype = 'fixedslopeloglinearfit',
                 slope=1,
-                stocknames = c("ling.imm","ling.mat")) %>% 
+                stocknames = c("lingimm","lingmat")) %>% 
   gadget_update("surveyindices",
                 name = paste0("si.", names(slices)[6]),
                 weight = 1,
                 data = SI6,
                 fittype = 'fixedslopeloglinearfit',
                 slope=1,
-                stocknames = c("ling.imm","ling.mat")) %>% 
+                stocknames = c("lingimm","lingmat")) %>% 
   gadget_update("surveyindices",
                 name = paste0("si.", names(slices)[7]),
                 weight = 1,
                 data = SI7,
                 fittype = 'fixedslopeloglinearfit',
                 slope=1,
-                stocknames = c("ling.imm","ling.mat")) 
+                stocknames = c("lingimm","lingmat")) 
+lik 
   
 ```
 
@@ -291,10 +306,10 @@ Finally, there are two components to the likelihood that do not incorporate data
 
 Understocking introduces a penalty when there are insufficent prey to met the requiremtnes of the predators. For example, if landings of the fleets exceeds available biomass, then the penalty is applied. The understocking penalty likelihood is then defined as the sum of the number of prey that are 'missing', raised to a power set by default to 2, and multiplied by the likelihood weight of 100 as indicated below.
 
-```{t}
+```{r}
   lik <-
-  lik %>% 
-  gadget_update("penalty",
+    lik %>% 
+    gadget_update("penalty",
                 name = "bounds",
                 weight = "0.5",
                 data = data.frame(
@@ -303,9 +318,11 @@ Understocking introduces a penalty when there are insufficent prey to met the re
                   upperW=10000,
                   lowerW=10000,
                   stringsAsFactors = FALSE)) %>%
-  gadget_update("understocking",
+    gadget_update("understocking",
                 name = "understocking",
-                weight = "100") %>% 
+                weight = "100")
+
+lik %>% 
   write.gadget.file(gd)
 
 ```
@@ -313,7 +330,88 @@ Understocking introduces a penalty when there are insufficent prey to met the re
 Notice that when the likelihood file is written, so are all the supporting aggregation files under the
 'Aggfiles' folder.
 
-## Set optimisation function parameters and fit Gadget statistical model
+## Fitting a Gadget model to data 
+
+Now that all data and likelihood components are incorporated, it is possible to run `callGadget` using a fitting procedure. Like any other optimisation routine, what is still needed are 1) starting values for the parameters, and 2) optimisation routine settings.
+
+### Create starting values
+
+If we start here with the same simple simulation as in day 2 of the ling model, we can see that a file called 'params.out' is automatically generated (same timestamp as the simple_log). However, if you open this file, is shows that each parameter was given a value of 1 with bounds set to {-9999, 9999} and no optimisation (0). Therefore, this simulation was run with very unrealistic parameters. Obviously this is not a helpful run in itself, but it is at least useful for conveniently generating an initial parameter file with the correct Gadget structure containing all the parameters specified throughout the Gadget model files. 
+
+```{r}
+Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
+callGadget(s=1,log = 'simple_log') 
+
+read.gadget.parameters(paste0(gd,'/params.out'))
+```
+
+Now that the structure is set, it is much easier to change the bounds and starting values to more realistic ones using `init_guess`. This function uses the `grepl` function internally to match names, so that large chunks of parameters with similar names can have their bounds similarly changed.
+
+```{r}
+lw_pars <- c(0.00000228, 3.20) #same values as in day 2
+
+## update the input parameters with sane initial guesses
+read.gadget.parameters(sprintf('%s/params.out',gd)) %>% 
+  init_guess('rec.[0-9]|init.[0-9]',1,0.001,1000,1) %>%
+  init_guess('recl',12,4,20,1) %>% 
+  init_guess('rec.sd',5, 4, 20,1) %>% 
+  init_guess('Linf',160, 100, 200,1) %>% 
+  init_guess('k$',90, 40, 100,1) %>% 
+  init_guess('bbin',6, 1e-08, 100, 1) %>% 
+  init_guess('alpha', 0.5,  0.01, 3, 1) %>% 
+  init_guess('l50',50,10,100,1) %>% 
+  init_guess('walpha',lw_pars[1], 1e-10, 1,0) %>% 
+  init_guess('wbeta',lw_pars[2], 2, 4,0) %>% 
+  init_guess('M$',0.15,0.001,1,0) %>% 
+  init_guess('rec.scalar',400,1,500,1) %>% 
+  init_guess('init.scalar',200,1,300,1) %>% 
+  init_guess('mat2',60,0.75*60,1.25*60,1) %>% 
+  init_guess('mat1',70,  10, 200, 1) %>% 
+  init_guess('init.F',0.4,0.1,1,1) %>% 
+  write.gadget.parameters(.,file=sprintf('%s/params.in',gd))
+
+read.gadget.parameters(sprintf('%s/params.in',gd))
+
+```
+  
+Now is a good point to scan the resulting 'params.in' file to make sure that a parameter was not forgotten and left with default values and bounds.
+
+### Set optimisation routine
+
+To run an optimisiation via callGadget is simple: it simply requires changing the argument `s=1` to `l=1`, removing the log (very important unless you want to crash you computer), providing an input parameter file with starting values (below as `i = 'params.in'`), and providing a file name to which final parameter values should be written (below as `p='params.init'`).
+
+```{r}
+timestamp()
+callGadget(l=1,i='params.in',p='params.init')
+timestamp()
+
+```
+
+Now that reasonable bounds and starting values have been set for an optimisation run, default settings can be used to run a short and simple Gadget optimisation. If you open the params.init file, comments can be found at the top that detail the computer and timing of the run (as in a simulation run), as well as optimisation information (something like 'Hooke & Jeeves algorithm ran for 1039 function evaluations'), the likelihood value at the end '1e+10' and a reason for stopping ('because the maximum number of function evaluations was reached'). You can also see from the timestamps above that this run took roughly 30 seconds, depending on the computer being used. 
+
+Obviously, the default settings for optimisation (1000 function evaluations using the Hooke and Jeeves algorithm), are insufficient to find a reasonable optimum. Gadget can also take quite a while to optimise a model (~ 6 hours for ling on a very fast computer). Therefore, it is best to plan ahead of time on which computer and when a model will be optimised, as well as which optimisation methods will be used. 
+  
+To change from the default settings, an opimisation file needs to be provided to `callGadget` via the `opt` argument. This is the file we provide for demonstration: it shows that we have implemented 3 consecutive optimisation routines. The first begins with simulated annealing (and parameter settings needed for it as well as a seed), followed by a Hooke and Jeeves algorithm that begins where simmulated annealing leaves off, and finally a BFGS algorithm. The three routines are listed in this manner to consecutively to transition from a broader global search (simulated annealing) to one that provides faster (Hooke and Jeeves) and more precise (BFGS) results, in an attempt to make the search more efficient. These three are the only algorithms currently implemented, but others are in a development phase. Also note that a seed is set in the beginning algorithm: it is good practice to both use random starting values as well as a set seed to check for possible optimisation problems. More information on parameters specific to each algorithm can be found in the Gadget User Guide.
+
+Each algorithm also has a low maximum number of iterations set in the optimisation file below, which is clearly not enough to be realistic: realistic values used for ling are given as notes within the optinfofile and are not read below. However, the each model presents new challenges to the search algorithm, so in some complex cases it may be necessary to rely mostly on simulating annealing, whereas in other more well-defined cases it may be possible to rely mostly on the faster algorithms. At this point in development, speeding Gadget runs is mostly done by using computers with multiple cores and faster processors. 
+
+```{r}
+read.gadget.optinfo('data_provided/optinfofile')
+```
+
+Here, we have implemented a fitting procedure that begins where the last default optimisation values left off (in the 'params.init' file). The 'params.opt' file will therefore be the result of a longer and more well-defined search as described by the 'optinfofile'.
+
+```{r}
+timestamp()
+callGadget(l=1,i='params.init',p='params.opt', opt = '../../data_provided/optinfofile')
+timestamp()
+```
+
+
+
+## Using the reiterative function to fit a Gadget statistical model
+
+
 
 ## Visualize Gadget statistical model fit
 

@@ -14,6 +14,51 @@ As Gadget is a length based simulation model, almost all processes are modelled 
 a) what the predator wants to consume and 
 b) what size ranges the predator is able to produce. 
 
+In Gadget there are a number of predator-prey relations that can be defined. They include the obvious case where one substock predates the other. Additionally a cannibalistic relationship can be defined if the substocks are modelled as an immature and a mature part of the same species. Fleets (survey and/or commercial) can be integrated into the model by being considered as one of the predators. A fleet can harvest one or both substocks in some or all areas. 
+
+The predation in Gadget is implemented as follows. Each predator will conceptually be assigned **availability** of a certain prey in comparison with other food sources and a **feeding level**, i.e., fraction of available food the predator wants to consume. Combining these two terms the amount that the predator wants to consume is calculated.
+
+The availability of a certain prey $p$ for a predator $P$ is determined by the prey biomass per length group ($N_{l}W_{l}$, where $W_l$ is the weight at length $l$) and a length based suitability function of the form:
+$$
+S_{P,p}(L,l) = \frac{\delta}{1+e^{-\alpha-\beta l-\gamma L}}
+$$
+where $l$ is the length of the prey $p$, $L$ length of the predator $P$ and $\alpha$, $\beta$, $\gamma$ and $\delta$, $0\leq \delta\leq 1$, are predator specific parameters that are given by the user. Note that $S_{P,p}$ is always between 0 and $\delta$, which is less than or equal to 1. $S_{P,p}(L,l)$ should therefore be interpreted as the percentage of prey abundance at length $l$ available to predator $P$ at length $L$.  This functional form for the suitability function also ensures that the length interaction between prey and predator is taken into account. For instance if $\beta <0$ the prey is less likely to be consumed as it grows larger. Similarly the prey is more likely to be consumed by a larger predator, given that $\gamma > 0$.  
+
+In Gadget fleets lengths, $L$, are assumed to be irrelevant. $\gamma$ is therefore assumed to be 0. Furthermore $\delta$ for fleets is assumed to take the value 1. Equation above for fleets therefore is reduced to:
+$$
+S_l = \frac{1}{1+e^{-\alpha-\beta l}}
+$$
+
+The feeding level for a fleet is determined by the yearly fishing effort $F$ multiplied by the length of the time step, i.e., the level is $F\Delta t$ and therefore the total consumption (harvest) is
+$$
+C_{fslat} = F\Delta t S_l N_{slat}
+$$
+In the simple predator-prey relation between the substocks in Gadget the prey availability to a predator becomes
+$$\frac{F_{Ll}}{\sum_{l'}F_{Ll'}+OA}$$
+where $F_{Ll} = S_{Pp}(L,l) N_{pl}W_{pl}$ is the prey biomass of length $l$ that the predator could consume, $W_{pl}$ is the average weight for prey of length $l$, $O$ is the density, per unit area, of other unspecified food sources and $A$ is the size of the area.
+
+The feeding level of the predator is
+$$\Psi_L = M_L \frac{\sum_{l'}F_{Ll'}+OA}{\sum_{l'}F_{Ll'}+OA+HA}$$
+where $M_L$ is the maximum consumption of a predator of length $L$ for a particular time step length $\Delta t$. It is determined by $M_L=m_0L^{m_4}\Delta t$ where $m_0$ and $m_4$ are user defined constants\footnote{The numbering scheme is set to correspond to parameters in \cite{begley2004overview}}. $H$ is the density (biomass per area unit) of available food at which the predator can consume half maximum consumption. Note that $H$ should reflect how able the predator is to pursue its prey, which should factor in variables such as temperature and the cost of search.  $H$ determines therefore how quickly the predators consumption reaches $M_L$. $H=0$ would indicate that the predator would easily consume $M_L$ of the available biomass. A larger value for $H$ would indicate that prey is harder to find and therefore prey needs to be more abundant for the predator to reach $M_L$.
+
+Given the feeding level and the prey availability the desired consumption of all predators of length $L$ is
+$$
+\begin{split}\label{eq:feedlev}
+C_{L,l}&=N_{L}\Psi_{L}\left[\frac{F_{Ll}}{\sum_{l'}F_{Ll'}+OA}\right]\\
+&=N_{L}M_{L}\frac{F_{Ll}}{\sum_{l'}F_{Ll'}+OA+HA}\\
+\end{split}
+$$
+For each prey an upper limit needs to be set on the total amount consumed by all predators, including the fleets, to prevent more consumption than the available biomass. This over consumption check is made because the consumption is calculated on discreet time intervals and therefore the consumption is not immediately reflected in the available biomass.  Consumption can be limited to $R_M$ of the available biomass. This is implemented by scaling target consumption of all predators. Let  
+$$
+R_{p}(l)=\frac{\sum_{P}\sum_{L}C_{P,p}(L,l)}{N_{p}(l)W_{p}(l)}.
+$$
+be the proposed ratio consumed of prey $p$ of length $l$ and $R_M$ be the maximum ratio that can be consumed at one time step. Now if $R_{p}(l)>R_M$ the consumption of all predators is adjusted by the following
+$$
+C_{P,p}(L,l)=R_MN_{p}(l)W_{p}(l)\frac{C_{P,p}(L,l)}{\sum_{P}C_{P,p}(L,l)}
+$$
+The total consumption by every predator on prey is then subtracted from the substock abundance numbers.
+
+
 This second part is determined by *suitability* functions. These functions are:
 
 Function name  | Formula 
@@ -29,4 +74,4 @@ Function name  | Formula
 
 where $L$ and $l$ are the predator and prey length respectively. Note that when defining fleets their lengths are not *well* defined and in the case of the Andersen suitability function you should use the fleet variant of that function. 
 
-As we have seen before 
+As we have seen before Rgadget has a number of helper functions to help the user to 

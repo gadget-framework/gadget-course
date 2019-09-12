@@ -351,7 +351,7 @@ read_lines(paste(gd,'simple_log',sep='/'))[-(58:175)]
 
 We can now gather the output from the model using `gadget.fit`:
 ```{r}
-fit <- gadget.fit(wgts = NULL,gd = list(dir=gd))
+fit <- gadget.fit(wgts = NULL,gd = gd)
 plot(fit,data='res.by.year',type = 'num.total') 
 ```
 and the fit object contains a number of useful datasets that can be used for further analysis:

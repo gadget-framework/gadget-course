@@ -20,7 +20,7 @@ schedule <-
 gd <- gadget.variant.dir('simple_model')
 ```
 
-## Gadget variables 
+# Gadget variables 
 
 It can be tedious to change all the input files whenever you want to try a different value for a certain input parameter. For example if you want to specify natural mortality as some thing else than 0 you can always do:
 ```{r}
@@ -113,16 +113,14 @@ to.gadget.formulae(quote(linf*(1-exp(-1*k(3-a0)))))
 
 # Predation
 
-As Gadget is a length based simulation model, almost all processes are modelled in terms of length of an individual in a particular stock. The rationale for this is that natural processes are better explained in terms of size, e.g. prey must fit into the mouth of the predator. Thus predation and fleet selection are modelled in terms of size. These selection processes can very between predators (and fleets) and therefore Gadget allows the user to define this relationship in a number of ways. This relationship is essentially factored into two components: 
+As Gadget is a length based simulation model, almost all processes are modelled in terms of length of an individual in a particular stock. The rationale for this is that natural processes are better explained in terms of size, e.g. prey must fit into the mouth of the predator. Thus predation and fleet selection are modelled in terms of size. These selection processes can very between predators (and fleets) and therefore Gadget allows the user to define this relationship in a number of ways. 
+In Gadget there are a number of predator-prey relations that can be defined. They include the obvious case where one substock predates the other. Additionally a cannibalistic relationship can be defined if the substocks are modelled as an immature and a mature part of the same species. Fleets (survey and/or commercial) can be integrated into the model by being considered as one of the predators. A fleet can harvest one or both substocks in some or all areas. These relationship are essentially factored into three components: 
 
-a) what the predator wants to consume and 
-b) what size ranges the predator is able to produce. 
+A) The amount which the predator wants to consume 
+B) The size range the predator is able to consume
+C) The size range of the prey which is available for consumption
 
-In Gadget there are a number of predator-prey relations that can be defined. They include the obvious case where one substock predates the other. Additionally a cannibalistic relationship can be defined if the substocks are modelled as an immature and a mature part of the same species. Fleets (survey and/or commercial) can be integrated into the model by being considered as one of the predators. A fleet can harvest one or both substocks in some or all areas. 
-
-The predation in Gadget is implemented as follows. Each predator will conceptually be assigned **availability** of a certain prey in comparison with other food sources and a **feeding level**, i.e., fraction of available food the predator wants to consume. Combining these two terms the amount that the predator wants to consume is calculated.
-
-The availability of a certain prey $p$ for a predator $P$ is determined by the prey biomass per length group ($N_{l}W_{l}$, where $W_l$ is the weight at length $l$) and a length based suitability function of the form:
+The availability of a certain prey $p$ and the ability for predator $P$ to consume $p$ is linked by a length based suitability function $S_{P,p}(L,l)$ of one of the following forms:
 
 Function name  | Formula 
 ------------- | -------------
@@ -135,45 +133,34 @@ Function name  | Formula
 `andersenfleet` | Same as above except $L$ is a parameter
 `gamma` | $S_{Pp}(L,l) = \bigg(\frac{1}{(\alpha -1)\beta\gamma)}\bigg)^{(\alpha -1)}e^{(\alpha -1 -\frac{1}{\beta\gamma})}$
 
-where $L$ and $l$ are the predator and prey length respectively. Note that when defining fleets their lengths are not *well* defined and in the case of the Andersen suitability function you should use the fleet variant of that function. Note that $S_{Pp}$ is always between 0 and 1. $S_{P,p}(L,l)$ should therefore be interpreted as the percentage of prey abundance at length $l$ available to predator $P$ at length $L$.  This functional form for the suitability function also ensures that the length interaction between prey and predator is taken into account. For instance if $\beta <0$ the prey is less likely to be consumed as it grows larger. Similarly the prey is more likely to be consumed by a larger predator, given that $\gamma > 0$.  
+where $L$ and $l$ are the predator and prey length respectively. Note that when defining fleets their lengths are not *well* defined and in the case of the Andersen suitability function you should use the fleet variant of that function. Note that $S_{Pp}$ is in most cases between 0 and 1. $S_{P,p}(L,l)$ should therefore be interpreted as the percentage of prey abundance at length $l$ available to predator $P$ at length $L$.  
 
-In Gadget fleets lengths, $L$, are assumed to be irrelevant. $\gamma$ is therefore assumed to be 0. 
+To help you to choose the appropriate Rgadget has a helper function, `suitability`, to help the user to investigate how a particular suitability function behaves, which allows the user to input the function name, parameters and the length of the predators and prey. Below is an example of how to calculate and visualise the exponential suitability function for different sizes of the 
 
-The feeding level for a fleet is determined by the yearly fishing effort $F$ multiplied by the length of the time step, i.e., the level is $F\Delta t$ and therefore the total consumption (harvest) is
-$$
-C_{fslat} = F\Delta t S_l N_{slat}
-$$
+```{r}
+prey.length <- 1:50
+pred.length <- seq(40,100,by=10) 
 
-In the simple predator-prey relation between the substocks in Gadget the prey availability to a predator becomes
-$$\frac{F_{Ll}}{\sum_{l'}F_{Ll'}+OA}$$
-where $F_{Ll} = S_{Pp}(L,l) N_{pl}W_{pl}$ is the prey biomass of length $l$ that the predator could consume, $W_{pl}$ is the average weight for prey of length $l$, $O$ is the density, per unit area, of other unspecified food sources and $A$ is the size of the area.
+param <- c(alpha = -20, beta = 0.5,gamma = 0.1, delta = 1)
 
-The feeding level of the predator is
-$$\Psi_L = M_L \frac{\sum_{l'}F_{Ll'}+OA}{\sum_{l'}F_{Ll'}+OA+HA}$$
-where $M_L$ is the maximum consumption of a predator of length $L$ for a particular time step length $\Delta t$. It is determined by $M_L=m_0L^{m_4}\Delta t$ where $m_0$ and $m_4$ are user defined constants\footnote{The numbering scheme is set to correspond to parameters in \cite{begley2004overview}}. $H$ is the density (biomass per area unit) of available food at which the predator can consume half maximum consumption. Note that $H$ should reflect how able the predator is to pursue its prey, which should factor in variables such as temperature and the cost of search.  $H$ determines therefore how quickly the predators consumption reaches $M_L$. $H=0$ would indicate that the predator would easily consume $M_L$ of the available biomass. A larger value for $H$ would indicate that prey is harder to find and therefore prey needs to be more abundant for the predator to reach $M_L$.
+suit <- suitability(params = param, 
+                    l = prey.length,
+                    L = pred.length,
+                    type = 'exponential',
+                    to.data.frame = TRUE)
 
-Given the feeding level and the prey availability the desired consumption of all predators of length $L$ is
-$$
-\begin{split}\label{eq:feedlev}
-C_{L,l}&=N_{L}\Psi_{L}\left[\frac{F_{Ll}}{\sum_{l'}F_{Ll'}+OA}\right]\\
-&=N_{L}M_{L}\frac{F_{Ll}}{\sum_{l'}F_{Ll'}+OA+HA}\\
-\end{split}
-$$
-For each prey an upper limit needs to be set on the total amount consumed by all predators, including the fleets, to prevent more consumption than the available biomass. This over consumption check is made because the consumption is calculated on discreet time intervals and therefore the consumption is not immediately reflected in the available biomass.  Consumption can be limited to $R_M$ of the available biomass. This is implemented by scaling target consumption of all predators. Let  
-$$
-R_{p}(l)=\frac{\sum_{P}\sum_{L}C_{P,p}(L,l)}{N_{p}(l)W_{p}(l)}.
-$$
-be the proposed ratio consumed of prey $p$ of length $l$ and $R_M$ be the maximum ratio that can be consumed at one time step. Now if $R_{p}(l)>R_M$ the consumption of all predators is adjusted by the following
-$$
-C_{P,p}(L,l)=R_MN_{p}(l)W_{p}(l)\frac{C_{P,p}(L,l)}{\sum_{P}C_{P,p}(L,l)}
-$$
-The total consumption by every predator on prey is then subtracted from the substock abundance numbers.
+ggplot(suit,aes(l,suit,col=as.factor(L))) + geom_line()
+```
 
+In Gadget you can define whether a stock is available for consumption, i.e indicate that the stock is a prey, or is a predator (or both) by setting the `doeseat` and `iseaten` options in the stock file. You can make the stock available for consumption using the following `gadget_update` call:
 
-This second part is determined by *suitability* functions. These functions are:
+```{r}
+gadgetstock('simple_stock',gd) %>% 
+  gadget_update("iseaten",1) %>% 
+  write.gadget.file(gd)
+```
 
-
-As we have seen before Rgadget has a number of helper functions to help the user to 
+It is a little more complicated to define the predation parameters so it will be covered at a later stage. 
 
 ## Fleet operations
 
@@ -184,30 +171,58 @@ Human interactions in Gadget are often modelled as removals of a particular stoc
 * **Suitability** how the fleet selection is defined
 * **Catch data** a table of catch/effort by time step
 
-Although the there are five different fleet types they can essentially be group into two classes of how the user can define the removals. These are the **Total fleets** where the total biomass or total number of removals are specified by the user and the **Effort fleets** that specify the removals in terms of harvest rate on available biomass/abundance.  The user defines when these removals occur by specifying the year and times step catch/effort take place (see https://hafro.github.io/gadget/docs/userguide#fleet_files for further details).  
+Although the there are five different fleet types they can essentially be group into two classes of how the user can define the removals. These are the **Total fleets** where the total biomass or total number of removals are specified by the user and the **Effort fleets** that specify the removals in terms of harvest rate on available biomass/abundance. Note that in the Gadget manual harvest rate and effort is be used interchangeably here (although they are generally not same).  The user defines when these removals occur by specifying the year and times step catch/effort take place (see https://hafro.github.io/gadget/docs/userguide#fleet_files for further details).  
 
+We will begin by looking at the effort type fleets. Their catch, $C_{plyt}$, of prey $p$ at length $l$, year $y$ and timestep $t$ is determined by the following equation:
+
+$$
+C_{plyt} = E_{yt}\Delta t S_{pl}N_{plyt}W_{plyt}
+$$
+where the $E$ denotes the harvest rate of the fleet, $S$ the suitability, $N$ the abundance and $W$ the mean weight for prey $p$ at length $l$. $\Delta t$ is then the length of the timestep, e.g. 0.25 for a quarter. When defining the harvest rate the user needs to create a table of rates per timestep in a particular format. So for example if the user want set this effort to 1 for all years at step 2 the following code can be used: 
 
 
 ```{r}
-effort <- 
+harvest.rate <- 
   structure(data.frame(year=schedule$year,step=2,area=1,number=1),
             area_group = list(`1` = 1)) 
+```
 
+Note that the `harvest.rate` object is simply a data frame with an associated area attribute (`area_group`) translating the areas in the data frame to a model area. Adding these attributes using `structure` may seem a bit of a overkill for this particular data set, but as we will see later on this becomes more useful when handling more diverse data structures. 
 
-gadgetstock('simple_stock',gd) %>% 
-  gadget_update("iseaten",1) %>% 
-  write.gadget.file(gd)
+The fleet is then defined is a similar manner as for stocks, you can read/define a fleet with the `gadgetfleet` command. There is however a minor difference, multiple fleets can be defined in a single file. The fleet files can the be edited using the `gadget_update` function. So as in the case of creating a stock we will begin by creating an empty stock:
+```{r,eval=FALSE}
+gadgetfleet('Modelfiles/fleet',gd,missingOkay = TRUE)
+```
+where the `missingOkay` switch means that the function should create a new file if missing. The `gadget_update` is then supplied with one of the fleet type listed above, which in this case will be the `LinearFleet` fleet type: 
 
+```{r}
 gadgetfleet('Modelfiles/fleet',gd,missingOkay = TRUE) %>% 
     gadget_update('linearfleet',
                   name = 'simple_fleet',
                   suitability = 
                     list(simple_stock=list(type='function',suit_func = 'constant',value=0.2)),
-                  data = effort) %>% 
+                  data = harvest.rate) %>% 
   write.gadget.file(gd)
 ```
 
+The suitabilty of the preys for the fleet is defined as list of all stocks caught by the fleet with a suitability function to each of them, allowing for wholly different prey selection between the various stocks. In this case the `constant` selection function is used, where 20 $\%$ of the whole stock at all sizes is available to the fleet. 
+
+To see the effects of the fleet operations on our stock we can use the `gadget.fit` function:
+```{r message=FALSE}
+fit <- gadget.fit(wgts = NULL, gd = gd, params.file = 'params.in')
+plot(fit,data = 'res.by.year',type='num.total') + 
+  expand_limits(y=0)
+```
+
+This formulation of the fleet assumes that a fixed harvest rate is applied for all years. This is probably not representative of reality, so Gadget allows the user do define varying rates by year. To do that 
+
+```{r}
+
+```
+
+
 # Recruitment
+
 
 
 ### Example

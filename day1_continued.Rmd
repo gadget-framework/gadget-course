@@ -183,11 +183,11 @@ where the $E$ denotes the harvest rate of the fleet, $S$ the suitability, $N$ th
 
 ```{r}
 harvest.rate <- 
-  structure(data.frame(year=schedule$year,step=2,area=1,number=1),
+  structure(data.frame(year=unique(schedule$year),step=2,area=1,number=1),
             area_group = list(`1` = 1)) 
 ```
 
-Note that the `harvest.rate` object is simply a data frame with an associated area attribute (`area_group`) translating the areas in the data frame to a model area. Adding these attributes using `structure` may seem a bit of a overkill for this particular data set, but as we will see later on this becomes more useful when handling more diverse data structures. 
+Note that the `harvest.rate` object is simply a data frame with an associated area attribute (`area_group`) translating the areas in the data frame to a model area. Adding these attributes using `structure` may seem a bit of a overkill for this particular data set, but as we will see later on this becomes more useful when handling more diverse data structures. Note that you the dplyr `mutate` function removes these attributes. 
 
 The fleet is then defined is a similar manner as for stocks, you can read/define a fleet with the `gadgetfleet` command. There is however a minor difference, multiple fleets can be defined in a single file. The fleet files can the be edited using the `gadget_update` function. So as in the case of creating a stock we will begin by creating an empty stock:
 ```{r,eval=FALSE}
@@ -208,28 +208,103 @@ gadgetfleet('Modelfiles/fleet',gd,missingOkay = TRUE) %>%
 The suitabilty of the preys for the fleet is defined as list of all stocks caught by the fleet with a suitability function to each of them, allowing for wholly different prey selection between the various stocks. In this case the `constant` selection function is used, where 20 $\%$ of the whole stock at all sizes is available to the fleet. 
 
 To see the effects of the fleet operations on our stock we can use the `gadget.fit` function:
-```{r message=FALSE}
+```{r message=FALSE, out.width = "50%", fig.show = "hold"}
 fit <- gadget.fit(wgts = NULL, gd = gd, params.file = 'params.in')
 plot(fit,data = 'res.by.year',type='num.total') + 
-  expand_limits(y=0)
+  expand_limits(y=0)  
+
+plot(fit,data = 'res.by.year',type='num.catch') + 
+  expand_limits(y=0) 
+  
 ```
 
-This formulation of the fleet assumes that a fixed harvest rate is applied for all years. This is probably not representative of reality, so Gadget allows the user do define varying rates by year. To do that 
+This formulation of the fleet assumes that a fixed harvest rate is applied for all years. This is probably not representative of reality, so Gadget allows the user do define varying rates by year. To do that you simply edit the harvest rate data frame above and update the fleet file accordingly:
 
-```{r}
+```{r, message=FALSE, out.width = "50%", fig.show = "hold"}
+harvest.rate <- 
+  structure(data.frame(year=unique(schedule$year),step=2,area=1,
+                       ## HR are now random variations around 1
+                       number= exp(rnorm(length(unique(schedule$year))))),
+            area_group = list(`1` = 1)) 
+
+## update the fleet file
+gadgetfleet('Modelfiles/fleet',gd,missingOkay = TRUE) %>% 
+    gadget_update('linearfleet',
+                  name = 'simple_fleet',
+                  suitability = 
+                    list(simple_stock=list(type='function',suit_func = 'constant',value=0.2)),
+                  data = harvest.rate) %>% 
+  write.gadget.file(gd)
+
+## And re-run
+
+fit <- gadget.fit(wgts = NULL, gd = gd, params.file = 'params.in')
+plot(fit,data = 'res.by.year',type='num.total') + 
+  expand_limits(y=0)  
+
+plot(fit,data = 'res.by.year',type='num.catch') + 
+  expand_limits(y=0) 
 
 ```
+
+### Excercise
+
+* `TotalFleet` and `NumberFleet` are defined exactly the same way as the `LinerFleet`, apart from the interpretation of the data file which now tells Gadget how many fish or how kg's are consumed by the fleet. Redo the example above with either of the fleet types, but make sure you do not over consume, i.e. don't take more that is available.
+* Where do you think it is possible to define model variables in the definition of the fleet file? Change as much as you can so the model can be controlled by the parameter file.  
 
 
 # Recruitment
 
+There are two types of recruitment processes in Gadget, those who are the results of spawning and what is called **renewal**. The difference between the two processes is that the spawning process depends on the size of the spawning stock while the renewal process is independent from other processes in the model. Setting up the spawning process is fairly involved and will covered in later sections. Today we will focus on the renewal process and how it is defined.  
+
+Renewals in Gadget allows the user to freely define the number of individuals that are recruited into the stock at any time, area or age. This is done by setting up a schema not unlike the one used for the initial conditions with the additions of the timing of the recuitment. For our simple model we will start by defining a data frame with the recruits:
 
 
-### Example
-Simple stock recruitment model
+```{r}
+recruits <- 
+  tibble(year = 1:10, ## Year of recruitment,
+         step = 1, ## timing of recruitment (q1)
+         area = 1, ## where does the rec. take place
+         age = 1, ## age of recruits
+         number = 1, ## num. of recruits (x10 000)
+         mean = 1, ## mean length
+         stddev = .1, ## std in length
+         alpha = 1, ## a in w = aL^b
+         beta = 1)
+```
 
-# Aging process
+This table will add 10 000 individuals at age 1 to our simulation every year. To add this to our model we need to update the stock file:
 
-# Growth
+```{r}
+gadgetstock('simple_stock',gd) %>% 
+  gadget_update('doesrenew',
+                normalparam = recruits) %>% 
+  write.gadget.file(gd)
+```
+
+and we can now re-run the model to see the effects of the recruitment to the abundance in the stock:
+
+```{r out.width = "50%", fig.show = "hold"}
+fit <- gadget.fit(wgts = NULL, params.file = 'params.in',gd=gd)
+
+plot(fit,data = 'res.by.year',type='num.total') + 
+  expand_limits(y=0)  
+
+plot(fit,data = 'res.by.year',type='num.catch') + 
+  expand_limits(y=0) 
+
+```
+
+
+# Excercise
+
+For the remainder of the we are going to play with the simple model we have created. Below are a couple of ideas to play with the model:
+
+* Try to insert model variables where ever you can. 
+* Investigate how you can introduce randomness into the model, e.g variability in recruitment and fishing effort.
+* Change the time horizon, i.e run the model for 50 years, and investigate the effects of different harvest rates on the biomass levels. 
+  + For those feeling adventurous think about how to set up a stochastic simulation to estimate the maximum sustainable yield
+
+
 
 

@@ -319,6 +319,7 @@ stock
 ```
 
 There is a lot to digest from the code above so it is worth stopping and taking a look at each element: 
+
 * The first call to `gadget_update` edited the attributes to the "stock" part of the file as discussed above. 
 * The second call to "doesgrow" turned off all growth processes in the model for this stock by setting `doesgrow` to `0` (Note that we will discuss growth models in later chapters). 
 * Natural mortality was set 0, meaning that fish in the model will not die of natural causes.  

@@ -87,6 +87,7 @@ leaflet() %>%
 * Deal with installation issues
 * [Getting started](getting_started.html)
 * [Adding fleets into the model](day1_continued.html)
+* Discussions
 
 ---
 
@@ -98,6 +99,7 @@ leaflet() %>%
   + Initial conditions
   + Recruitment
   + Fleet operations
+* Own projects
 
 ---
 

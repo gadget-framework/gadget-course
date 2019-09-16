@@ -459,7 +459,7 @@ parameters are provided for translation into biomass.
  ling.imm <-
    ling.imm %>%
   gadget_update('doesrenew',
-                normalparam = data_frame(year = schedule$year,
+                normalparam = tibble(year = schedule$year,
                                          step = 1,
                                          area = 1,
                                          age = .[[1]]$minage,

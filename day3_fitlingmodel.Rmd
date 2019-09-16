@@ -56,7 +56,7 @@ create_intervals <-  function (prefix, vect) {
     
     return(x)
 }
-#just to see what this function does:
+  #just to see what this function does:
 create_intervals('len',seq(minlength, maxlength, dl)) %>% .[1:3]
 ```
 
@@ -181,6 +181,9 @@ SI7 <- structure(read_csv('data_provided/SI7.csv'),
 
 ```
 
+#### Exercise
+* Change the aggregation levels of the age-length distribution data so that data are compared to model results within the bins 3 - 6, 7, 8, 9, 10 - 11, and 12 - 15.
+
 
 ### Setting up likelihood components
 Using Rgadget, writing the files that specify the likelihood componenets is straightforward. When calling `gadgetlikelihood` and then writing it with `write.gadget.file`, a likelihood file is created within R and written to disc.  The likelihood file contains a list of likelihood component specifications, and within this list is where the likelihood function, data, and weighting of the likelihood component is specifies.
@@ -252,6 +255,10 @@ lik
 
 Note here that Rgadget automatically creates references to necessary data files ('Data/...') and aggregation files ('Agg/...') that define the bin structure as defined by data attributes (see previous section). When `write.gadget.file` is finally called after we are done adding all likelihood components, these data and agg files will be written alongside this likelihood file, and a reference to this likelihood file will also be drawn within the 'main' file. 
 
+#### Exercise
+* Suppose that age sampling was done so that the same sampling effort was spread across all ages equally (roughly 30 fish per length range to attain roughly 30 age samples per age). Change the likelihood component function for age-length data to the appropriate function.
+
+
 Incorporating survey index components is very similar except that 1) the fact that the survey index is length-based is determined by the length attribute of the data frame, which sets the argument `si_type` to a value of `lengths`, and 2) a catchability function is also specified under the argument `'fittype'`. In addition, the argument `biomass` has a default setting of 0, signifying  a numbers-based index (rather than a biomass-based index, which has a value of 1). Other options for `si_type` can be read about in the Gadget User Guide, and `ages`, `fleets`, `acoustic`, and `effort`.
 
 The catchability function defines the type of linear regression to be used to calculate the likelihood score. Options include a linear fit on the orignal or log scale (`'linearfit'` or `'loglinearfit'`), linear fit with a fixed slope on the original or log scale (`'fixedslopelinearfit'` or `'fixedslopeloglinearfit'`), linear fit with a fixed intercept on the original or log scale (`'fixedinterceptlinearfit'` or `'fixedinterceptlinearfit'`), or a linear/loglinear function with both the slope and intercept fixed (`'fixedlinearfit'` or `'fixedloglinearfit'`). In the first set of cases (linear or loglinear fits), two parameters would be estimated; in the next two sets of cases, only a single parameter is estimated (slope or intercept, whichever is not fixed). In the last set of cases (fixed liner or loglinear fits), no parameters are estimated. Whenever a parameter is fixed, its value needs to be included as an additional argument to `gadget_update`. For example, catchability of the indices of smaller sized fish below are estimated using a log linear fit with both slopes and intercepts estimated, but catchabilities for indices of larger sized fish are calculated using log linear fits with fixed slopes. The slopes are fixed to a value of 1, so the argument '`slope = 1`' is included in the `gadget_update` call.
@@ -311,6 +318,9 @@ lik <-
 lik 
   
 ```
+
+#### Exercise
+* Change the survey indices to be biomass indices using `gadget_update`.
 
 Finally, there are two components to the likelihood that do not incorporate data but are instead used to ensure that the optimisation search algorithm remains within reasonable ranges of the objective function. The first component provides penalties for exceeding parameter bounds as set by the user in the input parameter file. In this case, the weight is set to 0.5, but see the troubleshooting page for cases in which it may be wise to set this weight higher. The data frame provided to this likelihood component specifies the power and parameter weights supplied if the parameter value exceeds its upper and lower bounds. In this case, if the likelihood of a parameter exceeds either the upper or lower bound, the distance between the bound and the parameter value is squared and multiplied by the parameter weights 10000; then the sum of these scores across all parameters is multiplied by the 0.5 weighting before being summed along with the other likelihood components to form the total. 
 
@@ -386,9 +396,13 @@ read.gadget.parameters(sprintf('%s/params.in',gd))
   
 Now is a good point to scan the resulting 'params.in' file to make sure that a parameter was not forgotten and left with default values and bounds.
 
+#### Exercise
+* Use `init_guess` to change the bounds of only one set of selectivity parameters.
+
+
 ### Set optimisation routine
 
-To run an optimisiation via callGadget is simple: it simply requires changing the argument `s=1` to `l=1`, removing the log (very important unless you want to crash you computer), providing an input parameter file with starting values (below as `i = 'params.in'`), and providing a file name to which final parameter values should be written (below as `p='params.init'`).
+To run an optimisation via callGadget is simple: it simply requires changing the argument `s=1` to `l=1`, removing the log (very important unless you want to crash you computer), providing an input parameter file with starting values (below as `i = 'params.in'`), and providing a file name to which final parameter values should be written (below as `p='params.init'`).
 
 ```{r cache=TRUE,eval=FALSE}
 timestamp()
@@ -417,6 +431,8 @@ callGadget(l=1,i='params.init',p='params.opt', opt = '../../data_provided/optinf
 timestamp()
 ```
 
+#### Exercise
+* Try changing the parameter starting values to the params.forsim file within the 'data_provided' folder. Does the optimisation finish any quicker?
 
 
 ## Using the reiterative function to fit a Gadget statistical model
@@ -430,12 +446,14 @@ l_{g,S}^{SI} + \sum_{f\in \{S,T,G,L\}} \left(
   w_{f}^{LD}  l_{f}^{LD} + w_{f}^{AL}
   l_{f}^{AL}\right) + w^{M}l^{M}
 \end{equation}
-where $f=S,T,G,L$ or $C$ denotes the spring survey, trawl, gillnet and
+where $f=S,T,G$ or $L$ denotes the spring survey, trawl, gillnet and
 longline fleets respectively and $w$'s are the weights assigned to each likelihood components. 
 
 The weights, $w_i$, are necessary for several reasons. First of all it
 is used to to prevent some components from dominating the likelihood
-function. Another would be to reduce the effect of low quality
+function. When one data source dominates, the model fits that one exactly
+and ignores information from the other data sources. Another would be to 
+reduce the effect of low quality
 data. It can be used as an a priori estimates of the variance in each
 subset of the data. 
 
@@ -450,31 +468,34 @@ objectively. Here the iterative re--weighting heuristic introduced by
 
 
 The general idea behind the iterative re-weighing is to assign the
-inverse variance of the fitted residuals as component weights. The
+inverse variance of the fitted residuals as component weights. This pattern 
+suggests that the more variable the residuals are from a particular data
+source, the less weight it should receive. The
 variances, and hence the final weights, are calculated according the
 following algorithm: 
 
 1. Calculate the initial sums of squares (SS) given the initial
-  parametrization for all likelihood components. Assign the inverse SS
+  parameterization for all likelihood components. Assign the inverse SS
   as the initial weight for all likelihood components, resulting in a total initial score of 1 for each component. 
 2. For each likelihood component, do an optimization run with
-  the initial weighted SS for that component set to 10000. Then estimate the
-  residual variance using the resulting SS of that component divided
+  the initial weighted SS for that component set to 10000. This run represents
+  a model fit where essentially only that component contributes to model
+  fitting, and therefore that component receives the best fit achievable.
+  Then estimate the residual variance using the resulting SS of that component divided
   by the degrees of freedom ($df^*$), i.e. $\hat{\sigma}^2 = \frac{SS}{df^*}$.
-3.  After the optimization set the final weight for that all
-  components as the inverse of the estimated variance from the step above
+3.  After the optimization of each component separately, set the final weight 
+  for each component to be the inverse of the estimated variance from the step above
   (weight $=1/\hat{\sigma}^2$). 
 
 
-The number of non-zero data-points ($df^{*}$) is used as a proxy
-for the degrees of freedom.
-While this may be a satisfactory proxy for larger data-sets it could be
-a gross overestimate of the degrees of freedom for smaller data-sets. 
+The number of non-zero data-points ($df^{*}$) is used as a proxy for the degrees 
+of freedom.While this may be a satisfactory proxy for larger data sets, it could be
+a gross overestimate of the degrees of freedom for smaller data sets. 
 In particular, if the survey indices are weighed on their own while the
-yearly recruitment is estimated they could be over-fitted. In general 
-problem such as these can be solved with component grouping, that is
-in step 2 the likelihood components that should behave similarly, such
-as survey indices representing similar age ranges, should be upweighted and optimized 
+annual recruitment is estimated, they could be over-fitted. In general, 
+problem such as these can be solved with component grouping. Component grouping
+is achieved in step 2: likelihood components that should behave similarly, such
+as survey indices representing similar age ranges, are weighted and optimized 
 together. 
 
 The `gadget.iterative` function implements the iterative reweighting heuristic and is invoked in the following manner:
@@ -491,9 +512,9 @@ setwd(old)
 ```
 
 
-This will start an iterative run that will estimate the weights for all likelihood components, although penalising likelihood components, such as `boundlikelihood` and `understocking` are left as is, and run a final optimisation run with the resulting likelihood weigths. As the iterative reweighting requires a number of optimisation runs `gadget.iterative` tries to spread these runs across the available cores on your computer. In the case of the number of cores lower than the number of runs the excess runs will wait until a core becomes available. The resulting parameter estimates are then stored in a folder called `WGTS` in your model directory, where the file `params.final` contains the final parameter estimate.  
+This will start an iterative run that will estimate the weights for all likelihood components, and run a final optimisation run with the resulting likelihood weights. Penalising likelihood components, such as `boundlikelihood` and `understocking`, are left as is. As the iterative reweighting requires several optimisation runs, `gadget.iterative` tries to spread these runs across the available cores on your computer. In the case of the number of cores lower than the number of runs, the excess runs will wait until a core becomes available. The resulting parameter estimates are then stored in a folder called `WGTS` in your model directory, where the file `params.final` contains the final parameter estimate.  
 
-When running `gadget.iterative` with standard setting you assume that all datasets has enough data that allows all parameters to be estimated with out overfitting the data. It is not always the case that this is appropriate. For instance survey indices have in general only one data point per year, step and size group, and when estimating annual recruitment this usually leads overfitting of that particular component when heavily emphasized. Similar problem can arise when only one year, or few disjoint years, worth of compositional data is supplied to the likelihood function. This account for this issue the user can group similar likelihood components together using the `grouping` switch in the `gadget.iterative` function. This grouping the empasizes two (or more) components together, ensuring that at least two data points are available for each of the recruiment parameters. In the case of Ling, the survey indices were split into two groups, sizes 20 to 70 cm and 70 to 160 cm, and the compositional data from the commercial trawl and gillnet fleets due to lack of data:
+When running `gadget.iterative` with standard setting you assume that all data sets have enough data to allow all parameters to be estimated without overfitting the data. It is not always the case that this is appropriate. For instance survey indices have in general only one data point per year, step and size group, and when estimating annual recruitment this usually leads overfitting of that particular component when heavily emphasized. Similar problem can arise when only one year, or a few disjoint years, worth of compositional data is supplied to the likelihood function. To account for this issue the user can group similar likelihood components together using the `grouping` argument in the `gadget.iterative` function. When estimating annual recruitment, for example, this ensures that at least two data points are available to estimate each of the recruitment parameters. In the case of Ling, the survey indices were split into two groups, sizes 20 to 70 cm and 70 to 160 cm, and the compositional data from the commercial trawl and gillnet fleets were grouped due to a low number of data points:
 ```{r eval=FALSE}
 run <- gadget.iterative(grouping = list(sind1=c('si.20-50','si.50-60','si.60-70'),
                                         sind2=c('si.70-80','si.80-90','si.90-100',
@@ -502,21 +523,21 @@ run <- gadget.iterative(grouping = list(sind1=c('si.20-50','si.50-60','si.60-70'
                                                'aldist.gil','aldist.bmt')))
 ```
 
-Note that if a likelihood component is not present in the defined grouping list it is assumed that the component is treated individually. Sometimes this is not enough to prevent overfitting and therefore the user can define a maximum weight of sorts by defining the minimum CV for survey indices using the `cv.floor` argument:
+Note that if a likelihood component is not present in the defined grouping list it is assumed that the component is treated individually. Sometimes this is not enough to prevent overfitting and therefore the user can define a maximum weight of sorts by defining the minimum CV for survey indices used for weight assignment. This is done using the `cv.floor` argument:
 
 ```{r eval=FALSE}
 run <- gadget.iterative(cv.floor = 0.2)
 ```
 
-The `cv.floor` argument is often used after the final optimisation run has crashed so it is convenient to be able to pick up the "thread" where the run crashed and resume the final optimisation. The `resume.final` switch allows for this and essentially only runs the last optimisation, assuming that the precending steps have been completed:
+The `cv.floor` argument is often used after the final optimisation run has crashed so it is convenient to be able to pick up the "thread" where the run crashed and resume the final optimisation. The `resume.final` switch allows for this and essentially only runs the last optimisation, thereby assuming that the preceding steps have been completed:
 
 ```{r eval=FALSE}
 run <- gadget.iterative(resume.final = TRUE, cv.floor = 0.2)
 ```
 
-Related to `resume.final` there are the `run.final` and `run.serial` that instruct the function to whether to run the final step and run on a single core respectively. 
+Related to `resume.final` there are the `run.final` and `run.serial` arguments that instruct the function to whether to run the final optimisation from the beginning and whether all optimisations should be run on a single core respectively. 
 
-Different treatment of data is often investigated, e.g. investigate the effect of a certain dataset by omitting from the estimation or different grouping. `gadget.iterative` allows you to have multiple `WGTS` folders in the same model directory by setting the `wgts` argument. In addition the user can explictly define (or remove) which component are to be used in the optimisation using a combination of the `comp` and `inverse` arguments:
+In post-hoc analyses of the effect of certain data sources on model fitting, differential treatment of data is often investigated. For example, the effect of a certain dataset can be analysed by omitting it from the estimation or chaning its grouping. `gadget.iterative` allows you to have multiple `WGTS` folders in the same model directory by setting the `wgts` argument. In addition the user can explictly define (or remove) which component are to be used in the optimisation using a combination of the `comp` and `inverse` arguments:
 
 ```{r eval=FALSE}
 
@@ -532,7 +553,7 @@ run <- gadget.iterative(comp = 'ldist.gil',
 
 ## Visualize Gadget statistical model fit
 
-To obtain information on the model fit and properties of the model one can use the `gadget.fit` function to query the model:
+To obtain information on the model fit and properties of the model, one can use the `gadget.fit` function to query the model and return conveniently structured output:
 
 ```{r,message=FALSE}
 fit <- gadget.fit()
@@ -580,7 +601,7 @@ A weighted summary plot:
 plot(fit,data='summary',type = 'weighted')
 ```
 
-and an pie chart of likelihood components:
+and a pie chart of likelihood components:
 ```{r}
 plot(fit,data='summary',type='pie')
 ```
@@ -652,4 +673,8 @@ plot(fit,data='res.by.year',type='total') + theme(legend.position = 'none') +
   plot(fit, data='res.by.year',type='rec')
 
 ```
+
+#### Exercise
+* Try plotting the catchabilities on the normal scale (exponentiated, not log as given) across ages for each survey. What shape are they?
+* What information is stored under fit$SS?
 

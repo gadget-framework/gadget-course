@@ -113,13 +113,13 @@ leaflet() %>%
 ---
 
 ### Thursday - BÞE
-* Alternate structures - SHOULD THIS MOVE TO THURSDAY MORNING?
+* Alternate structures
   + Multiple areas
   + Migration
-  + Straying
 * Stock interactions
   + Multiple stocks/species
   + Consumption
+  + Straying
 * Spawning
   + Time variables
 * MFDB

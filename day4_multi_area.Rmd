@@ -1,0 +1,59 @@
+---
+title: "day4_multi_area"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r likelihood}
+
+library(Rgadget)
+
+#assuming you are beginning in a fresh session; this information should be in an 
+#initialization script
+
+base_dir <- 'ling_model'
+vers <- c('01-base')
+gd <- gadget.variant.dir(sprintf(paste0("%s/",vers),base_dir))
+
+ling.imm <- gadgetstock('lingimm',gd)
+ling.mat <- gadgetstock('lingmat',gd)
+area_file <- read.gadget.file(gd, 'Modelfiles/area')
+
+## Write out areafile and update mainfile with areafile location
+
+schedule <- 
+  expand.grid(year = 1982:2018, step = 1:4, area = 1:2) %>% 
+  arrange(year, step, area)
+
+gadgetfile('Modelfiles/area',
+           file_type = 'area',
+           components = list(list(areas = c(1,2),
+                                  size = c(1,1),
+                                  temperature= schedule %>% mutate(temperature = 5)))) %>% 
+  write.gadget.file(gd)
+
+ling.imm <-
+  ling.imm %>% 
+  gadget_update('stock',
+                livesonareas = c(1,2))  
+ling.mat <- 
+  ling.mat %>% 
+  gadget_update('stock',
+                livesonareas = c(1,2))  
+
+## write to file
+ling.imm %>% 
+  write.gadget.file(gd)
+
+ling.mat %>% 
+  write.gadget.file(gd)
+
+ling.imm
+```
+
+
+```

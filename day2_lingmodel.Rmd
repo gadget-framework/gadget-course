@@ -695,6 +695,8 @@ gadgetfleet('Modelfiles/fleet',gd,missingOkay = TRUE) %>%
 
 ```
 
+#### Exercise
+* Try changing the longline and foreign fleet to the andersenfleet function (see commented out code under the foreign fleet). Under what conditions could this function be useful? [Hint: look it up in the Gadget User Guide]
 
 ## Run the simulation using pre-determined parameters 
 
@@ -718,3 +720,4 @@ callGadget(s=1,log = 'simple_log2', i='../../data_provided/params.forsim')
 read.gadget.parameters('data_provided/params.forsim')
 ```
 
+  

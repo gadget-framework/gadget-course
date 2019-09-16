@@ -112,18 +112,24 @@ leaflet() %>%
 
 ### Thursday - BÞE
 * Alternate structures - SHOULD THIS MOVE TO THURSDAY MORNING?
-  + Spawning
   + Multiple areas
-  + Multiple stocks/species
-* Stock interactions
   + Migration
   + Straying
+* Stock interactions
+  + Multiple stocks/species
   + Consumption
+* Spawning
+  + Time variables
 * MFDB
 * Version control
 * Own projects
 
 ---
 ### Friday - BÞE
-* MSE using Gadget: Ling (cont.)
+* Troubleshooting
+  + Known issues
+  + Asking for help
+* MSE using Gadget
+  + Ling 
+  + Shrimp
 * Wrap up

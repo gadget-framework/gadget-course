@@ -7,8 +7,11 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Alternate structures: multiple areas
 
-```{r likelihood}
+Let's return to the initial set-up of the ling model and modify it such that the stocks live on two areas. The first step to do this is to modify the area file and stock files to include a second area.
+
+```{r area2}
 
 library(Rgadget)
 
@@ -39,11 +42,220 @@ gadgetfile('Modelfiles/area',
 ling.imm <-
   ling.imm %>% 
   gadget_update('stock',
-                livesonareas = c(1,2))  
+                livesonareas = area_file[[1]]$areas)  
 ling.mat <- 
   ling.mat %>% 
   gadget_update('stock',
-                livesonareas = c(1,2))  
+                livesonareas = area_file[[1]]$areas)  
+
+ling.imm
+```
+
+In theory, the only details left that are necessary to set up a two-area model is to provide initial values and recruitment, as these are designated both by area and age:
+
+```{r}
+
+#taken from data analyses
+init.sigma.i <- rep(2, length(ling.imm[[1]]$minage:ling.imm[[1]]$maxage))
+init.sigma.m <- rep(2, length(ling.mat[[1]]$minage:ling.mat[[1]]$maxage))
+
+m
+
+ling.imm <-
+  ling.imm %>%
+  gadget_update('initialconditions',
+                normalparam = 
+                  expand.grid(age = ling.imm[[1]]$minage:ling.imm[[1]]$maxage, area = area_file[[1]]$areas) %>% 
+                  as_data_frame() %>% 
+                  mutate( 
+                    age.factor = parse(text=sprintf('exp(-1*(lingimm.M+ling.init.F)*%1$s)*lingimm.init.%1$s',age)) %>% 
+                      map(to.gadget.formulae) %>% 
+                      unlist(),   
+                    area.factor = '#lingimm.init.scalar',
+                    mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
+                    stddev = rep(init.sigma.i,2),
+                    alpha = '#ling.walpha',
+                    beta = '#ling.wbeta'
+                    )
+                ) %>%
+  gadget_update('doesrenew',
+                normalparam = 
+                  expand.grid(year = schedule$year,area = area_file[[1]]$areas) %>%
+                  distinct() %>% 
+                  as_data_frame() %>% 
+                  mutate(step = 1,
+                         age = ling.imm[[1]]$minage,
+                         number = parse(text=sprintf('ling.rec.scalar*ling.rec.%s',year)) %>% 
+                           map(to.gadget.formulae) %>% 
+                           unlist(),
+                         mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
+                         stddev = '#ling.rec.sd',
+                         alpha = '#ling.walpha',
+                         beta = '#ling.wbeta'
+                         )
+                ) 
+
+ling.mat <-
+  ling.mat %>% 
+  gadget_update('initialconditions',
+                normalparam = expand.grid(age = ling.mat[[1]]$minage:ling.mat[[1]]$maxage, area = area_file[[1]]$areas) %>% 
+                  as_data_frame() %>% 
+                  mutate(
+                    age.factor = parse(text=sprintf('exp(-1*(lingmat.M+ling.init.F)*%1$s)*lingmat.init.%1$s',age)) %>% 
+                      map(to.gadget.formulae) %>% 
+                      unlist(),
+                    area.factor = '#lingmat.init.scalar',
+                    mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
+                    stddev = rep(init.sigma.m,2),
+                    alpha = '#lingmat.walpha',
+                    beta = '#lingmat.wbeta'
+                    )
+                )  
+## write to file
+ling.imm %>% 
+  write.gadget.file(gd)
+
+ling.mat %>% 
+  write.gadget.file(gd)
+```
+
+The only changes added to the above model were to add a second area with the same exact values in initial conditions and recruitment as found in the first model. The second area is therefore a simulated mirror of the first, but with no fishing, as the fleets only exist on area 1. Structurally, this is the minimum possible information needed to include a second area.
+
+```{r cache=TRUE,eval=FALSE}
+Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
+
+callGadget(s=1,i='params.init',log = 'log_area2')
+
+```
+
+### Migration
+
+A model as shown in the previous section may be useful for theoretical simulations, otherwise it is not particularly interesting, and has no effect on what goes on in area 1, including the model fitting procedures (as data are specified by area). A single population in two areas in Gadget can interact via migration, which determines how much the individuals in each area move among areas.
+
+Migration is specified in the stock file under the migration section, and is therefore updated first by indicating that migration exists by turning the `doesmigrate` option from 0 to 1, and providing a migration matrix or migration ratios (two forms of the same information). In Rgadget, this can be done by creating a migration matrix file and using `gadget_update` to modify the migration component of the stock file to refer to this file.
+
+A migration matrix is a square n x n  matrix for the n areas that the stock is defined on with proportions moving *from* each area given in columns to the area given in rows. Migration should not change the total number of fish in the model, so each column in the migration matrix should sum to 1. Therefore in the following example, at the start of migration, 60% of individuals in area 1 remain there, 40% move to area 2. Likewise, 30% of individuals in area 2 move to area 1, whereas 70% remain there:
+```{r}
+matrix(c(0.6, 0.4, 0.3, 0.7), nrow = 2)
+```
+
+An alternate method for supplying these values is via migration ratios, which instead lists only the proportions of fish moving, and lets Gadget calculate the full matrix from those. To represent the above matrix in this form, we would write:
+```{r}
+matrix(c(1,2,0.4,2,1,0.3), nrow = 2, byrow = T)
+```
+In this form, within each row, the first column shows the origin area, the second the 
+destination area, and the third the proportion. Note that migrations of 0% are calculated 
+automatically, so they should be omitted.
+
+In this example we continue with the proportions format. Proportions can be replaced with 
+switches that are specified in the parameters file, and the matrix can be transformed into a Gadget file with the necessary name and keyword `[migrationmatrix]` using `gadgetfile`:
+
+```{r}
+tmp.mat <- matrix(c(1,2,0.4,2,1,'#mig'), nrow = 2, byrow = T)
+
+#produce a migration matrix
+
+    gadgetfile('Modelfiles/migration',
+                 components = list(migrationmatrix = list(
+                                        name = 'test',
+                                        as.list(tmp.mat[1,]),
+                                        as.list(tmp.mat[2,])
+                                        )
+                                   ) 
+    )
+   
+```
+
+Each migration file can also have a series of migrations, but note that the order of evaluation of
+these affects the proportions that should be written. For example, suppose we have 1000 fish in 
+each area, and we want to represent that 30% of the fish in area 1 will move to area 2 in time 
+step 1, but the same proportion will migrate to area 1 from 2 in time step 2. We would write
+the following:
+
+```{r}
+
+tmp.mat.w <- matrix(c(1,2,0.3), nrow = 1, byrow = T)
+tmp.mat.e <- matrix(c(2,1,0.3), nrow = 1, byrow = T)
+
+mig_file <-
+    gadgetfile('Modelfiles/migration',
+                 components = list(migrationmatrix = list(
+                                        name = 'west',
+                                        as.list(tmp.mat.w[1,])
+                                        ),
+                                   migrationmatrix =list(
+                                        name = 'east',
+                                        as.list(tmp.mat.e[1,])
+                                        )
+                                   )
+               )
+
+mig_file    
+```
+
+This indicates that 300 fish will move from area 1 to 2 in step 1, and then subsequently 
+0.3 x 1300 = 390 fish will move from area 2 to area 1. It does *not* mean that 300 fish
+will move back, or that these fish are the same individuals that moved in step 1. For 
+this pattern a different model structure (with a new stock) is needed. 
+
+For our purposes, lets set the migration proportions to switches
+```{r}
+
+tmp.mat.w <- matrix(c(1,2,'#mig.w'), nrow = 1, byrow = T)
+tmp.mat.e <- matrix(c(2,1,'#mig.e'), nrow = 1, byrow = T)
+
+mig_file <-
+    gadgetfile('Modelfiles/migration',
+                 components = list(migrationmatrix = list(
+                                        name = 'west',
+                                        as.list(tmp.mat.w[1,])
+                                        ),
+                                   migrationmatrix =list(
+                                        name = 'east',
+                                        as.list(tmp.mat.e[1,])
+                                        )
+                                   )
+               )
+
+mig_file %>% 
+      write.gadget.file(gd)
+
+mig_file    
+```
+
+
+Although in the above example we have time steps for migration in mind, we have not yet
+designated them in a Gadget file. To do this, the next step is to create a migration timing file:
+```{r}
+    gadgetfile('Modelfiles/migrationtime',
+               file_type = 'data',
+               components = list(bind_rows(
+                 tibble(year = schedule$year %>% unique,
+                            step = 2,
+                            defineratios='east'),
+                 tibble(year = schedule$year %>% unique,
+                             step = 1,
+                             defineratios='west')
+                             ))) %>% 
+    write.gadget.file(gd)
+
+```
+
+
+Finally, we modify the stock files for the stocks that should use this migration matrix and time files: 
+
+```{r}
+
+ling.imm <-
+  ling.imm %>% 
+    gadget_update('doesmigrate',
+                  yearstepfile = 'Modelfiles/migrationtime',
+                  defineratios = 'Modelfiles/migration')
+ling.mat <-
+  ling.mat%>% 
+    gadget_update('doesmigrate',
+                  yearstepfile = 'Modelfiles/migrationtime',
+                  defineratios = 'Modelfiles/migration')
 
 ## write to file
 ling.imm %>% 
@@ -52,8 +264,514 @@ ling.imm %>%
 ling.mat %>% 
   write.gadget.file(gd)
 
-ling.imm
+ling.mat
+```
+
+```{r cache=TRUE,eval=FALSE}
+Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
+
+callGadget(s=1,i='params.init',log = 'log_area2')
+
 ```
 
 
+### Using data from multiple areas
+
+It is also possible to fit a Gadget model using area-specific data. If data are available from both areas, then there must be fleets operating in both areas, so the first step is to modify the fleets. This is easily done in Rgadget by including catch data from both areas and including area 2 in the attributes:
+
+```{r fleets2}
+lln.landings <- structure(
+  bind_rows(read_csv('data_provided/lln.csv'),
+            read_csv('data_provided/lln.csv') %>% 
+              mutate(area=2,
+                     total_weight = round(total_weight*rlnorm(n(), sdlog = 0.5))) %>%
+                        filter(total_weight > 0)),
+            area_group = list(`1` = 1, `2` = 2))
+bmt.landings <- structure(
+  bind_rows(read_csv('data_provided/bmt.csv'),
+            read_csv('data_provided/bmt.csv') %>% 
+              mutate(area=2,
+                     total_weight = round(total_weight*rlnorm(n(), sdlog = 0.5))) %>%
+                        filter(total_weight > 0)),
+            area_group = list(`1` = 1, `2` = 2))
+gil.landings <- structure(
+  bind_rows(read_csv('data_provided/gil.csv'),
+            read_csv('data_provided/gil.csv') %>% 
+              mutate(area=2,
+                     total_weight = round(total_weight*rlnorm(n(), sdlog = 0.5))) %>%
+                        filter(total_weight > 0)),
+            area_group = list(`1` = 1, `2` = 2))
+for.landings <- structure(
+  bind_rows(read_csv('data_provided/for.csv'),
+            read_csv('data_provided/for.csv') %>% 
+              mutate(area=2,
+                     total_weight = round(total_weight*rlnorm(n(), sdlog = 0.5))) %>%
+                        filter(total_weight > 0)),
+            area_group = list(`1` = 1, `2` = 2))
+surv.landings <- structure(
+  bind_rows(read_csv('data_provided/surv.csv'),
+            read_csv('data_provided/surv.csv') %>% 
+              mutate(area=2)),
+            area_group = list(`1` = 1, `2` = 2))
+
+lln.landings
+surv.landings
+
 ```
+
+Then when these catch data are included in the fleet files, the areas of operation 
+with the fleets will be automatically updated. The current Rgadget version cannot 
+update fleet components separately, so here we rewrite the entire fleet file the 
+same way we did on day 2.
+
+```{r lik2}
+
+gadgetfleet('Modelfiles/fleet',gd,missingOkay = TRUE) %>% 
+  gadget_update('totalfleet',
+                name = 'surv',
+                suitability = paste0('\n',
+                                     paste(c('lingimm','lingmat'),
+                                           'function','exponentiall50',
+                                           '#ling.surv.alpha','#ling.surv.l50',
+                                           collapse='\n')),
+                data = surv.landings) %>%
+  gadget_update('totalfleet',
+                name = 'lln',
+                suitability = 
+                  paste0('\n',
+                         paste(c('lingimm','lingmat'),
+                               'function','exponentiall50',
+                               '#ling.lln.alpha','#ling.lln.l50',
+                               collapse='\n')),
+                data = lln.landings) %>% 
+  gadget_update('totalfleet',
+                name = 'bmt',
+                suitability = paste0('\n',
+                                     paste(c('lingimm','lingmat'),
+                                           'function','exponentiall50',
+                                           '#ling.bmt.alpha','#ling.bmt.l50',
+                                           collapse='\n')),
+                data = bmt.landings) %>% 
+  gadget_update('totalfleet',
+                name = 'gil',
+                suitability = paste0('\n',
+                                     paste(c('lingimm','lingmat'),
+                                           'function','exponentiall50',
+                                           '#ling.gil.alpha','#ling.gil.l50',
+                                           collapse='\n')),
+                data = gil.landings) %>% 
+  gadget_update('totalfleet',
+                name = 'foreign',
+                suitability = 
+                  paste0('\n',
+                         paste(c('lingimm','lingmat'),
+                               'function','exponentiall50',
+                               '#ling.lln.alpha','#ling.lln.l50',
+                               #'function','andersenfleet',                              #'#ling.lln.p0',to.gadget.formulae(quote(log(180/ling.lln.lmode))),'#ling.lln.p2',
+                               #'#ling.lln.p3','#ling.lln.p4','180',
+                               collapse='\n')),
+                data = for.landings) %>% 
+  write.gadget.file(gd)
+
+```
+
+Now that there are fleets fishing on area 2, it is possible for samples to be generated
+from area 2. 
+
+```{r, echo = FALSE}
+#some necessary info
+minage <- ling.imm[[1]]$minage
+maxage <- ling.mat[[1]]$maxage
+maxlength <- ling.mat[[1]]$maxlength 
+minlength <- ling.imm[[1]]$minlength
+dl <- ling.imm[[1]]$dl
+slices <- 
+  list('len20' = c(20,52), 'len52' = c(52,60), 'len60' = c(60,72), 'len72' = c(72,80), 'len80' = c(80,92), 'len92' = c(92,100), 'len100' = c(100,160) )
+
+create_intervals <-  function (prefix, vect) {
+  
+    x<-
+    structure(vect[1:(length(vect)-1)], names = paste0(prefix, vect[1:(length(vect)-1)])) %>% 
+    as.list(.) %>% 
+    purrr::map(~structure(., 
+                          min = ., 
+                          max = vect[-1][which(vect[1:(length(vect)-1)]==.)]))
+    
+    return(x)
+}
+
+#length distributions
+ldist.surv <- 
+  structure(bind_rows(read_csv('data_provided/ldist_sur.csv'),
+                      read_csv('data_provided/ldist_sur.csv') %>% 
+                        mutate(area = 2,
+                               number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
+                        filter(number > 0)
+                      ),
+            area = list(area_file[[1]]$areas) %>% set_names(.),
+            length = create_intervals('len',seq(minlength, maxlength, dl)),
+            age = create_intervals('all',seq(minage, maxage, maxage-minage))
+            )
+ldist.lln <- 
+  structure(bind_rows(read_csv('data_provided/ldist_lln.csv'),
+                      read_csv('data_provided/ldist_lln.csv') %>% 
+                        mutate(area = 2,
+                               number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
+                        filter(number > 0)
+                      ),
+            area = list(area_file[[1]]$areas) %>% set_names(.),
+            length = create_intervals('len',seq(minlength, maxlength, dl)),
+            age = create_intervals('all',seq(minage, maxage, maxage-minage))
+            )
+ldist.bmt <- 
+  structure(bind_rows(read_csv('data_provided/ldist_bmt.csv'),
+                      read_csv('data_provided/ldist_bmt.csv') %>% 
+                        mutate(area = 2,
+                               number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
+                        filter(number > 0)
+                      ),
+            area = list(area_file[[1]]$areas) %>% set_names(.),
+            length = create_intervals('len',seq(minlength, maxlength, dl)),
+            age = create_intervals('all',seq(minage, maxage, maxage-minage))
+            )
+ldist.gil <- 
+  structure(bind_rows(read_csv('data_provided/ldist_gil.csv'),
+                      read_csv('data_provided/ldist_gil.csv') %>% 
+                        mutate(area = 2,
+                               number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
+                        filter(number > 0)
+                      ),
+            area = list(area_file[[1]]$areas) %>% set_names(.),
+            length = create_intervals('len',seq(minlength, maxlength, dl)),
+            age = create_intervals('all',seq(minage, maxage, maxage-minage))
+            )
+
+#age-length distributions
+aldist.surv <- 
+  structure(bind_rows(read_csv('data_provided/aldist_sur.csv'),
+                      read_csv('data_provided/aldist_sur.csv') %>% 
+                        mutate(area = 2,
+                               number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
+                        filter(number > 0)
+                      ),
+            area = list(area_file[[1]]$areas) %>% set_names(.),
+            length = create_intervals('len',seq(minlength, maxlength, dl)),
+            age = create_intervals('age',c(minage:11, maxage))
+            )
+aldist.lln <- 
+  structure(bind_rows(read_csv('data_provided/aldist_lln.csv'),
+                      read_csv('data_provided/aldist_lln.csv') %>% 
+                        mutate(area = 2,
+                               number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
+                        filter(number > 0)
+                      ),
+            area = list(area_file[[1]]$areas) %>% set_names(.),
+            length = create_intervals('len',seq(minlength, maxlength, dl)),
+            age = create_intervals('age',c(minage:11, maxage))
+            )
+aldist.bmt <- 
+  structure(bind_rows(read_csv('data_provided/aldist_bmt.csv'),
+                      read_csv('data_provided/aldist_bmt.csv') %>% 
+                        mutate(area = 2,
+                               number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
+                        filter(number > 0)
+                      ),
+            area = list(area_file[[1]]$areas) %>% set_names(.),
+            length = create_intervals('len',seq(minlength, maxlength, dl)),
+            age = create_intervals('age',c(minage:11, maxage))
+            )
+aldist.gil <- 
+  structure(bind_rows(read_csv('data_provided/aldist_gil.csv'),
+                      read_csv('data_provided/aldist_gil.csv') %>% 
+                        mutate(area = 2,
+                               number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
+                        filter(number > 0)
+                      ),
+            area = list(area_file[[1]]$areas) %>% set_names(.),
+            length = create_intervals('len',seq(minlength, maxlength, dl)),
+            age = create_intervals('age',c(minage:11, maxage))
+            )
+
+#stock distribution data available:
+matp.surv <- 
+  structure(bind_rows(read_csv('data_provided/matp_sur.csv'),
+                      read_csv('data_provided/matp_sur.csv') %>% 
+                        mutate(area = 2,
+                               number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
+                        filter(number > 0)
+                      ),
+            area = list(area_file[[1]]$areas) %>% set_names(.),
+            length = create_intervals('len',seq(minlength, maxlength, dl*2)),
+            age = list(mat_ages = ling.mat[[1]]$minage:ling.mat[[1]]$maxage)
+            )
+
+# set up aggregation info for length-based survey indices
+SI1 <- 
+  structure(bind_rows(read_csv('data_provided/SI1.csv'),
+                      read_csv('data_provided/SI1.csv') %>% 
+                        mutate(area = 2,
+                               number = round(number*rlnorm(n(), sdlog = 0.5))/100) %>%
+                        filter(number > 0)
+                      ),
+            area = list(area_file[[1]]$areas) %>% set_names(.),
+            length = create_intervals('len', slices[[1]]))
+SI2 <- 
+  structure(bind_rows(read_csv('data_provided/SI2.csv'),
+                      read_csv('data_provided/SI2.csv') %>% 
+                        mutate(area = 2,
+                               number = round(number*rlnorm(n(), sdlog = 0.5))/100) %>%
+                        filter(number > 0)
+                      ),
+            area = list(area_file[[1]]$areas) %>% set_names(.),
+            length = create_intervals('len', slices[[2]]))
+SI3 <- 
+  structure(bind_rows(read_csv('data_provided/SI3.csv'),
+                      read_csv('data_provided/SI3.csv') %>% 
+                        mutate(area = 2,
+                               number = round(number*rlnorm(n(), sdlog = 0.5))/100) %>%
+                        filter(number > 0)
+                      ),
+            area = list(area_file[[1]]$areas) %>% set_names(.),
+            length = create_intervals('len', slices[[3]]))
+SI4 <- 
+  structure(bind_rows(read_csv('data_provided/SI4.csv'),
+                      read_csv('data_provided/SI4.csv') %>% 
+                        mutate(area = 2,
+                               number = round(number*rlnorm(n(), sdlog = 0.5))/100) %>%
+                        filter(number > 0)
+                      ),
+            area = list(area_file[[1]]$areas) %>% set_names(.),
+            length = create_intervals('len', slices[[4]]))
+SI5 <- 
+  structure(bind_rows(read_csv('data_provided/SI5.csv'),
+                      read_csv('data_provided/SI5.csv') %>% 
+                        mutate(area = 2,
+                               number = round(number*rlnorm(n(), sdlog = 0.5))/100) %>%
+                        filter(number > 0)
+                      ),
+             area = list(area_file[[1]]$areas) %>% set_names(.),
+            length = create_intervals('len', slices[[5]]))
+SI6 <- 
+  structure(bind_rows(read_csv('data_provided/SI6.csv'),
+                      read_csv('data_provided/SI6.csv') %>% 
+                        mutate(area = 2,
+                               number = round(number*rlnorm(n(), sdlog = 0.5))/100) %>%
+                        filter(number > 0)
+                      ),
+            area = list(area_file[[1]]$areas) %>% set_names(.),
+            length = create_intervals('len', slices[[6]]))
+SI7 <- 
+  structure(bind_rows(read_csv('data_provided/SI7.csv'),
+                      read_csv('data_provided/SI7.csv') %>% 
+                        mutate(area = 2,
+                               number = round(number*rlnorm(n(), sdlog = 0.5))/100) %>%
+                        filter(number > 0)
+                      ),
+            area = list(area_file[[1]]$areas) %>% set_names(.),
+            length = create_intervals('len', slices[[7]]))
+
+```
+
+Because all fish in the model, whether they belong to the area 1 or 2, belong to the
+same stocks (immature or mature), they all need to conform to the same stock-related
+processes, such as growth, maturation, and selectivity of a fleet as it fishes that
+stock. Different stocks would be necessary to change these by area. However, because
+initial conditions and recruitment are area-specific, they can be with different
+parameters. Previously we have the same parameters for both areas, resulting in mirror
+images; here we change these parameters to be area-specific. Also remember that
+catchability is also estimated separately by area in relation to survey indices. 
+
+```{r}
+ling.imm <-
+  ling.imm %>%
+  gadget_update('initialconditions',
+                normalparam = 
+                  expand.grid(age = ling.imm[[1]]$minage:ling.imm[[1]]$maxage, area = area_file[[1]]$areas) %>% 
+                  as_data_frame() %>% 
+                  mutate( 
+                    age.factor = parse(text=sprintf('exp(-1*(lingimm.M+ling.init.F)*%1$s)*lingimm.init.%1$s',age)) %>% 
+                      map(to.gadget.formulae) %>% 
+                      unlist(),   
+                    area.factor = sprintf('#lingimm.init.scalar.%1$s',area),
+                    mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
+                    stddev = rep(init.sigma.i,2),
+                    alpha = '#ling.walpha',
+                    beta = '#ling.wbeta'
+                    )
+                ) %>%
+  gadget_update('doesrenew',
+                normalparam = 
+                  expand.grid(year = schedule$year,area = area_file[[1]]$areas) %>%
+                  distinct() %>% 
+                  as_data_frame() %>% 
+                  mutate(step = 1,
+                         age = ling.imm[[1]]$minage,
+                         number = parse(text=sprintf('ling.rec.scalar*ling.rec.%1$s.%2$s',year,area)) %>% 
+                           map(to.gadget.formulae) %>% 
+                           unlist(),
+                         mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
+                         stddev = '#ling.rec.sd',
+                         alpha = '#ling.walpha',
+                         beta = '#ling.wbeta'
+                         )
+                ) 
+
+ling.mat <-
+  ling.mat %>% 
+  gadget_update('initialconditions',
+                normalparam = expand.grid(age = ling.mat[[1]]$minage:ling.mat[[1]]$maxage, area = area_file[[1]]$areas) %>% 
+                  as_data_frame() %>% 
+                  mutate(
+                    age.factor = parse(text=sprintf('exp(-1*(lingmat.M+ling.init.F)*%1$s)*lingmat.init.%1$s',age)) %>% 
+                      map(to.gadget.formulae) %>% 
+                      unlist(),
+                    area.factor = sprintf('#lingmat.init.scalar.%1$s',area),
+                    mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
+                    stddev = rep(init.sigma.m,2),
+                    alpha = '#lingmat.walpha',
+                    beta = '#lingmat.wbeta'
+                    )
+                )  
+## write to file
+ling.imm %>% 
+  write.gadget.file(gd)
+
+ling.mat %>% 
+  write.gadget.file(gd)
+
+```
+
+
+Finally, these data can be used to rewrite the likelihood function.
+
+
+```{r}
+
+lik <-
+  gadgetlikelihood('likelihood',gd,missingOkay = TRUE) %>% 
+  gadget_update("catchdistribution",
+                name = "ldist.surv",
+                weight = 1,
+                data = ldist.surv,
+                fleetnames = c("surv"),
+                stocknames =c("lingimm","lingmat")) %>% 
+  gadget_update("catchdistribution",
+                name = "aldist.surv",
+                weight = 1,
+                data = aldist.surv, 
+                fleetnames = c("surv"),
+                stocknames =c("lingimm","lingmat")) %>% 
+  gadget_update("catchdistribution",
+                name = "ldist.lln",
+                weight = 1,
+                data = ldist.lln, 
+                fleetnames = c("lln"),
+                stocknames = c("lingimm","lingmat")) %>% 
+  gadget_update("catchdistribution",
+                name = "aldist.lln",
+                weight = 1,
+                  data = aldist.lln,
+                fleetnames = c("lln"),
+                stocknames = c("lingimm","lingmat")) %>% 
+  gadget_update("catchdistribution",
+                name = "ldist.gil",
+                weight = 1,
+                data = ldist.gil,
+                fleetnames = c("gil"),
+                stocknames = c("lingimm","lingmat")) %>% 
+  gadget_update("catchdistribution",
+                name = "aldist.gil",
+                weight = 1,
+                data = aldist.gil,
+                fleetnames = c("gil"),
+                stocknames = c("lingimm","lingmat")) %>% 
+  gadget_update("catchdistribution",
+                name = "ldist.bmt",
+                weight = 1,
+                data = ldist.bmt,
+                fleetnames = c("bmt"),
+                stocknames = c("lingimm","lingmat")) %>% 
+  gadget_update("catchdistribution",
+                name = "aldist.bmt",
+                weight = 1,
+                data = aldist.bmt,
+                fleetnames = c("bmt"),
+                stocknames = c("lingimm","lingmat")) %>% 
+  gadget_update("stockdistribution",
+                name = "matp.surv",
+                weight = 1,
+                  data = matp.surv,
+                fleetnames = c("surv"),
+                stocknames =c("lingimm","lingmat")) %>%  
+  gadget_update("surveyindices",
+                name = paste0("si.", names(slices)[1]),
+                weight = 1,
+                data = SI1,
+                fittype = 'loglinearfit',
+                stocknames = c("lingimm","lingmat")) %>% 
+  gadget_update("surveyindices",
+                name = paste0("si.", names(slices)[2]),
+                weight = 1,
+                data = SI2,
+                fittype = 'loglinearfit',
+                stocknames = c("lingimm","lingmat")) %>% 
+  gadget_update("surveyindices",
+                name = paste0("si.", names(slices)[3]),
+                weight = 1,
+                data = SI3,
+                fittype = 'fixedslopeloglinearfit',
+                slope=1,
+                stocknames = c("lingimm","lingmat")) %>% 
+  gadget_update("surveyindices",
+                name = paste0("si.", names(slices)[4]),
+                weight = 1,
+                data = SI4,
+                fittype = 'fixedslopeloglinearfit',
+                slope=1,
+                stocknames = c("lingimm","lingmat")) %>% 
+  gadget_update("surveyindices",
+                name = paste0("si.", names(slices)[5]),
+                weight = 1,
+                data = SI5,
+                fittype = 'fixedslopeloglinearfit',
+                slope=1,
+                stocknames = c("lingimm","lingmat")) %>% 
+  gadget_update("surveyindices",
+                name = paste0("si.", names(slices)[6]),
+                weight = 1,
+                data = SI6,
+                fittype = 'fixedslopeloglinearfit',
+                slope=1,
+                stocknames = c("lingimm","lingmat")) %>% 
+  gadget_update("surveyindices",
+                name = paste0("si.", names(slices)[7]),
+                weight = 1,
+                data = SI7,
+                fittype = 'fixedslopeloglinearfit',
+                slope=1,
+                stocknames = c("lingimm","lingmat"))%>% 
+    gadget_update("penalty",
+                name = "bounds",
+                weight = "0.5",
+                data = data.frame(
+                  switch = c("default"),
+                  power = c(2),
+                  upperW=10000,
+                  lowerW=10000,
+                  stringsAsFactors = FALSE)) %>%
+    gadget_update("understocking",
+                name = "understocking",
+                weight = "100")
+
+lik %>% 
+  write.gadget.file(gd)
+ 
+```
+
+#### Exercise
+* Now that the area model is set up with new parameters and area structure, 1) use `callGadget` 
+to create a new parameters file, 2) use `init_guess` to set bounds and initial starting values 
+of all parameters in the new parameters file, and 3) use `callGadget` again to take create 
+another parameter file that contains reasonable starting values for a longer Gadget optimization 
+run. If you are not sure where to start, look back at the procedure in day 3.
+

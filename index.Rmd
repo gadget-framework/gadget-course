@@ -122,6 +122,7 @@ leaflet() %>%
   + Straying
 * Spawning
   + Time variables
+* Order of operations
 * MFDB
 * Version control
 * Own projects

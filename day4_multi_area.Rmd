@@ -775,3 +775,21 @@ of all parameters in the new parameters file, and 3) use `callGadget` again to t
 another parameter file that contains reasonable starting values for a longer Gadget optimization 
 run. If you are not sure where to start, look back at the procedure in day 3.
 
+* Now run gadget.fit on the results and create model fit figures that are area-specific.
+
+Answer
+```{r, echo = FALSE}
+setwd('ling_model/01-base')
+Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
+callGadget(s=1,log = 'simple_log')
+read.gadget.parameters(paste0(gd,'/params.out'))
+
+
+
+
+callGadget(l=1,i='params.in',p='params.init')
+
+```
+
+
+

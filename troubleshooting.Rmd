@@ -71,7 +71,7 @@ example in naming a likelihood component, can cause serious problems in your mod
 including the same data in two separate likelihood components). If the incorrectly generated files 
 are not deleted, Gadget may read them and incorporate them as part of your model. 
 
-### The Gadget working directory is incorporating model files from another Gadget model
+### The Gadget working directory is incorporating files from another Gadget model
 When recreating Gadget files and calling Gadget, check all working directories carefully. *This is especially problematic when working on two scripts of two different models simultaneously in the same R session.* Because there is only one Gadget working directory per R session environment, 
 which is set using `Sys.setenv(GADGET_WORKING_DIR=normalizePath(pathname))`, if you set 
 the Gadget working directory containing project A's data, and don't switch it back to project
@@ -85,5 +85,6 @@ places:
 * Is there understocking? Try restricting parameter bounds so that the model begins in a more realistic starting point.
 * Are parameter bound constricting? Loosen them if necessary.
 * Are parameter bounds realistic? Check to make sure parameter values are not on the wrong scale or have the wrong interpretation.
+* Are there more 'NAs' than data in your likelihood function? Because NAs are not actually included in Gadget, to consider this question you need to compare the model structure (e.g., # age-length bins) to the number of data points you include in the likelihood. For example, if you have 10 ages x 100 lengths = 1000 bins, but only 50 data points to compare with, then the optimisation routine can have a hard time fitting that data source. Try changing the aggregation levels of the data (grouping attributes of the data frame) to larger aggregations for the purpose of comparing the model to data.
 * **Does the growth process look realistic**? This is an important question to ask of all Gadget models, since Gadget models are more likely to be used in scenarios where there is little or poor ageing data. In this scenario, model results hinge heavily on how growth is modeled. Therefore, results for growth-related paramters should be scrutinized carefully (e.g., Linfinity and k in Von Bertalannfy growth, alpha & beta in the translation of lengths to weights, maxlengthgroupgrowth should be reduced, especially when the beta paramater hits a bound).
 * Check the list of known Gadget quirks.

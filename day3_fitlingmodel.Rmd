@@ -11,18 +11,40 @@ knitr::opts_chunk$set(echo = TRUE)
 
 In Gadget, a likelihood function is specified by supplying likelihood components within the likelihood
 file, which is referred to by the main file. Individual likelihood component scores are summed together 
-after being multiplied by weights to form a total likelihood score, and likelihood scores are defined by the type of likelihood component specified. 
+after being multiplied by weights to form a total likelihood score, and each likelihood score is defined by the type of likelihood component specified. 
 Component types define both the kind of data and likelihood function being calculated for that component.
 Although we refer to 'likelihood scores' throughout this description, it should be kept in mind that these
 are more accurately sums of log likelihoods, so that the objective function used for model fitting attempts to minimize the total likelihood score.
 
 
 ### Incorporating data (Ling case study cont.)
-In introducing likelihood components, we will first go through those used within the ling example in detail, but only mention the other types as they follow similar patterns of implementation. To use Rgadget to set up likelihood files, the first consideration that should be made is what data are available that would be useful for creating a likelihood component. These have been provided for you here: in the data_provided folder, you will find catch data (as introduced with the fleets), as well as survey indices, catch distribution, and 'stock' distribution data. Catch distribution include numbers at length as well as numbers at age and length by fleet. Each length- or age-bin has been defined as having the lower bound only inclusive, except that the lower bound of the smallest bin and the upper bound of the largest bin are open-ended to include all values lower or higher, respectively. These numbers are then used within Gadget to form proportions among defined bins, which are compared to the same proportions among the same bins simulated in the model. Stock distribution data are numbers within each stock, which for ling is immature or mature, but could for example be gender-specific stocks. These are similarly used to form proportions within Gadget.
+In introducing likelihood components, we will first go through those used within the ling example
+in detail, but only mention the other types as they follow similar patterns of implementation. 
+To use Rgadget to set up likelihood files, the first consideration that should be made is what 
+data are available that would be useful for creating a likelihood component. These have been 
+provided for you here: in the 'data_provided' folder, you will find catch data (as introduced 
+with the fleets), as well as survey indices, catch distribution, and 'stock' distribution data. 
+Catch distributions include numbers at length as well as numbers at age and length by fleet. 
+These therefore include both biological samples in fishery data as well as survey data. 
+Each length- or age-bin has been defined as having the lower bound only inclusive, except that 
+the lower bound of the smallest bin and the upper bound of the largest bin are open-ended to 
+include all values lower or higher, respectively. These numbers are then used within Gadget 
+to form proportions among defined bins, which are compared to the same proportions among the 
+same bins simulated in the model. Stock distribution data are numbers within each stock, which 
+for ling is immature or mature, but could for example be gender-specific stocks. Stock distribution 
+numbers are similarly used to form proportions within Gadget.
 
-As we saw when incorporating catch data into fleet files (day 2), certain attributes need to be present 
-in order for the proper and internally consistent Gadget aggregation files to be created alongside these data files. For catch and stock distribution data, these include area, length, and age aggregations. Even when there is only a single bin, these aggregations need to be specified. For example a single area and a single age group is needed for length distributions, in addition to the length bins. Note that bins need not be evenly distributed across the total length range; instead they are highly flexible and can be specified as any grouping. Therefore the user should be careful to ensure that the definitions make sense and that bins do not overlap. In our example below, we show how to add those necessary attributes, although in reality to do this we also use another R package named 'mfdb' that is aimed at database management and data extraction. This package will be briefly introduced on the last day
-of this class but is generally beyond the scope of this course.
+As we saw when incorporating catch data into fleet files (day 2), certain attributes need to 
+be present in order for the proper and internally consistent Gadget aggregation files to be
+created alongside these data files. For catch and stock distribution data, these include area,
+length, and age aggregations. Even when there is only a single bin, these aggregations need 
+to be specified. For example a single area and a single age group is needed for length 
+distributions, in addition to the length bins. Note that bins need not be evenly distributed
+across the total length range; instead they are highly flexible and can be specified as any
+grouping. Therefore the user should be careful to ensure that the definitions make sense and 
+that bins do not overlap. In our example below, we show how to add those necessary attributes,
+although in reality to do this we also use another R package named 'mfdb' that is aimed at 
+database management and data extraction [more on this in day 5]. 
 
 ```{r likelihood}
 
@@ -129,10 +151,14 @@ attributes(matp.surv)
 ```
 
 For ling, length-based indices were used by choosing 7 'slices' of abundance indices across the
-length range of ling observed. Index bounds are defined as above, generally inclusive of the lower bound only, but open-ended for the smallest and largest bins.
-are all other length- and age- bins presented above). No age extrapolations are necessary. It is important to note that only area and length attributes are included as attributes on these data frames, rather than age as in the distributional components. The length attribute allows `gadget_update` to recognize these data as length-based indices, rather than age-based or acoustic indices, for example. It is also important to keep in mind
+length range of ling observed. Index bounds are defined as above, generally inclusive of the 
+lower bound only, but open-ended for the smallest and largest bins. It is important to note 
+that only area and length attributes are included as attributes on these data frames, rather than
+age, as in the distributional components. The length attribute allows `gadget_update` to recognize
+these data as length-based indices, rather than age-based or acoustic indices, for example. It is
+also important to keep in mind
 here that each slice will have its own estimated catchability per survey (single data frame below)
-and area combination (multiple areas may be within a data frame). More on catchability later...
+and area combination (multiple areas may be within a data frame). 
 
 ```{r}
 
@@ -186,9 +212,23 @@ SI7 <- structure(read_csv('data_provided/SI7.csv'),
 
 
 ### Setting up likelihood components
-Using Rgadget, writing the files that specify the likelihood componenets is straightforward. When calling `gadgetlikelihood` and then writing it with `write.gadget.file`, a likelihood file is created within R and written to disc.  The likelihood file contains a list of likelihood component specifications, and within this list is where the likelihood function, data, and weighting of the likelihood component is specifies.
+Using Rgadget, writing the files that specify the likelihood componenets is straightforward. 
+When calling `gadgetlikelihood` and then writing it with `write.gadget.file`, a likelihood file
+is created within R and written to disc.  The likelihood file contains a list of likelihood 
+component specifications, and within each component is where the likelihood function, data, and
+weighting of the likelihood component is specified.
 
-Here we start with the distributional components. In all cases, each component receives a distinct name (to be referenced later so keep them short and distinct), weights (1 to yield equal weights for now), data as imported above, and the fleet names and stock names to which these data apply. As a default, Rgadget specifies a sum of squares function to calculate the likelihood score (`'sumofsquares'`), although a variety of other functions are possible, including one for stratified sum of squares (`'stratified'`), multinomial function (`'multinomial'`), pearson function (`'pearson'`), gamma function (`'gamma'`), log function (`'log'`), multivariate normal function (`'mvn'`) or a multivariate logistic function (`'mvlogistic'`). Many of these functions have been tailored for specific data situations (e.g., including tagging or predation data into a likelihood component). More on these functions can be read in the Gadget User Guide. To change the default setting to the stratified sum of squares, for example, one would include an additional argument `function = 'stratified',` to the `gadget_update` call. 
+Here we start with the distributional components. In all cases, each component receives a distinct 
+name (to be referenced later so keep them short and distinct), weights (1 to yield equal weights 
+for now), data as imported above, and the fleet names and stock names to which these data apply. 
+As a default, Rgadget specifies a sum of squares function to calculate the likelihood score
+(`sumofsquares`), although a variety of other functions are possible, including one for stratified 
+sum of squares (`stratified`), multinomial function (`multinomial`), pearson function (`pearson`), 
+gamma function (`gamma`), log function (`log`), multivariate normal function (`mvn`) or a 
+multivariate logistic function (`mvlogistic`). Many of these functions have been tailored for 
+specific data situations (e.g., including tagging or predation data into a likelihood component). 
+More on these functions can be read in the [Gadget User Guide](https://hafro.github.io/gadget/docs/userguide). To change the default setting to 
+the stratified sum of squares, for example, one would include an additional argument `function = 'stratified',` to the `gadget_update` call. 
 
 ```{r}
 
@@ -253,16 +293,46 @@ lik
 
 ```
 
-Note here that Rgadget automatically creates references to necessary data files ('Data/...') and aggregation files ('Agg/...') that define the bin structure as defined by data attributes (see previous section). When `write.gadget.file` is finally called after we are done adding all likelihood components, these data and agg files will be written alongside this likelihood file, and a reference to this likelihood file will also be drawn within the 'main' file. 
+Note here that Rgadget automatically creates references to necessary data files ('Data/...') and
+aggregation files ('Agg/...') that define the bin structure as defined by data attributes 
+(see previous section). When `write.gadget.file` is finally called after we are done adding 
+all likelihood components, these data and agg files will be written alongside this likelihood 
+file, and a reference to this likelihood file will also be drawn within the 'main' file. 
 
 #### Exercise
-* Suppose that age sampling was done so that the same sampling effort was spread across all ages equally (roughly 30 fish per length range to attain roughly 30 age samples per age). Change the likelihood component function for age-length data to the appropriate function.
+* Suppose that age sampling was done so that the same sampling effort was spread across all 
+ages equally (roughly 30 fish per length range to attain roughly 30 age samples per age).
+Change the likelihood component function for age-length data to the appropriate function.
 
-Incorporating survey index components is very similar except that 1) the fact that the survey index is length-based is determined by the length attribute of the data frame, which sets the argument `si_type` to a value of `lengths`, and 2) a catchability function is also specified under the argument `'fittype'`. In addition, the argument `biomass` has a default setting of 0, signifying  a numbers-based index (rather than a biomass-based index, which has a value of 1). Other options for `si_type` can be read about in the Gadget User Guide, and `ages`, `fleets`, `acoustic`, and `effort`.
+Incorporating survey index components is very similar except that 1) the fact that the survey 
+index is length-based is determined by the length attribute of the data frame, which sets the
+argument `si_type` to a value of `lengths`, and 2) a catchability function is also specified
+under the argument `'fittype'`. In addition, the argument `biomass` has a default setting of 0,
+signifying  a numbers-based index (rather than a biomass-based index, which has a value of 1). 
+Other options for `si_type` can be read about in the [Gadget User Guide](https://hafro.github.io/gadget/docs/userguide), and `ages`, `fleets`, `acoustic`, and `effort`.
 
-The catchability function defines the type of linear regression to be used to calculate the likelihood score. Options include a linear fit on the orignal or log scale (`'linearfit'` or `'loglinearfit'`), linear fit with a fixed slope on the original or log scale (`'fixedslopelinearfit'` or `'fixedslopeloglinearfit'`), linear fit with a fixed intercept on the original or log scale (`'fixedinterceptlinearfit'` or `'fixedinterceptlinearfit'`), or a linear/loglinear function with both the slope and intercept fixed (`'fixedlinearfit'` or `'fixedloglinearfit'`). In the first set of cases (linear or loglinear fits), two parameters would be estimated; in the next two sets of cases, only a single parameter is estimated (slope or intercept, whichever is not fixed). In the last set of cases (fixed liner or loglinear fits), no parameters are estimated. Whenever a parameter is fixed, its value needs to be included as an additional argument to `gadget_update`. For example, catchability of the indices of smaller sized fish below are estimated using a log linear fit with both slopes and intercepts estimated, but catchabilities for indices of larger sized fish are calculated using log linear fits with fixed slopes. The slopes are fixed to a value of 1, so the argument '`slope = 1`' is included in the `gadget_update` call.
+The catchability function defines the type of linear regression to be used to calculate 
+the likelihood score. Options include a linear fit on the orignal or log scale (`linearfit` 
+or `loglinearfit`), linear fit with a fixed slope on the original or log scale (`fixedslopelinearfit`
+or `fixedslopeloglinearfit`), linear fit with a fixed intercept on the original or log scale
+(`fixedinterceptlinearfit` or `fixedinterceptlinearfit`), or a linear/loglinear function with 
+both the slope and intercept fixed (`fixedlinearfit` or `fixedloglinearfit`). In the first set 
+of cases (linear or loglinear fits), two parameters would be estimated; in the next two sets of 
+cases, only a single parameter is estimated (slope or intercept, whichever is not fixed). In 
+the last set of cases (fixed liner or loglinear fits), no parameters are estimated. Whenever a 
+parameter is fixed, its value needs to be included as an additional argument to `gadget_update`.
+For example, catchability of the indices of smaller sized fish below are estimated using a 
+log linear fit with both slopes and intercepts estimated, but catchabilities for indices of 
+larger sized fish are calculated using log linear fits with fixed slopes. The slopes are 
+fixed to a value of 1, so the argument `slope = 1` is included in the `gadget_update` call.
 
-Notice that, unlike the distributional likelihood components, a fleet is not specified for the survey indices, unless `si_type` is set to `'fleets'`, `'effort'`, `'acoustic'`. Therefore, the suitability curve of a certain fleet is not accounted for when catchabilities are estimated, except when `si_type` is set to `'fleets'` or  `'effort'` . In this latter case, a single catchability is estimated instead of a series of catchabilities, corresponding to each age or length index included. Each survey index is matched to stock size observations at a given time and area; therefore, if there are two length- or age-based survey index series with the same time and area, they can each be incorporated as separate likelihood components as long as they have different names. 
+Notice that, unlike the distributional likelihood components, a fleet is not specified 
+for the survey indices, unless `si_type` is set to `fleets`, `effort`, `acoustic` (rather than `length` as in our example). 
+In this latter case, a single catchability is estimated instead of a series of 
+catchabilities, corresponding to each age or length index included. Each survey index is 
+matched to stock size observations at a given time and area; therefore, if there are two 
+length- or age-based survey index series with the same time and area, they can each be 
+incorporated as separate likelihood components as long as they have different names. 
 
 ```{r}
 lik <-
@@ -321,7 +391,11 @@ lik
 #### Exercise
 * Change the survey indices to be biomass indices using `gadget_update`.
 
-Finally, there are two components to the likelihood that do not incorporate data but are instead used to ensure that the optimisation search algorithm remains within reasonable ranges of the objective function. The first component provides penalties for exceeding parameter bounds as set by the user in the input parameter file. In this case, the weight is set to 0.5, but see the troubleshooting page for cases in which it may be wise to set this weight higher. The data frame provided to this likelihood component specifies the power and parameter weights supplied if the parameter value exceeds its upper and lower bounds. In this case, if the likelihood of a parameter exceeds either the upper or lower bound, the distance between the bound and the parameter value is squared and multiplied by the parameter weights 10000; then the sum of these scores across all parameters is multiplied by the 0.5 weighting before being summed along with the other likelihood components to form the total. 
+Finally, there are two components to the likelihood that do not incorporate data but 
+are instead used to ensure that the optimisation search algorithm remains within reasonable 
+ranges of the objective function. The first component provides penalties for exceeding parameter
+bounds as set by the user in the input parameter file. In this case, the weight is set to 0.5, 
+  but see the troubleshooting page for cases in which it may be wise to set this weight higher. The data frame provided to this likelihood component specifies the power and parameter weights supplied if the parameter value exceeds its upper and lower bounds. In this case, if the likelihood of a parameter exceeds either the upper or lower bound, the distance between the bound and the parameter value is squared and multiplied by the parameter weights 10000; then the sum of these scores across all parameters is multiplied by the 0.5 weighting before being summed along with the other likelihood components to form the total. 
 
 Understocking introduces a penalty when there are insufficent prey to met the requiremtnes of the predators. For example, if landings of the fleets exceeds available biomass, then the penalty is applied. The understocking penalty likelihood is then defined as the sum of the number of prey that are 'missing', raised to a power set by default to 2, and multiplied by the likelihood weight of 100 as indicated below.
 
@@ -414,7 +488,7 @@ Now that reasonable bounds and starting values have been set for an optimisation
 
 Obviously, the default settings for optimisation (1000 function evaluations using the Hooke and Jeeves algorithm), are insufficient to find a reasonable optimum. Gadget can also take quite a while to optimise a model (~ 6 hours for ling on a very fast computer). Therefore, it is best to plan ahead of time on which computer and when a model will be optimised, as well as which optimisation methods will be used. 
   
-To change from the default settings, an opimisation file needs to be provided to `callGadget` via the `opt` argument. This is the file we provide for demonstration: it shows that we have implemented 3 consecutive optimisation routines. The first begins with simulated annealing (and parameter settings needed for it as well as a seed), followed by a Hooke and Jeeves algorithm that begins where simmulated annealing leaves off, and finally a BFGS algorithm. The three routines are listed in this manner to consecutively to transition from a broader global search (simulated annealing) to one that provides faster (Hooke and Jeeves) and more precise (BFGS) results, in an attempt to make the search more efficient. These three are the only algorithms currently implemented, but others are in a development phase. Also note that a seed is set in the beginning algorithm: it is good practice to both use random starting values as well as a set seed to check for possible optimisation problems. More information on parameters specific to each algorithm can be found in the Gadget User Guide.
+To change from the default settings, an opimisation file needs to be provided to `callGadget` via the `opt` argument. This is the file we provide for demonstration: it shows that we have implemented 3 consecutive optimisation routines. The first begins with simulated annealing (and parameter settings needed for it as well as a seed), followed by a Hooke and Jeeves algorithm that begins where simmulated annealing leaves off, and finally a BFGS algorithm. The three routines are listed in this manner to consecutively to transition from a broader global search (simulated annealing) to one that provides faster (Hooke and Jeeves) and more precise (BFGS) results, in an attempt to make the search more efficient. These three are the only algorithms currently implemented, but others are in a development phase. Also note that a seed is set in the beginning algorithm: it is good practice to both use random starting values as well as a set seed to check for possible optimisation problems. More information on parameters specific to each algorithm can be found in the [Gadget User Guide](https://hafro.github.io/gadget/docs/userguide).
 
 Each algorithm also has a low maximum number of iterations set in the optimisation file below, which is clearly not enough to be realistic: realistic values used for ling are given as notes within the optinfofile and are not read below. However, the each model presents new challenges to the search algorithm, so in some complex cases it may be necessary to rely mostly on simulating annealing, whereas in other more well-defined cases it may be possible to rely mostly on the faster algorithms. At this point in development, speeding Gadget runs is mostly done by using computers with multiple cores and faster processors. 
 

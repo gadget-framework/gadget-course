@@ -506,7 +506,7 @@ to crash you computer), providing an input parameter file with starting values
 (below as `i = 'params.in'`), and providing a file name to which final parameter
 values should be written (below as `p='params.init'`).
 
-```{r cache=TRUE,eval=FALSE}
+```{r cache=TRUE, eval = FALSE}
 timestamp()
 callGadget(l=1,i='params.in',p='params.init')
 timestamp()
@@ -563,7 +563,7 @@ last default optimisation values left off (in the 'params.init' file).
 The 'params.opt' file will therefore be the result of a longer and more
 well-defined search as described by the 'optinfofile'.
 
-```{r cache=TRUE,eval=FALSE}
+```{r cache=TRUE, eval = FALSE}
 timestamp()
 callGadget(l=1,i='params.init',p='params.opt', opt = '../../data_provided/optinfofile')
 timestamp()
@@ -638,15 +638,19 @@ together.
 
 The `gadget.iterative` function implements the iterative reweighting heuristic and is invoked in the following manner:
 ```{r eval=FALSE}
-## This needs to be fixed at somepoint
-old <- getwd(gd)
+## In its current version, gadget.iterative needs to be run from within the
+## directory that contains the Gadget model
+old <- getwd()
+file.copy(sprintf('%s/optinfofile','data_provided'),gd)
 setwd(gd)
 
 ## run gadget iterative
+## WARNING: Each time gadget.iterative runs with the given optinfofile,
+## it takes 11 mins to run on a reasonably fast computer with 2 cores.
+timestamp() 
 run <- gadget.iterative()
+timestamp()
 
-## go back to the old folder
-setwd(old)
 ```
 
 
@@ -673,14 +677,26 @@ together using the `grouping` argument in the `gadget.iterative` function.
 When estimating annual recruitment, for example, this ensures that at least 
 two data points are available to estimate each of the recruitment parameters.
 In the case of Ling, the survey indices were split into two groups, sizes 20 
-to 70 cm and 70 to 160 cm, and the compositional data from the commercial 
-trawl and gillnet fleets were grouped due to a low number of data points:
+to 72 cm and 72 to 160 cm, and the compositional data from the commercial 
+trawl and gillnet fleets were grouped due to a low number of data points. 
+
+Note that when rerunning gadget.reiterative, it is best for file management 
+purposes to delete the old 'WGTS' folder before reruinning `gadget.iterative`, 
+for example by running `unlink("WGTS", recursive=TRUE)`.
+Alternatively, if both sets of results should be kept, then the 'WGTS' folder
+should be renamed by changing the default argument `wgts = 'WGTS'`. This is
+especially important when visualizing model results in the next step using
+`gadget.fit`.
+
 ```{r eval=FALSE}
-run <- gadget.iterative(grouping = list(sind1=c('si.20-50','si.50-60','si.60-70'),
-                                        sind2=c('si.70-80','si.80-90','si.90-100',
-                                                'si.100-160'),
+
+run <- gadget.iterative(grouping = list(sind1=c('si.len20','si.len52','si.len60'),
+                                        sind2=c('si.len72','si.len80','si.len92',
+                                                'si.len100'),
                                         comm=c('ldist.gil','ldist.bmt',
-                                               'aldist.gil','aldist.bmt')))
+                                               'aldist.gil','aldist.bmt')),
+                        wgts = 'WGTS2')
+
 ```
 
 Note that if a likelihood component is not present in the defined 
@@ -691,7 +707,8 @@ for survey indices used for weight assignment. This is done using the
 `cv.floor` argument:
 
 ```{r eval=FALSE}
-run <- gadget.iterative(cv.floor = 0.2)
+run <- gadget.iterative(cv.floor = 0.2,
+                        wgts = 'WGTS3')
 ```
 
 The `cv.floor` argument is often used after the final optimisation 
@@ -701,7 +718,8 @@ switch allows for this and essentially only runs the last optimisation, thereby
 assuming that the preceding steps have been completed:
 
 ```{r eval=FALSE}
-run <- gadget.iterative(resume.final = TRUE, cv.floor = 0.2)
+run <- gadget.iterative(resume.final = TRUE, cv.floor = 0.2,
+                        wgts = 'WGTS3')
 ```
 
 Related to `resume.final` there are the `run.final` and `run.serial` arguments 
@@ -719,20 +737,32 @@ using a combination of the `comp` and `inverse` arguments:
 ```{r eval=FALSE}
 
 ## only want to fit to ldist.gil, all others discarded
-run <- gadget.iterative(comp = 'ldist.gil')
+run <- gadget.iterative(comp = 'ldist.gil',
+                        wgts = 'WGTS3')
 
 ## remove ldist.gil, all others kept
 run <- gadget.iterative(comp = 'ldist.gil', 
-                        inverse = TRUE)
+                        inverse = TRUE,
+                        wgts = 'WGTS3')
 
 ```
 
 
 ## Visualize Gadget statistical model fit
 
-To obtain information on the model fit and properties of the model, one can use the `gadget.fit` function to query the model and return conveniently structured output:
+To obtain information on the model fit and properties of the model, one can 
+use the `gadget.fit` function to query the model and return conveniently 
+structured output. Notice that there is a default argument in `gadget.fit` 
+that matches `gadget.reiterative`: the `wgts = 'WGTS'` argument. This means that
+by default gadget.fit will load the reiterative results stored under 'WGTS', 
+but this can be changed. Here we load results from the first run of 
+`gadget.iterative` where no grouping was implemented.
 
 ```{r,message=FALSE}
+
+#Notice that we are still in the same directory as where gadget.iterative was run
+getwd()
+
 fit <- gadget.fit()
 
 theme_set(theme_light()) ## set the plot theme (optional)
@@ -791,10 +821,10 @@ names(tmp)
 
 and then plot them one by one:
 ```{r}
-tmp$alkeys.survey
+tmp$aldist.surv
 ```
 ```{r}
-tmp$ldist.survey
+tmp$ldist.surv
 ```
 
 
@@ -821,7 +851,7 @@ names(grplot)
 ```
 Illstrate the fit to the autumn survey
 ```{r}
-grplot$alkeys.survey
+grplot$aldist.surv
 ```
 
 And the fit to maturity data:
@@ -849,9 +879,13 @@ plot(fit,data='res.by.year',type='total') + theme(legend.position = 'none') +
   plot(fit,data = 'res.by.year',type='catch') + theme(legend.position = 'none') +
   plot(fit, data='res.by.year',type='rec')
 
+## go back to the old folder if necessary
+#setwd(old)
+
 ```
 
 #### Exercise
 * Try plotting the catchabilities on the normal scale (exponentiated, not log as given) across ages for each survey. What shape are they when plotted?
 * What information is stored under fit$SS?
+* Try changing the grouping structure above to one that makes more sense to you. Do model results fit any better?
 

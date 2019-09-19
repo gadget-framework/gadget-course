@@ -71,6 +71,12 @@ example in naming a likelihood component, can cause serious problems in your mod
 including the same data in two separate likelihood components). If the incorrectly generated files 
 are not deleted, Gadget may read them and incorporate them as part of your model. 
 
+### Gadget iterative gives errors
+
+Step through your model files looking for bugs, especially in the 
+likelihood files. Look at the weights that are being assigned in every
+instance, which could lead you to problematic data or likelihood structures.
+
 ### The Gadget working directory is incorporating files from another Gadget model
 When recreating Gadget files and calling Gadget, check all working directories carefully. *This is especially problematic when working on two scripts of two different models simultaneously in the same R session.* Because there is only one Gadget working directory per R session environment, 
 which is set using `Sys.setenv(GADGET_WORKING_DIR=normalizePath(pathname))`, if you set 

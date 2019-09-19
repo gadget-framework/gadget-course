@@ -82,6 +82,8 @@ We will use the stock template to define multiple stocks to illustrate the vario
 
 ## Movement and straying
 
+Movement between stocks can be 
+
 ```{r engine='tikz',echo=FALSE}
 
 \usetikzlibrary{arrows,decorations.pathmorphing,decorations.footprints,fadings,calc,trees,mindmap,shadows,decorations.text,patterns,positioning,shapes,matrix,fit,backgrounds}
@@ -91,50 +93,50 @@ We will use the stock template to define multiple stocks to illustrate the vario
 \path 
 %(-8,0) node [shape = circle,draw,fill=black!20] (BG1M) {}
 %(-5.5,0) node [shape = circle,draw,fill=black!20] (BG2M) {}
-(-3,0) node [shape = circle,draw,fill=black!20] (BG3M) {}
+%(-3,0) node [shape = circle,draw,fill=black!20] (BG3M) {}
 (0.5,0) node [shape = circle,draw,fill=black!50, fill opacity=0.5] (BG1D) {}
 (2,0) node [shape = circle,draw,fill=black!50, fill opacity=0.5] (BG2D) {}
-(3.5,0) node [shape = circle,draw,fill=black!50, fill opacity=0.5] (BG3D) {}
-(-7,5) node [shape = circle,draw,fill=black!50, fill opacity=0.5] (FG1M) {}
-(-5.5,5) node [shape = circle,draw,fill=black!50, fill opacity=0.5] (FG2M) {}
-(-4,5) node [shape = circle,draw,fill=black!50, fill opacity=0.5] (FG3M) {}
-(-.5,5) node [shape = circle,draw,fill=black!50, fill opacity=0.5] (FG1D) {}
-(2,5) node [shape = circle,draw,fill=black!50, fill opacity=0.5] (FG2D) {}
-(4.5,5) node [shape = circle,draw,fill=black!50, fill opacity=0.5] (FG3D) {};
+(3.5,0) node [shape = circle,draw,fill=black!50, fill opacity=0.5] (BG3D) {};
+%(-7,5) node [shape = circle,draw,fill=black!50, fill opacity=0.5] (FG1M) {}
+%(-5.5,5) node [shape = circle,draw,fill=black!50, fill opacity=0.5] (FG2M) {}
+%(-4,5) node [shape = circle,draw,fill=black!50, fill opacity=0.5] (FG3M) {}
+%(-.5,5) node [shape = circle,draw,fill=black!50, fill opacity=0.5] (FG1D) {}
+%(2,5) node [shape = circle,draw,fill=black!50, fill opacity=0.5] (FG2D) {}
+%(4.5,5) node [shape = circle,draw,fill=black!50, fill opacity=0.5] (FG3D) {};
 %(1.5,-1) node [draw,fill=white] (txt1) {Dispersion}
-\draw [<->] (BG1M) to (FG1M) ;
-\draw [<->] (BG2M) to (FG2M) ;
-\draw [<->] (BG3M) to (FG3M) ;
-\draw [-] (-1.75,-1) to (-1.75,6.5) ;
-\draw [-,dashed] (-10,2.5) to (7,2.5) ;
-\draw (-7,6.5) node {EG} ;
-\draw (-5.5,6.5) node {WI} ;
-\draw (-4,6.5) node {EI} ;
-\draw (-.5,6.5) node {EG} ;
-\draw (2,6.5) node {WI} ;
-\draw (4.5,6.5) node {EI} ;
-\draw (-8,-2) node {BG1} ;
-\draw (-5.5,-2) node {BG2} ;
-\draw (-3,-2) node {BG3} ;
-\draw (.5,-2) node {BG1} ;
-\draw (2,-2) node {BG2} ;
-\draw (3.5,-2) node {BG3} ;
-\draw [-,dashed] (-6.25,2.5) to (-6.25,6.5) ;
-\draw [-,dashed] (-4.75,2.5) to (-4.75,6.5) ;
-\draw [-,dashed] (0.75,2.5) to (0.75,6.5) ;
-\draw [-,dashed] (3.25,2.5) to (3.25,6.5) ;
-\draw [<->] (BG1D) to (FG1D) ;
-\draw [<->] (BG2D) to (FG2D) ;
-\draw [<->] (BG3D) to (FG3D) ;
+%\draw [<->] (BG1M) to (FG1M) ;
+%\draw [<->] (BG2M) to (FG2M) ;
+%\draw [<->] (BG3M) to (FG3M) ;
+%\draw [-] (-1.75,-1) to (-1.75,6.5) ;
+%\draw [-,dashed] (-10,2.5) to (7,2.5) ;
+%\draw (-7,6.5) node {EG} ;
+%\draw (-5.5,6.5) node {WI} ;
+%\draw (-4,6.5) node {EI} ;
+%\draw (-.5,6.5) node {EG} ;
+%\draw (2,6.5) node {WI} ;
+%\draw (4.5,6.5) node {EI} ;
+%\draw (-8,-2) node {BG1} ;
+%\draw (-5.5,-2) node {BG2} ;
+%\draw (-3,-2) node {BG3} ;
+%\draw (.5,-2) node {BG1} ;
+%\draw (2,-2) node {BG2} ;
+%\draw (3.5,-2) node {BG3} ;
+%\draw [-,dashed] (-6.25,2.5) to (-6.25,6.5) ;
+%\draw [-,dashed] (-4.75,2.5) to (-4.75,6.5) ;
+%\draw [-,dashed] (0.75,2.5) to (0.75,6.5) ;
+%\draw [-,dashed] (3.25,2.5) to (3.25,6.5) ;
+%\draw [<->] (BG1D) to (FG1D) ;
+%\draw [<->] (BG2D) to (FG2D) ;
+%\draw [<->] (BG3D) to (FG3D) ;
 \draw [->] (1,-0.2) to (1.8,-0.2) ;
 \draw [<-] (0.7,0.2) to (1.5,0.2) ;
 \draw [->] (2.5,-0.2) to (3.25,-0.2) ;
 \draw [<-] (2.25,0.2) to (3.0,0.2) ;
 %\draw[fill=black!20] (0,-1.25) rectangle (3,-.75);
-\draw[style=dashed] (2,0) ellipse (3.5 and 1.5);
+%\draw[style=dashed] (2,0) ellipse (3.5 and 1.5);
 %\draw [dashed] (0,0) grid (3,2);
-\draw (2,7.5) node {Dispersion} ;
-\draw (-5.5,7.5) node {Mixing} ;
+%\draw (2,7.5) node {Dispersion} ;
+%\draw (-5.5,7.5) node {Mixing} ;
 %\draw (-10,3.25) node {\makecell{Feeding\\grounds}} ;
 %\draw (-10,1.75) node {\makecell{Breeding\\grounds}} ;
 \end{tikzpicture}

@@ -1,6 +1,14 @@
 ---
 title: "A course on Gadget"
-output: html_document
+output: 
+  html_document:
+    fig_height: 4
+    fig_width: 8
+    highlight: haddock
+    theme: united
+    toc: yes
+    toc_float: yes
+bibliography: library.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -41,11 +49,15 @@ so that a more complex ecosystem can be simulated
 **Prior to the course** make sure your operating system is a unix derivative, 
 such as linux or macosx, as the code and examples in this course is only tested 
 against these operating systems. Windows should in theory work, but issues related 
-to Windows line endings are known to cause random issues in Gadget. 
+to Windows line endings are known to cause random issues in Gadget. For those who do 
+not want dual boot their computers they can install [VirtualBox](https://www.virtualbox.org/) 
+and install linux on a virtual machine (you can find a selection of pre-install images 
+[here](https://www.osboxes.org/virtualbox-images/) where it is recommended that you choose Ubuntu). 
+However if you insist on using Windows you should install the `icesTAF` R-package to handle all the file conversion issues.  
 
-To install Gadget follow the [installation guide]. 
+To install Gadget follow the [installation guide](Gadget_installation.html). 
 
-Please also have the most recent version of R and Rstudio installed.
+Please also have the most recent version of [R](https://cran.r-project.org/) and [Rstudio](https://www.rstudio.com/) installed.
 
 In addition, if you plan to run a simple model using your own data, please:
 
@@ -54,7 +66,7 @@ In addition, if you plan to run a simple model using your own data, please:
 2. think about your model structure/ aggregation level and have R scripts ready that 
 aggregate your data into an appropriately formatted data frame (i.e., columns of :
 year, time step, area, age bins, length bins, or age- and length-bins - have a sneak
-peak at our example model data [here])
+peak at our example model data [here](data_provided.zip))
 
 # Time and location
 ___
@@ -85,7 +97,9 @@ leaflet() %>%
 * [Introduction to tidyverse](tidyverse.html)
 * Deal with installation issues
 * [Getting started](getting_started.html)
-* [Adding fleets into the model](day1_continued.html)
+* [Model variable](day1_continued.html#gadget_variables)
+* [Fleets and selection](day1_continued.html#predation)
+* [Recruitment](day1_continued.html#predation)
 * Discussions
 
 ---

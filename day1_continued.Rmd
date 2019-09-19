@@ -20,7 +20,7 @@ schedule <-
 gd <- gadget.variant.dir('simple_model')
 ```
 
-## Gadget variables 
+# Gadget variables 
 
 It can be tedious to change all the input files whenever you want to try a different
 value for a certain input parameter. For example if you want to specify natural 

@@ -276,6 +276,50 @@ transition, or be moved (ie., to the mature stock). Therefore, `doesmove` and
 additional information to them, whereas neither of
 these are switched on for the mature stock. 
 
+Maturation is split into a two-step process in Gadget. For all ages included in the
+immature stock, maturation is determined by a maturation function (set using the 
+`doesmature` component). For all ages older than the immature stock, maturation is 
+governed by a stepwise 'transition' (or lack of transition) to the mature stock (set 
+using the `doesmove` component). 
+
+For all ages within the immature stock, at what length individuals in the immature stock
+become mature is governed by the maturation function in the `doesmature` component. 
+When choosing a maturity function, both the rate of maturation and timing of maturity should
+be considered. For example, the maturity function used below ('continuous') reflects a
+maturation that occurs continuously through the year (not seasonal) at a rate with a 
+logistic dependence on length, age, or both. The first two parameters listed under 
+the `coefficients` correspond with length-dependency (alpha and L50, respectively), whereas
+the last two correspond with age-dependency (beta and a50, respectively). Therefore,
+for ling, we have only implemented length-dependency. Maturation in the `continuous`
+functions occurs instantaneously (i.e., the maturation function is evaluated 
+and individuals are moved to the mature stock in every time step). When individuals
+transition, they are placed into the same age-length bins of the destination
+stock. If that bin does not exist in the destination stock, or transitioning is not defined 
+to occur, then the fish remain in the oldest age-length bins of the source stock, which act 
+as a plus group. The [Gadget User Guide](https://hafro.github.io/gadget/docs/userguide) describes other possible
+maturity functions, which implement for example a dependency on body condition, 
+seasonal maturation (in which maturation is only evaluated in a certain time step), and
+length-dependent knife-edged (rather than logistic) maturation.
+
+For all ages older than the immature stock, maturation is 
+governed by a stepwise 'transition' (or lack of transition) to the mature stock, set 
+using the `doesmove` component. In our example we turn on the `doesmove` component
+to require that all fish in the oldest age of the immature stock should be moved to the
+mature stock upon aging beyond the range of the immature stock. If this `doesmove` is not
+turned on, then these individuals would instead remain in the immature stock as the 
+oldest age would be considered a plus group, and could lead to a large component of 
+old immature fish populating the model.
+
+For both the `doesmove` and `doesmature` components, the proportion of
+the originating stock transitioning to the 
+destination stock needs to be designated. This is because both components additionally
+allow for maturation / transition into multiple stocks. It is therefore required that
+the stock names and corresponding ratios are supplied that describe what proportion
+of the immature should mature into each stock. Our example shows 
+all (ratio = 1) immature ling to be maturing into the mature stock ('lingmat') under the
+argument `maturestocksandratios`, as well as transitioning to the same stock (under argument
+`transitionstocksandratios`) in the fourth time step of every year when in the maximal age bin of the immature stock.
+
 ```{r}
 mat_stock <- 'lingmat'
 imm_stock <- 'lingimm'
@@ -293,31 +337,11 @@ ling.imm <-
 
 ```
 
-Maturation is split into a two-step process in Gadget. At what length they transition is defined
-by a maturation function in the `doesmature` component, but the seasonal timing of the
-maturation process is described by the `doesmove` component. Both components additionally
-allow for maturation / transition into multiple stocks, therefore requiring the stock names
-and corresponding ratios that describe what proportion of the immature should mature or
-transition into each stock (for example, into a female versus male stock). Our example shows 
-all (ratio = 1) immature ling to be maturing into the mature stock ('lingmat') under the
-argument `maturestocksandratios`, as well as transitioning to the same stock (under argument
-`transitionstocksandratios`) in the fourth time step of every year. 
-
-Note that transition in Gadget is currently implemented as a process that occurs for 
-only the oldest age-length bins of a stock. When a stock transitions, the ratio supplied by
-transition `transitionstocksandratios` determines what proportion from the oldest age-length
-bins is removed; these then are placed into the same age-length bins of the destination 
-stock. If that bin does not exist in the destination stock, or transitioning is not defined 
-to occur, then the fish remain in the oldest age-length bins of the source stock, which act 
-as plus-groups.
-
-The maturity function used in our example ('continuous') reflects a logistic maturation curve
-that can be length, age, or length- and age-dependent. The first two parameters listed under
-the `coefficients` correspond with length-dependency (alpha and L50, respectively), whereas
-the last two correspond with age-dependency (beta and a50, respectively). Therefore, for ling,
-we have only implmented length-dependency. The [Gadget User Guide](https://hafro.github.io/gadget/docs/userguide) describes other possible
-maturity functions, which implement for example a dependency on body condition, instantaneous 
-maturation (rather than seasonal or time-step-dependent transition), and step-wise maturation of whole stocks.
+Note that although the `doesmove` component as described here is used for the maturation 
+process, it actually provides far more flexibility in designing Gadget models by providing 
+a mechanism for tracking stock components as the transition from one state to another. 
+For example, in another case it may be useful to track the transition from male to female 
+in a species that exhibits sequential hermaphroditism.
 
 ### Initial conditions
 

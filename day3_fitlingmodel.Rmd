@@ -328,8 +328,9 @@ fixed to a value of 1, so the argument `slope = 1` is included in the `gadget_up
 
 Notice that, unlike the distributional likelihood components, a fleet is not specified 
 for the survey indices, unless `si_type` is set to `fleets`, `effort`, `acoustic` (rather than `length` as in our example). 
-In this latter case, a single catchability is estimated instead of a series of 
-catchabilities, corresponding to each age or length index included. Each survey index is 
+When indices are not length- or age-based, a single catchability is estimated, rather 
+than the series of catchabilities estimated for each age or length index series. 
+Each survey index is 
 matched to stock size observations at a given time and area; therefore, if there are two 
 length- or age-based survey index series with the same time and area, they can each be 
 incorporated as separate likelihood components as long as they have different names. 
@@ -392,12 +393,24 @@ lik
 * Change the survey indices to be biomass indices using `gadget_update`.
 
 Finally, there are two components to the likelihood that do not incorporate data but 
-are instead used to ensure that the optimisation search algorithm remains within reasonable 
-ranges of the objective function. The first component provides penalties for exceeding parameter
-bounds as set by the user in the input parameter file. In this case, the weight is set to 0.5, 
-  but see the troubleshooting page for cases in which it may be wise to set this weight higher. The data frame provided to this likelihood component specifies the power and parameter weights supplied if the parameter value exceeds its upper and lower bounds. In this case, if the likelihood of a parameter exceeds either the upper or lower bound, the distance between the bound and the parameter value is squared and multiplied by the parameter weights 10000; then the sum of these scores across all parameters is multiplied by the 0.5 weighting before being summed along with the other likelihood components to form the total. 
+are instead used to ensure that the optimisation search algorithm remains within 
+reasonable ranges of the defined model. The first component provides penalties to for 
+exceeding parameter bounds as set by the user in the input parameter file. 
+In this example, the weight is set to 0.5, 
+  but see the troubleshooting page for cases in which it may be wise to set this weight
+  higher. The data frame provided to this likelihood component specifies the power and
+  parameter weights supplied if the parameter value exceeds its upper and lower bounds. 
+  If the likelihood of a parameter exceeds either the upper or lower bound, 
+  the distance between the bound and the parameter value is squared and multiplied by the
+  parameter weights 10 000; then the sum of these scores across all parameters is 
+  multiplied by the 0.5 weighting before being summed along with the other 
+  likelihood components to form the total. 
 
-Understocking introduces a penalty when there are insufficent prey to met the requiremtnes of the predators. For example, if landings of the fleets exceeds available biomass, then the penalty is applied. The understocking penalty likelihood is then defined as the sum of the number of prey that are 'missing', raised to a power set by default to 2, and multiplied by the likelihood weight of 100 as indicated below.
+Understocking introduces a penalty when there are insufficent prey to met the requirements
+of the predators. For example, if landings of the fleets exceeds available biomass, 
+then the penalty is applied. The understocking penalty likelihood is then defined as 
+the sum of the number of prey that are 'missing', raised to a power set by default
+to 2, and multiplied by the likelihood weight of 100 as indicated below.
 
 ```{r}
   lik <-
@@ -420,16 +433,24 @@ lik %>%
 
 ```
 
-Notice that when the likelihood file is written, so are all the supporting aggregation files under the
-'Aggfiles' folder.
+Notice that when the likelihood file is written, so are all the supporting 
+aggregation files under the 'Aggfiles' folder.
 
 ## Fitting a Gadget model to data 
 
-Now that all data and likelihood components are incorporated, it is possible to run `callGadget` using a fitting procedure. Like any other optimisation routine, what is still needed are 1) starting values for the parameters, and 2) optimisation routine settings.
+Now that all data and likelihood components are incorporated, it is possible to run `callGadget` using a fitting procedure. Like any other optimisation routine, what 
+is still needed are 1) starting values for the parameters, and 2) optimisation routine settings.
 
 ### Create starting values
 
-If we start here with the same simple simulation as in day 2 of the ling model, we can see that a file called 'params.out' is automatically generated (same timestamp as the simple_log). However, if you open this file, is shows that each parameter was given a value of 1 with bounds set to {-9999, 9999} and no optimisation (0). Therefore, this simulation was run with very unrealistic parameters. Obviously this is not a helpful run in itself, but it is at least useful for conveniently generating an initial parameter file with the correct Gadget structure containing all the parameters specified throughout the Gadget model files. 
+If we start here with the same simple `callGadget` simulation as in day 2 of the 
+ling model, we can see that a file called 'params.out' is automatically generated
+(same timestamp as the simple_log). However, if you open this file, is shows that 
+each parameter was given a value of 1 with bounds set to {-9999, 9999} and no 
+optimisation (0). Therefore, this simulation was run with very unrealistic parameters.
+Obviously this is not a helpful run in itself, but it is at least useful for 
+conveniently generating an initial parameter file with the correct Gadget 
+structure containing all the parameters specified throughout the Gadget model files. 
 
 ```{r}
 Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
@@ -438,7 +459,10 @@ callGadget(s=1,log = 'simple_log')
 read.gadget.parameters(paste0(gd,'/params.out'))
 ```
 
-Now that the structure is set, it is much easier to change the bounds and starting values to more realistic ones using `init_guess`. This function uses the `grepl` function internally to match names, so that large chunks of parameters with similar names can have their bounds similarly changed.
+Now that the structure is set, it is much easier to change the bounds and starting 
+values to more realistic ones using `init_guess`. This function uses the `grepl`
+function internally to match names, so that large chunks of parameters with similar
+names can have their bounds similarly changed.
 
 ```{r}
 lw_pars <- c(0.00000228, 3.20) #same values as in day 2
@@ -467,7 +491,8 @@ read.gadget.parameters(sprintf('%s/params.in',gd))
 
 ```
   
-Now is a good point to scan the resulting 'params.in' file to make sure that a parameter was not forgotten and left with default values and bounds.
+Now is a good point to scan the resulting 'params.in' file to make sure that
+a parameter was not forgotten and left with default values and bounds.
 
 #### Exercise
 * Use `init_guess` to change the bounds of only one set of selectivity parameters.
@@ -475,7 +500,11 @@ Now is a good point to scan the resulting 'params.in' file to make sure that a p
 
 ### Set optimisation routine
 
-To run an optimisation via callGadget is simple: it simply requires changing the argument `s=1` to `l=1`, removing the log (very important unless you want to crash you computer), providing an input parameter file with starting values (below as `i = 'params.in'`), and providing a file name to which final parameter values should be written (below as `p='params.init'`).
+To run an optimisation via `callGadget` is simple: it only requires changing
+the argument `s=1` to `l=1`, removing the log argument (very important unless you want 
+to crash you computer), providing an input parameter file with starting values
+(below as `i = 'params.in'`), and providing a file name to which final parameter
+values should be written (below as `p='params.init'`).
 
 ```{r cache=TRUE,eval=FALSE}
 timestamp()
@@ -484,19 +513,55 @@ timestamp()
 
 ```
 
-Now that reasonable bounds and starting values have been set for an optimisation run, default settings can be used to run a short and simple Gadget optimisation. If you open the params.init file, comments can be found at the top that detail the computer and timing of the run (as in a simulation run), as well as optimisation information (something like 'Hooke & Jeeves algorithm ran for 1039 function evaluations'), the likelihood value at the end '1e+10' and a reason for stopping ('because the maximum number of function evaluations was reached'). You can also see from the timestamps above that this run took roughly 30 seconds, depending on the computer being used. 
+Now that reasonable bounds and starting values have been set for an 
+optimisation run, default settings can be used to run a short and simple
+Gadget optimisation. If you open the params.init file, comments can be found 
+at the top that detail the computer and timing of the run (as in a simulation run),
+as well as optimisation information (something like 'Hooke & Jeeves algorithm ran 
+for 1039 function evaluations'), the likelihood value at the end '1e+10' and a 
+reason for stopping ('because the maximum number of function evaluations was reached').
+You can also see from the timestamps above that this run took roughly 30 seconds,
+depending on the computer being used. 
 
-Obviously, the default settings for optimisation (1000 function evaluations using the Hooke and Jeeves algorithm), are insufficient to find a reasonable optimum. Gadget can also take quite a while to optimise a model (~ 6 hours for ling on a very fast computer). Therefore, it is best to plan ahead of time on which computer and when a model will be optimised, as well as which optimisation methods will be used. 
+Obviously, the default settings for optimisation (1000 function evaluations 
+using the Hooke and Jeeves algorithm), are insufficient to find a reasonable 
+optimum. Gadget can also take quite a while to optimise a model (~ 6 hours for
+ling on a very fast computer). Therefore, it is best to plan ahead of time on 
+which computer and when a model will be optimised, as well as which optimisation
+methods will be used. 
   
-To change from the default settings, an opimisation file needs to be provided to `callGadget` via the `opt` argument. This is the file we provide for demonstration: it shows that we have implemented 3 consecutive optimisation routines. The first begins with simulated annealing (and parameter settings needed for it as well as a seed), followed by a Hooke and Jeeves algorithm that begins where simmulated annealing leaves off, and finally a BFGS algorithm. The three routines are listed in this manner to consecutively to transition from a broader global search (simulated annealing) to one that provides faster (Hooke and Jeeves) and more precise (BFGS) results, in an attempt to make the search more efficient. These three are the only algorithms currently implemented, but others are in a development phase. Also note that a seed is set in the beginning algorithm: it is good practice to both use random starting values as well as a set seed to check for possible optimisation problems. More information on parameters specific to each algorithm can be found in the [Gadget User Guide](https://hafro.github.io/gadget/docs/userguide).
+To change from the default settings, an opimisation file needs to be provided
+to `callGadget` via the `opt` argument. This is the file we provide for 
+demonstration: it shows that we have implemented 3 consecutive optimisation 
+routines. The first begins with simulated annealing (and parameter settings 
+needed for it as well as a seed), followed by a Hooke and Jeeves algorithm 
+that begins where simmulated annealing leaves off, and finally a BFGS algorithm.
+The three routines are listed in this manner to consecutively to transition from
+a broader global search (simulated annealing) to one that provides faster 
+(Hooke and Jeeves) and more precise (BFGS) results, in an attempt to make the 
+search more efficient. These three are the only algorithms currently implemented, 
+but others are in a development phase. Also note that a seed is set in the 
+beginning algorithm: it is good practice to both use random starting values
+as well as a set seed to check for possible optimisation problems. More 
+information on parameters specific to each algorithm can be found in the [Gadget User Guide](https://hafro.github.io/gadget/docs/userguide).
 
-Each algorithm also has a low maximum number of iterations set in the optimisation file below, which is clearly not enough to be realistic: realistic values used for ling are given as notes within the optinfofile and are not read below. However, the each model presents new challenges to the search algorithm, so in some complex cases it may be necessary to rely mostly on simulating annealing, whereas in other more well-defined cases it may be possible to rely mostly on the faster algorithms. At this point in development, speeding Gadget runs is mostly done by using computers with multiple cores and faster processors. 
+Each algorithm also has a low maximum number of iterations set in the 
+optimisation file below, which is clearly not enough to be realistic: realistic 
+values used for ling are given as notes within the optinfofile and are not read 
+below. However, the each model presents new challenges to the search algorithm, 
+so in some complex cases it may be necessary to rely mostly on simulating annealing, 
+whereas in other more well-defined cases it may be possible to rely mostly on the
+faster algorithms. At this point in development, speeding Gadget runs is mostly 
+done by using computers with multiple cores and faster processors. 
 
 ```{r}
 read.gadget.optinfo('data_provided/optinfofile')
 ```
 
-Here, we have implemented a fitting procedure that begins where the last default optimisation values left off (in the 'params.init' file). The 'params.opt' file will therefore be the result of a longer and more well-defined search as described by the 'optinfofile'.
+Here, we have implemented a fitting procedure that begins where the 
+last default optimisation values left off (in the 'params.init' file). 
+The 'params.opt' file will therefore be the result of a longer and more
+well-defined search as described by the 'optinfofile'.
 
 ```{r cache=TRUE,eval=FALSE}
 timestamp()
@@ -531,8 +596,8 @@ data. It can be used as an a priori estimates of the variance in each
 subset of the data. 
 
 
-Assigning likelihood weights is not a trivial matter, has in the past
-been the most time consuming part of a Gadget model. Commonly this has
+Assigning likelihood weights is not a trivial matter; it has in the past
+been the most time-consuming part of developing a Gadget model. Commonly this has
 been done using some form of 'expert judgement'. General heuristics
 have recently been developed to estimated these weights
 objectively. Here the iterative re--weighting heuristic introduced by
@@ -540,7 +605,7 @@ objectively. Here the iterative re--weighting heuristic introduced by
 @taylor2007simple, is used. Rgadget implements this heuristing using the `gadget.iterative` function.
 
 
-The general idea behind the iterative re-weighing is to assign the
+The general idea behind the iterative re-weighting is to assign the
 inverse variance of the fitted residuals as component weights. This pattern 
 suggests that the more variable the residuals are from a particular data
 source, the less weight it should receive. The
@@ -551,7 +616,7 @@ following algorithm:
   parameterization for all likelihood components. Assign the inverse SS
   as the initial weight for all likelihood components, resulting in a total initial score of 1 for each component. 
 2. For each likelihood component, do an optimization run with
-  the initial weighted SS for that component set to 10000. This run represents
+  the initial weighted SS for that component set to 10 000. This run represents
   a model fit where essentially only that component contributes to model
   fitting, and therefore that component receives the best fit achievable.
   Then estimate the residual variance using the resulting SS of that component divided
@@ -562,7 +627,7 @@ following algorithm:
 
 
 The number of non-zero data-points ($df^{*}$) is used as a proxy for the degrees 
-of freedom.While this may be a satisfactory proxy for larger data sets, it could be
+of freedom. While this may be a satisfactory proxy for larger data sets, it could be
 a gross overestimate of the degrees of freedom for smaller data sets. 
 In particular, if the survey indices are weighed on their own while the
 annual recruitment is estimated, they could be over-fitted. In general, 
@@ -585,9 +650,31 @@ setwd(old)
 ```
 
 
-This will start an iterative run that will estimate the weights for all likelihood components, and run a final optimisation run with the resulting likelihood weights. Penalising likelihood components, such as `boundlikelihood` and `understocking`, are left as is. As the iterative reweighting requires several optimisation runs, `gadget.iterative` tries to spread these runs across the available cores on your computer. In the case of the number of cores lower than the number of runs, the excess runs will wait until a core becomes available. The resulting parameter estimates are then stored in a folder called `WGTS` in your model directory, where the file `params.final` contains the final parameter estimate.  
+This will start an iterative run that will estimate the weights for all likelihood
+components, and run a final optimisation run with the resulting likelihood weights.
+Penalising likelihood components, such as `boundlikelihood` and `understocking`, are 
+left as is. As the iterative reweighting requires several optimisation runs,
+`gadget.iterative` tries to spread these runs across the available cores on your 
+computer. In the case of the number of cores lower than the number of runs, the excess
+runs will wait until a core becomes available. The resulting parameter estimates are
+then stored in a folder called `WGTS` in your model directory, where the file 
+`params.final` contains the final parameter estimate.  
 
-When running `gadget.iterative` with standard setting you assume that all data sets have enough data to allow all parameters to be estimated without overfitting the data. It is not always the case that this is appropriate. For instance survey indices have in general only one data point per year, step and size group, and when estimating annual recruitment this usually leads overfitting of that particular component when heavily emphasized. Similar problem can arise when only one year, or a few disjoint years, worth of compositional data is supplied to the likelihood function. To account for this issue the user can group similar likelihood components together using the `grouping` argument in the `gadget.iterative` function. When estimating annual recruitment, for example, this ensures that at least two data points are available to estimate each of the recruitment parameters. In the case of Ling, the survey indices were split into two groups, sizes 20 to 70 cm and 70 to 160 cm, and the compositional data from the commercial trawl and gillnet fleets were grouped due to a low number of data points:
+When running `gadget.iterative` with standard setting you assume that all 
+data sets have enough data to allow all parameters to be estimated without 
+overfitting the data. It is not always the case that this is appropriate. 
+For instance survey indices have in general only one data point per year, 
+step and size group, and when estimating annual recruitment this usually 
+leads overfitting of that particular component when heavily emphasized. 
+Similar problem can arise when only one year, or a few disjoint years, 
+worth of compositional data is supplied to the likelihood function. To 
+account for this issue the user can group similar likelihood components 
+together using the `grouping` argument in the `gadget.iterative` function.
+When estimating annual recruitment, for example, this ensures that at least 
+two data points are available to estimate each of the recruitment parameters.
+In the case of Ling, the survey indices were split into two groups, sizes 20 
+to 70 cm and 70 to 160 cm, and the compositional data from the commercial 
+trawl and gillnet fleets were grouped due to a low number of data points:
 ```{r eval=FALSE}
 run <- gadget.iterative(grouping = list(sind1=c('si.20-50','si.50-60','si.60-70'),
                                         sind2=c('si.70-80','si.80-90','si.90-100',
@@ -596,21 +683,38 @@ run <- gadget.iterative(grouping = list(sind1=c('si.20-50','si.50-60','si.60-70'
                                                'aldist.gil','aldist.bmt')))
 ```
 
-Note that if a likelihood component is not present in the defined grouping list it is assumed that the component is treated individually. Sometimes this is not enough to prevent overfitting and therefore the user can define a maximum weight of sorts by defining the minimum CV for survey indices used for weight assignment. This is done using the `cv.floor` argument:
+Note that if a likelihood component is not present in the defined 
+grouping list it is assumed that the component is treated individually. 
+Sometimes this is not enough to prevent overfitting and therefore the 
+user can define a maximum weight of sorts by defining the minimum CV 
+for survey indices used for weight assignment. This is done using the 
+`cv.floor` argument:
 
 ```{r eval=FALSE}
 run <- gadget.iterative(cv.floor = 0.2)
 ```
 
-The `cv.floor` argument is often used after the final optimisation run has crashed so it is convenient to be able to pick up the "thread" where the run crashed and resume the final optimisation. The `resume.final` switch allows for this and essentially only runs the last optimisation, thereby assuming that the preceding steps have been completed:
+The `cv.floor` argument is often used after the final optimisation 
+run has crashed so it is convenient to be able to pick up the "thread" 
+where the run crashed and resume the final optimisation. The `resume.final` 
+switch allows for this and essentially only runs the last optimisation, thereby
+assuming that the preceding steps have been completed:
 
 ```{r eval=FALSE}
 run <- gadget.iterative(resume.final = TRUE, cv.floor = 0.2)
 ```
 
-Related to `resume.final` there are the `run.final` and `run.serial` arguments that instruct the function to whether to run the final optimisation from the beginning and whether all optimisations should be run on a single core respectively. 
+Related to `resume.final` there are the `run.final` and `run.serial` arguments 
+that instruct the function to whether to run the final optimisation from the 
+beginning and whether all optimisations should be run on a single core respectively. 
 
-In post-hoc analyses of the effect of certain data sources on model fitting, differential treatment of data is often investigated. For example, the effect of a certain dataset can be analysed by omitting it from the estimation or chaning its grouping. `gadget.iterative` allows you to have multiple `WGTS` folders in the same model directory by setting the `wgts` argument. In addition the user can explictly define (or remove) which component are to be used in the optimisation using a combination of the `comp` and `inverse` arguments:
+In post-hoc analyses of the effect of certain data sources on model fitting, 
+differential treatment of data is often investigated. For example, the effect 
+of a certain dataset can be analysed by omitting it from the estimation or changing 
+its grouping. `gadget.iterative` allows you to have multiple `WGTS` folders in the 
+same model directory by setting the `wgts` argument. In addition the user can 
+explicitly define (or remove) which component are to be used in the optimisation 
+using a combination of the `comp` and `inverse` arguments:
 
 ```{r eval=FALSE}
 
@@ -738,7 +842,7 @@ plot(fit,data='stock.std') + scale_fill_crayola()
 ```
 
 
-And the standard ices plots
+And the standard ICES plots
 ```{r}
 plot(fit,data='res.by.year',type='total') + theme(legend.position = 'none') +
   plot(fit,data='res.by.year',type='F') + theme(legend.position = 'none') +
@@ -748,6 +852,6 @@ plot(fit,data='res.by.year',type='total') + theme(legend.position = 'none') +
 ```
 
 #### Exercise
-* Try plotting the catchabilities on the normal scale (exponentiated, not log as given) across ages for each survey. What shape are they?
+* Try plotting the catchabilities on the normal scale (exponentiated, not log as given) across ages for each survey. What shape are they when plotted?
 * What information is stored under fit$SS?
 

@@ -9,7 +9,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Alternate structures: multiple areas
 
-Let's return to the initial set-up of the ling model and modify it such that the stocks live on two areas. The first step to do this is to modify the area file and stock files to include a second area.
+Let's return to the initial set-up of the ling model and modify it such that
+the stock live on two areas. The first step to do this is to modify the area
+file and stock files to include a second area.
 
 ```{r area2}
 
@@ -51,7 +53,9 @@ ling.mat <-
 ling.imm
 ```
 
-In theory, the only details left that are necessary to set up a two-area model is to provide initial values and recruitment, as these are designated both by area and age:
+In theory, the only details left that are necessary to set up a two-area model
+is to provide initial values and recruitment, as these are designated both by
+area and age combinations:
 
 ```{r}
 
@@ -59,14 +63,12 @@ In theory, the only details left that are necessary to set up a two-area model i
 init.sigma.i <- rep(2, length(ling.imm[[1]]$minage:ling.imm[[1]]$maxage))
 init.sigma.m <- rep(2, length(ling.mat[[1]]$minage:ling.mat[[1]]$maxage))
 
-m
-
 ling.imm <-
   ling.imm %>%
   gadget_update('initialconditions',
                 normalparam = 
                   expand.grid(age = ling.imm[[1]]$minage:ling.imm[[1]]$maxage, area = area_file[[1]]$areas) %>% 
-                  as_data_frame() %>% 
+                  as_tibble() %>% 
                   mutate( 
                     age.factor = parse(text=sprintf('exp(-1*(lingimm.M+ling.init.F)*%1$s)*lingimm.init.%1$s',age)) %>% 
                       map(to.gadget.formulae) %>% 
@@ -82,7 +84,7 @@ ling.imm <-
                 normalparam = 
                   expand.grid(year = schedule$year,area = area_file[[1]]$areas) %>%
                   distinct() %>% 
-                  as_data_frame() %>% 
+                  as_tibble() %>% 
                   mutate(step = 1,
                          age = ling.imm[[1]]$minage,
                          number = parse(text=sprintf('ling.rec.scalar*ling.rec.%s',year)) %>% 
@@ -99,7 +101,7 @@ ling.mat <-
   ling.mat %>% 
   gadget_update('initialconditions',
                 normalparam = expand.grid(age = ling.mat[[1]]$minage:ling.mat[[1]]$maxage, area = area_file[[1]]$areas) %>% 
-                  as_data_frame() %>% 
+                  as_tibble() %>% 
                   mutate(
                     age.factor = parse(text=sprintf('exp(-1*(lingmat.M+ling.init.F)*%1$s)*lingmat.init.%1$s',age)) %>% 
                       map(to.gadget.formulae) %>% 
@@ -119,7 +121,12 @@ ling.mat %>%
   write.gadget.file(gd)
 ```
 
-The only changes added to the above model were to add a second area with the same exact values in initial conditions and recruitment as found in the first model. The second area is therefore a simulated mirror of the first, but with no fishing, as the fleets only exist on area 1. Structurally, this is the minimum possible information needed to include a second area.
+The only changes added to the above model were to add a second area with the
+same exact values in initial conditions and recruitment as found in the
+previous model with only a single area. The second area is therefore a
+simulated mirror of the first, but with no fishing, as the fleets only 
+exist on area 1. Structurally, this is the minimum possible information 
+needed to include a second area.
 
 ```{r cache=TRUE,eval=FALSE}
 Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
@@ -130,16 +137,37 @@ callGadget(s=1,i='params.init',log = 'log_area2')
 
 ### Migration
 
-A model as shown in the previous section may be useful for theoretical simulations, otherwise it is not particularly interesting, and has no effect on what goes on in area 1, including the model fitting procedures (as data are specified by area). A single population in two areas in Gadget can interact via migration, which determines how much the individuals in each area move among areas.
+A model as shown in the previous section may be useful for theoretical
+simulations, otherwise it is not particularly interesting, and has no 
+effect on what goes on in area 1, including the model fitting procedures 
+(as data are specified by area). A slightly more interesting model could
+be a single population in two areas that can interact between areas 
+via migration, which determines how much the individuals move among areas.
 
-Migration is specified in the stock file under the migration section, and is therefore updated first by indicating that migration exists by turning the `doesmigrate` option from 0 to 1, and providing a migration matrix or migration ratios (two forms of the same information). In Rgadget, this can be done by creating a migration matrix file and using `gadget_update` to modify the migration component of the stock file to refer to this file.
+Migration is specified in the stock file under the migration section, 
+and is therefore updated first by indicating that migration exists by 
+turning the `doesmigrate` option from 0 to 1, and providing a migration 
+matrix or migration ratios (two forms of the same information). In Rgadget,
+this can be done by creating a migration matrix file and using 
+`gadget_update` to modify the migration component of the stock file to 
+refer to this file.
 
-A migration matrix is a square n x n  matrix for the n areas that the stock is defined on with proportions moving *from* each area given in columns to the area given in rows. Migration should not change the total number of fish in the model, so each column in the migration matrix should sum to 1. Therefore in the following example, at the start of migration, 60% of individuals in area 1 remain there, 40% move to area 2. Likewise, 30% of individuals in area 2 move to area 1, whereas 70% remain there:
+A migration matrix is a square n x n matrix for the n areas that the stock
+is defined on with proportions moving *from* each area given in columns
+*to* the area given in rows. Migration should not change the total number 
+of fish in the model, so each column in the migration matrix should 
+sum to 1. Therefore in the following example, at the start of migration, 
+60% of individuals in area 1 remain there, 40% move to area 2. Likewise, 
+30% of individuals in area 2 move to area 1, whereas 70% remain there:
+
 ```{r}
 matrix(c(0.6, 0.4, 0.3, 0.7), nrow = 2)
 ```
 
-An alternate method for supplying these values is via migration ratios, which instead lists only the proportions of fish moving, and lets Gadget calculate the full matrix from those. To represent the above matrix in this form, we would write:
+An alternate method for supplying these values is via migration ratios, 
+which instead lists only the proportions of fish moving, and lets Gadget
+calculate the full matrix from those. To represent the above matrix in 
+this form, we would write:
 ```{r}
 matrix(c(1,2,0.4,2,1,0.3), nrow = 2, byrow = T)
 ```
@@ -147,8 +175,10 @@ In this form, within each row, the first column shows the origin area, the secon
 destination area, and the third the proportion. Note that migrations of 0% are calculated 
 automatically, so they should be omitted.
 
-In this example we continue with the proportions format. Proportions can be replaced with 
-switches that are specified in the parameters file, and the matrix can be transformed into a Gadget file with the necessary name and keyword `[migrationmatrix]` using `gadgetfile`:
+In this example we continue with the migration ratios format. Ratios can be replaced with 
+switches that are specified in the parameters file, and the matrix can 
+be placed into a Gadget file with the necessary name and keyword
+`[migrationmatrix]` using `gadgetfile`:
 
 ```{r}
 tmp.mat <- matrix(c(1,2,0.4,2,1,'#mig'), nrow = 2, byrow = T)
@@ -166,10 +196,10 @@ tmp.mat <- matrix(c(1,2,0.4,2,1,'#mig'), nrow = 2, byrow = T)
    
 ```
 
-Each migration file can also have a series of migrations, but note that the order of evaluation of
-these affects the proportions that should be written. For example, suppose we have 1000 fish in 
-each area, and we want to represent that 30% of the fish in area 1 will move to area 2 in time 
-step 1, but the same proportion will migrate to area 1 from 2 in time step 2. We would write
+Each migration file can include a series of migrations, but note that the order of evaluation of
+these affects the ratios that should be written. For example, suppose we have 1000 fish in 
+each area, and we want to represent the situation that 30% of the fish in area 1 will move to area 2 in time 
+step 1, and the same ratio will migrate to area 1 from 2 in time step 2. We would write
 the following:
 
 ```{r}
@@ -196,13 +226,14 @@ mig_file
 This indicates that 300 fish will move from area 1 to 2 in step 1, and then subsequently 
 0.3 x 1300 = 390 fish will move from area 2 to area 1. It does *not* mean that 300 fish
 will move back, or that these fish are the same individuals that moved in step 1. For 
-this pattern a different model structure (with a new stock) is needed. 
+this pattern a different model structure (with a new stock) is needed, so
+that those 300 individuals can be tracked separately. 
 
-For our purposes, lets set the migration proportions to switches
+For our purposes, let's set the migration proportions to switches:
 ```{r}
 
-tmp.mat.w <- matrix(c(1,2,'#mig.w'), nrow = 1, byrow = T)
-tmp.mat.e <- matrix(c(2,1,'#mig.e'), nrow = 1, byrow = T)
+tmp.mat.w <- matrix(c(1,2,'#ling.mig.w'), nrow = 1, byrow = T)
+tmp.mat.e <- matrix(c(2,1,'#ling.mig.e'), nrow = 1, byrow = T)
 
 mig_file <-
     gadgetfile('Modelfiles/migration',
@@ -223,7 +254,6 @@ mig_file %>%
 mig_file    
 ```
 
-
 Although in the above example we have time steps for migration in mind, we have not yet
 designated them in a Gadget file. To do this, the next step is to create a migration timing file:
 ```{r}
@@ -240,7 +270,6 @@ designated them in a Gadget file. To do this, the next step is to create a migra
     write.gadget.file(gd)
 
 ```
-
 
 Finally, we modify the stock files for the stocks that should use this migration matrix and time files: 
 
@@ -277,7 +306,11 @@ callGadget(s=1,i='params.init',log = 'log_area2')
 
 ### Using data from multiple areas
 
-It is also possible to fit a Gadget model using area-specific data. If data are available from both areas, then there must be fleets operating in both areas, so the first step is to modify the fleets. This is easily done in Rgadget by including catch data from both areas and including area 2 in the attributes:
+It is also possible to fit a Gadget model using area-specific data. 
+If data are available from both areas, then there must be fleets operating
+in both areas, so the first step is to modify the fleets. This is easily
+done in Rgadget by including catch data from both areas and including 
+area 2 in the attributes:
 
 ```{r fleets2}
 lln.landings <- structure(
@@ -375,8 +408,8 @@ gadgetfleet('Modelfiles/fleet',gd,missingOkay = TRUE) %>%
 
 ```
 
-Now that there are fleets fishing on area 2, it is possible for samples to be generated
-from area 2. 
+Now that there are fleets fishing on area 2 with catches removed, 
+it is possible for biological samples to be generated from area 2. 
 
 ```{r, echo = FALSE}
 #some necessary info
@@ -576,8 +609,8 @@ Because all fish in the model, whether they belong to the area 1 or 2, belong to
 same stocks (immature or mature), they all need to conform to the same stock-related
 processes, such as growth, maturation, and selectivity of a fleet as it fishes that
 stock. Different stocks would be necessary to change these by area. However, because
-initial conditions and recruitment are area-specific, they can be with different
-parameters. Previously we have the same parameters for both areas, resulting in mirror
+initial conditions and recruitment are area-specific, they can be set with different values or 
+switches. Previously we had written the same parameters for both areas, resulting in mirror
 images; here we change these parameters to be area-specific. Also remember that
 catchability is also estimated separately by area in relation to survey indices. 
 
@@ -587,7 +620,7 @@ ling.imm <-
   gadget_update('initialconditions',
                 normalparam = 
                   expand.grid(age = ling.imm[[1]]$minage:ling.imm[[1]]$maxage, area = area_file[[1]]$areas) %>% 
-                  as_data_frame() %>% 
+                  as_tibble() %>% 
                   mutate( 
                     age.factor = parse(text=sprintf('exp(-1*(lingimm.M+ling.init.F)*%1$s)*lingimm.init.%1$s',age)) %>% 
                       map(to.gadget.formulae) %>% 
@@ -603,7 +636,7 @@ ling.imm <-
                 normalparam = 
                   expand.grid(year = schedule$year,area = area_file[[1]]$areas) %>%
                   distinct() %>% 
-                  as_data_frame() %>% 
+                  as_tibble() %>% 
                   mutate(step = 1,
                          age = ling.imm[[1]]$minage,
                          number = parse(text=sprintf('ling.rec.scalar*ling.rec.%1$s.%2$s',year,area)) %>% 
@@ -620,7 +653,7 @@ ling.mat <-
   ling.mat %>% 
   gadget_update('initialconditions',
                 normalparam = expand.grid(age = ling.mat[[1]]$minage:ling.mat[[1]]$maxage, area = area_file[[1]]$areas) %>% 
-                  as_data_frame() %>% 
+                  as_tibble() %>% 
                   mutate(
                     age.factor = parse(text=sprintf('exp(-1*(lingmat.M+ling.init.F)*%1$s)*lingmat.init.%1$s',age)) %>% 
                       map(to.gadget.formulae) %>% 
@@ -773,21 +806,56 @@ lik %>%
 to create a new parameters file, 2) use `init_guess` to set bounds and initial starting values 
 of all parameters in the new parameters file, and 3) use `callGadget` again to take create 
 another parameter file that contains reasonable starting values for a longer Gadget optimization 
-run. If you are not sure where to start, look back at the procedure in day 3.
+run, and use 4) `gadget.reiterative` to create a final model run with decent
+weights among data sources. If you are not sure where to start, look back at
+the procedure in day 3.
 
 * Now run gadget.fit on the results and create model fit figures that are area-specific.
 
 Answer
 ```{r, echo = FALSE}
-setwd('ling_model/01-base')
 Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
 callGadget(s=1,log = 'simple_log')
-read.gadget.parameters(paste0(gd,'/params.out'))
+lw_pars <- c(0.00000228, 3.20) #same values as in day 2
 
+## update the input parameters with sane initial guesses
+read.gadget.parameters(sprintf('%s/params.out',gd)) %>% 
+  init_guess('rec.[0-9]|init.[0-9]',1,0.001,1000,1) %>%
+  init_guess('recl',12,4,20,1) %>% 
+  init_guess('rec.sd',5, 4, 20,1) %>% 
+  init_guess('Linf',160, 100, 200,1) %>% 
+  init_guess('k$',90, 40, 100,1) %>% 
+  init_guess('bbin',6, 1e-08, 100, 1) %>% 
+  init_guess('alpha', 0.5,  0.01, 3, 1) %>% 
+  init_guess('l50',50,10,100,1) %>% 
+  init_guess('walpha',lw_pars[1], 1e-10, 1,0) %>% 
+  init_guess('wbeta',lw_pars[2], 2, 4,0) %>% 
+  init_guess('M$',0.15,0.001,1,0) %>% 
+  init_guess('rec.scalar',400,1,500,1) %>% 
+  init_guess('init.scalar',200,1,300,1) %>% 
+  init_guess('mat2',60,0.75*60,1.25*60,1) %>% 
+  init_guess('mat1',70,  10, 200, 1) %>% 
+  init_guess('init.F',0.4,0.1,1,1) %>% 
+  init_guess('mig',0.1,0.1,1,0) %>% 
+  write.gadget.parameters(.,file=sprintf('%s/params.in',gd))
 
-
+read.gadget.parameters(sprintf('%s/params.in',gd))
 
 callGadget(l=1,i='params.in',p='params.init')
+
+old <- getwd()
+setwd(gd)
+
+unlink("WGTS", recursive=TRUE)
+timestamp() 
+run <- gadget.iterative()
+timestamp()
+
+
+fit <- gadget.fit()
+plot(fit)
+tmp <- plot(fit,data = 'catchdist.fleets')
+tmp$ldist.lln
 
 ```
 

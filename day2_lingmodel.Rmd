@@ -15,11 +15,13 @@ bibliography: library.bib
 knitr::opts_chunk$set(echo = TRUE)
 #require("knitr")
 #opts_knit$set(root.dir = 'ling_model/01-base')
+
+fs::dir_delete('ling_model')
 ```
 
 ## Ling stock assessment in Icelandic waters
 
-As touched on in the **Introduction**, Gadget is particularly useful in a stock
+As touched on in the [Introduction](introduction.html), Gadget is particularly useful in a stock
 assessment setting when age data are absent or sparse. In these cases,
 parameterising age-based stock assessement models may require a lot of
 pre-processing based on sparse age data to calculate the model input (e.g., catch 
@@ -37,7 +39,7 @@ maturation, and recruitment.
 
 First we load Rgadget, set up directories, and some default model dimensions and names to use throughout.
 
-```{r ling}
+```{r ling, message=FALSE}
 library(Rgadget)
 
 base_dir <- 'ling_model'
@@ -329,8 +331,9 @@ ling.imm <-
   ling.imm  %>% 
   gadget_update('doesmature', 
                 maturityfunction = 'continuous',
-                maturestocksandratios = 'lingmat 1',
-                coefficients = '( * 0.001 #ling.mat1) #ling.mat2 0 0') %>% 
+                maturestocksandratios = list(stock='lingmat', ratio = 1),
+                coefficients = list(alpha = to.gadget.formulae(quote(0.001*ling.mat1)), 
+                                    l50='#ling.mat2', beta=0, a50=0)) %>% 
   gadget_update('doesmove',
                 transitionstocksandratios = 'lingmat 1',
                 transitionstep = 4)
@@ -438,10 +441,10 @@ init.sigma.m <- rep(2, length(ling.mat[[1]]$minage:ling.mat[[1]]$maxage))
 ling.imm <-
   ling.imm %>%
   gadget_update('initialconditions',
-                normalparam = data_frame(age = .[[1]]$minage:.[[1]]$maxage,
+                normalparam = tibble(age = .[[1]]$minage:.[[1]]$maxage,
                                          area = 1,
                                          age.factor = parse(text=sprintf('exp(-1*(lingimm.M+ling.init.F)*%1$s)*lingimm.init.%1$s',age)) %>% 
-                                           map(to.gadget.formulae) %>% 
+                                           purrr::map(to.gadget.formulae) %>% 
                                            unlist(),   
                                          area.factor = '#lingimm.init.scalar',
                                          mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
@@ -455,7 +458,7 @@ ling.mat <-
                 normalparam = data_frame(age = .[[1]]$minage:.[[1]]$maxage,
                                          area = 1,
                                          age.factor = parse(text=sprintf('exp(-1*(lingmat.M+ling.init.F)*%1$s)*lingmat.init.%1$s',age)) %>% 
-                                           map(to.gadget.formulae) %>% 
+                                           purrr::map(to.gadget.formulae) %>% 
                                            unlist(),
                                          area.factor = '#lingmat.init.scalar',
                                          mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
@@ -704,47 +707,67 @@ differences in data and a lack of variation in predator 'size' when it comes to 
 gadgetfleet('Modelfiles/fleet',gd,missingOkay = TRUE) %>% 
   gadget_update('totalfleet',
                 name = 'surv',
-                suitability = paste0('\n',
-                                     paste(c('lingimm','lingmat'),
-                                           'function','exponentiall50',
-                                           '#ling.surv.alpha','#ling.surv.l50',
-                                           collapse='\n')),
+                suitability = 
+                  list(ling.imm = list(type='function',suit_func='exponentiall50',
+                                       alpha = '#ling.surv.alpha',
+                                       beta = '#ling.surv.l50'),
+                       ling.mat = list(type='function',suit_func='exponentiall50',
+                                       alpha = '#ling.surv.alpha',
+                                       beta = '#ling.surv.l50')),
                 data = surv.landings) %>%
   gadget_update('totalfleet',
                 name = 'lln',
                 suitability = 
-                  paste0('\n',
-                         paste(c('lingimm','lingmat'),
-                               'function','exponentiall50',
-                               '#ling.lln.alpha','#ling.lln.l50',
-                               collapse='\n')),
+                  list(ling.imm = list(type='function',suit_func='exponentiall50',
+                                       alpha = '#ling.lln.alpha',
+                                       beta = '#ling.lln.l50'),
+                       ling.mat = list(type='function',suit_func='exponentiall50',
+                                       alpha = '#ling.lln.alpha',
+                                       beta = '#ling.lln.l50')),
                 data = lln.landings) %>% 
   gadget_update('totalfleet',
                 name = 'bmt',
-                suitability = paste0('\n',
-                                     paste(c('lingimm','lingmat'),
-                                           'function','exponentiall50',
-                                           '#ling.bmt.alpha','#ling.bmt.l50',
-                                           collapse='\n')),
+                suitability = 
+                  list(ling.imm = list(type='function',suit_func='exponentiall50',
+                                       alpha = '#ling.bmt.alpha',
+                                       beta = '#ling.bmt.l50'),
+                       ling.mat = list(type='function',suit_func='exponentiall50',
+                                       alpha = '#ling.bmt.alpha',
+                                       beta = '#ling.bmt.l50')),
                 data = bmt.landings) %>% 
   gadget_update('totalfleet',
                 name = 'gil',
-                suitability = paste0('\n',
-                                     paste(c('lingimm','lingmat'),
-                                           'function','exponentiall50',
-                                           '#ling.gil.alpha','#ling.gil.l50',
-                                           collapse='\n')),
+                suitability = 
+                  list(ling.imm = list(type='function',suit_func='exponentiall50',
+                                       alpha = '#ling.gil.alpha',
+                                       beta = '#ling.gil.l50'),
+                       ling.mat = list(type='function',suit_func='exponentiall50',
+                                       alpha = '#ling.gil.alpha',
+                                       beta = '#ling.gil.l50')),
                 data = gil.landings) %>% 
   gadget_update('totalfleet',
                 name = 'foreign',
                 suitability = 
-                  paste0('\n',
-                         paste(c('lingimm','lingmat'),
-                               'function','exponentiall50',
-                               '#ling.lln.alpha','#ling.lln.l50',
-                               #'function','andersenfleet',                              #'#ling.lln.p0',to.gadget.formulae(quote(log(180/ling.lln.lmode))),'#ling.lln.p2',
-                               #'#ling.lln.p3','#ling.lln.p4','180',
-                               collapse='\n')),
+                  list(ling.imm = list(type='function',suit_func='exponentiall50',
+                                       alpha = '#ling.lln.alpha',
+                                       beta = '#ling.lln.l50'),
+                       ling.mat = list(type='function',suit_func='exponentiall50',
+                                       alpha = '#ling.lln.alpha',
+                                       beta = '#ling.lln.l50')),
+                  # list(ling.imm = list(type='function',suit_func='andersen',
+                  #                      p0 = '#ling.lln.p0',
+                  #                      p1 = to.gadget.formulae(quote(log(180/ling.lln.lmode))),
+                  #                      p2 = '#ling.lln.p2',
+                  #                      p3 = '#ling.lln.p3',
+                  #                      p4 = '#ling.lln.p4',
+                  #                      L = '180'),
+                  #      ling.mat =  list(type='function',suit_func='andersen',
+                  #                      p0 = '#ling.lln.p0',
+                  #                      p1 = to.gadget.formulae(quote(log(180/ling.lln.lmode))),
+                  #                      p2 = '#ling.lln.p2',
+                  #                      p3 = '#ling.lln.p3',
+                  #                      p4 = '#ling.lln.p4',
+                  #                      L = '180')),
                 data = for.landings) %>% 
   write.gadget.file(gd)
 

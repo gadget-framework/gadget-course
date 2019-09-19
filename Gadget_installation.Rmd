@@ -1,21 +1,23 @@
 ---
 title: "Gadget installation"
-html_document:
-  fig_height: 4
-  fig_width: 8
-  highlight: haddock
-  theme: united
-  toc: yes
-  toc_float: yes
+output: 
+  html_document:
+    fig_height: 4
+    fig_width: 8
+    highlight: haddock
+    theme: united
+    toc: yes
+    toc_float: yes
+bibliography: library.bib
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Gadget is housed on the MFRI github site https://github.com/Hafro/gadget. Basic
+Gadget is housed on the [MFRI github site](https://github.com/Hafro/gadget). Basic
 installation instructions can be found there, below they are given step-by-step. Notice
-that the extremely useful resource 'Gadget User Guide' is included with the installation.
+that the extremely useful resource 'Gadget User Guide' is included as a pdf with the installation, but it is also available [on-line](https://hafro.github.io/gadget/docs/userguide).
 
 # Prerequisites
 
@@ -37,7 +39,7 @@ It should be sufficient to install XCode through the Appstore and through XCode'
 
 The easiest way is to install uses
 [Rtools](https://cran.r-project.org/bin/windows/Rtools/) . During the install process 
-allow the installer to append to the system path.
+allow the installer to append to the system path. Also you may want to install the `icesTAF` R package to be able to convert Windows line-endings to unix line-endings with the `dos2unix` function. 
 
 # Download, compile and install
 

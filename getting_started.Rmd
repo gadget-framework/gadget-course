@@ -16,12 +16,15 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-Install devtools and Rgadget. Rgadget is under constant construction so please remember to update it regularly (e.g., monthly).
+Install devtools, Rgadget and mfdb. Rgadget is under constant construction so please remember to update it regularly (e.g., monthly). 
 
 ```{r setupRgadget, eval=FALSE}
 install.packages('devtools')
 devtools::install_github('hafro/rgadget')
+devtools::install_github('mareframe/mfdb')
 ```
+
+Note that you can update all packages, both from github and CRAN using the `update_packages` command from `devtools`
 
 ## What is Rgadget?
 
@@ -397,7 +400,14 @@ callGadget(s=1,main='main',ignore.stderr = FALSE,log = 'simple_log')
 This gives you a warning that no understocking likelihood is available. The 
 understocking likelihood is a penalty function used to prevent negative consumption, 
 i.e. more fish being eaten and/or fished than is available. We can safely ignore this
-warning for the time being. If you get additional errors, ending with `...running command 'gadget  -s      -main main      -log simple_log   ' had status 1`, your Gadget run did
+warning for the time being. If you get additional errors, ending with 
+
+
+```
+...running command 'gadget  -s      -main main      -log simple_log   ' had status 1
+```
+
+your Gadget run did
 not work. At this stage in the tutorial, it is likely becuase you have previously run 
 later code from the next section, which has provided additional old files to your 
 Gadget model directory (see above) that do not match the specifications above. 
@@ -407,12 +417,14 @@ the code on this page from the point of defining `gd`.
 After running Gadget we see that two new files have been 
 added to the directory, the parameter file (`params.out`) and the log file 
 (`simple_log`). We will discuss the parameter file in more detail in the following
-sections but for now lets look at the log file:
+sections but for now lets look at the log file: 
+
+**If and when you have errors, such as the '...status 1' error above, the log file is the best place to start trying to figure out why the error occurs.** 
 
 ```{r}
 read_lines(paste(gd,'simple_log',sep='/'))[-(58:175)] 
 ```
-**If and when you have errors, such as the '...status 1' error above, the log file is the best place to start trying to figure out why the error occurs.** 
+
 
 We can now gather the output from the model using `gadget.fit`:
 ```{r}

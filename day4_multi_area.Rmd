@@ -783,7 +783,7 @@ lik <-
                 fittype = 'fixedslopeloglinearfit',
                 slope=1,
                 stocknames = c("lingimm","lingmat"))%>% 
-    gadget_update("penalty",
+  gadget_update("penalty",
                 name = "bounds",
                 weight = "0.5",
                 data = data.frame(
@@ -792,7 +792,7 @@ lik <-
                   upperW=10000,
                   lowerW=10000,
                   stringsAsFactors = FALSE)) %>%
-    gadget_update("understocking",
+  gadget_update("understocking",
                 name = "understocking",
                 weight = "100")
 

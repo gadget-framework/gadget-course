@@ -61,7 +61,7 @@ Please also have the most recent version of [R](https://cran.r-project.org/) and
 
 In addition, if you plan to run a simple model using your own data, please:
 
-1. familiarize yourself with [tidyverse programming](tidyverse.html)
+1. familiarize yourself with [tidyverse programming](Tidyverse.html)
 
 2. think about your model structure/ aggregation level and have R scripts ready that 
 aggregate your data into an appropriately formatted data frame (i.e., columns of :
@@ -90,11 +90,11 @@ leaflet() %>%
 
 # Draft workplan
 
-### Monday - PJW
+### Monday
 
 * Internet access
 * [Introduction](introduction.html)
-* [Introduction to tidyverse](tidyverse.html)
+* [Introduction to tidyverse](Tidyverse.html)
 * Deal with installation issues
 * [Getting started](getting_started.html)
 * [Model variable](day1_continued.html#gadget_variables)
@@ -104,7 +104,7 @@ leaflet() %>%
 
 ---
 
-### Tuesday - PJW
+### Tuesday
 * Recap and examples 
 * More complicated models: [Ling in Iceland](day2_lingmodel.html)
   + Growth
@@ -116,17 +116,17 @@ leaflet() %>%
 
 ---
 
-### Wednesday - PJW / BÞE
-* Introducing likelihood functions and iterative reweighting
-* Incorporating data (Ling case study cont.)
-* Set optimisation function parameters and fit Gadget statistical model
-* Visualize Gadget statistical model fit
+### Wednesday
+* [Introducing likelihood functions](day3_fitlingmodel.html#introducing_likelihood_functions)
+* [Incorporating data](day3_fitlingmodel.html#fitting_a_gadget_model_to_data) (Ling case study cont.)
+* Set [optimisation function parameters](day3_fitlingmodel.html#set_optimisation_routine) and fit Gadget statistical model using [iterative reweighting](day3_fitlingmodel.html#using_the_iterative_reweighting_function_to_fit_a_gadget_statistical_model)
+* [Visualize Gadget statistical model fit](day3_fitlingmodel.html#visualize_gadget_statistical_model_fit)
 * Own projects
 
 ---
 
-### Thursday - BÞE
-* Alternate structures
+### Thursday
+* [Alternate structures](day4_multi_area.html)
   + Multiple areas
   + Migration
 * Stock interactions
@@ -141,8 +141,8 @@ leaflet() %>%
 * Own projects
 
 ---
-### Friday - BÞE
-* Troubleshooting
+### Friday
+* [Troubleshooting](troubleshooting.html)
   + Known issues
   + Asking for help
 * When to use Gagdet? Some examples.

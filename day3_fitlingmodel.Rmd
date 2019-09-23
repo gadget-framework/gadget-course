@@ -1,6 +1,13 @@
 ---
-title: "day3_fitlingmodel"
-output: html_document
+output: 
+  html_document:
+    fig_height: 4
+    fig_width: 8
+    highlight: haddock
+    theme: united
+    toc: yes
+    toc_float: yes
+bibliography: library.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -46,7 +53,7 @@ that bins do not overlap. In our example below, we show how to add those necessa
 although in reality to do this we also use another R package named 'mfdb' that is aimed at 
 database management and data extraction [more on this in day 5]. 
 
-```{r likelihood}
+```{r likelihood, message=FALSE}
 
 library(Rgadget)
 
@@ -573,7 +580,7 @@ timestamp()
 * Try changing the parameter starting values to the params.forsim file within the 'data_provided' folder. Does the optimisation finish any quicker?
 
 
-## Using the reiterative function to fit a Gadget statistical model
+## Using the iterative reweighting function to fit a Gadget statistical model
 
 The total objective function used the modeling process combines
 equations \ref{eq:SSSI} to \ref{eq:SSalk} using the following formula:
@@ -726,6 +733,8 @@ Related to `resume.final` there are the `run.final` and `run.serial` arguments
 that instruct the function to whether to run the final optimisation from the 
 beginning and whether all optimisations should be run on a single core respectively. 
 
+Note for Windows users: the user needs to explicitly define a cluster for `gadget.iterative` to run in parallel, see [here](https://www.r-bloggers.com/implementing-mclapply-on-windows-a-primer-on-embarrassingly-parallel-computation-on-multicore-systems-with-r/) for ways around this problem. 
+
 In post-hoc analyses of the effect of certain data sources on model fitting, 
 differential treatment of data is often investigated. For example, the effect 
 of a certain dataset can be analysed by omitting it from the estimation or changing 
@@ -758,13 +767,20 @@ by default gadget.fit will load the reiterative results stored under 'WGTS',
 but this can be changed. Here we load results from the first run of 
 `gadget.iterative` where no grouping was implemented.
 
-```{r,message=FALSE}
+```{r echo=FALSE,message=FALSE,warning=FALSE}
+load(paste(gd,'WGTS/WGTS.Rdata',sep='/'))
+fit <- out
+```
+
+```{r,message=FALSE,eval=FALSE}
 
 #Notice that we are still in the same directory as where gadget.iterative was run
 getwd()
 
 fit <- gadget.fit()
+```
 
+```{r message=FALSE}
 theme_set(theme_light()) ## set the plot theme (optional)
 
 library(patchwork)  ## optional packages 
@@ -889,3 +905,5 @@ plot(fit,data='res.by.year',type='total') + theme(legend.position = 'none') +
 * What information is stored under fit$SS?
 * Try changing the grouping structure above to one that makes more sense to you. Do model results fit any better?
 
+
+## References

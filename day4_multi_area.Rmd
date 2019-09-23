@@ -1,6 +1,14 @@
 ---
 title: "day4_multi_area"
-output: html_document
+output: 
+  html_document:
+    fig_height: 4
+    fig_width: 8
+    highlight: haddock
+    theme: united
+    toc: yes
+    toc_float: yes
+bibliography: library.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -26,7 +34,7 @@ gd <- gadget.variant.dir(sprintf(paste0("%s/",vers),base_dir))
 
 ling.imm <- gadgetstock('lingimm',gd)
 ling.mat <- gadgetstock('lingmat',gd)
-area_file <- read.gadget.file(gd, 'Modelfiles/area')
+#area_file <- read.gadget.file(gd, 'Modelfiles/area', file_type = 'area')
 
 ## Write out areafile and update mainfile with areafile location
 
@@ -34,11 +42,13 @@ schedule <-
   expand.grid(year = 1982:2018, step = 1:4, area = 1:2) %>% 
   arrange(year, step, area)
 
-gadgetfile('Modelfiles/area',
-           file_type = 'area',
-           components = list(list(areas = c(1,2),
-                                  size = c(1,1),
-                                  temperature= schedule %>% mutate(temperature = 5)))) %>% 
+area_file <- 
+  gadgetfile('Modelfiles/area',
+             file_type = 'area',
+             components = list(list(areas = c(1,2),
+                                    size = c(1,1),
+                                    temperature= schedule %>% mutate(temperature = 5)))) 
+area_file %>% 
   write.gadget.file(gd)
 
 ling.imm <-
@@ -131,7 +141,7 @@ needed to include a second area.
 ```{r cache=TRUE,eval=FALSE}
 Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
 
-callGadget(s=1,i='params.init',log = 'log_area2')
+callGadget(s=1,i='params.in',log = 'log_area2')
 
 ```
 
@@ -361,51 +371,61 @@ same way we did on day 2.
 
 gadgetfleet('Modelfiles/fleet',gd,missingOkay = TRUE) %>% 
   gadget_update('totalfleet',
+                livesonareas = c(1,2),
                 name = 'surv',
-                suitability = paste0('\n',
-                                     paste(c('lingimm','lingmat'),
-                                           'function','exponentiall50',
-                                           '#ling.surv.alpha','#ling.surv.l50',
-                                           collapse='\n')),
+                suitability = 
+                  list(lingimm = list(type='function',suit_func='exponentiall50',
+                                      alpha = '#ling.surv.alpha',
+                                      beta = '#ling.surv.l50'),
+                       lingmat = list(type='function',suit_func='exponentiall50',
+                                      alpha = '#ling.surv.alpha',
+                                      beta = '#ling.surv.l50')),
                 data = surv.landings) %>%
   gadget_update('totalfleet',
                 name = 'lln',
+                livesonareas = c(1,2),
                 suitability = 
-                  paste0('\n',
-                         paste(c('lingimm','lingmat'),
-                               'function','exponentiall50',
-                               '#ling.lln.alpha','#ling.lln.l50',
-                               collapse='\n')),
+                  list(lingimm = list(type='function',suit_func='exponentiall50',
+                                      alpha = '#ling.lln.alpha',
+                                      beta = '#ling.lln.l50'),
+                       lingmat = list(type='function',suit_func='exponentiall50',
+                                      alpha = '#ling.lln.alpha',
+                                      beta = '#ling.lln.l50')),
                 data = lln.landings) %>% 
   gadget_update('totalfleet',
                 name = 'bmt',
-                suitability = paste0('\n',
-                                     paste(c('lingimm','lingmat'),
-                                           'function','exponentiall50',
-                                           '#ling.bmt.alpha','#ling.bmt.l50',
-                                           collapse='\n')),
+                livesonareas = c(1,2),
+                suitability = 
+                  list(lingimm = list(type='function',suit_func='exponentiall50',
+                                      alpha = '#ling.bmt.alpha',
+                                      beta = '#ling.bmt.l50'),
+                       lingmat = list(type='function',suit_func='exponentiall50',
+                                      alpha = '#ling.bmt.alpha',
+                                      beta = '#ling.bmt.l50')),
                 data = bmt.landings) %>% 
   gadget_update('totalfleet',
                 name = 'gil',
-                suitability = paste0('\n',
-                                     paste(c('lingimm','lingmat'),
-                                           'function','exponentiall50',
-                                           '#ling.gil.alpha','#ling.gil.l50',
-                                           collapse='\n')),
+                livesonareas = c(1,2),
+                suitability = 
+                  list(lingimm = list(type='function',suit_func='exponentiall50',
+                                      alpha = '#ling.gil.alpha',
+                                      beta = '#ling.gil.l50'),
+                       lingmat = list(type='function',suit_func='exponentiall50',
+                                      alpha = '#ling.gil.alpha',
+                                      beta = '#ling.gil.l50')),
                 data = gil.landings) %>% 
   gadget_update('totalfleet',
                 name = 'foreign',
+                livesonareas = c(1,2),
                 suitability = 
-                  paste0('\n',
-                         paste(c('lingimm','lingmat'),
-                               'function','exponentiall50',
-                               '#ling.lln.alpha','#ling.lln.l50',
-                               #'function','andersenfleet',                              #'#ling.lln.p0',to.gadget.formulae(quote(log(180/ling.lln.lmode))),'#ling.lln.p2',
-                               #'#ling.lln.p3','#ling.lln.p4','180',
-                               collapse='\n')),
+                  list(lingimm = list(type='function',suit_func='exponentiall50',
+                                      alpha = '#ling.lln.alpha',
+                                      beta = '#ling.lln.l50'),
+                       lingmat = list(type='function',suit_func='exponentiall50',
+                                      alpha = '#ling.lln.alpha',
+                                      beta = '#ling.lln.l50')),
                 data = for.landings) %>% 
   write.gadget.file(gd)
-
 ```
 
 Now that there are fleets fishing on area 2 with catches removed, 
@@ -441,7 +461,7 @@ ldist.surv <-
                                number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
                         filter(number > 0)
                       ),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
+            area = as.list(area_file[[1]]$areas %>% set_names(.)),
             length = create_intervals('len',seq(minlength, maxlength, dl)),
             age = create_intervals('all',seq(minage, maxage, maxage-minage))
             )
@@ -452,7 +472,7 @@ ldist.lln <-
                                number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
                         filter(number > 0)
                       ),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
+            area = as.list(area_file[[1]]$areas %>% set_names(.)),
             length = create_intervals('len',seq(minlength, maxlength, dl)),
             age = create_intervals('all',seq(minage, maxage, maxage-minage))
             )
@@ -463,7 +483,7 @@ ldist.bmt <-
                                number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
                         filter(number > 0)
                       ),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
+            area = as.list(area_file[[1]]$areas %>% set_names(.)),
             length = create_intervals('len',seq(minlength, maxlength, dl)),
             age = create_intervals('all',seq(minage, maxage, maxage-minage))
             )
@@ -474,7 +494,7 @@ ldist.gil <-
                                number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
                         filter(number > 0)
                       ),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
+            area = as.list(area_file[[1]]$areas %>% set_names(.)),
             length = create_intervals('len',seq(minlength, maxlength, dl)),
             age = create_intervals('all',seq(minage, maxage, maxage-minage))
             )
@@ -487,7 +507,7 @@ aldist.surv <-
                                number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
                         filter(number > 0)
                       ),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
+            area = as.list(area_file[[1]]$areas %>% set_names(.)),
             length = create_intervals('len',seq(minlength, maxlength, dl)),
             age = create_intervals('age',c(minage:11, maxage))
             )
@@ -498,7 +518,7 @@ aldist.lln <-
                                number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
                         filter(number > 0)
                       ),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
+            area = as.list(area_file[[1]]$areas %>% set_names(.)),
             length = create_intervals('len',seq(minlength, maxlength, dl)),
             age = create_intervals('age',c(minage:11, maxage))
             )
@@ -509,7 +529,7 @@ aldist.bmt <-
                                number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
                         filter(number > 0)
                       ),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
+            area = as.list(area_file[[1]]$areas %>% set_names(.)),
             length = create_intervals('len',seq(minlength, maxlength, dl)),
             age = create_intervals('age',c(minage:11, maxage))
             )
@@ -520,7 +540,7 @@ aldist.gil <-
                                number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
                         filter(number > 0)
                       ),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
+            area =as.list(area_file[[1]]$areas %>% set_names(.)),
             length = create_intervals('len',seq(minlength, maxlength, dl)),
             age = create_intervals('age',c(minage:11, maxage))
             )
@@ -533,7 +553,7 @@ matp.surv <-
                                number = round(number*rlnorm(n(), sdlog = 0.5))) %>%
                         filter(number > 0)
                       ),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
+            area = as.list(area_file[[1]]$areas %>% set_names(.)),
             length = create_intervals('len',seq(minlength, maxlength, dl*2)),
             age = list(mat_ages = ling.mat[[1]]$minage:ling.mat[[1]]$maxage)
             )
@@ -546,7 +566,7 @@ SI1 <-
                                number = round(number*rlnorm(n(), sdlog = 0.5))/100) %>%
                         filter(number > 0)
                       ),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
+            area = as.list(area_file[[1]]$areas %>% set_names(.)),
             length = create_intervals('len', slices[[1]]))
 SI2 <- 
   structure(bind_rows(read_csv('data_provided/SI2.csv'),
@@ -555,7 +575,7 @@ SI2 <-
                                number = round(number*rlnorm(n(), sdlog = 0.5))/100) %>%
                         filter(number > 0)
                       ),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
+            area = as.list(area_file[[1]]$areas %>% set_names(.)),
             length = create_intervals('len', slices[[2]]))
 SI3 <- 
   structure(bind_rows(read_csv('data_provided/SI3.csv'),
@@ -564,7 +584,7 @@ SI3 <-
                                number = round(number*rlnorm(n(), sdlog = 0.5))/100) %>%
                         filter(number > 0)
                       ),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
+            area = as.list(area_file[[1]]$areas %>% set_names(.)),
             length = create_intervals('len', slices[[3]]))
 SI4 <- 
   structure(bind_rows(read_csv('data_provided/SI4.csv'),
@@ -573,7 +593,7 @@ SI4 <-
                                number = round(number*rlnorm(n(), sdlog = 0.5))/100) %>%
                         filter(number > 0)
                       ),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
+            area = as.list(area_file[[1]]$areas %>% set_names(.)),
             length = create_intervals('len', slices[[4]]))
 SI5 <- 
   structure(bind_rows(read_csv('data_provided/SI5.csv'),
@@ -582,7 +602,7 @@ SI5 <-
                                number = round(number*rlnorm(n(), sdlog = 0.5))/100) %>%
                         filter(number > 0)
                       ),
-             area = list(area_file[[1]]$areas) %>% set_names(.),
+             area = as.list(area_file[[1]]$areas %>% set_names(.)),
             length = create_intervals('len', slices[[5]]))
 SI6 <- 
   structure(bind_rows(read_csv('data_provided/SI6.csv'),
@@ -591,7 +611,7 @@ SI6 <-
                                number = round(number*rlnorm(n(), sdlog = 0.5))/100) %>%
                         filter(number > 0)
                       ),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
+            area = as.list(area_file[[1]]$areas %>% set_names(.)),
             length = create_intervals('len', slices[[6]]))
 SI7 <- 
   structure(bind_rows(read_csv('data_provided/SI7.csv'),
@@ -600,7 +620,7 @@ SI7 <-
                                number = round(number*rlnorm(n(), sdlog = 0.5))/100) %>%
                         filter(number > 0)
                       ),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
+            area = as.list(area_file[[1]]$areas %>% set_names(.)),
             length = create_intervals('len', slices[[7]]))
 
 ```
@@ -812,7 +832,7 @@ the procedure in day 3.
 
 * Now run gadget.fit on the results and create model fit figures that are area-specific.
 
-Answer
+
 ```{r, echo = FALSE}
 Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
 callGadget(s=1,log = 'simple_log')

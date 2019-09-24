@@ -33,13 +33,13 @@ gadgetfile('Modelfiles/area',
                                     mutate(area = 1, temperature = 5)))) %>% 
   write.gadget.file(gd)
 
-
-gadgetfile('Modelfiles/area',
-           file_type = 'area',
-           components = list(list(areas = 1,
-                                  size = 1,
-                                  temperature = schedule %>% head(5) %>%  
-                                    mutate(area = 1, temperature = 5)))) %>% 
+gadgetfile('Modelfiles/time',
+           file_type = 'time',
+           components = list(list(firstyear = min(schedule$year),
+                                  firststep=1,
+                                  lastyear=max(schedule$year),
+                                  laststep=4,
+                                  notimesteps=c(4,3,3,3,3)))) %>% ## number of time steps and step length in months
   write.gadget.file(gd)
 
 stock_template <- 
@@ -57,7 +57,7 @@ stock_template <-
   gadget_update('initialconditions',
                 normalparam = tibble(age = 1,
                                      area = 1,
-                                     age.factor = 1,   
+                                     age.factor = 0,   
                                      area.factor =1,
                                      mean = 1,
                                      stddev = .1,
@@ -80,11 +80,115 @@ We will use the stock template to define multiple stocks to illustrate the vario
 
 # Fish recruits into a stock
 
-## Movement and straying
+We have already seen how to implment the most straitforward version of recruitment into a stock, that is the renewal process. To recap, the renewal process adds fish into a stock based on a predefined schedule on the number and age of fish at a given time step. The most obvious use of this feature is to define a non-parametric recruitment to a stock a the minimum age of the stock. However one can use it also to add migrations from a related to stock, where the dynamics of the related stock is not modelled. An example of this would be the sporadic migrations of cod from Greenlandic waters into Icelandic waters. 
 
-Movement between stocks can be 
+Movement between stocks can however be defined to more elaborate. We have already seen how maturation can be modelled as a two step approach, that is a combination of Maturation and Movement. Movement is the simplest approach as it simply takes the oldest fish of one stock and pushes it into a another stock, provided that this other stocks age range includes the maximum age of the first stock. 
 
-```{r engine='tikz',echo=FALSE}
+
+```{r out.width = "50%", fig.show = "hold"}
+young_stock <- 
+  stock_template %>% 
+  gadget_update('stock',
+                stockname = 'young_stock') %>% 
+  gadget_update('doesmove',
+                ## be careful how you spell this
+                transitionstocksandratios = list(stock='old_stock',ratio = 1),
+                transitionstep = 4)
+
+old_stock <- 
+  stock_template %>% 
+  gadget_update('stock',
+                stockname = 'old_stock',
+                minage = 2,
+                maxage = 2) %>% 
+  gadget_update('doesrenew',0) %>% 
+  gadget_update('naturalmortality', 0.2) %>% 
+  gadget_update('initialconditions',
+                normalparam = tibble(age = 2,
+                                     area = 1,
+                                     age.factor = 0,   
+                                     area.factor =1,
+                                     mean = 1,
+                                     stddev = .1,
+                                     alpha = 1,
+                                     beta = 1))
+
+
+young_stock %>% 
+  write.gadget.file(gd)
+
+old_stock %>% 
+  write.gadget.file(gd)
+
+fit <- gadget.fit(wgts = NULL,gd=gd,steps = 2)
+
+plot(fit,data='res.by.year',type='num.total')
+plot(fit,data='stock.std')
+```
+
+And this process can of course continue further. Two processes allow the user to define movement based on size or age. These are the maturation process and the straying process. These behave in a similar manner but there are key differences, in particular how you can define the movement. In the ling example the maturity process was a continuous process where the probability of a maturing at a certain length or age was determing using the following equation:
+$$ 
+p_{la} = \frac{1}{1+e^{-\alpha(l - l_{50}) - \beta(a - a_{50})}}
+$$
+For a stock to mature you need to set `doesmature`,`maturityfunction` and `maturityfile`. The `maturityfile` defines the maturation function parameters and to which stock(s) the immmature stock matures into. Gadget has three additional functions you can use to define movement from an immmature to a mature stock:
+
+* `constant` which is essentially the same as the `continous` function apart from the definition of the `maturitysteps`, i.e. when the maturation takes place.
+* `constantweight` same as above but the probability of maturation is now also a function of the body condition:
+$$ 
+p_{la} = \frac{1}{1+e^{-\alpha(l - l_{50}) - \beta(a - a_{50}) - \gamma(k-k_{50})}}
+$$
+where the body condition, $k$, is determined by dividing the reference weight to the modelled weight
+* `fixedlength` which is a knife-edge selection in terms of length. You need to define the `maturitysteps` and `maturitylengths`. 
+
+The straying process is slightly different as it is thought of as the means to provide mechanisms to define processes such as dispersal between breeding components and different growth rates within the same stock due to different enviromental factors. To setup the straying process you will need to define when the straying occurs, where it occurs (i.e. what area) and what fish strays. The fish that strays is defined by specific length selection listed below:
+
+* `constant`: $S_l = \alpha$
+* `straightline`: $S_l = \alpha l + \beta$
+* `exponential`: $S_l = \frac{1}{1+e^{\alpha(l-l_{50})}}$
+
+For our simple model we will define 20$\%$ straying between two stock components, from `stock_a` to `stock_b`:
+
+```{r}
+stock_a <- 
+  stock_template %>% 
+  gadget_update('stock',
+                stockname = 'stock_a') %>% 
+  gadget_update('doesstray',
+                straysteps = 3,
+                strayareas = 1,
+                straystocksandratios = list(stock='stock_b',ratio = 1),
+                proportionfunction = list(sel_function='constant',alpha = 0))
+
+stock_b <- 
+  stock_template %>% 
+  gadget_update('stock',
+                stockname = 'stock_b') %>% 
+  gadget_update('doesrenew',0) %>% 
+  gadget_update('initialconditions',
+                normalparam = tibble(age = 1,
+                                     area = 1,
+                                     age.factor = .1,   
+                                     area.factor =1,
+                                     mean = 1,
+                                     stddev = .1,
+                                     alpha = 1,
+                                     beta = 1))
+
+stock_a %>% 
+  write.gadget.file(gd)
+
+stock_b %>% 
+  write.gadget.file(gd)
+
+fit <- gadget.fit(wgts = NULL,gd=gd,steps = 2)
+
+plot(fit,data='res.by.year',type='num.total')
+
+
+```
+
+
+```{r engine='tikz',echo=FALSE, eval=FALSE}
 
 \usetikzlibrary{arrows,decorations.pathmorphing,decorations.footprints,fadings,calc,trees,mindmap,shadows,decorations.text,patterns,positioning,shapes,matrix,fit,backgrounds}
 
@@ -144,9 +248,95 @@ Movement between stocks can be
 ```
 
 
-## Maturation
+### Excercise 
+
+* Depletion of stock components is often a concern. Using the straying mechanism set up a three stock model where individual are slowly dispersed between all three components. Define a fishing fleet that targets only one of the stocks and investigate how different dispersion levels affect the depletion of all stocks. 
+* Gadget allow you to set up a catch at age model. Use the movement mechanism to define a model with a maximum age of 10, where each age is a separate stock. How would you define the fleets for this model so you could use commercial catch at age directly into the model? 
 
 ## Spawning
 
-# Consumption 
+The spawning process allows the user to define recruits into as stock as function of the size of another stock. A number of relationships can be defined:
 
+* `fecundity` $$R = p_0 \sum_a\sum_l l^{p_1}a^{p_2}N_{al}^{p_3}W_{al}^{p_4}$$
+* `simplessb` $$R = \mu S$$ where $S = \sum_a\sum_l N_{al}W_{al}$
+* `ricker` $$R = \mu Se^{-\lambda S}$$
+* `bevertonholt` $$R = \frac{\mu S}{\lambda + S}$$
+* `hockeystick` $$R = R =  \begin{cases}
+R_0,&\text{If } B_{lim} \leq S \\
+\frac{R_0S}{B_{lim}} & \text{If } 0 \leq S \leq B_{lim}
+\end{cases}  $$
+
+In addition the user can define using the same length based selection function as for straying which of the stock "spawns" and what happens to them, i.e. what mortalities are applied to the stock and changes in condition. The spawning stock is updated according to the following equations:
+$$ N_l = N_l(1 + P_l(e^{-m_l} - 1)) $$
+$$ W_l = W_l\frac{1 + P_l((2-w_l)e^{-m_l} -1)}{(1 + P_l(2e^{-m_l} -1))} $$
+where $P_l$ is proportion that will spawn, $m_l$ is the mortality for and $w_l$ is the weight loss for length group $l$.
+
+# Consumption 
+# Suitability functions
+
+As Gadget is a length based simulation model, almost all processes are modelled in terms of length of an individual in a particular stock. The rationale for this is that natural processes are better explained in terms of size, e.g. prey must fit into the mouth of the predator. Thus predation and fleet selection are modelled in terms of size. These selection processes can very between predators (and fleets) and therefore Gadget allows the user to define this relationship in a number of ways. This relationship is essentially factored into two components: 
+
+a) what the predator wants to consume and 
+b) what size ranges the predator is able to produce. 
+
+In Gadget there are a number of predator-prey relations that can be defined. They include the obvious case where one substock predates the other. Additionally a cannibalistic relationship can be defined if the substocks are modelled as an immature and a mature part of the same species. Fleets (survey and/or commercial) can be integrated into the model by being considered as one of the predators. A fleet can harvest one or both substocks in some or all areas. 
+
+The predation in Gadget is implemented as follows. Each predator will conceptually be assigned **availability** of a certain prey in comparison with other food sources and a **feeding level**, i.e., fraction of available food the predator wants to consume. Combining these two terms the amount that the predator wants to consume is calculated.
+
+The availability of a certain prey $p$ for a predator $P$ is determined by the prey biomass per length group ($N_{l}W_{l}$, where $W_l$ is the weight at length $l$) and a length based suitability function of the form:
+$$
+S_{P,p}(L,l) = \frac{\delta}{1+e^{-\alpha-\beta l-\gamma L}}
+$$
+where $l$ is the length of the prey $p$, $L$ length of the predator $P$ and $\alpha$, $\beta$, $\gamma$ and $\delta$, $0\leq \delta\leq 1$, are predator specific parameters that are given by the user. Note that $S_{P,p}$ is always between 0 and $\delta$, which is less than or equal to 1. $S_{P,p}(L,l)$ should therefore be interpreted as the percentage of prey abundance at length $l$ available to predator $P$ at length $L$.  This functional form for the suitability function also ensures that the length interaction between prey and predator is taken into account. For instance if $\beta <0$ the prey is less likely to be consumed as it grows larger. Similarly the prey is more likely to be consumed by a larger predator, given that $\gamma > 0$.  
+
+In Gadget fleets lengths, $L$, are assumed to be irrelevant. $\gamma$ is therefore assumed to be 0. Furthermore $\delta$ for fleets is assumed to take the value 1. Equation above for fleets therefore is reduced to:
+$$
+S_l = \frac{1}{1+e^{-\alpha-\beta l}}
+$$
+
+The feeding level for a fleet is determined by the yearly fishing effort $F$ multiplied by the length of the time step, i.e., the level is $F\Delta t$ and therefore the total consumption (harvest) is
+$$
+C_{fslat} = F\Delta t S_l N_{slat}
+$$
+In the simple predator-prey relation between the substocks in Gadget the prey availability to a predator becomes
+$$\frac{F_{Ll}}{\sum_{l'}F_{Ll'}+OA}$$
+where $F_{Ll} = S_{Pp}(L,l) N_{pl}W_{pl}$ is the prey biomass of length $l$ that the predator could consume, $W_{pl}$ is the average weight for prey of length $l$, $O$ is the density, per unit area, of other unspecified food sources and $A$ is the size of the area.
+
+The feeding level of the predator is
+$$\Psi_L = M_L \frac{\sum_{l'}F_{Ll'}+OA}{\sum_{l'}F_{Ll'}+OA+HA}$$
+where $M_L$ is the maximum consumption of a predator of length $L$ for a particular time step length $\Delta t$. It is determined by $M_L=m_0L^{m_4}\Delta t$ where $m_0$ and $m_4$ are user defined constants\footnote{The numbering scheme is set to correspond to parameters in \cite{begley2004overview}}. $H$ is the density (biomass per area unit) of available food at which the predator can consume half maximum consumption. Note that $H$ should reflect how able the predator is to pursue its prey, which should factor in variables such as temperature and the cost of search.  $H$ determines therefore how quickly the predators consumption reaches $M_L$. $H=0$ would indicate that the predator would easily consume $M_L$ of the available biomass. A larger value for $H$ would indicate that prey is harder to find and therefore prey needs to be more abundant for the predator to reach $M_L$.
+
+Given the feeding level and the prey availability the desired consumption of all predators of length $L$ is
+$$
+\begin{split}\label{eq:feedlev}
+C_{L,l}&=N_{L}\Psi_{L}\left[\frac{F_{Ll}}{\sum_{l'}F_{Ll'}+OA}\right]\\
+&=N_{L}M_{L}\frac{F_{Ll}}{\sum_{l'}F_{Ll'}+OA+HA}\\
+\end{split}
+$$
+For each prey an upper limit needs to be set on the total amount consumed by all predators, including the fleets, to prevent more consumption than the available biomass. This over consumption check is made because the consumption is calculated on discreet time intervals and therefore the consumption is not immediately reflected in the available biomass.  Consumption can be limited to $R_M$ of the available biomass. This is implemented by scaling target consumption of all predators. Let  
+$$
+R_{p}(l)=\frac{\sum_{P}\sum_{L}C_{P,p}(L,l)}{N_{p}(l)W_{p}(l)}.
+$$
+be the proposed ratio consumed of prey $p$ of length $l$ and $R_M$ be the maximum ratio that can be consumed at one time step. Now if $R_{p}(l)>R_M$ the consumption of all predators is adjusted by the following
+$$
+C_{P,p}(L,l)=R_MN_{p}(l)W_{p}(l)\frac{C_{P,p}(L,l)}{\sum_{P}C_{P,p}(L,l)}
+$$
+The total consumption by every predator on prey is then subtracted from the substock abundance numbers.
+
+
+This second part is determined by *suitability* functions. These functions are:
+
+Function name  | Formula 
+------------- | -------------
+`constant`  | $S(L,l) = \alpha$ 
+`straightline`  | $S(L,l) = \alpha + \beta l$
+`exponential` | $S(L,l) = \frac{\delta}{1+e^{(-\alpha-\beta l - \gamma L)}}$
+`exponentiall50` | $S(L,l) = \frac{1}{1 + e^{-\alpha(l-l_{50})}}$
+`richards` | $S(L,l) = \left(\frac{\delta}{1+e^{(-\alpha-\beta l - \gamma L)}}\right)^\eta$
+`andersen` | $S(L,l) =  \begin{cases} \alpha + \gamma e^{-\frac{(ln(L/l)-\beta)^2}{\delta}}, & \text{if}\ a=ln(L/l) < \beta \\\alpha + \gamma e^{-\frac{(ln(L/l)-\beta)^2}{\eta}}, & \text{if}\ a=ln(L/l) > \beta \end{cases}$
+`andersenfleet` | Same as above except $L$ is a parameter
+`gamma` | $S(L,l) = \bigg(\frac{1}{(\alpha -1)\beta\gamma)}\bigg)^{(\alpha -1)}e^{(\alpha -1 -\frac{1}{\beta\gamma})}$
+
+where $L$ and $l$ are the predator and prey length respectively. Note that when defining fleets their lengths are not *well* defined and in the case of the Andersen suitability function you should use the fleet variant of that function. 
+
+As we have seen before Rgadget has a number of helper functions to help the user to 

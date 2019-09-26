@@ -1,6 +1,14 @@
 ---
 title: "Stock interactions"
-output: html_document
+output: 
+  html_document:
+    fig_height: 4
+    fig_width: 8
+    highlight: haddock
+    theme: united
+    toc: yes
+    toc_float: yes
+bibliography: library.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -157,7 +165,7 @@ stock_a <-
                 straysteps = 3,
                 strayareas = 1,
                 straystocksandratios = list(stock='stock_b',ratio = 1),
-                proportionfunction = list(sel_function='constant',alpha = 0))
+                proportionfunction = list(sel_function='constant',alpha = 0.2))
 
 stock_b <- 
   stock_template %>% 
@@ -253,7 +261,7 @@ plot(fit,data='res.by.year',type='num.total')
 * Depletion of stock components is often a concern. Using the straying mechanism set up a three stock model where individual are slowly dispersed between all three components. Define a fishing fleet that targets only one of the stocks and investigate how different dispersion levels affect the depletion of all stocks. 
 * Gadget allow you to set up a catch at age model. Use the movement mechanism to define a model with a maximum age of 10, where each age is a separate stock. How would you define the fleets for this model so you could use commercial catch at age directly into the model? 
 
-## Spawning
+# Spawning
 
 The spawning process allows the user to define recruits into as stock as function of the size of another stock. A number of relationships can be defined:
 
@@ -269,42 +277,145 @@ R_0,&\text{If } B_{lim} \leq S \\
 In addition the user can define using the same length based selection function as for straying which of the stock "spawns" and what happens to them, i.e. what mortalities are applied to the stock and changes in condition. The spawning stock is updated according to the following equations:
 $$ N_l = N_l(1 + P_l(e^{-m_l} - 1)) $$
 $$ W_l = W_l\frac{1 + P_l((2-w_l)e^{-m_l} -1)}{(1 + P_l(2e^{-m_l} -1))} $$
-where $P_l$ is proportion that will spawn, $m_l$ is the mortality for and $w_l$ is the weight loss for length group $l$.
+where $P_l$ is proportion that will spawn, $m_l$ is the mortality for and $w_l$ is the weight loss for length group $l$. To illustrate how to set up spawning for a particular stock we will use the simple stock templates from above and use those to define parent and offspring stocks:
+
+```{r}
+parent <- 
+  stock_template %>% 
+  gadget_update('stock',
+                stockname = 'parent') %>% 
+  gadget_update('doesrenew',0) %>% 
+  gadget_update('doesspawn',
+                spawnsteps = 1, 
+                spawnareas = 1,
+                firstspawnyear = 1,
+                lastspawnyear = 30,
+                spawnstocksandratios = list(stock='offspring', ratio = 1),
+                proportionfunction = list(sel_func = 'constant', alpha = 1),
+                mortalityfunction = list(sel_func = 'constant', alpha = 0),
+                weightlossfunction = list(sel_func = 'constant', alpha = 0),
+                recruitment = list(spawn_function = 'ricker', mu = 2, lambda = 1e-4), 
+                stockparameters = list(mean = 1,
+                                       stddev = .1,
+                                       alpha = 1,
+                                       beta = 1)) %>% 
+  gadget_update('initialconditions',
+                normalparam = tibble(age = 1,
+                                     area = 1,
+                                     age.factor = 1,   
+                                     area.factor = .1,
+                                     mean = 1,
+                                     stddev = .1,
+                                     alpha = 1,
+                                     beta = 1))
+
+
+offspring <- 
+  stock_template %>% 
+  gadget_update('stock',
+                stockname = 'offspring',
+                minage = 0,
+                maxage = 0) %>% 
+  gadget_update('initialconditions',
+                normalparam = tibble(age = 0,
+                                     area = 1,
+                                     age.factor = 0,   
+                                     area.factor = 0,
+                                     mean = 1,
+                                     stddev = .1,
+                                     alpha = 1,
+                                     beta = 1)) %>% 
+  gadget_update('doesrenew',0) %>% 
+  gadget_update('doesmove',
+                transitionsteps = 4,
+                transitionstocksandratios = list(stock='parent',ratio=1))
+
+
+parent %>% 
+  write.gadget.file(gd)
+offspring %>% 
+  write.gadget.file(gd)
+
+fit <- gadget.fit(wgts = NULL, gd = gd, steps = 2)
+
+fit$res.by.year %>% 
+  filter(stock %in% c('parent','offspring')) %>% 
+  ggplot(aes(year,total.number,lty = stock)) + geom_line() +
+  expand_limits(y=0)
+
+```
+
+The code above defines a Ricker recruitment function between the parent and offspring stocks. As evident from the graph above the relationship between the two stocks is a fairly deterministic. This type of relationship, however, is hardly ever observed without error (both in process and observation). To include process variation into the model Gadget has another trick up its sleave, Time variables.
+
+## Time variables
+
+Time variables allow Gadget to change the value of parameters with time. They are an extension to the Gadget formulae functionality and can be use (almost) where ever you can use Gadget formulae. To define a time variable you will need to define a data frame with the start time for a particular value, which will be valid until the next change. Example uses might be shifts fleet selection due to changes in regulation and temperature effects in growth. In the case of the simple stock recruitment relationship above we may want change the value for $\mu$ with time. To introduce time variables into this model you will need to create a special file:
+
+```{r}
+mu_time <- 
+  gadgetfile('Modelfiles/mu_time',
+             file_type = 'timevariable',
+             components = list(list('mu_time',
+                                    data = schedule %>% 
+                                      filter(step == 1) %>% 
+                                      mutate(value = 2*rlnorm(n = 30, sdlog = 0.2)))))
+
+mu_time %>% 
+  write.gadget.file(gd)
+
+mu_time
+```
+
+and then we need to replace value for $\mu$ with this file:
+```{r}
+parent <- 
+  parent %>% 
+  gadget_update('doesspawn',
+                spawnsteps = 1, 
+                spawnareas = 1,
+                firstspawnyear = 1,
+                lastspawnyear = 30,
+                spawnstocksandratios = list(stock='offspring', ratio = 1),
+                proportionfunction = list(sel_func = 'constant', alpha = 1),
+                mortalityfunction = list(sel_func = 'constant', alpha = 0),
+                weightlossfunction = list(sel_func = 'constant', alpha = 0),
+                recruitment = list(spawn_function = 'ricker', mu = "Modelfiles/mu_time", lambda = 1e-4), 
+                stockparameters = list(mean = 1,
+                                       stddev = .1,
+                                       alpha = 1,
+                                       beta = 1))
+parent %>% 
+  write.gadget.file(gd)
+
+fit <- gadget.fit(wgts = NULL, gd = gd, steps = 2)
+
+fit$res.by.year %>% 
+  filter(stock %in% c('parent','offspring')) %>% 
+  ggplot(aes(year,total.number,lty = stock)) + geom_line() +
+  expand_limits(y=0)
+```
+
+### Excercise
+
+* Modify the code above such that the spawning is split into two stocks, representing e.g. either the male or female part of the stock.
+* Using the simple stock template define a auto-spawning stock, i.e. a stock that spawns into it self. 
+* Instead of the Ricker function try to parametrise the Beverton and Holt recruitment function for the example above. 
+* In the ling example consider how you would project the recruitment into the future.
 
 # Consumption 
-# Suitability functions
 
-As Gadget is a length based simulation model, almost all processes are modelled in terms of length of an individual in a particular stock. The rationale for this is that natural processes are better explained in terms of size, e.g. prey must fit into the mouth of the predator. Thus predation and fleet selection are modelled in terms of size. These selection processes can very between predators (and fleets) and therefore Gadget allows the user to define this relationship in a number of ways. This relationship is essentially factored into two components: 
 
-a) what the predator wants to consume and 
-b) what size ranges the predator is able to produce. 
+In Gadget there are a number of predator-prey relations that can be defined. They include the obvious case where one substock predates the other. Additionally a cannibalistic relationship can be defined if the substocks are modelled as an immature and a mature part of the same species. The predation in Gadget is implemented as follows. Each predator will conceptually be assigned **availability** of a certain prey in comparison with other food sources and a **feeding level**, i.e., fraction of available food the predator wants to consume. Combining these two terms the amount that the predator wants to consume is calculated.
 
-In Gadget there are a number of predator-prey relations that can be defined. They include the obvious case where one substock predates the other. Additionally a cannibalistic relationship can be defined if the substocks are modelled as an immature and a mature part of the same species. Fleets (survey and/or commercial) can be integrated into the model by being considered as one of the predators. A fleet can harvest one or both substocks in some or all areas. 
+The availability of a certain prey $p$ for a predator $P$ is determined by the prey biomass per length group ($N_{l}W_{l}$, where $W_l$ is the weight at length $l$) and a length based suitability function listed [here](day1_continued.html#predation).
 
-The predation in Gadget is implemented as follows. Each predator will conceptually be assigned **availability** of a certain prey in comparison with other food sources and a **feeding level**, i.e., fraction of available food the predator wants to consume. Combining these two terms the amount that the predator wants to consume is calculated.
-
-The availability of a certain prey $p$ for a predator $P$ is determined by the prey biomass per length group ($N_{l}W_{l}$, where $W_l$ is the weight at length $l$) and a length based suitability function of the form:
-$$
-S_{P,p}(L,l) = \frac{\delta}{1+e^{-\alpha-\beta l-\gamma L}}
-$$
-where $l$ is the length of the prey $p$, $L$ length of the predator $P$ and $\alpha$, $\beta$, $\gamma$ and $\delta$, $0\leq \delta\leq 1$, are predator specific parameters that are given by the user. Note that $S_{P,p}$ is always between 0 and $\delta$, which is less than or equal to 1. $S_{P,p}(L,l)$ should therefore be interpreted as the percentage of prey abundance at length $l$ available to predator $P$ at length $L$.  This functional form for the suitability function also ensures that the length interaction between prey and predator is taken into account. For instance if $\beta <0$ the prey is less likely to be consumed as it grows larger. Similarly the prey is more likely to be consumed by a larger predator, given that $\gamma > 0$.  
-
-In Gadget fleets lengths, $L$, are assumed to be irrelevant. $\gamma$ is therefore assumed to be 0. Furthermore $\delta$ for fleets is assumed to take the value 1. Equation above for fleets therefore is reduced to:
-$$
-S_l = \frac{1}{1+e^{-\alpha-\beta l}}
-$$
-
-The feeding level for a fleet is determined by the yearly fishing effort $F$ multiplied by the length of the time step, i.e., the level is $F\Delta t$ and therefore the total consumption (harvest) is
-$$
-C_{fslat} = F\Delta t S_l N_{slat}
-$$
 In the simple predator-prey relation between the substocks in Gadget the prey availability to a predator becomes
 $$\frac{F_{Ll}}{\sum_{l'}F_{Ll'}+OA}$$
-where $F_{Ll} = S_{Pp}(L,l) N_{pl}W_{pl}$ is the prey biomass of length $l$ that the predator could consume, $W_{pl}$ is the average weight for prey of length $l$, $O$ is the density, per unit area, of other unspecified food sources and $A$ is the size of the area.
+where $$F_{Ll} = (S_{Pp}(L,l) N_{pl}W_{pl})^{d_p}$$ is the prey biomass of length $l$ that the predator could consume, $W_{pl}$ is the average weight for prey of length $l$, $d_p$ is the preference, and $O$ is the density, per unit area, of other unspecified food sources and $A$ is the size of the area.
 
 The feeding level of the predator is
 $$\Psi_L = M_L \frac{\sum_{l'}F_{Ll'}+OA}{\sum_{l'}F_{Ll'}+OA+HA}$$
-where $M_L$ is the maximum consumption of a predator of length $L$ for a particular time step length $\Delta t$. It is determined by $M_L=m_0L^{m_4}\Delta t$ where $m_0$ and $m_4$ are user defined constants\footnote{The numbering scheme is set to correspond to parameters in \cite{begley2004overview}}. $H$ is the density (biomass per area unit) of available food at which the predator can consume half maximum consumption. Note that $H$ should reflect how able the predator is to pursue its prey, which should factor in variables such as temperature and the cost of search.  $H$ determines therefore how quickly the predators consumption reaches $M_L$. $H=0$ would indicate that the predator would easily consume $M_L$ of the available biomass. A larger value for $H$ would indicate that prey is harder to find and therefore prey needs to be more abundant for the predator to reach $M_L$.
+where $M_L$ is the maximum consumption of a predator of length $L$ for a particular time step length $\Delta t$. It is determined by $$M_L=m_0L^{m_4}\Delta t e^{(m_1 T - m_2 T^3)}$$ where $m_0$ to $m_4$ are user defined constants. $H$ is the density (biomass per area unit) of available food at which the predator can consume half maximum consumption. Note that $H$ should reflect how able the predator is to pursue its prey, which should factor in variables such as temperature and the cost of search.  $H$ determines therefore how quickly the predators consumption reaches $M_L$. $H=0$ would indicate that the predator would easily consume $M_L$ of the available biomass. A larger value for $H$ would indicate that prey is harder to find and therefore prey needs to be more abundant for the predator to reach $M_L$.
 
 Given the feeding level and the prey availability the desired consumption of all predators of length $L$ is
 $$
@@ -313,30 +424,75 @@ C_{L,l}&=N_{L}\Psi_{L}\left[\frac{F_{Ll}}{\sum_{l'}F_{Ll'}+OA}\right]\\
 &=N_{L}M_{L}\frac{F_{Ll}}{\sum_{l'}F_{Ll'}+OA+HA}\\
 \end{split}
 $$
-For each prey an upper limit needs to be set on the total amount consumed by all predators, including the fleets, to prevent more consumption than the available biomass. This over consumption check is made because the consumption is calculated on discreet time intervals and therefore the consumption is not immediately reflected in the available biomass.  Consumption can be limited to $R_M$ of the available biomass. This is implemented by scaling target consumption of all predators. Let  
-$$
-R_{p}(l)=\frac{\sum_{P}\sum_{L}C_{P,p}(L,l)}{N_{p}(l)W_{p}(l)}.
-$$
-be the proposed ratio consumed of prey $p$ of length $l$ and $R_M$ be the maximum ratio that can be consumed at one time step. Now if $R_{p}(l)>R_M$ the consumption of all predators is adjusted by the following
-$$
-C_{P,p}(L,l)=R_MN_{p}(l)W_{p}(l)\frac{C_{P,p}(L,l)}{\sum_{P}C_{P,p}(L,l)}
-$$
-The total consumption by every predator on prey is then subtracted from the substock abundance numbers.
+For each prey an upper limit needs to be set on the total amount consumed by all predators, including the fleets, to prevent more consumption than the available biomass. To prevent this overconsumption when fitting a Gadget model the `understocking` likelihood component is usually added to the likelihood. 
+
+To illustrate how one can set up a predator prey relationship in Gadget we will take the simple case of one stock, `predator`, predating another, `prey`. First we will need to set up the prey stock:
+```{r}
+prey <- 
+  stock_template %>% 
+  gadget_update('stock',
+                stockname = 'prey') %>% 
+  gadget_update('iseaten',
+                ## define how many KJ per gram
+                energycontent = 1) 
+```
+We also have to define something called "Otherfood". Otherfood refers to other non-dynamic food items that the predator consumes. It is usually defined in order for the stock to consume something else in the absense of the prey. 
+```{r}
+otherfood <- 
+  gadgetfile('Modelfiles/otherfood',
+             file_type = 'otherfood',
+             components = list(component=list(foodname = 'otherfood',
+                                              livesonareas = 1,
+                                              lengths = list(min = 1, max = 2),
+                                              energycontent = 1,
+                                              amount = gadgetfile('Data/otherfood',
+                                                                  component = list(schedule %>% 
+                                                                    mutate(area = 1, food_name = 'otherfood',amount = 1e6))))))
 
 
-This second part is determined by *suitability* functions. These functions are:
+```
 
-Function name  | Formula 
-------------- | -------------
-`constant`  | $S(L,l) = \alpha$ 
-`straightline`  | $S(L,l) = \alpha + \beta l$
-`exponential` | $S(L,l) = \frac{\delta}{1+e^{(-\alpha-\beta l - \gamma L)}}$
-`exponentiall50` | $S(L,l) = \frac{1}{1 + e^{-\alpha(l-l_{50})}}$
-`richards` | $S(L,l) = \left(\frac{\delta}{1+e^{(-\alpha-\beta l - \gamma L)}}\right)^\eta$
-`andersen` | $S(L,l) =  \begin{cases} \alpha + \gamma e^{-\frac{(ln(L/l)-\beta)^2}{\delta}}, & \text{if}\ a=ln(L/l) < \beta \\\alpha + \gamma e^{-\frac{(ln(L/l)-\beta)^2}{\eta}}, & \text{if}\ a=ln(L/l) > \beta \end{cases}$
-`andersenfleet` | Same as above except $L$ is a parameter
-`gamma` | $S(L,l) = \bigg(\frac{1}{(\alpha -1)\beta\gamma)}\bigg)^{(\alpha -1)}e^{(\alpha -1 -\frac{1}{\beta\gamma})}$
+The predator stock is bit more involved:
+```{r}
+predator <-
+  stock_template %>% 
+  gadget_update('stock',
+                stockname = 'predator') %>% 
+  gadget_update('doeseat',
+                suitability = list(paste('\n',prey = 'prey',type='function',suit_func = 'constant', alpha = 1,'\n', sep = '\t'),
+                                   paste(prey = 'otherfood',type='function',suit_func = 'constant', alpha = 0.5, sep = '\t')),
+                preference = paste('\n','prey',1,'\n','otherfood', 1),
+                maxconsumption = list(m0=1,m1=0,m2=0,m3=0),
+                halffeedingvalue = 0.2)
+```
+Now save this all to file and run Gadget:
+```{r out.width = "50%", fig.show = "hold"}
+prey %>% 
+  write.gadget.file(gd)
 
-where $L$ and $l$ are the predator and prey length respectively. Note that when defining fleets their lengths are not *well* defined and in the case of the Andersen suitability function you should use the fleet variant of that function. 
+predator %>% 
+  write.gadget.file(gd)
 
-As we have seen before Rgadget has a number of helper functions to help the user to 
+otherfood %>% 
+  write.gadget.file(gd)
+
+fit <- gadget.fit(wgts = NULL, gd = gd, steps = 2)
+
+fit$res.by.year %>% 
+  filter(stock %in% c('predator','prey')) %>% 
+  ggplot(aes(year,total.number,lty = stock)) + geom_line() +
+  expand_limits(y=0)
+
+fit$predator.prey %>% 
+  group_by(year) %>% 
+  summarise(num = sum(number_consumed)) %>% 
+  ggplot(aes(year,num)) + geom_line()
+```
+
+### Excercise
+
+* In the example above, insert variable names instead of direct numbers for the selection and predation parameters. Investigate the effects of changing the selection parameter has on the consumption. E.g:
+  + Change the otherfood time series such that it is more variable
+  + Change the recruitment of both predator and prey
+  + Add a new prey
+  

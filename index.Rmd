@@ -129,13 +129,13 @@ leaflet() %>%
 * [Alternate structures](day4_multi_area.html)
   + Multiple areas
   + Migration
-* Stock interactions
-  + Multiple stocks/species
-  + Consumption
+* [Stock interactions](stock_interactions.html)
+  + [Multiple stocks/species](stock_interactions.html#fish_recruits_into_a_stock)
   + Straying
-* Spawning
-  + Time variables
-* Order of operations
+  + [Spawning](stock_interactions.html#spawning)
+    * [Time variables](stock_interactions.html#time_variables)
+  + [Consumption](stock_interactions.html#consumption)
+* [Order of operations](https://hafro.github.io/gadget/docs/userguide#order_of_calculations)
 * MFDB
 * Version control
 * Own projects

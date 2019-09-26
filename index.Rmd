@@ -90,7 +90,7 @@ leaflet() %>%
 
 # Draft workplan
 
-### Monday
+### Monday 9:00 - 16:00
 
 * Internet access
 * [Introduction](introduction.html)
@@ -104,7 +104,7 @@ leaflet() %>%
 
 ---
 
-### Tuesday
+### Tuesday 9:00 - 16:00
 * Recap and examples 
 * More complicated models: [Ling in Iceland](day2_lingmodel.html)
   + Growth
@@ -116,7 +116,7 @@ leaflet() %>%
 
 ---
 
-### Wednesday
+### Wednesday 9:00 - 16:00
 * [Introducing likelihood functions](day3_fitlingmodel.html#introducing_likelihood_functions)
 * [Incorporating data](day3_fitlingmodel.html#fitting_a_gadget_model_to_data) (Ling case study cont.)
 * Set [optimisation function parameters](day3_fitlingmodel.html#set_optimisation_routine) and fit Gadget statistical model using [iterative reweighting](day3_fitlingmodel.html#using_the_iterative_reweighting_function_to_fit_a_gadget_statistical_model)
@@ -125,7 +125,7 @@ leaflet() %>%
 
 ---
 
-### Thursday
+### Thursday 9:00 - 16:00
 * [Alternate structures](day4_multi_area.html)
   + Multiple areas
   + Migration
@@ -137,12 +137,12 @@ leaflet() %>%
   + [Consumption](stock_interactions.html#consumption)
 * [Order of operations](https://hafro.github.io/gadget/docs/userguide#order_of_calculations)
 * [MFDB](mfdb.html)
-* Version control
+* [Version control](https://github.com/fishvice/gadget-models/)
 * Own projects
 
 ---
 
-### Friday
+### Friday 9:00 - 12:00
 
 * [Troubleshooting](troubleshooting.html)
   + Known issues

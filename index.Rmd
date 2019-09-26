@@ -136,7 +136,7 @@ leaflet() %>%
     * [Time variables](stock_interactions.html#time_variables)
   + [Consumption](stock_interactions.html#consumption)
 * [Order of operations](https://hafro.github.io/gadget/docs/userguide#order_of_calculations)
-* MFDB
+* [MFDB](mfdb.html)
 * Version control
 * Own projects
 

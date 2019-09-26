@@ -141,7 +141,9 @@ leaflet() %>%
 * Own projects
 
 ---
+
 ### Friday
+
 * [Troubleshooting](troubleshooting.html)
   + Known issues
   + Asking for help
@@ -152,3 +154,21 @@ leaflet() %>%
 * MSE using Gadget
   + Ling 
 * Wrap up
+
+---
+
+# Reading material
+
+* [A model of cod in Icelandic waters](docs/ajms.pdf)
+* [Two area cod - shrimp model](http://raunvisindastofnun.hi.is/sites/raunvisindastofnun.hi.is/files/rh-03-2011.pdf)
+* [Uncertainty estimates with Gadget](docs/TAMS_Elvarsson.pdf)
+* [MSE using ling in Icelandic waters](docs/elvarsson2018ling.pdf)
+* [Cod - herring - sprat in the Baltic](docs/Kulatska_baltic_2018.pdf)
+* Assessments that use Gadget:
+  + [Ling in 5a](http://www.ices.dk/sites/pub/Publication%20Reports/Stock%20Annexes/2017/lin.27.5a_SA.pdf)
+  + [Tusk in 5a and 14](http://www.ices.dk/sites/pub/Publication%20Reports/Stock%20Annexes/2017/lin.27.5a_SA.pdf)
+  + [Golden redfish in 5, 6, 12 and 14](http://ices.dk/sites/pub/Publication%20Reports/Stock%20Annexes/2015/smr-5614_SA.pdf)
+  + [Deep pelagic beaked redfish](http://ices.dk/sites/pub/Publication%20Reports/Stock%20Annexes/2015/smn-dp_SA.pdf) 
+  + [Atlantic wolffish in Icelandic waters](https://www.hafogvatn.is/static/extras/images/09-AtlanticWolffish_TR%20(1)1141513.pdf)
+  + [Greenland halibut in the Northeast Artic](http://ices.dk/sites/pub/Publication%20Reports/Stock%20Annexes/2015/ghl-arct_SA.pdf)
+  + [Southern hake](http://www.ices.dk/sites/pub/Publication%20Reports/Stock%20Annexes/2017/hke-soth_SA.pdf)

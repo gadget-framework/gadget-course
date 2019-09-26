@@ -1,0 +1,138 @@
+---
+title: 'MFDB'
+output: 
+  html_document:
+    fig_height: 4
+    fig_width: 8
+    highlight: haddock
+    theme: united
+    toc: yes
+    toc_float: yes
+bibliography: library.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Description of the MFDB system
+
+[MFDB](https://github.com/mareframe/mfdb) is a R package enables automated processing of fisheries data into suitable forms for running ecosystem models against it such as Gadget
+
+MFDB contains several distinct sets of functions:
+
+* Create and connect to a PostgreSQL database schema (mfdb function)
+* Import data into a PostgreSQL database (mfdb_import_* functions)
+* Sample / group data from database (other mfdb_* functions)
+
+Using this, you can install PostgreSQL locally and have a script automating the process of:
+
+* Importing data from your sources
+* Uploading into your local MFDB database
+* Sampling / grouping this data
+* Producing set of Gadget data files ready to be run by Gadget
+
+Also, MFDB can be used to connect to a remote database and generate model files from that data.
+
+Before doing anything with mfdb, it is worth knowing a bit about how data is stored. Broadly, there are 2 basic types of table in mfdb, **taxonomy** and **measurement** tables.
+
+The measurement tables store all forms of sample data supported, at the finest available detail. These are then aggregated when using any of the mfdb query functions. All measurement data is separated by case study, so multiple case studies can be loaded into a database without conflicts.
+
+Taxonomy tables store all possible values for terms and their meaning, to ensure consistency in the data. For example, species stores short-names and full latin names of all known species to MFDB, to ensure consistency in naming.
+
+Most Taxonomies have defaults which are populated when the database is created, and their definitions are stored as data attached to this package. See `mfdb-data` for more information on these. Others, such as areacell and sampling_type are case study specific, and you will need to define your terms before you can import data.
+
+# Installing mfdb
+
+Follow these [instructions](https://github.com/mareframe/mfdb/#prerequisites)
+
+# Importing data
+
+
+Unless you are working with a remote database, you will need to populate the database at least once before you are able to do any querying. The steps your script needs to do are:
+
+## Connect to database
+
+Use the `mfdb()` function. This will create tables / populate taxonomies if necessary.
+
+## Define areas & divisions
+
+mfdb models space in the following way:
+
+* areacell
+  + The finest level of detail stored in the database. Every measurement (e.g. temperature, length sample) is assigned to an areacell. This will generally correspond to ICES gridcells, however there is no requirement to do so. You might augment gridcell information with depth, or include divisions when the measurement doesn't correlate to a specific areacell.
+
+* division
+  + Collections of areacells, e.g. ICES subdivisions, or whatever is appropriate.
+
+Finally, when querying, divisions are grouped together into named collections, for instance `mfdb_group(north = 1:3, south = 4:6)` will put anything in divisions 1–3 under an area named "north", 4–5 under an area named "south".
+
+Before you can upload any measurements, you have to define the areacells that they will use. You do this using the `mfdb_import_area()` function. This allows you to import tables of area/division information, such as:
+
+```
+mfdb_import_area(mdb, data.frame( area = c('101', '102', '103', '401','402', '403'), division = c('1', '1', '1', '4', '4', '4'), ))
+```
+
+If you want areas to be part of multiple divisions, then you can use `mfdb_import_division()` to import extra revisions.
+
+## Define sampling types
+
+Any survey data can have a sampling type defined, which then can be used when querying data. If you want to use a sampling type, then define it using mfdb_import_sampling_type().
+
+## Import temperature data
+
+At this point, you can start uploading actual measurements. The easiest of which is temperature. Upload a table of areacell/month/temperature data using `mfdb_import_temperature()`.
+
+## Import survey data
+
+Finally, import any survey data using `mfdb_import_survey()`. Ideally upload your data in separate chunks. For example, if you have length and age-length data, don't combine them in R, upload them separately and both will be used when querying for length data. This keeps the process simple, and allows you to swap out data as necessary.
+
+## Import stomach survey
+
+Stomach surveys are imported in much the same way, however there are 2 data.frames, one representing predators, one preys. The column stomach_name links the two, which can contain any numeric / character value, as long as it is unique for predators and prey measurements are assigned to the correct stomach.
+
+See `mfdb_import_survey` for more information or the demo directory for concrete examples.
+
+## Dumping / Restoring a DB
+
+You can also dump/import a dump from another host using the postgres `pg_dump` and `pg_restore` commands. You can dump/restore indvidual schemas (i.e. the case study you give to the `mfdb()` command), to list all the schemas installed run `SELECT DISTINCT(table_schema) FROM information_schema.tables` from psql. Note that if you use `mfdb('Baltic')`, the Postgres schema name will be lower-cased.
+
+Create a dump of your chosen schema with the following command:
+
+```
+pg_dump --schema=baltic -F tar mf > baltic.tar
+```
+
+This will make a dump of the "baltic" case study into "baltic.tar". It can then be restored onto another computer with the following:
+
+```
+pg_restore --clean -d mf baltic.tar
+```
+
+If you already have a baltic schema you wish to preserve, you can rename it first by issuing ALTER SCHEMA baltic RENAME TO baltic_o in psql. Once the restore is done you can rename the new schema and put the name of the old schema back.
+
+
+## Querying data
+
+There are a selection of querying functions available, all of which work same way. You give a set of parameters, each of which can be a vector of data you wish returned, for instance `year = 1998:2000` or `species = c('COD')`.
+
+If also grouping by this column (i.e. 'year', 'timestep', 'area' and any other columns given, e.g. 'age'), then the parameter will control how this grouping works, e.g. maturity_stage = mfdb_group(imm = 1, mat = 2:5) will result in the maturity_stage column having either 'imm' or 'mat'. These will also be used to generate Gadget aggregation files later.
+
+For example, the following queries the temperature table:
+
+```
+defaults <- list(
+    area = mfdb_group("101" = ),
+    timestep = mfdb_timestep_quarterly, # Group months to create 2 timesteps for each year
+    year = 1996:2005)
+agg_data <- mfdb_temperature(mdb, defaults)
+
+```
+All functions will result in a list of data.frame result tables (generally only one, unless you requested bootstrapping). Each are suitable for feeding into a gadget function to output into model files.
+
+See `mfdb_sample_count` for more information or the demo directory for concrete examples.
+
+# Creating Gadget files
+
+Finally, there are a set of functions that turn the output of queries into GADGET model files. These work on a gadget_directory object, which can either be an existing Gadget model to alter, or an empty / nonexistant directory.
+

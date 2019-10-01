@@ -10,8 +10,8 @@ output:
     toc_float: yes
 bibliography: library.bib
 ---
-
-```{r setup, include=FALSE}
+  
+  ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 #require("knitr")
 #opts_knit$set(root.dir = 'ling_model/01-base')
@@ -25,13 +25,13 @@ As touched on in the [Introduction](introduction.html), Gadget is particularly u
 assessment setting when age data are absent or sparse. In these cases,
 parameterising age-based stock assessement models may require a lot of
 pre-processing based on sparse age data to calculate the model input (e.g., catch 
-at age), which can produce bias. Using length- and age-based models instead 
+                                                                      at age), which can produce bias. Using length- and age-based models instead 
 are appealing because comparisons sparse data can be directly incorporated into the
 model likelihood, rather than pre-processed. This was the original main motivation
 for developing the model presented here that is currently used for stock assessment. 
 
 In this example we present the stock assessment model used for ling *Molva molva*
-in Icelandic fisheries as an example of a length- and age-based model with all the 
+  in Icelandic fisheries as an example of a length- and age-based model with all the 
 standard components implemented, including natural mortality, fishing, growth,
 maturation, and recruitment.
 
@@ -87,7 +87,7 @@ gadgetstock('test',gd,missingOkay = TRUE)
 However, growth is the exception: `doesgrow` is turned on (value set to 1) with the growth
 function `lengthvbsimple` implemented and parameters supplied to that function as 
 'test.Linf', 'test.k' (multiplied by 0.001 to keep it help the optimisation routine by 
-placing it on a similar scale to other parameters), 'test.walpha', 'test.wbeta', 
+                       placing it on a similar scale to other parameters), 'test.walpha', 'test.wbeta', 
 'test.bbin' (also multiplied by a scalar), and a constant value for `maxlengthgroupgrowth`.
 
 ### Growth
@@ -126,8 +126,8 @@ are based on predicting changes in length over a time step, based on the length 
 the previous time step and the length of the time step. Therefore, length is not directly 
 associated with age. This is a useful property when Gadget is being used for estimation, because
 it implies that age data are not a prerequisite to estimating growth (although it does help a 
-lot). However, it also implies that the parameter values obtained when estimating (i.e., the 
-length at infinity and growth rate parameters) are not directly comparable to those estimated
+                                                                      lot). However, it also implies that the parameter values obtained when estimating (i.e., the 
+                                                                                                                                                         length at infinity and growth rate parameters) are not directly comparable to those estimated
 when using length and age data in non-linear models estimation (standard methods). In particular, 
 length at infinity using standard estimation methods with age data would represent the mean 
 length attainable at infinity, but in Gadget it represents the maximal length that could be 
@@ -159,7 +159,7 @@ steps than a model with monthly time steps: at most $2 * 4 = 8$ length group ste
 per annum rather than $2 * 12 = 24$. An exception to this implementation is values for
 mortality: they are expected to be suppled as annual mortality rates, and are therefore
 subsequently divided among the time steps before implementation (e.g., so that $M = 0.2$ is the 
-same in quarterly and monthly models).
+                                                                 same in quarterly and monthly models).
 
 ### Maturation as multi-'stock' models
 
@@ -211,10 +211,10 @@ As described above in the **Growth** section, default settings are provided by t
 `gadgetstock` function. However, those settings give parameters that are named to be
 stock-specific. To simplify the model a bit, we change the parameters to have the same 
 value in both stocks, so that both stocks are governed by the same growth equation:
-
-```{r}
- ling.imm <-
-   ling.imm %>%
+  
+  ```{r}
+ling.imm <-
+  ling.imm %>%
   gadget_update('doesgrow', 
                 growthparameters=c(linf='#ling.Linf', 
                                    k=to.gadget.formulae(quote(0.001*ling.k)),
@@ -222,8 +222,8 @@ value in both stocks, so that both stocks are governed by the same growth equati
                                    beta = '#ling.wbeta'),
                 beta = to.gadget.formulae(quote(10*ling.bbin))) 
 
-  ling.mat <-
-   ling.mat %>%
+ling.mat <-
+  ling.mat %>%
   gadget_update('doesgrow', 
                 growthparameters=c(linf='#ling.Linf', 
                                    k=to.gadget.formulae(quote(0.001*ling.k)),
@@ -280,9 +280,9 @@ these are switched on for the mature stock.
 
 Maturation is split into a two-step process in Gadget. For all ages included in the
 immature stock, maturation is determined by a maturation function (set using the 
-`doesmature` component). For all ages older than the immature stock, maturation is 
+                                                                   `doesmature` component). For all ages older than the immature stock, maturation is 
 governed by a stepwise 'transition' (or lack of transition) to the mature stock (set 
-using the `doesmove` component). 
+                                                                                 using the `doesmove` component). 
 
 For all ages within the immature stock, at what length individuals in the immature stock
 become mature is governed by the maturation function in the `doesmature` component. 
@@ -294,7 +294,7 @@ the `coefficients` correspond with length-dependency (alpha and L50, respectivel
 the last two correspond with age-dependency (beta and a50, respectively). Therefore,
 for ling, we have only implemented length-dependency. Maturation in the `continuous`
 functions occurs instantaneously (i.e., the maturation function is evaluated 
-and individuals are moved to the mature stock in every time step). When individuals
+                                  and individuals are moved to the mature stock in every time step). When individuals
 transition, they are placed into the same age-length bins of the destination
 stock. If that bin does not exist in the destination stock, or transitioning is not defined 
 to occur, then the fish remain in the oldest age-length bins of the source stock, which act 
@@ -320,7 +320,7 @@ the stock names and corresponding ratios are supplied that describe what proport
 of the immature should mature into each stock. Our example shows 
 all (ratio = 1) immature ling to be maturing into the mature stock ('lingmat') under the
 argument `maturestocksandratios`, as well as transitioning to the same stock (under argument
-`transitionstocksandratios`) in the fourth time step of every year when in the maximal age bin of the immature stock.
+                                                                              `transitionstocksandratios`) in the fourth time step of every year when in the maximal age bin of the immature stock.
 
 ```{r}
 mat_stock <- 'lingmat'
@@ -429,7 +429,7 @@ To be internally consistent, the parameters supplied to this convenience functio
 the alpha and beta columns defined in the `normalparam` data frame, are set to be the same as
 those used when implementing growth in the `doesgrow` component above. Notice one more
 parameter called 'ling.recl' is also supplied for internal consistency with recruitment
-settings, which are explained in the next section.
+settings, which are explained in the next section. 
 
 ```{r}
 
@@ -447,24 +447,24 @@ ling.imm <-
                                            purrr::map(to.gadget.formulae) %>% 
                                            unlist(),   
                                          area.factor = '#lingimm.init.scalar',
-                                         mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
-                                         stddev = init.sigma.i,
-                                         alpha = '#ling.walpha',
-                                         beta = '#ling.wbeta')) 
+                                                                              mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
+                                                                              stddev = init.sigma.i,
+                                                                              alpha = '#ling.walpha',
+                                                                              beta = '#ling.wbeta')) 
 
 ling.mat <-
   ling.mat %>% 
   gadget_update('initialconditions',
-                normalparam = data_frame(age = .[[1]]$minage:.[[1]]$maxage,
-                                         area = 1,
-                                         age.factor = parse(text=sprintf('exp(-1*(lingmat.M+ling.init.F)*%1$s)*lingmat.init.%1$s',age)) %>% 
-                                           purrr::map(to.gadget.formulae) %>% 
-                                           unlist(),
-                                         area.factor = '#lingmat.init.scalar',
-                                         mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
-                                         stddev = init.sigma.m,
-                                         alpha = '#lingmat.walpha',
-                                         beta = '#lingmat.wbeta'))  
+                normalparam = tibble(age = .[[1]]$minage:.[[1]]$maxage,
+                                     area = 1,
+                                     age.factor = parse(text=sprintf('exp(-1*(lingmat.M+ling.init.F)*%1$s)*lingmat.init.%1$s',age)) %>% 
+                                       purrr::map(to.gadget.formulae) %>% 
+                                       unlist(),
+                                     area.factor = '#lingmat.init.scalar',
+                                     mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
+                                     stddev = init.sigma.m,
+                                     alpha = '#ling.walpha',
+                                     beta = '#ling.wbeta'))  
 ## write to file
 ling.imm %>% 
   write.gadget.file(gd)
@@ -477,6 +477,13 @@ ling.mat %>%
 Note that the new files 'Modelfiles/lingimm.init.normalparam' and 
 'Modelfiles/lingmat.init.normalparam' are created to hold the information in the data 
 frames. 
+
+** Note the `von_b_formula` requires the infuser package** 
+  ```{r eval=FALSE}
+devtools::install_github('Bart6114/infuser')
+
+```
+
 
 ### Renewal
 
@@ -518,12 +525,12 @@ parameters are provided for translation into biomass.
                                          area = 1,
                                          age = .[[1]]$minage,
                                          number = parse(text=sprintf('ling.rec.scalar*ling.rec.%s',year)) %>% 
-                                           map(to.gadget.formulae) %>% 
-                                           unlist(),
-                                         mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
-                                         stddev = '#ling.rec.sd',
-                                         alpha = '#ling.walpha',
-                                         beta = '#ling.wbeta')) 
+map(to.gadget.formulae) %>% 
+  unlist(),
+mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
+stddev = '#ling.rec.sd',
+alpha = '#ling.walpha',
+beta = '#ling.wbeta')) 
 
 ## write to file
 ling.imm %>% 
@@ -548,8 +555,8 @@ frame, which is the same for both stocks.
 #same as those for ling.walpha & ling.wbeta in the params file
 lw_pars <- c(0.00000228, 3.20) 
 
- ling.imm <-
-   ling.imm %>%
+ling.imm <-
+  ling.imm %>%
   gadget_update('iseaten',1) %>%  
   gadget_update('refweight',
                 data=data_frame(length=seq(.[[1]]$minlength,.[[1]]$maxlength,.[[1]]$dl),
@@ -585,8 +592,8 @@ consumption.
 
 ```{r}
 
- ling.imm <-
-   ling.imm %>%
+ling.imm <-
+  ling.imm %>%
   gadget_update('iseaten',1)
 
 ling.mat <-
@@ -604,8 +611,8 @@ ling.mat %>%
 
 ```{r}
 
- ling.imm <-
-   ling.imm %>%
+ling.imm <-
+  ling.imm %>%
   gadget_update('iseaten',1) %>% 
   gadget_update('doesrenew',
                 normalparam = data_frame(year = schedule$year,
@@ -650,9 +657,9 @@ If fleets will be set up using data, catch or effort data must be first organize
 structure as the model (units kg for catch). Here we continue with `totalfleet` examples that
 requires catch data for four fishing fleets: 'foreign', longline, bottom trawl, and gillnet
 fleets. [Foreign are assumed to use long lines, but are kept separate because the have no
-biological data from fishery samples - more on this later]. Fleets are separated by gear so
+         biological data from fishery samples - more on this later]. Fleets are separated by gear so
 that a different selectivity curve can be implemented for each fleet (but foreign is assumed
-to have the same selectivity as the longline fleet). The survey is also
+                                                                      to have the same selectivity as the longline fleet). The survey is also
 treated as a fleet here so that it too can have a different selectivity curve implemented.
 However, note that because we don't want the survey to actually have any fishing impact on 
 the population, but we still want to use biological 'fishery data' resulting from the 
@@ -661,20 +668,20 @@ step / year combination. Gadget will give an error if there exists no catch in t
 
 Also notice that the attribute `area_group` needs to be applied to the data frame using the 
 function `structure`. These attributes are called on by Rgadget when creating the
-appropriate aggregation files.
+appropriate aggregation files. You will need to download the files from [here](data_provided.zip)
 
 ```{r}
 
 lln.landings <- structure(read_csv('data_provided/lln.csv'),
-            area_group = list(`1` = 1))
+                          area_group = list(`1` = 1))
 bmt.landings <- structure(read_csv('data_provided/bmt.csv'),
-            area_group = list(`1` = 1))
+                          area_group = list(`1` = 1))
 gil.landings <- structure(read_csv('data_provided/gil.csv'),
-            area_group = list(`1` = 1))
+                          area_group = list(`1` = 1))
 for.landings <- structure(read_csv('data_provided/for.csv'),
-            area_group = list(`1` = 1))
+                          area_group = list(`1` = 1))
 surv.landings <- structure(read_csv('data_provided/surv.csv'),
-            area_group = list(`1` = 1))
+                           area_group = list(`1` = 1))
 
 lln.landings
 surv.landings
@@ -710,11 +717,11 @@ gadgetfleet('Modelfiles/fleet',gd,missingOkay = TRUE) %>%
                 suitability = 
                   list(lingimm = list(type='function',suit_func='exponentiall50',
                                       alpha = '#ling.surv.alpha',
-                                      beta = '#ling.surv.l50'),
-                       lingmat = list(type='function',suit_func='exponentiall50',
-                                      alpha = '#ling.surv.alpha',
-                                      beta = '#ling.surv.l50')),
-                data = surv.landings) %>%
+beta = '#ling.surv.l50'),
+lingmat = list(type='function',suit_func='exponentiall50',
+               alpha = '#ling.surv.alpha',
+               beta = '#ling.surv.l50')),
+data = surv.landings) %>%
   gadget_update('totalfleet',
                 name = 'lln',
                 suitability = 
@@ -775,9 +782,9 @@ gadgetfleet('Modelfiles/fleet',gd,missingOkay = TRUE) %>%
 
 #### Exercise
 * Try changing the longline and foreign fleet to the andersenfleet function (see commented 
-out code under the foreign fleet, as well as day 1 material). Use the Rgadget helper function
+                                                                             out code under the foreign fleet, as well as day 1 material). Use the Rgadget helper function
 to explore it. Under what conditions could this function be useful? [Hint: also look up the
-description in the [Gadget User Guide](https://hafro.github.io/gadget/docs/userguide)]
+                                                                     description in the [Gadget User Guide](https://hafro.github.io/gadget/docs/userguide)]
 
 ## Run the simulation using pre-determined parameters 
 
@@ -803,4 +810,3 @@ callGadget(s=1,log = 'simple_log2', i='../../data_provided/params.forsim')
 read.gadget.parameters('data_provided/params.forsim')
 ```
 
-  

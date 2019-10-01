@@ -785,7 +785,7 @@ Now we run Gadget on the ling model just as in the simple model example. Here we
 set the directory to model location, then use `Sys.setenv` to set the Gadget working 
 directory to the model path, and finally call Gadget to do a simple simulation.
 
-```{r, echo = FALSE}
+```{r}
 
 Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
 callGadget(s=1,log = 'simple_log')
@@ -797,7 +797,7 @@ As you can see above, a default simulation run uses unrealistic parameter values
 are provided. To make it a little more interesting, we change the input parameter file to 
 one that we know contains some reasonable values.
 
-```{r, echo = FALSE}
+```{r}
 callGadget(s=1,log = 'simple_log2', i='../../data_provided/params.forsim')
 
 read.gadget.parameters('data_provided/params.forsim')

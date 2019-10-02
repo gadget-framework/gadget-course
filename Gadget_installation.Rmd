@@ -87,7 +87,7 @@ Next, Gadget can be cloned (rather than downloaded) from the github website usin
 From terminal, use: 
 
 ```
-git clone git@github.com:Hafro/gadget.git
+git clone https://github.com/Hafro/gadget.git
 ```
 Navigate to the gadget directory, then install:
 ```

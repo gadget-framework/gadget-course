@@ -377,6 +377,23 @@ ead the mean length and standard deviation from the `mean` and `stddev` columns,
 the paramters of the weight--length relationship ($w = \alpha l^\beta$) can be read 
 from the `alpha` and `beta` columns. 
 
+Note that `gadget_update` updates the stock file based on their implicit components, which are the following:
+
+Component| Description
+-----|--------
+stock | Basic information (age, length, dl, area)
+doesgrow | The growth model, see [this](https://hafro.github.io/gadget/docs/userguide#growth)
+naturalmortality | An entry for each age group
+iseaten | If defined then the stock is considered to be a prey, 0 otherwise
+doeseat | If defined the stock is a predator and prey selection needs to be defined, see [this](https://hafro.github.io/gadget/docs/userguide#stock_predator)
+doesmigrate | 
+doesmature | 
+doesmove | 
+doesrenew |
+doesspawn |
+doesstray |
+
+
 
 The stock file essentially defines a stock with 10 000 fish that do not grow, consume 
 or die for the duration of the simulation. By writing this file to the disk R has 

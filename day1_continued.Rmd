@@ -129,11 +129,67 @@ to.gadget.formulae(quote(linf*(1-exp(-1*k(3-a0)))))
 * Change the initial conditions in such a way you can control both the initial number 
 of fish and the natural mortality using the parameter file. What happens to your stock
 when you change these values?
+
+```{r eval=FALSE}
+
+ stock %>% 
+  gadget_update('naturalmortality','#M') %>% 
+  gadget_update('initialconditions',
+                normalparam = tibble(age = 1,
+                                     area = 1,
+                                     age.factor = '#init.num',   
+                                     area.factor =1,
+                                     mean = 1,
+                                     stddev = .1,
+                                     alpha = 1,
+                                     beta = 1)) %>% 
+  write.gadget.file(gd)
+  
+  callGadget(s=1,log = 'test',i = 'params.in')
+  
+  read.gadget.parameters('simple_model/params.out') %>% 
+    init_guess('M',value = 0.2) %>% 
+    init_guess('init.num', value = 3) %>% 
+    write.gadget.parameters(file = 'simple_model/params.in')
+  
+  
+  read.gadget.parameters('simple_model/params.out') %>% 
+    init_guess('M',value = 0.6) %>% 
+    init_guess('init.num', value = 10) %>% 
+    write.gadget.parameters(file = 'simple_model/params.in2')
+  
+  
+  
+fit <- gadget.fit(wgts = NULL, 
+                  ## make sure that this is relative to
+                  ## gadget directory
+                  params.file = 'params.in',
+                  gd = gd)
+
+
+fit2 <- gadget.fit(wgts = NULL, 
+                  ## make sure that this is relative to
+                  ## gadget directory
+                  params.file = 'params.in2',
+                  gd = gd)
+
+
+```
+
+
 * Play around with the Gadget formulae functions, e.g. parse and evaluate the 
 following formula at $\alpha = 0.1$ and $l_{50} = 75$ :
 ```
  (/ 1 (+ 1 (exp (* (* -1 #alpha) (- 50 #l50)))))
 ```
+
+```{r eval=FALSE}
+
+parse.gadget.formulae('(/ 1 (+ 1 (exp (* (* -1 #alpha) (- 50 #l50)))))') %>% 
+  eval(list(alpha = 0.1, l50 = 75))
+
+```
+
 
 # Predation
 
@@ -342,9 +398,45 @@ Gadget how many fish or how many kilograms are consumed by the fleet. Redo the
 example above with either of the fleet types, but make sure you do not overconsume
 (i.e., don't take more that is available).
 
+
+```{r eval=FALSE}
+
+catch <- 
+  structure(data.frame(year=unique(schedule$year),step=2,area=1,
+                       number= 500,
+            area_group = list(`1` = 1)) 
+
+## update the fleet file
+gadgetfleet('Modelfiles/fleet',gd,missingOkay = TRUE) %>% 
+  gadget_update('numberfleet',
+                name = 'simple_fleet',
+                suitability = 
+                  list(simple_stock=list(type='function',suit_func = 'constant',value=0.2)),
+                data = catch) %>% 
+  write.gadget.file(gd)
+
+## And re-run
+
+fit <- gadget.fit(wgts = NULL, gd = gd, params.file = 'params.in')
+
+
+
+```
+
+
 * Where do you think it is possible to define model variables in the definition 
 of the fleet file? Change as much as you can so the model can be controlled by 
   the parameter file.  
+```{r eval=FALSE}
+
+
+catch <- 
+  structure(data.frame(year=unique(schedule$year),step=2,area=1,
+                       ## put a gadget parameter for each year
+                       number= sprintf('#catch.%s',unique(schedule$year))),
+                       area_group = list(`1` = 1)) 
+
+```
 
 
 # Recruitment
@@ -405,7 +497,35 @@ For the remainder of the session we are going to play with the simple model we h
 created. Below are a couple of ideas to play with the model:
 
 * Try to insert model variables where ever you can. 
+```{r eval=FALSE} 
+
+stock %>% 
+  gadget_update('doesrenew',
+                normalparam = tibble(year = 1:10, ## Year of recruitment,
+                                     step = 1, ## timing of recruitment (q1)
+                                     area = 1, ## where does the rec. take place
+                                     age = 1, ## age of recruits
+                                     number = sprintf('#rec.%s',year), ## num. of recruits (x10 000)
+                                     mean = '#ml', ## mean length
+                                     stddev = '#sdl', ## std in length
+                                     alpha = '#alpha', ## a in w = aL^b
+                                     beta = '#beta')) %>% 
+  write.gadget.file(gd)
+
+```
+
+
+
 * Investigate how you can introduce randomness into the model, e.g variability in recruitment and fishing effort.
+```{r eval=FALSE}
+callGadget(s=1)
+
+read.gadget.parameters('simple_model/params.out') %>% 
+  init_guess('rec.+',value = 6*rlnorm(10)) %>% 
+  init_guess('catch.+', value = 3*rlnorm(10)) %>% 
+  write.gadget.parameters('simple_model/params.in')
+```
+
 * Change the time horizon, i.e run the model for 50 years, and investigate the 
 effects of different harvest rates on the biomass levels. 
   + For those feeling adventurous think about how to set up a stochastic simulation to estimate the maximum sustainable yield.

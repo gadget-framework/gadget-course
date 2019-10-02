@@ -74,16 +74,24 @@ maxlength <- ling.mat[[1]]$maxlength
 minlength <- ling.imm[[1]]$minlength
 dl <- ling.imm[[1]]$dl
 
+
+
 create_intervals <-  function (prefix, vect) {
   
-    x<-
+  x<-
     structure(vect[1:(length(vect)-1)], names = paste0(prefix, vect[1:(length(vect)-1)])) %>% 
     as.list(.) %>% 
-    purrr::map(~structure(., 
+    purrr::map(~structure(seq(.,vect[-1][which(vect[1:(length(vect)-1)]==.)],1)[-length(seq(.,vect[-1][which(vect[1:(length(vect)-1)]==.)],1))], 
                           min = ., 
                           max = vect[-1][which(vect[1:(length(vect)-1)]==.)]))
-    
-    return(x)
+  
+  x[[length(x)]] <- c(x[[length(x)]], attributes(x[[length(x)]])$max) %>% 
+    structure(., 
+              min = min(.), 
+              max = max(.))
+
+
+return(x)
 }
   #just to see what this function does:
 create_intervals('len',seq(minlength, maxlength, dl)) %>% .[1:3]

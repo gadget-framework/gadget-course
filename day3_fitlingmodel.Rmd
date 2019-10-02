@@ -306,10 +306,6 @@ aggregation files ('Agg/...') that define the bin structure as defined by data a
 all likelihood components, these data and agg files will be written alongside this likelihood 
 file, and a reference to this likelihood file will also be drawn within the 'main' file. 
 
-#### Exercise
-* Suppose that age sampling was done so that the same sampling effort was spread across all 
-ages equally (roughly 30 fish per length range to attain roughly 30 age samples per age).
-Change the likelihood component function for age-length data to the appropriate function.
 
 Incorporating survey index components is very similar except that 1) the fact that the survey 
 index is length-based is determined by the length attribute of the data frame, which sets the
@@ -396,8 +392,6 @@ lik
   
 ```
 
-#### Exercise
-* Change the survey indices to be biomass indices using `gadget_update`.
 
 Finally, there are two components to the likelihood that do not incorporate data but 
 are instead used to ensure that the optimisation search algorithm remains within 
@@ -502,6 +496,12 @@ Now is a good point to scan the resulting 'params.in' file to make sure that
 a parameter was not forgotten and left with default values and bounds.
 
 #### Exercise
+* Suppose that age sampling was done so that the same sampling effort was spread across all 
+ages equally (roughly 30 fish per length range to attain roughly 30 age samples per age).
+Change the likelihood component function for age-length data to the appropriate function.
+
+* Change the survey indices to be biomass indices using `gadget_update`.
+
 * Use `init_guess` to change the bounds of only one set of selectivity parameters.
 
 

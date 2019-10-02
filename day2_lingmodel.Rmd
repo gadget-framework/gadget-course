@@ -550,13 +550,11 @@ lw_pars <- c(0.00000228, 3.20)
 
  ling.imm <-
    ling.imm %>%
-  gadget_update('iseaten',1) %>%  
   gadget_update('refweight',
                 data=data_frame(length=seq(.[[1]]$minlength,.[[1]]$maxlength,.[[1]]$dl),
                                 mean=lw_pars[1]*length^lw_pars[2]))
 ling.mat <-
   ling.mat %>% 
-  gadget_update('iseaten',1) %>% 
   gadget_update('refweight',
                 data=data_frame(length=seq(.[[1]]$minlength,.[[1]]$maxlength,.[[1]]$dl),
                                 mean=lw_pars[1]*length^lw_pars[2]))
@@ -599,48 +597,6 @@ ling.imm %>%
 
 ling.mat %>% 
   write.gadget.file(gd)
-
-```
-
-```{r}
-
- ling.imm <-
-   ling.imm %>%
-  gadget_update('iseaten',1) %>% 
-  gadget_update('doesrenew',
-                normalparam = data_frame(year = schedule$year,
-                                         step = 1,
-                                         area = 1,
-                                         age = .[[1]]$minage,
-                                         number = parse(text=sprintf('ling.rec.scalar*ling.rec.%s',year)) %>% 
-                                           map(to.gadget.formulae) %>% 
-                                           unlist(),
-                                         mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
-                                         stddev = '#ling.rec.sd',
-                                         alpha = '#lingimm.walpha',
-                                         beta = '#lingimm.wbeta')) %>% 
-  gadget_update('refweight',
-                data=data_frame(length=seq(.[[1]]$minlength,.[[1]]$maxlength,.[[1]]$dl),
-                                mean=lw_pars[1]*length^lw_pars[2]))
-
-
-
-
-ling.mat <-
-  ling.mat %>% 
-  gadget_update('iseaten',1) %>% 
-  gadget_update('refweight',
-                data=data_frame(length=seq(.[[1]]$minlength,.[[1]]$maxlength,.[[1]]$dl),
-                                mean=lw_pars[1]*length^lw_pars[2]))
-
-
-## write to file
-ling.imm %>% 
-  write.gadget.file(gd)
-
-ling.mat %>% 
-  write.gadget.file(gd)
-
 
 ```
 

@@ -20,8 +20,8 @@ knitr::opts_chunk$set(echo = FALSE)
 Ecosystem considerations appear to be an obvious, and necessary part,
 of the management of marine resources. Several international
 organizations have stressed the importance of studying ecosystems
-interactions in terms of management [eg. @Sinclair2002255,
-  @nammco1997,@iwc2002]. Optimum fisheries management based on ecosystem
+interactions in terms of management [eg. @sinclair2002responsible,
+  @nammco1997]. Optimum fisheries management based on ecosystem
 consideration is however an elusive target. Even if the model
 sufficiently describes the target ecosystem, @voss2014regional
 illustrated that the definition of the this optimum is dependent on
@@ -42,6 +42,7 @@ information such as those obtained from scientific surveys also needs
 some consideration. There are a number of approaches to ecosystems
 models. According to @plaganyi2007models they broadly fall broadly into
 four categories:
+
 * Whole ecosystem approaches, where all trophic levels of the
   ecosystem are modelled [e.g. @christensen2004ecopath].
 * Dynamic systems models, where where the whole ecosystem and
@@ -62,7 +63,7 @@ Ecopath with Ecosim [@christensen2004ecopath], often try to
 include a larger part of the ecosystem where it becomes harder to
 estimate the model parameters through comparisons with real
 data. These grand models tend to be more useful when answering
-strategic questions, such as discussed by @fulton2008atlantis,
+strategic questions, such as discussed by @fulton2011lessons,
 rather than more tactical issues such as direct advice on next years
 quota.
 
@@ -95,7 +96,7 @@ in @plaganyi2014multispecies].
 A special modelling framework, Gadget [**G**lobally
   **a**pplicable, area--**d**isaggregated
   **e**cosystem **t**oolbox, described
-  in @begley2005gadget], has been developed to aid in the study of
+  in @begley2005gadget], was developed to aid in the study of
 various statistical processes involved in multi--species
 assessments. The development of Gadget conceptually dates back to
 MULTSPEC [@bogstad1997multspec], which described a multi--species
@@ -111,7 +112,7 @@ merged back with Bormicon to form Gadget as part of the dst$^2$
 project [@dst2].
 
 The dst$^2$ project was multi-objective project funded by the European
-Union and began in 1999. The basic
+Union and began in 1999. The bas
 idea was to ``develop fisheries science as far as information will
 support'' the development of statistically sound models of marine
 ecological processes, ``but strictly no further''. Four main
@@ -148,19 +149,19 @@ connection with Gadget in a harvest control simulation.
 \usetikzlibrary{arrows,fit}
   \begin{tikzpicture}[auto,
     %decision/.style={diamond, draw=black, thick, fill=white,
-    %text width=8em, text badly centered,
+    %text width=4em, text badly centered,
     %inner sep=1pt, font=\sffamily\small},
     block_center/.style ={rectangle, draw=black, thick, fill=white,
       text width=8em, text centered,
       minimum height=4em},
     block_left/.style ={rectangle, draw=black, thick, fill=white,
-      text width=16em, text ragged, minimum height=4em, inner sep=6pt},
+      text width=8em, text ragged, minimum height=2em, inner sep=3pt},
     block_noborder/.style ={rectangle, draw=none, thick, fill=none,
-      text width=12em, text centered, minimum height=1em},
+      text width=6em, text centered, minimum height=1em},
     block_assign/.style ={rectangle, draw=black, thick, fill=white,
-      text width=12em, text ragged, minimum height=3em, inner sep=6pt},
+      text width=6em, text ragged, minimum height=1em, inner sep=3pt},
     block_lost/.style ={rectangle, draw=black, thick, fill=white,
-      text width=16em, text ragged, minimum height=3em, inner sep=6pt},
+      text width=8em, text ragged, minimum height=1em, inner sep=3pt},
       line/.style ={draw, thick, -latex', shorten >=0pt}]
     % outlining the flowchart using the PGF/TikZ matrix funtion
       \matrix (m) [column sep=1mm,row sep=4mm] {
@@ -271,7 +272,7 @@ In contrast with Gadget, age-based or stock production type stock
 assessments require data in a fairly processed form. For instance when
 using VPA one requires the total catch in numbers of individuals by
 age. However, apart from catches of fin whales in the North Atlantic
-@iwcistfin2015, one rarely has all catches by numbers at
+@iwcistfin, one rarely has all catches by numbers at
 age. Therefore the age distribution of catches needs to be
 approximated using some combination of age readings, length
 distributions, total catches in tonnes and weight at age [as noted
@@ -319,5 +320,8 @@ simulated annealing, to make the results less sensitive to the initial
 Jeeves and BFGS), to obtain more accurate final values in the 
 neighborhood of the global optimum.
 
+# This course
+
+During this course we will attempt to introduce how the key topic listed here above are implemented in Gadget. You will learn how to set up a simulation model using Gadget using the Rgadget functions. We will briefly discuss the how you can add data to your model and subsequently fit the model, but fuller analysis of how to include data into the model is very case specific and requires an analysis of a developed model. 
 
 # Bibliography

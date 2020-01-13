@@ -106,21 +106,22 @@ leaflet() %>%
 
 ### Tuesday 9:00 - 16:00
 * Recap and examples 
-* More complicated models: [Ling in Iceland](day2_lingmodel.html)
-  + Growth
-  + Maturation as a multi-'stock' process
-  + Initial conditions
-  + Recruitment
-  + Fleet operations
+* [More complicated models: Ling in Iceland](day2_lingmodel.html)
+  + [Growth](day2_lingmodel.html#growth)
+  + [Maturation as a multi-'stock' process](day2_lingmodel.html#maturation_as_multi-‘stock’_models)
+  + [Initial conditions](day2_lingmodel.html#initial_conditions)
+  + [Renewal](day2_lingmodel.html#renewal)
+  + [Fleet operations](day2_lingmodel.html#set_up_fleets_using_catch_or_effort_data)
 * Own projects
 
 ---
 
 ### Wednesday 9:00 - 16:00
-* [Introducing likelihood functions](day3_fitlingmodel.html#introducing_likelihood_functions)
-* [Incorporating data](day3_fitlingmodel.html#fitting_a_gadget_model_to_data) (Ling case study cont.)
-* Set [optimisation function parameters](day3_fitlingmodel.html#set_optimisation_routine) and fit Gadget statistical model using [iterative reweighting](day3_fitlingmodel.html#using_the_iterative_reweighting_function_to_fit_a_gadget_statistical_model)
-* [Visualize Gadget statistical model fit](day3_fitlingmodel.html#visualize_gadget_statistical_model_fit)
+* [Fitting model](day3_fitlingmodel.html)
+  + [Introducing likelihood functions](day3_fitlingmodel.html#introducing_likelihood_functions)
+  + [Incorporating data](day3_fitlingmodel.html#fitting_a_gadget_model_to_data) (Ling case study cont.)
+  + Set [optimisation function parameters](day3_fitlingmodel.html#set_optimisation_routine) and fit Gadget statistical model using [iterative reweighting](day3_fitlingmodel.html#using_the_iterative_reweighting_function_to_fit_a_gadget_statistical_model)
+  + [Visualize Gadget statistical model fit](day3_fitlingmodel.html#visualize_gadget_statistical_model_fit)
 * Own projects
 
 ---

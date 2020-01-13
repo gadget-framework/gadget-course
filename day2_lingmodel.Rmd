@@ -455,16 +455,16 @@ ling.imm <-
 ling.mat <-
   ling.mat %>% 
   gadget_update('initialconditions',
-                normalparam = data_frame(age = .[[1]]$minage:.[[1]]$maxage,
-                                         area = 1,
-                                         age.factor = parse(text=sprintf('exp(-1*(lingmat.M+ling.init.F)*%1$s)*lingmat.init.%1$s',age)) %>% 
-                                           purrr::map(to.gadget.formulae) %>% 
-                                           unlist(),
-                                         area.factor = '#lingmat.init.scalar',
-                                         mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
-                                         stddev = init.sigma.m,
-                                         alpha = '#lingmat.walpha',
-                                         beta = '#lingmat.wbeta'))  
+                normalparam = tibble(age = .[[1]]$minage:.[[1]]$maxage,
+                                     area = 1,
+                                     age.factor = parse(text=sprintf('exp(-1*(lingmat.M+ling.init.F)*%1$s)*lingmat.init.%1$s',age)) %>% 
+                                       purrr::map(to.gadget.formulae) %>% 
+                                       unlist(),
+                                     area.factor = '#lingmat.init.scalar',
+                                     mean = von_b_formula(age,linf='ling.Linf',k='ling.k',recl='ling.recl'),
+                                     stddev = init.sigma.m,
+                                     alpha = '#lingmat.walpha',
+                                     beta = '#lingmat.wbeta'))  
 ## write to file
 ling.imm %>% 
   write.gadget.file(gd)
@@ -551,13 +551,13 @@ lw_pars <- c(0.00000228, 3.20)
  ling.imm <-
    ling.imm %>%
   gadget_update('refweight',
-                data=data_frame(length=seq(.[[1]]$minlength,.[[1]]$maxlength,.[[1]]$dl),
-                                mean=lw_pars[1]*length^lw_pars[2]))
+                data=tibble(length=seq(.[[1]]$minlength,.[[1]]$maxlength,.[[1]]$dl),
+                            mean=lw_pars[1]*length^lw_pars[2]))
 ling.mat <-
   ling.mat %>% 
   gadget_update('refweight',
-                data=data_frame(length=seq(.[[1]]$minlength,.[[1]]$maxlength,.[[1]]$dl),
-                                mean=lw_pars[1]*length^lw_pars[2]))
+                data=tibble(length=seq(.[[1]]$minlength,.[[1]]$maxlength,.[[1]]$dl),
+                            mean=lw_pars[1]*length^lw_pars[2]))
 
 
 ## write to file

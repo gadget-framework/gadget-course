@@ -21,7 +21,7 @@ Let's return to the initial set-up of the ling model and modify it such that
 the stock live on two areas. The first step to do this is to modify the area
 file and stock files to include a second area.
 
-```{r area2}
+```{r area2, message=FALSE}
 
 library(Rgadget)
 

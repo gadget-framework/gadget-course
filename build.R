@@ -6,6 +6,9 @@ if (length(args) == 0) {
     stop("Usage: ./build-docs.R (directory-to-build-into | --serve)")
 }
 
+# Remove old model outputs
+unlink("*_model", recursive = TRUE)
+
 if (args[[1]] == '--serve') {
     output_dir <- tempfile(fileext = ".build-docs")
     serve_output <- TRUE

@@ -570,7 +570,7 @@ faster algorithms. At this point in development, speeding Gadget runs is mostly
 done by using computers with multiple cores and faster processors. 
 
 ```{r}
-read.gadget.optinfo('data_provided/optinfofile')
+read.gadget.file('data_provided', 'optinfofile')
 ```
 
 Here, we have implemented a fitting procedure that begins where the 

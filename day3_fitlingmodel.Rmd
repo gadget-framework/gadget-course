@@ -11,7 +11,7 @@ bibliography: library.bib
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, cache=TRUE, autodep=TRUE)
 ```
 
 ## Introducing likelihood functions
@@ -62,7 +62,7 @@ library(Rgadget)
 
 base_dir <- 'ling_model'
 vers <- c('01-base')
-gd <- gadget.variant.dir(sprintf(paste0("%s/",vers),base_dir))
+gd <- normalizePath(gadget.variant.dir(sprintf(paste0("%s/",vers),base_dir)))
 
 ling.imm <- gadgetstock('lingimm',gd)
 ling.mat <- gadgetstock('lingmat',gd)
@@ -652,7 +652,7 @@ as survey indices representing similar age ranges, are weighted and optimized
 together. 
 
 The `gadget.iterative` function implements the iterative reweighting heuristic and is invoked in the following manner:
-```{r eval=FALSE}
+```{r}
 ## In its current version, gadget.iterative needs to be run from within the
 ## directory that contains the Gadget model
 old <- getwd()
@@ -775,16 +775,8 @@ by default gadget.fit will load the reiterative results stored under 'WGTS',
 but this can be changed. Here we load results from the first run of 
 `gadget.iterative` where no grouping was implemented.
 
-```{r echo=FALSE,message=FALSE,warning=FALSE}
-load(paste(gd,'WGTS/WGTS.Rdata',sep='/'))
-fit <- out
-```
-
-```{r,message=FALSE,eval=FALSE}
-
-#Notice that we are still in the same directory as where gadget.iterative was run
-getwd()
-
+```{r,message=FALSE}
+setwd(gd)  # Make sure we are in gd first
 fit <- gadget.fit()
 ```
 
@@ -902,10 +894,6 @@ plot(fit,data='res.by.year',type='total') + theme(legend.position = 'none') +
   plot(fit,data='res.by.year',type='F') + theme(legend.position = 'none') +
   plot(fit,data = 'res.by.year',type='catch') + theme(legend.position = 'none') +
   plot(fit, data='res.by.year',type='rec')
-
-## go back to the old folder if necessary
-#setwd(old)
-
 ```
 
 #### Exercise

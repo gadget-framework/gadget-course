@@ -97,9 +97,9 @@ leaflet() %>%
 * [Introduction to tidyverse](Tidyverse.html)
 * Deal with installation issues
 * [Getting started](getting_started.html)
-* [Model variable](day1_continued.html#gadget_variables)
-* [Fleets and selection](day1_continued.html#predation)
-* [Recruitment](day1_continued.html#predation)
+* [Model variable](getting_started.html#gadget_variables)
+* [Fleets and selection](getting_started.html#predation)
+* [Recruitment](getting_started.html#predation)
 * Discussions
 
 ---
@@ -165,6 +165,8 @@ leaflet() %>%
 * [Uncertainty estimates with Gadget](docs/TAMS_Elvarsson.pdf)
 * [MSE using ling in Icelandic waters](docs/elvarsson2018ling.pdf)
 * [Cod - herring - sprat in the Baltic](docs/Kulatska_baltic_2018.pdf)
+* [CAPAM talk on the Rgadget environment](http://capamresearch.org/sites/default/files/gadget_pre_Bjarki.pdf)
+* [Length-based assessments](docs/lba.pdf)
 * Assessments that use Gadget:
   + [Ling in 5a](http://www.ices.dk/sites/pub/Publication%20Reports/Stock%20Annexes/2017/lin.27.5a_SA.pdf)
   + [Tusk in 5a and 14](http://www.ices.dk/sites/pub/Publication%20Reports/Stock%20Annexes/2017/lin.27.5a_SA.pdf)
@@ -173,3 +175,4 @@ leaflet() %>%
   + [Atlantic wolffish in Icelandic waters](https://www.hafogvatn.is/static/extras/images/09-AtlanticWolffish_TR%20(1)1141513.pdf)
   + [Greenland halibut in the Northeast Artic](http://ices.dk/sites/pub/Publication%20Reports/Stock%20Annexes/2015/ghl-arct_SA.pdf)
   + [Southern hake](http://www.ices.dk/sites/pub/Publication%20Reports/Stock%20Annexes/2017/hke-soth_SA.pdf)
+ 

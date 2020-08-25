@@ -11,7 +11,7 @@
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,cache = TRUE)
+knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ## Idealogy behind R for Data Science
@@ -54,7 +54,7 @@ library(nycflights13)
 
 Note that a tibble is essentially the same as a data frame (for example made with data.frame) but with some useful information printed (e.g., dimensions and data types), as well as some restrictions placed on how it an be manipulated. These help prevent common errors. For example, recycling is possible as it is in data frames but less flexible:
 
-```{r tibbleerror}
+```{r tibbleerror, eval=FALSE}
 
 flights$year <- c(2013, 2014)
 try(flights$year <- rep(2014, 7))

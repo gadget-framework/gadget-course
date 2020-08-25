@@ -12,7 +12,8 @@ bibliography: library.bib
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
+library(tidyverse)
 library(Rgadget)
 ```
 
@@ -130,8 +131,22 @@ old_stock %>%
 
 fit <- gadget.fit(wgts = NULL,gd=gd,steps = 2)
 
+
+## better color scheme
+
+scale_fill_crayola <- function(n = 100, ...) {
+  
+  # taken from RColorBrewer::brewer.pal(12, "Paired")
+  pal <- c("#A6CEE3", "#1F78B4", "#B2DF8A", "#33A02C",
+           "#FB9A99", "#E31A1C", "#FDBF6F", "#FF7F00",
+           "#CAB2D6", "#6A3D9A", "#FFFF99", "#B15928")
+  pal <- rep(pal, n)
+  ggplot2::scale_fill_manual(values = pal, ...)
+  
+}
+
 plot(fit,data='res.by.year',type='num.total')
-plot(fit,data='stock.std')
+plot(fit,data='stock.std') + scale_fill_crayola()
 ```
 
 And this process can of course continue further. Two processes allow the user to define movement based on size or age. These are the maturation process and the straying process. These behave in a similar manner but there are key differences, in particular how you can define the movement. In the ling example the maturity process was a continuous process where the probability of a maturing at a certain length or age was determing using the following equation:
@@ -190,8 +205,10 @@ stock_b %>%
 
 fit <- gadget.fit(wgts = NULL,gd=gd,steps = 2)
 
-plot(fit,data='res.by.year',type='num.total')
 
+fit$res.by.year %>% 
+  filter(stock %in% c('stock_a','stock_b')) %>% 
+  ggplot(aes(year,total.number,lty = stock)) + geom_line()
 
 ```
 
@@ -407,7 +424,7 @@ fit$res.by.year %>%
 
 In Gadget there are a number of predator-prey relations that can be defined. They include the obvious case where one substock predates the other. Additionally a cannibalistic relationship can be defined if the substocks are modelled as an immature and a mature part of the same species. The predation in Gadget is implemented as follows. Each predator will conceptually be assigned **availability** of a certain prey in comparison with other food sources and a **feeding level**, i.e., fraction of available food the predator wants to consume. Combining these two terms the amount that the predator wants to consume is calculated.
 
-The availability of a certain prey $p$ for a predator $P$ is determined by the prey biomass per length group ($N_{l}W_{l}$, where $W_l$ is the weight at length $l$) and a length based suitability function listed [here](day1_continued.html#predation).
+The availability of a certain prey $p$ for a predator $P$ is determined by the prey biomass per length group ($N_{l}W_{l}$, where $W_l$ is the weight at length $l$) and a length based suitability function listed [here](getting_started.html#predation).
 
 In the simple predator-prey relation between the substocks in Gadget the prey availability to a predator becomes
 $$\frac{F_{Ll}}{\sum_{l'}F_{Ll'}+OA}$$
@@ -419,7 +436,7 @@ where $M_L$ is the maximum consumption of a predator of length $L$ for a particu
 
 Given the feeding level and the prey availability the desired consumption of all predators of length $L$ is
 $$
-\begin{split}\label{eq:feedlev}
+\begin{split}
 C_{L,l}&=N_{L}\Psi_{L}\left[\frac{F_{Ll}}{\sum_{l'}F_{Ll'}+OA}\right]\\
 &=N_{L}M_{L}\frac{F_{Ll}}{\sum_{l'}F_{Ll'}+OA+HA}\\
 \end{split}

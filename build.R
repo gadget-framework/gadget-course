@@ -24,13 +24,12 @@ for (f in c(
         "troubleshooting.Rmd",
         "getting_started.Rmd",
         "Gadget_installation.Rmd",
-        "day1_continued.Rmd",
         "day2_lingmodel.Rmd",
         "day3_fitlingmodel.Rmd",
         "day4_multi_area.Rmd",
         "mfdb.Rmd",
         "stock_interactions.Rmd",
-        "suitability.Rmd",
+#        "suitability.Rmd",
         "")) {
     if (nchar(f) == 0) next
     rmarkdown::render(f, output_dir = output_dir, output_format = "html_document")

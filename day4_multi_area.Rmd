@@ -1,5 +1,5 @@
 ---
-title: "day4_multi_area"
+title: "Defining multi area models"
 output: 
   html_document:
     fig_height: 4
@@ -12,7 +12,7 @@ bibliography: library.bib
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE,message = FALSE)
 ```
 
 ## Alternate structures: multiple areas
@@ -24,6 +24,7 @@ file and stock files to include a second area.
 ```{r area2, message=FALSE}
 
 library(Rgadget)
+library(tidyverse)
 
 #assuming you are beginning in a fresh session; this information should be in an 
 #initialization script
@@ -139,9 +140,7 @@ exist on area 1. Structurally, this is the minimum possible information
 needed to include a second area.
 
 ```{r cache=TRUE,eval=FALSE}
-Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
-
-callGadget(s=1,i='params.in',log = 'log_area2')
+gadget_evaluate(gd,log = 'log_area2')
 
 ```
 
@@ -307,10 +306,7 @@ ling.mat
 ```
 
 ```{r cache=TRUE,eval=FALSE}
-Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
-
-callGadget(s=1,i='params.init',log = 'log_area2')
-
+gadget_evaluate(gd,log = 'log_area2')
 ```
 
 
@@ -834,8 +830,7 @@ the procedure in day 3.
 
 
 ```{r, echo = FALSE}
-Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
-callGadget(s=1,log = 'simple_log')
+gadget_evaluate(gd,log = 'two_area_log')
 lw_pars <- c(0.00000228, 3.20) #same values as in day 2
 
 ## update the input parameters with sane initial guesses
@@ -860,8 +855,7 @@ read.gadget.parameters(sprintf('%s/params.out',gd)) %>%
   write.gadget.parameters(.,file=sprintf('%s/params.in',gd))
 
 read.gadget.parameters(sprintf('%s/params.in',gd))
-
-callGadget(l=1,i='params.in',p='params.init')
+gadget_optimize(gd,params.in ='params.in',params.out = 'params.init')
 
 old <- getwd()
 setwd(gd)

@@ -12,12 +12,229 @@ bibliography: library.bib
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 #require("knitr")
 #opts_knit$set(root.dir = 'ling_model/01-base')
 
 #fs::dir_delete('ling_model')
 ```
+
+## Defining growth
+
+Let us begin by setting the scene with time and area in the typical fashion:
+
+```{r}
+library(tidyverse)
+library(Rgadget)
+
+
+gd <- gadget.variant.dir('simple_growth_model')
+gd
+
+## lets look at the files in gd
+#fs::dir_ls(gd) ## nothing has happened
+
+## Time file
+schedule <- 
+  expand.grid(year = 1:10, step = 1:4) %>% 
+  arrange(year)
+
+gadgetfile('Modelfiles/time',
+           file_type = 'time',
+           components = list(list(firstyear = min(schedule$year),
+                                  firststep=1,
+                                  lastyear=max(schedule$year),
+                                  laststep=4,
+                                  notimesteps=c(4,3,3,3,3)))) %>% ## number of time steps and step length in months
+  write.gadget.file(gd)
+
+
+
+## Area file
+
+gadgetfile('Modelfiles/area',
+           file_type = 'area',
+           components = list(list(areas = 1,
+                                  size = 1,
+                                  temperature = schedule %>% 
+                                    mutate(area = 1, temperature = 5)))) %>% 
+  write.gadget.file(gd)
+
+```
+
+
+
+
+Now that we have attributes of the time and place, we can insert a population into
+it. Remember that population subcomponents are called 'stocks' in Gadget. To do this, we use the
+function `gadgetstock`. However, using gadgetstock also has some default settings built in for
+convenience. The first one is that it automatically sets up the Gadget model with growth
+implemented. If we first generate a default stock (with name 'test'), we find that much of 
+the structural information we supplied above was not supplied, and most of the other settings
+are turned off (value = 0, more on those settings later).
+
+```{r}
+gadgetstock('test',gd,missingOkay = TRUE) 
+```
+
+
+However, growth is the exception: `doesgrow` is turned on (value set to 1) with the growth
+function `lengthvbsimple` implemented and parameters supplied to that function as 
+'test.Linf', 'test.k' (multiplied by 0.001 to keep it help the optimisation routine by 
+placing it on a similar scale to other parameters), 'test.walpha', 'test.wbeta', 
+'test.bbin' (also multiplied by a scalar), and a constant value for `maxlengthgroupgrowth`.
+
+### Growth
+
+Growth is implemented using three processes in Gadget. The first process is described by a 
+growth function that shows how mean body size at age changes over time. The second process
+generates variability around that mean length at age relationship using a beta binomial 
+distribution (currently, no other distributions are implemented). The third process translates
+between lengths and weights.
+
+The first and third processes are implemented together via the chosen growth function. In the 
+default Rgadget `lengthvbsimple` function implementation, the length at infinity and growth rate
+parameters supplied to this function are automatically named `test.Linf` and `test.k` to 
+signify that these parameters only refer to growth within the 'test' stock.  Similarly, an 
+exponential relationship is used to represent growth, using the automatically named 
+`test.walpha` and `test.wbeta` parameters. Because they are by default supplied here and 
+supplied as switches with '#' preceding them, they will be automatically 
+generated in the parameter file when an initial Gadget simulation is run, and their values can 
+then be controlled from this file (as demonstrated in Day 1 material). Beyond `lengthvbsimple`,
+there are a variety of other growth functions that can be implemented, 
+including those that implement starvation, time- and area- dependent growth, or reading weights 
+from a length-weight key. These are described in the [Gadget User Guide](https://hafro.github.io/gadget2/userguide/chap-stock.html#sec:stockgrowth).
+
+The second process is implemented in the default by providing a single switch 'test.bbin' 
+parameter to the beta-binomial distribution, along with a constant value for 
+`maxlengthgroupgrowth`. The beta-binomial distribution is implemented in Gadget because high
+flexibility in the distribution of growth deviations is provided by changing only a single
+estimable parameter. The constant value for `maxlengthgroupgrowth` describes the maximum number of
+length bins a fish is allowed to grow in a single time step, so it should be set high enough to 
+be realistic.
+
+As growth is one of the major determinants of population dynamics, some words of caution should
+be mentioned in any discussion of the implementation of growth in
+Gadget. The first is that the implementation of the Von Bertalanffy growth curves used in Gadget
+are based on predicting changes in length over a time step, based on the length at the end of 
+the previous time step and the length of the time step. Therefore, length is not directly 
+associated with age. This is a useful property when Gadget is being used for estimation, because
+it implies that age data are not a prerequisite to estimating growth (although it does help a 
+lot). However, it also implies that the parameter values obtained when estimating (i.e., the 
+length at infinity and growth rate parameters) are not directly comparable to those estimated
+when using length and age data in non-linear models estimation (standard methods). In particular, 
+length at infinity using standard estimation methods with age data would represent the mean 
+length attainable at infinity, but in Gadget it represents the maximal length that could be 
+expected at infinity, and therefore almost all fish tracked in the model should actually be 
+below this value. If individuals happen to surpass length at infinity in one time step due to  variability in 
+growth implemented via the beta binomial distribution, those individuals will exhibit negative 
+growth in the next time step. This process is not represented by standard methods of 
+estimation using age data. Therefore, care should be taken that any final values used for length
+at infinity within Gadget should be roughly above that expected of most fish observed, in order
+to avoid accidentally implementing unexpected and unrealistic negative growth.
+
+The second word of caution is that although the beta-binomial distribution has proven to be a very useful
+distribution for capturing realistic patterns in the variability of the growth process, it is
+not a very well-known or intuitive distribution. High values of beta produce a narrow
+distribution, while lower values produce a more dispersed distribution with a larger right-hand
+tail. Very low values should be avoided because it changes the expected shape of the
+distribution. In addition, the default value of maximum 15 length bin steps by which a fish
+could grow is set to be generous to allow the beta-binomial enough space to estimate the shape
+of the distribution without being confined by an upper limit. However, in practice, where 
+growth is difficult to estimate or cohorts have very narrow length distributions, setting this
+parameter to a much lower value (2 - 4) can sometimes better capture observed patterns 
+in growth variability.
+
+Finally, it should be kept in mind that growth, like all other time-dependent processes, is
+implemented within Gadget according to the time steps provided, not corresponding to an annual
+basis. For example, a model with quarterly time steps would yield annual growth based on $\Delta t = 1/4$, 
+whereas the same in monthly time steps would yield $\Delta t = 1/12$. Likewise, setting
+`maxlengthgroupgrowth` to 2 would be far more constricting for a model with quarterly time 
+steps than a model with monthly time steps: at most $2 * 4 = 8$ length group steps would be allowed 
+per annum rather than $2 * 12 = 24$. An exception to this implementation is values for
+mortality: they are expected to be suppled as annual mortality rates, and are therefore
+subsequently divided among the time steps before implementation (e.g., so that $M = 0.2$ is the 
+same in quarterly and monthly models).
+
+To play around with the growth model we can now define a simple growth model to test the effect of various parameter settings: 
+
+```{r}
+## Stock file 
+stock <- gadgetstock('growth_stock',gd,missingOkay = TRUE)
+stock
+
+stock <- 
+  stock %>% 
+  gadget_update('stock',
+                livesonareas = 1,
+                maxage = 1,
+                minage = 1,
+                minlength = 0,
+                maxlength = 100,
+                dl = 1) %>% 
+  gadget_update('naturalmortality',0) %>% 
+  gadget_update('refweight',data=tibble(length=0:100,mean=1)) %>% 
+  gadget_update('initialconditions',
+                normalparam = tibble(age = 1,
+                                     area = 1,
+                                     age.factor = 1,   
+                                     area.factor =1,
+                                     mean = 1,
+                                     stddev = .1,
+                                     alpha = 1,
+                                     beta = 1))
+stock %>% 
+  write.gadget.file(gd)
+stock
+```
+
+For the sake of testing let run the model and see if the run is successful:
+```{r}
+gadget_evaluate(gd, log = 'growth_log')
+```
+
+To play with the effects of various settings:
+
+```{r}
+read.gadget.parameters(paste(gd, 'params.out', sep = '/')) %>% 
+  init_guess('alpha', value = 1) %>% 
+  init_guess('beta', value = 1) %>% 
+  init_guess('linf', value = 100) %>% 
+  init_guess('k', value = 100) %>% 
+  write.gadget.parameters(paste(gd, 'params.in', sep = '/'))
+
+
+fit <- gadget.fit(wgts = NULL, params.file = 'params.in', gd = gd)
+
+fit$stock.full %>% 
+  ggplot(aes(length,number,col=as.factor(year))) + 
+  geom_line()
+```
+
+We can also test a different value for $\beta$ in the beta binomial:
+
+```{r}
+## different value for the beta binomial
+read.gadget.parameters(paste(gd, 'params.in', sep = '/')) %>% 
+  init_guess('bbin', value = 1) %>% 
+  write.gadget.parameters(paste(gd, 'params.in2', sep = '/'))
+
+fit2 <- gadget.fit(wgts = NULL, params.file = 'params.in2', gd = gd)
+
+
+fit$stock.full %>%
+  bind_rows(fit2$stock.full,.id='model') %>% 
+  ggplot(aes(length,number,col=as.factor(year),lty = as.factor(model))) + 
+  geom_line()
+
+
+```
+
+#### Excercise 
+
+* Investigate what are the effects of different growth rates ($k$) and $L_\infty$ on the length distribution.
+
+
 
 ## Ling stock assessment in Icelandic waters
 
@@ -69,97 +286,7 @@ gadgetfile('Modelfiles/area',
 
 ```
 
-## Define stocks
 
-Now that we have attributes of the time and place, we can insert a population into
-it. Remember that population subcomponents are called 'stocks' in Gadget. To do this, we use the
-function `gadgetstock`. However, using gadgetstock also has some default settings built in for
-convenience. The first one is that it automatically sets up the Gadget model with growth
-implemented. If we first generate a default stock (with name 'test'), we find that much of 
-the structural information we supplied above was not supplied, and most of the other settings
-are turned off (value = 0, more on those settings later).
-
-```{r}
-gadgetstock('test',gd,missingOkay = TRUE) 
-```
-
-
-However, growth is the exception: `doesgrow` is turned on (value set to 1) with the growth
-function `lengthvbsimple` implemented and parameters supplied to that function as 
-'test.Linf', 'test.k' (multiplied by 0.001 to keep it help the optimisation routine by 
-placing it on a similar scale to other parameters), 'test.walpha', 'test.wbeta', 
-'test.bbin' (also multiplied by a scalar), and a constant value for `maxlengthgroupgrowth`.
-
-### Growth
-
-Growth is implemented using three processes in Gadget. The first process is described by a 
-growth function that shows how mean body size at age changes over time. The second process
-generates variability around that mean length at age relationship using a beta binomial 
-distribution (currently, no other distributions are implemented). The third process translates
-between lengths and weights.
-
-The first and third processes are implemented together via the chosen growth function. In the 
-default Rgadget `lengthvbsimple` function implementation, the length at infinity and growth rate
-parameters supplied to this function are automatically named 'test.Linf' and 'test.k' to 
-signify that these parameters only refer to growth within the 'test' stock.  Similarly, an 
-exponential relationship is used to represent growth, using the automatically named 
-'test.walpha' and 'test.wbeta' parameters. Because they are by default supplied here and 
-supplied as switches with '#' preceding them, they will be automatically 
-generated in the parameter file when an initial Gadget simulation is run, and their values can 
-then be controlled from this file (as demonstrated in Day 1 material). Beyond `lengthvbsimple`,
-there are a variety of other growth functions that can be implemented, 
-including those that implement starvation, time- and area- dependent growth, or reading weights 
-from a length-weight key. These are described in the [Gadget User Guide](https://hafro.github.io/gadget/docs/userguide).
-
-The second process is implemented in the default by providing a single switch 'test.bbin' 
-parameter to the beta-binomial distribution, along with a constant value for 
-`maxlengthgroupgrowth`. The beta-binomial distribution is implemented in Gadget because high
-flexibility in the distribution of growth deviations is provided by changing only a single
-estimable parameter. The constant value for `maxlengthgroupgrowth` describes the maximum number of
-length bins a fish is allowed to grow in a single time step, so it should be set high enough to 
-be realistic.
-
-As growth is one of the major determinants of population dynamics, some words of caution should
-be mentioned in any discussion of the implementation of growth in
-Gadget. The first is that the implementation of the Von Bertalanffy growth curves used in Gadget
-are based on predicting changes in length over a time step, based on the length at the end of 
-the previous time step and the length of the time step. Therefore, length is not directly 
-associated with age. This is a useful property when Gadget is being used for estimation, because
-it implies that age data are not a prerequisite to estimating growth (although it does help a 
-lot). However, it also implies that the parameter values obtained when estimating (i.e., the 
-length at infinity and growth rate parameters) are not directly comparable to those estimated
-when using length and age data in non-linear models estimation (standard methods). In particular, 
-length at infinity using standard estimation methods with age data would represent the mean 
-length attainable at infinity, but in Gadget it represents the maximal length that could be 
-expected at infinity, and therefore almost all fish tracked in the model should actually be 
-below this value. If individuals happen to surpass length at infinity in one time step due to  variability in 
-growth implemented via the beta binomial distribution, those individuals will exhibit negative 
-growth in the next time step. This process is not represented by standard methods of 
-estimation using age data. Therefore, care should be taken that any final values used for length
-at infinity within Gadget should be roughly above that expected of most fish observed, in order
-to avoid accidentally implementing unexpected and unrealistic negative growth.
-
-The second word of caution is that although the beta-binomial distribution has proven to be a very useful
-distribution for capturing realistic patterns in the variability of the growth process, it is
-not a very well-known or intuitive distribution. High values of beta produce a narrow
-distribution, while lower values produce a more dispersed distribution with a larger right-hand
-tail. Very low values should be avoided because it changes the expected shape of the
-distribution. In addition, the default value of maximum 15 length bin steps by which a fish
-could grow is set to be generous to allow the beta-binomial enough space to estimate the shape
-of the distribution without being confined by an upper limit. However, in practice, where 
-growth is difficult to estimate or cohorts have very narrow length distributions, setting this
-parameter to a much lower value (2 - 4) can sometimes better capture observed patterns 
-in growth variability.
-
-Finally, it should be kept in mind that growth, like all other time-dependent processes, is
-implemented within Gadget according to the time steps provided, not corresponding to an annual
-basis. For example, a model with quarterly time steps would yield annual growth based on $\Delta t = 1/4$, whereas the same in monthly time steps would yield $\Delta t = 1/12$. Likewise, setting
-`maxlengthgroupgrowth` to 2 would be far more constricting for a model with quarterly time 
-steps than a model with monthly time steps: at most $2 * 4 = 8$ length group steps would be allowed 
-per annum rather than $2 * 12 = 24$. An exception to this implementation is values for
-mortality: they are expected to be suppled as annual mortality rates, and are therefore
-subsequently divided among the time steps before implementation (e.g., so that $M = 0.2$ is the 
-same in quarterly and monthly models).
 
 ### Maturation as multi-'stock' models
 
@@ -730,7 +857,7 @@ gadgetfleet('Modelfiles/fleet',gd,missingOkay = TRUE) %>%
 ```
 
 #### Exercise
-* Try changing the longline and foreign fleet to the andersenfleet function (see commented 
+* Try changing the longline and foreign fleet to the `andersenfleet` function (see commented 
 out code under the foreign fleet, as well as day 1 material). Use the Rgadget helper function
 to explore it. Under what conditions could this function be useful? [Hint: also look up the
 description in the [Gadget User Guide](https://hafro.github.io/gadget/docs/userguide)]
@@ -743,8 +870,7 @@ directory to the model path, and finally call Gadget to do a simple simulation.
 
 ```{r}
 
-Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
-callGadget(s=1,log = 'simple_log')
+gadget_evaluate(gd,log = 'simple_log')
 
 read.gadget.parameters(paste0(gd,'/params.out'))
 ```
@@ -754,9 +880,37 @@ are provided. To make it a little more interesting, we change the input paramete
 one that we know contains some reasonable values.
 
 ```{r}
-callGadget(s=1,log = 'simple_log2', i='../../data_provided/params.forsim')
+params.forsim <- 
+  read.gadget.parameters('data_provided/params.forsim')
 
-read.gadget.parameters('data_provided/params.forsim')
+gadget_evaluate(gd,log = 'simple_log2',params.in = params.forsim)
+
+params.forsim
 ```
+
+We can as before look into the simulation results:
+
+```{r}
+params.forsim %>% 
+  write.gadget.parameters(paste(gd, 'params.forsim', sep= '/'))
+
+fit <- gadget.fit(gd = gd, wgts = NULL, params.file = 'params.forsim')
+
+## standard ICES plot
+
+library(patchwork)
+plot(fit, data = 'res.by.year',type='catch') + 
+  plot(fit, data =  'res.by.year', type = 'rec') + 
+  plot(fit, data = 'res.by.year', type = 'F') +
+  plot(fit, data = 'res.by.year', type = 'total')
+```
+
+## Talking points
+
+* How would you structure your model?
+  + Split by sex?
+  + How many fleets?
+  + ... 
+
 
   

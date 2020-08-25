@@ -1,4 +1,5 @@
 ---
+title: "Fitting models"
 output: 
   html_document:
     fig_height: 4
@@ -11,7 +12,7 @@ bibliography: library.bib
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, cache=TRUE, autodep=TRUE)
+knitr::opts_chunk$set(echo = TRUE, cache=TRUE, autodep=TRUE, warning = FALSE,message = FALSE)
 ```
 
 ## Introducing likelihood functions
@@ -462,9 +463,7 @@ conveniently generating an initial parameter file with the correct Gadget
 structure containing all the parameters specified throughout the Gadget model files. 
 
 ```{r}
-Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd))
-callGadget(s=1,log = 'simple_log') 
-
+gadget_evaluate(gd,log = 'ling_log')
 read.gadget.parameters(paste0(gd,'/params.out'))
 ```
 
@@ -523,7 +522,7 @@ values should be written (below as `p='params.init'`).
 
 ```{r cache=TRUE, eval = FALSE}
 timestamp()
-callGadget(l=1,i='params.in',p='params.init')
+gadget_optimize(params.in = 'params.in', params.out = 'params.init')
 timestamp()
 
 ```
@@ -570,7 +569,8 @@ faster algorithms. At this point in development, speeding Gadget runs is mostly
 done by using computers with multiple cores and faster processors. 
 
 ```{r}
-read.gadget.file('data_provided', 'optinfofile')
+optinfo <- read.gadget.file('data_provided', 'optinfofile')
+optinfo
 ```
 
 Here, we have implemented a fitting procedure that begins where the 
@@ -580,7 +580,7 @@ well-defined search as described by the 'optinfofile'.
 
 ```{r cache=TRUE, eval = FALSE}
 timestamp()
-callGadget(l=1,i='params.init',p='params.opt', opt = '../../data_provided/optinfofile')
+gadget_optimize(params.in = 'params.in', params.out = 'params.init', control = optinfo)
 timestamp()
 ```
 

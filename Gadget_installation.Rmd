@@ -15,11 +15,26 @@ bibliography: library.bib
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Gadget is housed on the [MFRI github site](https://github.com/Hafro/gadget). Basic
-installation instructions can be found there, below they are given step-by-step. Notice
-that the extremely useful resource 'Gadget User Guide' is included as a pdf with the installation, but it is also available [on-line](https://hafro.github.io/gadget/docs/userguide).
+Gadget development repository is housed on the [MFRI github site](https://github.com/Hafro/gadget2). For convenience Gadget has been wrapped up in a R-package  available from CRAN using the following command:
 
-# Prerequisites
+```
+install.packages('gadget2')
+
+```
+or if you need the bleeding edge version of Gadget you can also install it directly with:
+
+```
+devtools::install_github('hafro/gadget2')
+```
+
+Windows users note that you may want to install the `icesTAF` R package to be able to convert Windows line-endings to unix line-endings with the `dos2unix` function, which when not corrected could cause all kinds of grieve. 
+
+
+# Command line version
+
+Alternatively you can install gadget from source as a command line tool. Basic
+installation instructions can be found on the github site but below they are given step-by-step. Notice
+that the extremely useful resource 'Gadget User Guide' is included as a pdf with the installation, but it is also available [on-line](https://hafro.github.io/gadget2/userguide/). 
 
 To compile Gadget one needs a working C++ compiler and a version of Make installed on the
 computer.

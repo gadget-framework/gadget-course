@@ -199,8 +199,8 @@ To play with the effects of various settings:
 read.gadget.parameters(paste(gd, 'params.out', sep = '/')) %>% 
   init_guess('alpha', value = 1) %>% 
   init_guess('beta', value = 1) %>% 
-  init_guess('linf', value = 100) %>% 
-  init_guess('k', value = 100) %>% 
+  init_guess('Linf', value = 100) %>% 
+  init_guess('k$', value = 100) %>% 
   write.gadget.parameters(paste(gd, 'params.in', sep = '/'))
 
 
@@ -216,7 +216,7 @@ We can also test a different value for $\beta$ in the beta binomial:
 ```{r}
 ## different value for the beta binomial
 read.gadget.parameters(paste(gd, 'params.in', sep = '/')) %>% 
-  init_guess('bbin', value = 1) %>% 
+  init_guess('bbin', value = 100) %>% 
   write.gadget.parameters(paste(gd, 'params.in2', sep = '/'))
 
 fit2 <- gadget.fit(wgts = NULL, params.file = 'params.in2', gd = gd)
@@ -414,7 +414,7 @@ using the `doesmove` component).
 For all ages within the immature stock, at what length individuals in the immature stock
 become mature is governed by the maturation function in the `doesmature` component. 
 When choosing a maturity function, both the rate of maturation and timing of maturity should
-be considered. For example, the maturity function used below ('continuous') reflects a
+be considered. For example, the maturity function used below (`continuous`) reflects a
 maturation that occurs continuously through the year (not seasonal) at a rate with a 
 logistic dependence on length, age, or both. The first two parameters listed under 
 the `coefficients` correspond with length-dependency (alpha and L50, respectively), whereas
@@ -509,13 +509,13 @@ factor and length-weight key, or supply the numbers that make up the stock distr
 than a theoretical distribution. Implementation methods for these should be referred to in
 the [Gadget User Guide](https://hafro.github.io/gadget/docs/userguide).
 
-The data frame supplied to `normparam` needs one row per age x area combination; therefore, the 
+The data frame supplied to `normalparam` needs one row per age x area combination; therefore, the 
 first two columns in our example specify ages found in the stock (first columns), all with an area set to 1 (second column). [That is, using
-the `.` placeholder passes the ling.imm object to that location, where minage and maxage 
+the `.` placeholder passes the `ling.imm` object to that location, where `minage` and `maxage` 
 information is extracted]. The next two columns implement differences among ages and 
-differences among areas respectively, by supplying age- and area-specific factors against 
-which the 10 000 initial fish will be multiplied. These columns are called 'age.factor' and 
-'area.factor', respectively. The next two columns reflect the mean 
+differences among areas respectively, by supplying age - and area - specific factors against 
+which the 10 000 initial fish will be multiplied. These columns are called `age.factor` and 
+`area.factor`, respectively. The next two columns reflect the mean 
 length and standard deviation that will be used to distribute lengths for that age x area 
 combination. Note that although different lengths at age could in theory be supplied for 
 different areas, only one growth function is supplied for all areas, so justifying the utility 
@@ -535,27 +535,40 @@ according to a total mortality experienced by the population at the beginning of
 series. Second, we would like to set mean lengths of the age groups to be those expected by the
 same Von Bertalanffy relationship implemented under the **Growth** section. 
 
-To implement the first pattern via the age.factor column, a different equation per age is supplied. Each equation is based on an age-specific intial number parameter (e.g.,
-'lingimm.init.3' for age 3), which is then multiplied times the exponent of negative total
+To implement the first pattern via the age.factor column, a different equation per age is supplied. Each equation is based on an age-specific initial number parameter (e.g.,
+`lingimm.init.3` for age 3), which is then multiplied times the exponent of negative total
 mortality rate times the number of annual time steps since recruitment (i.e., the age). This
 ensures that the distribution in numbers among ages will be close to that expected simply 
-from natural mortality. In additions, the presupplied natural mortality parameter 'lingimm.M' 
-is added to user-defined parameter 'ling.init.F', which represents an initial level of fishing
+from natural mortality. In addition, the pre-supplied natural mortality parameter `lingimm.M` 
+is added to user-defined parameter `ling.init.F`, which represents an initial level of fishing
 mortality experienced before the first time step of the model. Doing this slightly changes the
 distribution to account for prior effects of fishing. Under this transformation, all
-initial parameters ('lingimm.init.3', 'lingimm.init.4', etc.) have the same interpretation:
+initial parameters (`lingimm.init.3`, `lingimm.init.4`, etc.) have the same interpretation:
 they are the back-calculated recruitment values for the year classes to which the observed 
-ages correspond. Implementing the intial parameters with a consistent interpretation yields 
+ages correspond. Implementing the initial parameters with a consistent interpretation yields 
 the benefits of expecting their values to be on roughly the same scale and fosters easier
 communication (e.g., fixing all age-specific parameters to the same value would denote fixed
-recruitment during the years prior to the time series).
+recruitment during the years prior to the time series). So in mathematical terms the initial 
+number of fish at age a will:
+$$N_a = 10 000 \times q \nu_a e^{-a(M_a+F_0)}$$
+And is written as:
+
+```{r}
+quote(exp(-1*(lingimm.M+ling.init.F)*3)*lingimm.init.3) %>% to.gadget.formulae()
+```
 
 To implement the second pattern, in mean lengths-at-age provided, we can borrow an Rgadget
-convenience function 'von_b_formula' that writes out the `lengthvbsimple` equations in Gadget-friendly formulae.
+convenience function `von_b_formula` that writes out the `lengthvbsimple` equations in Gadget-friendly formulae.
+
+```{r}
+von_b_formula(3,linf='ling.Linf',k='ling.k',recl='ling.recl')
+```
+
+
 To be internally consistent, the parameters supplied to this convenience function, as well as
 the alpha and beta columns defined in the `normalparam` data frame, are set to be the same as
 those used when implementing growth in the `doesgrow` component above. Notice one more
-parameter called 'ling.recl' is also supplied for internal consistency with recruitment
+parameter called `ling.recl` is also supplied for internal consistency with recruitment
 settings, which are explained in the next section.
 
 ```{r}
@@ -630,7 +643,7 @@ distribution or a numerical distribution). A factor is then supplied under the c
 combinations. Below, we have provided a knew parameter for each year (beginning with
 `ling.rec`), each of which are multiplied by the scalar `ling.rec.scalar` which is
 used to scale the whole time series of renewal values. Here, lengths are supplied via a normal parametric 
-distribution (as under initial conditions), so a column is also provided for mean and stddev
+distribution (as under initial conditions), so a column is also provided for `mean` and `stddev`
 to designate the parametric distribution. Just as in initial conditions, the mean was set 
 using the same Von Bertalanffy equation and parameters, including the `ling.recl`, which
 represents length at age 0. In the last columns, the same `ling.walpha` and `ling.wbeta` 
@@ -658,7 +671,7 @@ ling.imm %>%
 
 ```
 
-Note that the new files 'Modelfiles/lingimm.rec.normalparam' is created to hold the 
+Note that the new file `Modelfiles/lingimm.rec.normalparam` is created to hold the 
 information in the data frame. 
 
 ### Reference Weight
@@ -666,7 +679,7 @@ information in the data frame.
 Some implementations of the initial conditions and growth functions translate between
 lengths and weights via a constant length-weight key. Although the functions provided in our
 example here do not depend on it, we provide an example in the following code for how
-gadget_update can be used to update the `refweight` component to provide the key as a data
+`gadget_update` can be used to update the `refweight` component to provide the key as a data
 frame, which is the same for both stocks.
 
 ```{r}
@@ -697,7 +710,7 @@ ling.mat %>%
 
 ```
 
-Note that the new files 'Modelfiles/lingimm.refwgt' and 'Modelfiles/lingmat.refwgt' 
+Note that the new files `Modelfiles/lingimm.refwgt` and `Modelfiles/lingmat.refwgt` 
 are created to hold the information in the data frames. 
 
 
@@ -731,8 +744,8 @@ ling.mat %>%
 
 If fleets will be set up using data, catch or effort data must be first organized in the same
 structure as the model (units kg for catch). Here we continue with `totalfleet` examples that
-requires catch data for four fishing fleets: 'foreign', longline, bottom trawl, and gillnet
-fleets. [Foreign are assumed to use long lines, but are kept separate because the have no
+requires catch data for four fishing fleets: "foreign", "longline", "bottom trawl", and "gillnet"
+fleets. [Foreign vessels are assumed to use long lines, but are kept separate because the have no
 biological data from fishery samples - more on this later]. Fleets are separated by gear so
 that a different selectivity curve can be implemented for each fleet (but foreign is assumed
 to have the same selectivity as the longline fleet). The survey is also
@@ -775,8 +788,8 @@ through a simple harvest control rule based on the previous year's biomass level
 splits it among the fleet.
 
 Setting up a fleet using `gadget_update` requires setting the fleet type (below to
-`totalfleet`), giving the fleet a name (below 'surv', 'lln','bmt', 'gil', and 'foreign'),
-designating a 'suitability' function, and supplying the catch data described above.
+`totalfleet`), giving the fleet a name (below `surv`, `lln`, `bmt`, `gil`, and `foreign`),
+designating a `suitability` function, and supplying the catch data described above.
 
 In Gadget, the fleets act as a simple predator in the model, with consumption controlled 
 by input or output data to the fleet (i.e., effort or landings), depending on the type 
@@ -864,13 +877,11 @@ description in the [Gadget User Guide](https://hafro.github.io/gadget/docs/userg
 
 ## Run the simulation using pre-determined parameters 
 
-Now we run Gadget on the ling model just as in the simple model example. Here we chose to 
-set the directory to model location, then use `Sys.setenv` to set the Gadget working 
-directory to the model path, and finally call Gadget to do a simple simulation.
+Now we run Gadget on the ling model just as in the simple model example. 
 
 ```{r}
 
-gadget_evaluate(gd,log = 'simple_log')
+gadget_evaluate(gd,log = 'ling_log')
 
 read.gadget.parameters(paste0(gd,'/params.out'))
 ```

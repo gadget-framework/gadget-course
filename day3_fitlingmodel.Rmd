@@ -536,7 +536,7 @@ values should be written (below as `params.out = 'params.init'`).
 
 ```{r cache=TRUE, eval = FALSE}
 timestamp()
-gadget_optimize(params.in = 'params.in', params.out = 'params.init')
+gadget_optimize(gd,params.in = 'params.in', params.out = 'params.init')
 timestamp()
 
 ```
@@ -594,7 +594,7 @@ well-defined search as described by the 'optinfofile'.
 
 ```{r cache=TRUE, eval = FALSE}
 timestamp()
-gadget_optimize(params.in = 'params.in', params.out = 'params.init', control = optinfo)
+gadget_optimize(gd,params.in = 'params.in', params.out = 'params.init', control = optinfo)
 timestamp()
 ```
 

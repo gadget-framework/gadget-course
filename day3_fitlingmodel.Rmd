@@ -15,7 +15,7 @@ bibliography: library.bib
 knitr::opts_chunk$set(echo = TRUE, cache=TRUE, autodep=TRUE, warning = FALSE,message = FALSE)
 ```
 
-## Introducing likelihood functions
+# Introducing likelihood functions
 
 In Gadget, a likelihood function is specified by supplying likelihood components within the likelihood
 file, which is referred to by the main file. Individual likelihood component scores are summed together 
@@ -25,7 +25,7 @@ Although we refer to 'likelihood scores' throughout this description, it should 
 are more accurately sums of log likelihoods, so that the objective function used for model fitting attempts to minimize the total likelihood score.
 
 
-### Incorporating data (Ling case study cont.)
+## Incorporating data (Ling case study cont.)
 In introducing likelihood components, we will first go through those used within the ling example
 in detail, but only mention the other types as they follow similar patterns of implementation. 
 To use Rgadget to set up likelihood files, the first consideration that should be made is what 
@@ -56,6 +56,7 @@ database management and data extraction [more on this in day 5].
 
 ```{r likelihood, message=FALSE}
 
+library(tidyverse)
 library(Rgadget)
 
 #assuming you are beginning in a fresh session; this information should be in an 
@@ -90,39 +91,40 @@ create_intervals <-  function (prefix, vect) {
     structure(., 
               min = min(.), 
               max = max(.))
-
-
-return(x)
+  
+  
+  return(x)
 }
-  #just to see what this function does:
+#just to see what this function does:
 create_intervals('len',seq(minlength, maxlength, dl)) %>% .[1:3]
 ```
 
 ```{r}
 #catch distribution data available:
-  #length distributions do not regard age bins
+#length distributions do not regard age bins
 ldist.surv <- structure(read_csv('data_provided/ldist_sur.csv'),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
-            length = create_intervals('len',seq(minlength, maxlength, dl)),
-            age = create_intervals('all',seq(minage, maxage, maxage-minage))
-            )
+                        area = list(area_file[[1]]$areas) %>% set_names(.),
+                        length = create_intervals('len',seq(minlength, maxlength, dl)),
+                        age = create_intervals('all',seq(minage, maxage, maxage-minage))
+)
 ldist.lln <- structure(read_csv('data_provided/ldist_lln.csv'),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
-            length = create_intervals('len',seq(minlength, maxlength, dl)),
-            age = create_intervals('all',seq(minage, maxage, maxage-minage))
-            )
+                       area = list(area_file[[1]]$areas) %>% set_names(.),
+                       length = create_intervals('len',seq(minlength, maxlength, dl)),
+                       age = create_intervals('all',seq(minage, maxage, maxage-minage))
+)
 ldist.bmt <- structure(read_csv('data_provided/ldist_bmt.csv'),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
-            length = create_intervals('len',seq(minlength, maxlength, dl)),
-            age = create_intervals('all',seq(minage, maxage, maxage-minage))
-            )
+                       area = list(area_file[[1]]$areas) %>% set_names(.),
+                       length = create_intervals('len',seq(minlength, maxlength, dl)),
+                       age = create_intervals('all',seq(minage, maxage, maxage-minage))
+)
 ldist.gil <- structure(read_csv('data_provided/ldist_gil.csv'),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
-            length = create_intervals('len',seq(minlength, maxlength, dl)),
-            age = create_intervals('all',seq(minage, maxage, maxage-minage))
-            )
+                       area = list(area_file[[1]]$areas) %>% set_names(.),
+                       length = create_intervals('len',seq(minlength, maxlength, dl)),
+                       age = create_intervals('all',seq(minage, maxage, maxage-minage))
+)
 
-attributes(ldist.surv)
+attributes(ldist.surv) %>% 
+  purrr::map(head)
 
 ```
 
@@ -130,39 +132,39 @@ attributes(ldist.surv)
 
 #age bins needed for age-length distributions
 aldist.surv <- structure(read_csv('data_provided/aldist_sur.csv'),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
-            length = create_intervals('len',seq(minlength, maxlength, dl)),
-            age = create_intervals('age',c(minage:11, maxage))
-            )
+                         area = list(area_file[[1]]$areas) %>% set_names(.),
+                         length = create_intervals('len',seq(minlength, maxlength, dl)),
+                         age = create_intervals('age',c(minage:11, maxage))
+)
 aldist.lln <- structure(read_csv('data_provided/aldist_lln.csv'),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
-            length = create_intervals('len',seq(minlength, maxlength, dl)),
-            age = create_intervals('age',c(minage:11, maxage))
-            )
+                        area = list(area_file[[1]]$areas) %>% set_names(.),
+                        length = create_intervals('len',seq(minlength, maxlength, dl)),
+                        age = create_intervals('age',c(minage:11, maxage))
+)
 aldist.bmt <- structure(read_csv('data_provided/aldist_bmt.csv'),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
-            length = create_intervals('len',seq(minlength, maxlength, dl)),
-            age = create_intervals('age',c(minage:11, maxage))
-            )
+                        area = list(area_file[[1]]$areas) %>% set_names(.),
+                        length = create_intervals('len',seq(minlength, maxlength, dl)),
+                        age = create_intervals('age',c(minage:11, maxage))
+)
 aldist.gil <- structure(read_csv('data_provided/aldist_gil.csv'),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
-            length = create_intervals('len',seq(minlength, maxlength, dl)),
-            age = create_intervals('age',c(minage:11, maxage))
-            )
+                        area = list(area_file[[1]]$areas) %>% set_names(.),
+                        length = create_intervals('len',seq(minlength, maxlength, dl)),
+                        age = create_intervals('age',c(minage:11, maxage))
+)
 
-attributes(aldist.surv)
+attributes(aldist.surv)$age %>% head(3)
 ```
 
 ```{r}
 
 #stock distribution data available:
 matp.surv <- structure(read_csv('data_provided/matp_sur.csv'),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
-            length = create_intervals('len',seq(minlength, maxlength, dl*2)),
-            age = list(mat_ages = ling.mat[[1]]$minage:ling.mat[[1]]$maxage)
-            )
+                       area = list(area_file[[1]]$areas) %>% set_names(.),
+                       length = create_intervals('len',seq(minlength, maxlength, dl*2)),
+                       age = list(mat_ages = ling.mat[[1]]$minage:ling.mat[[1]]$maxage)
+)
 
-attributes(matp.surv)
+#attributes(matp.surv)
 
 ```
 
@@ -180,54 +182,59 @@ and area combination (multiple areas may be within a data frame).
 
 #survey index data available: 
 slices <- 
-  list('len20' = c(20,52), 'len52' = c(52,60), 'len60' = c(60,72), 'len72' = c(72,80), 'len80' = c(80,92), 'len92' = c(92,100), 'len100' = c(100,160) )
+  list('len20' = c(20,52), 'len52' = c(52,60), 'len60' = c(60,72), 
+       'len72' = c(72,80), 'len80' = c(80,92), 'len92' = c(92,100), 
+       'len100' = c(100,160) )
 
 # just to illustrate slices:
 
 ldist.surv %>% 
   mutate(length = substring(length, 4) %>% as.numeric) %>% 
-  group_by(length) %>% 
+  filter(year %in% c(2000,2005,2010,2015)) %>% 
+  group_by(year,length) %>% 
   summarise(n = sum(number)) %>% 
-  ggplot(aes(x = length, y = n)) + geom_col() + 
+  ggplot(aes(x = length, y = n)) + geom_line() + 
   geom_vline(aes(xintercept = length), 
              lty = 2, col = 'orange', 
              data = slices %>% 
                bind_rows() %>% 
                t() %>% .[-1,1] %>% 
-               tibble(length = .))
+               tibble(length = .)) + 
+  facet_wrap(~year)
 ```
 
 ```{r}
 # set up aggregation info for length-based survey indices
 SI1 <- structure(read_csv('data_provided/SI1.csv'),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
-            length = create_intervals('len', slices[[1]]))
+                 area = list(area_file[[1]]$areas) %>% set_names(.),
+                 length = create_intervals('len', slices[[1]]))
 SI2 <- structure(read_csv('data_provided/SI2.csv'),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
-            length = create_intervals('len', slices[[2]]))
+                 area = list(area_file[[1]]$areas) %>% set_names(.),
+                 length = create_intervals('len', slices[[2]]))
 SI3 <- structure(read_csv('data_provided/SI3.csv'),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
-            length = create_intervals('len', slices[[3]]))
+                 area = list(area_file[[1]]$areas) %>% set_names(.),
+                 length = create_intervals('len', slices[[3]]))
 SI4 <- structure(read_csv('data_provided/SI4.csv'),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
-            length = create_intervals('len', slices[[4]]))
+                 area = list(area_file[[1]]$areas) %>% set_names(.),
+                 length = create_intervals('len', slices[[4]]))
 SI5 <- structure(read_csv('data_provided/SI5.csv'),
-             area = list(area_file[[1]]$areas) %>% set_names(.),
-            length = create_intervals('len', slices[[5]]))
+                 area = list(area_file[[1]]$areas) %>% set_names(.),
+                 length = create_intervals('len', slices[[5]]))
 SI6 <- structure(read_csv('data_provided/SI6.csv'),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
-            length = create_intervals('len', slices[[6]]))
+                 area = list(area_file[[1]]$areas) %>% set_names(.),
+                 length = create_intervals('len', slices[[6]]))
 SI7 <- structure(read_csv('data_provided/SI7.csv'),
-            area = list(area_file[[1]]$areas) %>% set_names(.),
-            length = create_intervals('len', slices[[7]]))
+                 area = list(area_file[[1]]$areas) %>% set_names(.),
+                 length = create_intervals('len', slices[[7]]))
 
 ```
 
-#### Exercise
+### Exercise
+
 * Change the aggregation levels of the age-length distribution data so that data are compared to model results within the bins 3 - 6, 7, 8, 9, 10 - 11, and 12 - 15.
 
 
-### Setting up likelihood components
+## Setting up likelihood components
 Using Rgadget, writing the files that specify the likelihood componenets is straightforward. 
 When calling `gadgetlikelihood` and then writing it with `write.gadget.file`, a likelihood file
 is created within R and written to disc.  The likelihood file contains a list of likelihood 
@@ -255,13 +262,13 @@ lik <-
                 weight = 1,
                 data = ldist.surv,
                 fleetnames = c("surv"),
-                stocknames =c("lingimm","lingmat")) %>% 
+                stocknames = c("lingimm","lingmat")) %>% 
   gadget_update("catchdistribution",
                 name = "aldist.surv",
                 weight = 1,
                 data = aldist.surv, 
                 fleetnames = c("surv"),
-                stocknames =c("lingimm","lingmat")) %>% 
+                stocknames = c("lingimm","lingmat")) %>% 
   gadget_update("catchdistribution",
                 name = "ldist.lln",
                 weight = 1,
@@ -271,7 +278,7 @@ lik <-
   gadget_update("catchdistribution",
                 name = "aldist.lln",
                 weight = 1,
-                  data = aldist.lln,
+                data = aldist.lln,
                 fleetnames = c("lln"),
                 stocknames = c("lingimm","lingmat")) %>% 
   gadget_update("catchdistribution",
@@ -301,7 +308,7 @@ lik <-
   gadget_update("stockdistribution",
                 name = "matp.surv",
                 weight = 1,
-                  data = matp.surv,
+                data = matp.surv,
                 fleetnames = c("surv"),
                 stocknames =c("lingimm","lingmat")) 
 
@@ -315,6 +322,13 @@ aggregation files ('Agg/...') that define the bin structure as defined by data a
 all likelihood components, these data and agg files will be written alongside this likelihood 
 file, and a reference to this likelihood file will also be drawn within the 'main' file. 
 
+You can also see how individual aggregation files will be printed by e.g.:
+```{r}
+lik[[2]]$ageaggfile
+```
+which gives you the age aggregation for the second likelihood component.
+
+### Setting up survey indices
 
 Incorporating survey index components is very similar except that 1) the fact that the survey 
 index is length-based is determined by the length attribute of the data frame, which sets the
@@ -347,7 +361,7 @@ matched to stock size observations at a given time and area; therefore, if there
 length- or age-based survey index series with the same time and area, they can each be 
 incorporated as separate likelihood components as long as they have different names. 
 
-```{r}
+```{r, results='hide'}
 lik <-
   lik %>%  
   gadget_update("surveyindices",
@@ -398,8 +412,9 @@ lik <-
                 slope=1,
                 stocknames = c("lingimm","lingmat")) 
 lik 
-  
+
 ```
+
 
 
 Finally, there are two components to the likelihood that do not incorporate data but 
@@ -407,14 +422,16 @@ are instead used to ensure that the optimisation search algorithm remains within
 reasonable ranges of the defined model. The first component provides penalties to for 
 exceeding parameter bounds as set by the user in the input parameter file. 
 In this example, the weight is set to 0.5, 
-  but see the troubleshooting page for cases in which it may be wise to set this weight
-  higher. The data frame provided to this likelihood component specifies the power and
-  parameter weights supplied if the parameter value exceeds its upper and lower bounds. 
-  If the likelihood of a parameter exceeds either the upper or lower bound, 
-  the distance between the bound and the parameter value is squared and multiplied by the
-  parameter weights 10 000; then the sum of these scores across all parameters is 
-  multiplied by the 0.5 weighting before being summed along with the other 
-  likelihood components to form the total. 
+but see the troubleshooting page for cases in which it may be wise to set this weight
+higher. The data frame provided to this likelihood component specifies the power and
+parameter weights supplied if the parameter value exceeds its upper and lower bounds. 
+If the likelihood of a parameter exceeds either the upper or lower bound, 
+the distance between the bound and the parameter value is squared and multiplied by the
+parameter weights 10 000; then the sum of these scores across all parameters is 
+multiplied by the 0.5 weighting before being summed along with the other 
+likelihood components to form the total. 
+
+### Penalty functions
 
 Understocking introduces a penalty when there are insufficent prey to met the requirements
 of the predators. For example, if landings of the fleets exceeds available biomass, 
@@ -423,9 +440,9 @@ the sum of the number of prey that are 'missing', raised to a power set by defau
 to 2, and multiplied by the likelihood weight of 100 as indicated below.
 
 ```{r}
-  lik <-
-    lik %>% 
-    gadget_update("penalty",
+lik <-
+  lik %>% 
+  gadget_update("penalty",
                 name = "bounds",
                 weight = "0.5",
                 data = data.frame(
@@ -434,7 +451,7 @@ to 2, and multiplied by the likelihood weight of 100 as indicated below.
                   upperW=10000,
                   lowerW=10000,
                   stringsAsFactors = FALSE)) %>%
-    gadget_update("understocking",
+  gadget_update("understocking",
                 name = "understocking",
                 weight = "100")
 
@@ -446,14 +463,13 @@ lik %>%
 Notice that when the likelihood file is written, so are all the supporting 
 aggregation files under the 'Aggfiles' folder.
 
-## Fitting a Gadget model to data 
+# Fitting a Gadget model to data 
 
-Now that all data and likelihood components are incorporated, it is possible to run `callGadget` using a fitting procedure. Like any other optimisation routine, what 
-is still needed are 1) starting values for the parameters, and 2) optimisation routine settings.
+Now that all data and likelihood components are incorporated, it is possible to run `gadget_optimise` to run a fitting procedure. Like any other optimisation routine, what is still needed are 1) starting values for the parameters, and 2) optimisation routine settings.
 
-### Create starting values
+## Create starting values
 
-If we start here with the same simple `callGadget` simulation as in day 2 of the 
+If we start here with the same simple `gadget_evaluate` simulation as in day 2 of the 
 ling model, we can see that a file called 'params.out' is automatically generated
 (same timestamp as the simple_log). However, if you open this file, is shows that 
 each parameter was given a value of 1 with bounds set to {-9999, 9999} and no 
@@ -498,11 +514,11 @@ read.gadget.parameters(sprintf('%s/params.out',gd)) %>%
 read.gadget.parameters(sprintf('%s/params.in',gd))
 
 ```
-  
+
 Now is a good point to scan the resulting 'params.in' file to make sure that
 a parameter was not forgotten and left with default values and bounds.
 
-#### Exercise
+### Exercise
 * Suppose that age sampling was done so that the same sampling effort was spread across all 
 ages equally (roughly 30 fish per length range to attain roughly 30 age samples per age).
 Change the likelihood component function for age-length data to the appropriate function.
@@ -512,13 +528,11 @@ Change the likelihood component function for age-length data to the appropriate 
 * Use `init_guess` to change the bounds of only one set of selectivity parameters.
 
 
-### Set optimisation routine
+## Set optimisation routine
 
-To run an optimisation via `callGadget` is simple: it only requires changing
-the argument `s=1` to `l=1`, removing the log argument (very important unless you want 
-to crash you computer), providing an input parameter file with starting values
-(below as `i = 'params.in'`), and providing a file name to which final parameter
-values should be written (below as `p='params.init'`).
+To run an optimisation via `gadget_optimize` is simple, the user provides an input parameter file with starting values
+(below as `params.in = 'params.in'`), and providing a file name to which final parameter
+values should be written (below as `params.out = 'params.init'`).
 
 ```{r cache=TRUE, eval = FALSE}
 timestamp()
@@ -529,7 +543,7 @@ timestamp()
 
 Now that reasonable bounds and starting values have been set for an 
 optimisation run, default settings can be used to run a short and simple
-Gadget optimisation. If you open the params.init file, comments can be found 
+Gadget optimisation. If you open the `params.init` file, comments can be found 
 at the top that detail the computer and timing of the run (as in a simulation run),
 as well as optimisation information (something like 'Hooke & Jeeves algorithm ran 
 for 1039 function evaluations'), the likelihood value at the end '1e+10' and a 
@@ -543,13 +557,13 @@ optimum. Gadget can also take quite a while to optimise a model (~ 6 hours for
 ling on a very fast computer). Therefore, it is best to plan ahead of time on 
 which computer and when a model will be optimised, as well as which optimisation
 methods will be used. 
-  
+
 To change from the default settings, an opimisation file needs to be provided
-to `callGadget` via the `opt` argument. This is the file we provide for 
+to `gadget_optimize` via the `control` argument. This is the file we provide for 
 demonstration: it shows that we have implemented 3 consecutive optimisation 
 routines. The first begins with simulated annealing (and parameter settings 
 needed for it as well as a seed), followed by a Hooke and Jeeves algorithm 
-that begins where simmulated annealing leaves off, and finally a BFGS algorithm.
+that begins where simulated annealing leaves off, and finally a BFGS algorithm.
 The three routines are listed in this manner to consecutively to transition from
 a broader global search (simulated annealing) to one that provides faster 
 (Hooke and Jeeves) and more precise (BFGS) results, in an attempt to make the 
@@ -584,7 +598,7 @@ gadget_optimize(params.in = 'params.in', params.out = 'params.init', control = o
 timestamp()
 ```
 
-#### Exercise
+### Exercise
 * Try changing the parameter starting values to the params.forsim file within the 'data_provided' folder. Does the optimisation finish any quicker?
 
 
@@ -596,8 +610,8 @@ equations \ref{eq:SSSI} to \ref{eq:SSalk} using the following formula:
 \begin{equation}\label{eq:loglik}
 l^{T} = \sum_g  w_{gf}^{SI}
 l_{g,S}^{SI} + \sum_{f\in \{S,T,G,L\}} \left(
-  w_{f}^{LD}  l_{f}^{LD} + w_{f}^{AL}
-  l_{f}^{AL}\right) + w^{M}l^{M}
+w_{f}^{LD}  l_{f}^{LD} + w_{f}^{AL}
+l_{f}^{AL}\right) + w^{M}l^{M}
 \end{equation}
 where $f=S,T,G$ or $L$ denotes the spring survey, trawl, gillnet and
 longline fleets respectively and $w$'s are the weights assigned to each likelihood components. 
@@ -612,7 +626,7 @@ subset of the data.
 
 
 Assigning likelihood weights is not a trivial matter; it has in the past
-been the most time-consuming part of developing a Gadget model. Commonly this has
+been the most time-consuming part of developing a Gadget model. Historicall this was
 been done using some form of 'expert judgement'. General heuristics
 have recently been developed to estimated these weights
 objectively. Here the iterative re--weighting heuristic introduced by
@@ -628,17 +642,17 @@ variances, and hence the final weights, are calculated according the
 following algorithm: 
 
 1. Calculate the initial sums of squares (SS) given the initial
-  parameterization for all likelihood components. Assign the inverse SS
-  as the initial weight for all likelihood components, resulting in a total initial score of 1 for each component. 
+parameterization for all likelihood components. Assign the inverse SS
+as the initial weight for all likelihood components, resulting in a total initial score of 1 for each component. 
 2. For each likelihood component, do an optimization run with
-  the initial weighted SS for that component set to 10 000. This run represents
-  a model fit where essentially only that component contributes to model
-  fitting, and therefore that component receives the best fit achievable.
-  Then estimate the residual variance using the resulting SS of that component divided
-  by the degrees of freedom ($df^*$), i.e. $\hat{\sigma}^2 = \frac{SS}{df^*}$.
+the initial weighted SS for that component set to 10 000. This run represents
+a model fit where essentially only that component contributes to model
+fitting, and therefore that component receives the best fit achievable.
+Then estimate the residual variance using the resulting SS of that component divided
+by the degrees of freedom ($df^*$), i.e. $\hat{\sigma}^2 = \frac{SS}{df^*}$.
 3.  After the optimization of each component separately, set the final weight 
-  for each component to be the inverse of the estimated variance from the step above
-  (weight $=1/\hat{\sigma}^2$). 
+for each component to be the inverse of the estimated variance from the step above
+(weight $=1/\hat{\sigma}^2$). 
 
 
 The number of non-zero data-points ($df^{*}$) is used as a proxy for the degrees 
@@ -765,7 +779,7 @@ run <- gadget.iterative(comp = 'ldist.gil',
 ```
 
 
-## Visualize Gadget statistical model fit
+# Visualize Gadget statistical model fit
 
 To obtain information on the model fit and properties of the model, one can 
 use the `gadget.fit` function to query the model and return conveniently 
@@ -896,10 +910,10 @@ plot(fit,data='res.by.year',type='total') + theme(legend.position = 'none') +
   plot(fit, data='res.by.year',type='rec')
 ```
 
-#### Exercise
+### Exercise
 * Try plotting the catchabilities on the normal scale (exponentiated, not log as given) across ages for each survey. What shape are they when plotted?
 * What information is stored under fit$SS?
 * Try changing the grouping structure above to one that makes more sense to you. Do model results fit any better?
 
 
-## References
+# References

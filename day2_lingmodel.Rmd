@@ -757,9 +757,20 @@ step / year combination. Gadget will give an error if there exists no catch in t
 
 Also notice that the attribute `area_group` needs to be applied to the data frame using the 
 function `structure`. These attributes are called on by Rgadget when creating the
-appropriate aggregation files.
+appropriate aggregation files. The following will use files that can be downloaded [here](data_provided.zip)
+
+```{r, eval=FALSE}
+
+## 
+download.file('https://heima.hafro.is/~bthe/data_provided.zip')
+unzip('data_provided')
+
+```
+
 
 ```{r}
+
+
 
 lln.landings <- structure(read_csv('data_provided/lln.csv'),
             area_group = list(`1` = 1))
@@ -844,27 +855,27 @@ gadgetfleet('Modelfiles/fleet',gd,missingOkay = TRUE) %>%
   gadget_update('totalfleet',
                 name = 'foreign',
                 suitability = 
-                  list(lingimm = list(type='function',suit_func='exponentiall50',
-                                      alpha = '#ling.lln.alpha',
-                                      beta = '#ling.lln.l50'),
-                       lingmat = list(type='function',suit_func='exponentiall50',
-                                      alpha = '#ling.lln.alpha',
-                                      beta = '#ling.lln.l50')),
-                # list(lingimm = list(type='function',suit_func='andersen',
-                #                      p0 = '#ling.lln.p0',
-                #                      p1 = to.gadget.formulae(quote(log(180/ling.lln.lmode))),
-                #                      p2 = '#ling.lln.p2',
-                #                      p3 = '#ling.lln.p3',
-                #                      p4 = '#ling.lln.p4',
-                #                      L = '180'),
-                #      lingmat =  list(type='function',suit_func='andersen',
-                #                      p0 = '#ling.lln.p0',
-                #                      p1 = to.gadget.formulae(quote(log(180/ling.lln.lmode))),
-                #                      p2 = '#ling.lln.p2',
-                #                      p3 = '#ling.lln.p3',
-                #                      p4 = '#ling.lln.p4',
-                #                      L = '180')),
-                data = for.landings) %>% 
+                   list(lingimm = list(type='function',suit_func='exponentiall50',
+                                       alpha = '#ling.lln.alpha',
+                                       beta = '#ling.lln.l50'),
+                        lingmat = list(type='function',suit_func='exponentiall50',
+                                       alpha = '#ling.lln.alpha',
+                                       beta = '#ling.lln.l50')),
+                #   list(lingimm = list(type='function',suit_func='andersenfleet',
+                #                       p0 = '#ling.lln.p0',
+                #                       p1 = to.gadget.formulae(quote(log(180/ling.lln.lmode))),
+                #                       p2 = '#ling.lln.p2',
+                #                       p3 = '#ling.lln.p3',
+                #                       p4 = '#ling.lln.p4',
+                #                       L = '180'),
+                #       lingmat =  list(type='function',suit_func='andersenfleet',
+                #                       p0 = '#ling.lln.p0',
+                #                       p1 = to.gadget.formulae(quote(log(180/ling.lln.lmode))),
+                #                       p2 = '#ling.lln.p2',
+                #                       p3 = '#ling.lln.p3',
+                #                       p4 = '#ling.lln.p4',
+                #                       L = '180')),
+                 data = for.landings) %>% 
   write.gadget.file(gd)
 
 ```

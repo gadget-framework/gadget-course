@@ -1,0 +1,24 @@
+new_session: yes
+delete_merged_file: yes
+
+rmd_files:
+  [
+  "index.Rmd",
+  "introduction.Rmd",
+  "Tidyverse.Rmd",
+  "getting_started.Rmd",
+  "stock_interactions.Rmd",
+  "day2_lingmodel.Rmd",
+  'day3_fitlingmodel.Rmd',
+  "day4_multi_area.Rmd",
+  "mfdb.Rmd",
+  "Gadget_installation.Rmd",
+  "troubleshooting.Rmd",
+  "references.Rmd"
+  ]
+  
+output_dir: "_gadget_course"
+
+view: https://github.com/hafro/gadget-course/blob/master/%s
+edit: https://github.com/hafro/gadget-course/edit/master/%s
+bibliography: library.bib

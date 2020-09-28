@@ -11,3 +11,7 @@
 /*_files
 params.out
 .Rproj.user
+*.md
+*.R
+_gadget_course
+*.rds

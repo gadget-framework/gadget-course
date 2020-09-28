@@ -1,19 +1,12 @@
----
-title: "Gadget installation"
-output: 
-  html_document:
-    fig_height: 4
-    fig_width: 8
-    highlight: haddock
-    theme: united
-    toc: yes
-    toc_float: yes
-bibliography: library.bib
----
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+# (APPENDIX) Appendix {-} 
+
+# Installing Gadget from source
 
 Gadget development repository is housed on the [MFRI github site](https://github.com/Hafro/gadget2). For convenience Gadget has been wrapped up in a R-package  available from CRAN using the following command:
 
@@ -30,7 +23,7 @@ devtools::install_github('hafro/gadget2')
 Windows users note that you may want to install the `icesTAF` R package to be able to convert Windows line-endings to unix line-endings with the `dos2unix` function, which when not corrected could cause all kinds of grieve. 
 
 
-# Command line version
+## Command line version
 
 Alternatively you can install gadget from source as a command line tool. Basic
 installation instructions can be found on the github site but below they are given step-by-step. Notice
@@ -39,26 +32,26 @@ that the extremely useful resource 'Gadget User Guide' is included as a pdf with
 To compile Gadget one needs a working C++ compiler and a version of Make installed on the
 computer.
 
-## Linux
+### Linux
 
 The compiler and Make should be installed automatically on most linux distributions but on ubuntu one needs to install build-essentials:
 ```
 sudo apt-get install build-essential
 ```
 
-## Mac
+### Mac
 
 It should be sufficient to install XCode through the Appstore and through XCode's preferences install commandline tools.
 
-## Windows
+### Windows
 
 The easiest way is to install uses
 [Rtools](https://cran.r-project.org/bin/windows/Rtools/) . During the install process 
 allow the installer to append to the system path. Also you may want to install the `icesTAF` R package to be able to convert Windows line-endings to unix line-endings with the `dos2unix` function. 
 
-# Download, compile and install
+## Download, compile and install
 
-## Standard procedure
+### Standard procedure
 
 To install Gadget you can simply click the "download as a zip file" button. Unzip this file and within command prompt/terminal application make your way to the resulting folder, typically called gadget-master, and simply type:
 ```
@@ -88,7 +81,7 @@ echo export PATH >> ~/.bash_profile
 
 and then Rgadget should be able to find gadget. 
 
-## Recommended: via Git
+### Recommended: via Git
 
 We recommend installing via Git because it provides for easy updating and if you don't
 already use git, then this is a good time to start: can be extremely useful later for

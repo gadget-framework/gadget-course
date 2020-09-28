@@ -1,19 +1,8 @@
----
-title: "Defining multi area models"
-output: 
-  html_document:
-    fig_height: 4
-    fig_width: 8
-    highlight: haddock
-    theme: united
-    toc: yes
-    toc_float: yes
-bibliography: library.bib
----
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE,message = FALSE)
 ```
+# Defining multi area models
 
 ## Alternate structures: multiple areas
 

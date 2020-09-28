@@ -1,15 +1,3 @@
----
-title: "Introduction to Gadget"
-output: 
-  html_document:
-    fig_height: 4
-    fig_width: 8
-    highlight: haddock
-    theme: united
-    toc: yes
-    toc_float: yes
-bibliography: library.bib
----
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
@@ -320,8 +308,7 @@ simulated annealing, to make the results less sensitive to the initial
 Jeeves and BFGS), to obtain more accurate final values in the 
 neighborhood of the global optimum.
 
-# This course
+## This course
 
 During this course we will attempt to introduce how the key topic listed here above are implemented in Gadget. You will learn how to set up a simulation model using Gadget using the Rgadget functions. We will briefly discuss the how you can add data to your model and subsequently fit the model, but fuller analysis of how to include data into the model is very case specific and requires an analysis of a developed model. 
 
-# Bibliography

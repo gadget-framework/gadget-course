@@ -1,21 +1,11 @@
----
-title: "Fitting models"
-output: 
-  html_document:
-    fig_height: 4
-    fig_width: 8
-    highlight: haddock
-    theme: united
-    toc: yes
-    toc_float: yes
-bibliography: library.bib
----
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, cache=TRUE, autodep=TRUE, warning = FALSE,message = FALSE)
 ```
 
-# Introducing likelihood functions
+# Fitting a model to data
+
+## Introducing likelihood functions
 
 In Gadget, a likelihood function is specified by supplying likelihood components within the likelihood
 file, which is referred to by the main file. Individual likelihood component scores are summed together 
@@ -463,11 +453,11 @@ lik %>%
 Notice that when the likelihood file is written, so are all the supporting 
 aggregation files under the 'Aggfiles' folder.
 
-# Fitting a Gadget model to data 
+## Fitting a Gadget model to data 
 
 Now that all data and likelihood components are incorporated, it is possible to run `gadget_optimise` to run a fitting procedure. Like any other optimisation routine, what is still needed are 1) starting values for the parameters, and 2) optimisation routine settings.
 
-## Create starting values
+### Create starting values
 
 If we start here with the same simple `gadget_evaluate` simulation as in day 2 of the 
 ling model, we can see that a file called 'params.out' is automatically generated
@@ -518,7 +508,7 @@ read.gadget.parameters(sprintf('%s/params.in',gd))
 Now is a good point to scan the resulting 'params.in' file to make sure that
 a parameter was not forgotten and left with default values and bounds.
 
-### Exercise
+#### Exercise
 * Suppose that age sampling was done so that the same sampling effort was spread across all 
 ages equally (roughly 30 fish per length range to attain roughly 30 age samples per age).
 Change the likelihood component function for age-length data to the appropriate function.
@@ -598,7 +588,7 @@ gadget_optimize(gd,params.in = 'params.in', params.out = 'params.init', control 
 timestamp()
 ```
 
-### Exercise
+#### Exercise
 * Try changing the parameter starting values to the params.forsim file within the 'data_provided' folder. Does the optimisation finish any quicker?
 
 
@@ -779,7 +769,7 @@ run <- gadget.iterative(comp = 'ldist.gil',
 ```
 
 
-# Visualize Gadget statistical model fit
+## Visualize Gadget statistical model fit
 
 To obtain information on the model fit and properties of the model, one can 
 use the `gadget.fit` function to query the model and return conveniently 
@@ -910,10 +900,10 @@ plot(fit,data='res.by.year',type='total') + theme(legend.position = 'none') +
   plot(fit, data='res.by.year',type='rec')
 ```
 
-### Exercise
+#### Exercise
 * Try plotting the catchabilities on the normal scale (exponentiated, not log as given) across ages for each survey. What shape are they when plotted?
 * What information is stored under fit$SS?
 * Try changing the grouping structure above to one that makes more sense to you. Do model results fit any better?
 
 
-# References
+

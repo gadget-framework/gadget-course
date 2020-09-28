@@ -1,22 +1,11 @@
----
-title: "Getting started"
-output: 
-  html_document:
-    fig_height: 4
-    fig_width: 8
-    highlight: haddock
-    theme: united
-    toc: yes
-    toc_float: yes
-bibliography: library.bib
----
+
 
 ```{r setup, include=FALSE}
 # install.packages(c('pdftools','magick'))
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
+# Getting started with the Gadget framework
 Install devtools, Rgadget and mfdb. Rgadget is under constant construction so please remember to update it regularly (e.g., monthly). 
 
 ```{r setupRgadget, eval=FALSE}
@@ -454,7 +443,7 @@ names(fit)
 ```
 
 
-# Gadget variables 
+## Gadget variables 
 
 It can be tedious to change all the input files whenever you want to try a different
 value for a certain input parameter. For example if you want to specify natural 
@@ -624,7 +613,7 @@ parse.gadget.formulae('(/ 1 (+ 1 (exp (* (* -1 #alpha) (- 50 #l50)))))') %>%
 ```
 
 
-# Predation
+## Predation
 
 As Gadget is a length-based simulation model, almost all processes are modelled in
 terms of length of an individual in a particular stock. The rationale for this is 
@@ -872,7 +861,7 @@ catch <-
 ```
 
 
-# Recruitment
+## Recruitment
 
 There are two types of recruitment processes in Gadget, those that are the result of
 spawning and what is called **renewal**. The difference between the two processes is 

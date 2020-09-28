@@ -1,18 +1,9 @@
----
-  title: "Tidyverse"
-  output: 
-    html_document:
-      fig_height: 4
-      fig_width: 8
-      highlight: haddock
-      theme: united
-      toc: yes
-      toc_float: yes
----
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+# Introduction to Tidyverse
 
 ## Idealogy behind R for Data Science
 
@@ -33,9 +24,9 @@ that are focused on easing these tasks into a simple uniform routine that can be
 to any dataset. Standardizing the approach taken toward any data science project then 
 aids reproducability of any project as well as the ability to collaborate on a project.
 
-# The foundation: tibbles, tidy data, and piping
+## The foundation: tibbles, tidy data, and piping
 
-## Tibbles
+### Tibbles
 
 First we need to install and load Tidyverse. After that we can have a look at what at 
 the main form of data storage, called a tibble:
@@ -76,7 +67,7 @@ dataset 'tidy':
 If, for example, the flights dataset were organized such that each carrier, origin, or 
 dest had their own sets of columns, the data would no longer be tidy.
 
-## Piping
+### Piping
 
 In base R programming, functions wrap around the objects that they are applied to, which
 are often indexed, and this manipulated object is saved as a new one. What is written is
@@ -109,7 +100,7 @@ where the input data frame is expected. Finally, this modified data frame
 is assigned to 'sub' at the end, but alternatively it could have been assigned at the 
 beginning as in the non-piped version.
 
-# The power of tidyverse: all you need in a handful of functions
+## The power of tidyverse: all you need in a handful of functions
 
 As in the 'select' function, there are a variety of functions that come with the
 tidyverse package, but only a small set are needed to do almost any kind of data 
@@ -152,7 +143,7 @@ using tidyverse commands, as well as functions such as 'aggregate' using 'group_
 
 Here is a smattering of demonstrations on how to use the other important functions and their equivalents in base R:
 
-### filter()
+#### filter()
 ```{r smat filter}
 
 #filter()
@@ -162,7 +153,7 @@ flights %>%
   filter(month == 3, dest == "DEN")
 ```
 
-### arrange()
+#### arrange()
 ```{r smat arrange}
 o <- order(flights$distance)
 flights[o,c('year','month','day','distance')]
@@ -177,7 +168,7 @@ flights %>%
   arrange(desc(distance))
 ```
 
-### rename()
+#### rename()
 ```{r smat rename}
 flights2 <- data.frame(flights, year2 = flights$year)
 flights2 <- as_tibble(flights2[c(dim(flights2)[2],2:(dim(flights2)[2]-1))])
@@ -189,7 +180,7 @@ flights2 <-
 flights2
 ```
 
-### mutate()
+#### mutate()
 ```{r smat mutate}
 flights2 <- as_tibble(data.frame(flights, air_time_hr = flights$air_time/60, distance_1000m = flights$distance/1000))
 
@@ -199,7 +190,7 @@ flights2 <-
   mutate(air_time_hr = air_time/60, distance_1000m = distance/1000)
 flights2
 ```
-### group_by() with count()
+#### group_by() with count()
 ```{r smat count}
 
 #count() with group_by()
@@ -213,7 +204,7 @@ flights2 <-
   count()
 flights2
 ```
-### spread() / gather() to convert between long and tidy formats:
+#### spread() / gather() to convert between long and tidy formats:
 ```{r smat spread}
   
 flights2b <-
@@ -245,7 +236,7 @@ a long learning curve. However, the ultimate results are well worth the
 learning investment. For a basic explanation and cheat sheet see
 [here](https://ggplot2.tidyverse.org/)
 
-# ggplot: Key components
+### ggplot: Key components
 
 ggplot has __three__ key components: 
 
@@ -291,11 +282,11 @@ The structure (a bit of Latin - not run here):
 str(p)
 ```
 
-# aesthetic
+### aesthetic
 
 Adding more variables to a two dimensional scatterplot can be done by mapping the variables to an aesthetic (colour, fill, size, shape, alpha)
 
-### colour
+#### colour
 
 ```{r, out.width = "50%", fig.show = "hold"}
 p <- ggplot(sub, aes(distance, air_time))
@@ -318,13 +309,13 @@ RColorBrewer::display.brewer.all()
 
 
 
-### shape
+#### shape
 
 ```{r}
 p + geom_point(aes(distance, air_time, shape = origin))
 ```
 
-### size
+#### size
 
 ```{r}
 p + geom_point(aes(distance, air_time, size = month))
@@ -342,7 +333,7 @@ p + geom_point(aes(distance, air_time, size = month), alpha = 0.3, col = "red")
 ```
 
 
-# Facetting
+### Facetting
 
 Splitting a graph into subsets based on a categorical variable. 
 
@@ -360,7 +351,7 @@ ggplot(sub) +
   facet_grid(as.factor(year) ~ origin)
 ```
 
-# Adding layers
+### Adding layers
 
 The power of ggplot comes into place when one adds layers on top of other layers. Let's for now look at only at two examples.
 
@@ -372,7 +363,7 @@ ggplot(sub, aes(distance, air_time)) +
   geom_line()
 ```
 
-### Add a smoother to a scatterplot
+#### Add a smoother to a scatterplot
 
 ```{r, out.width = "33%", fig.show = "hold"}
 p <- ggplot(sub, aes(distance, air_time))
@@ -390,12 +381,12 @@ ggplot(sub, aes(distance, air_time, colour = origin)) +
 ```
 
 
-# Statistical summary graphs
+## Statistical summary graphs
 ___
 
 There are some useful *inbuilt* routines within the ggplot2-packages which allows one to create some simple summary plots of the raw data.
 
-### bar plot
+#### bar plot
 
 One can create bar graph for discrete data using the `geom_bar`
 
@@ -405,7 +396,7 @@ ggplot(sub, aes(dest)) + geom_bar()
 
 The graph shows the number of observations we have of each destination. The original data is first transformed behind the scene into a table of counts, before being rendered. 
 
-### histograms
+#### histograms
 
 For continuous data one uses the `geom_histogram`-function (left default bin-number, right bindwith specified as 50 mins): 
 
@@ -422,7 +413,7 @@ p + geom_histogram(aes(fill = origin))
 p + geom_histogram() + facet_wrap(~ origin, ncol = 1)
 ```
 
-### Frequency polygons
+#### Frequency polygons
 
 Alternatives to histograms for continuous data are frequency polygons:
 ```{r, out.width = "50%", fig.show = "hold"}
@@ -430,7 +421,7 @@ p + geom_freqpoly(lwd = 1)
 p + geom_freqpoly(aes(colour = origin), lwd = 1)
 ```
 
-### Box-plots
+#### Box-plots
 
 Boxplots, which are more condensed summaries of the data than histograms, are called using `geom_boxplot`. Here two versions of the same graph are used, the one on the left is the default, but on the right we have reordered the maturity variable on the x-axis such that the median value of length increases from left to right:
 ```{r, out.width = "50%", fig.show = "hold"}
@@ -456,7 +447,7 @@ ggplot(sub, aes(reorder(dest, air_time), air_time)) +
 
 </div>
 </div>
-### Other statistical summaries
+## Other statistical summaries
 
 Using `stat_summary` one can call specific summary statistics. Here are examples of 4 plots, going from top-left to bottom right we have:
 
@@ -474,7 +465,7 @@ p + stat_summary(fun.data = "mean_se")
 p + stat_summary(fun.data = "mean_cl_boot")
 ```
 
-# Some controls
+## Some controls
 
 ### labels
 
@@ -514,7 +505,7 @@ p + ylim(NA, 500) # setting only upper limit
 
 
 
-# Further readings
+## Further readings
 ___
 
 * The ggplot2 site: http://ggplot2.tidyverse.org

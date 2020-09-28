@@ -1,21 +1,9 @@
----
-title: 'MFDB'
-output: 
-  html_document:
-    fig_height: 4
-    fig_width: 8
-    highlight: haddock
-    theme: united
-    toc: yes
-    toc_float: yes
-bibliography: library.bib
----
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Working with data
+# Processing input data with MFDB
+## Working with data
 
 Fisheries stock assessment aims to provide a satisfactory level of catch based the estimated stock status. Typically this means the abundance or biomass of the resource in question. In all but rare cases it is next to impossible to observe these numbers directly as the fish species in question live in the deep oceanc. Therefore the most of the information on the population is derived from assumptions on the population dynamics combined with observations on various aspects of the population. This includes relative abundance/biomass from scientific surveys and catch size and/or age composition. 
 
@@ -24,7 +12,7 @@ Assessing stock or ecosystem status is therefore often a exhaustive exercise of 
 Regardless of the modeling approach employed, fisheries stock assessment requires robust data management especially for those assessment that are used annually to produce advice on catch advice as it is imperative for whole process to be reproducible between years. There has been increased interest in developing tools/procedures to ensure this reproducibility which can be seen from project such as the ICES TAF and stockassessment.org. One such project, [MFDB](https://github.com/mareframe/mfdb), was developed explicitly to deal with formatting data for ecosystem models and Gadget models. In this chapter an overview of the key components of the MFDB system is provided with simple illustration based on Icelandic data.  
 
 
-# Description of the MFDB system
+## Description of the MFDB system
 
 MFDB is essentially a custom built database system written to smooth out kinks in the process of collating the various snippets of data. The user interface is written entirely in R allowing the user to leverage the tools available in the R environment thus enabling automated processing of fisheries data into suitable forms for running ecosystem models against it such as Gadget
 
@@ -51,7 +39,7 @@ Taxonomy tables store all possible values for terms and their meaning, to ensure
 
 Most Taxonomies have defaults which are populated when the database is created, and their definitions are stored as data attached to this package. See `mfdb-data` for more information on these. Others, such as areacell and sampling_type are case study specific, and you will need to define your terms before you can import data.
 
-## Installing MFDB
+### Installing MFDB
 
 MFDB is available from CRAN and is intalled in the typical fashion:
 
@@ -61,11 +49,11 @@ install.packages('mfdb')
 
 However MFDB requires that the user has access to a running postgreSQL database. To install postgreSQL on your local machine you can follow these [instructions](https://github.com/mareframe/mfdb/#prerequisites) but if you expect more users working on the same DB it may be wise to consider installing it on a (widely) accessible server. 
 
-# Importing data
+## Importing data
 
 Unless you are working with a remote database, you will need to populate the database at least once before you are able to do any querying. The steps your script needs to do are:
 
-## Connect to database
+### Connect to database
 
 Use the `mfdb()` function. This will create tables / populate taxonomies if necessary. The user opens the link with the following command:
 ```{r eval=FALSE}
@@ -102,7 +90,7 @@ mdb <- mfdb('Iceland', db_params = list(host='mfdb.example.com',
 ```
 where the connection parameters are specified appropriately. In addition, the schema can be destroyed (e.g. when you want to start again) using `destroy_schema = TRUE` when connecting to the database. 
 
-## Defining taxonomies
+### Defining taxonomies
 
 The MFDB system has a number of taxonomies, some of which are populated by default while other are defined by the user when importing and will be linked to the data when imported and used to filter it when exported. These taxonomies can be are listed by calling:
 
@@ -459,26 +447,9 @@ Stomach surveys are imported in much the same way, however there are 2 data.fram
 
 See `mfdb_import_survey` for more information or the demo directory for concrete examples.
 
-## Dumping / Restoring a DB
-
-You can also dump/import a dump from another host using the postgres `pg_dump` and `pg_restore` commands. You can dump/restore indvidual schemas (i.e. the case study you give to the `mfdb()` command), to list all the schemas installed run `SELECT DISTINCT(table_schema) FROM information_schema.tables` from psql. Note that if you use `mfdb('Baltic')`, the Postgres schema name will be lower-cased.
-
-Create a dump of your chosen schema with the following command:
-
-```
-pg_dump --schema=baltic -F tar mf > baltic.tar
-```
-
-This will make a dump of the "baltic" case study into "baltic.tar". It can then be restored onto another computer with the following:
-
-```
-pg_restore --clean -d mf baltic.tar
-```
-
-If you already have a baltic schema you wish to preserve, you can rename it first by issuing ALTER SCHEMA baltic RENAME TO baltic_o in psql. Once the restore is done you can rename the new schema and put the name of the old schema back.
 
 
-# Querying data
+## Querying data
 
 There are a selection of querying functions available, all of which work same way. You give a set of parameters, each of which can be a vector of data you wish returned, for instance `year = 1998:2000` or `species = c('COD')`.
 
@@ -498,7 +469,7 @@ All functions will result in a list of data.frame result tables (generally only 
 
 See `mfdb_sample_count` for more information or the demo directory for concrete examples.
 
-# Uploading the DATRAS database to MFDB
+## Uploading the DATRAS database to MFDB
 
 ```{r, eval=FALSE}
 # devtools::install_github('mareframe/mfdb',ref='6.x')
@@ -662,3 +633,20 @@ tibble(year = 2017,month = 1, areacell = -3548,
 
 ```
 
+## Dumping / Restoring a DB
+
+You can also dump/import a dump from another host using the postgres `pg_dump` and `pg_restore` commands. You can dump/restore indvidual schemas (i.e. the case study you give to the `mfdb()` command), to list all the schemas installed run `SELECT DISTINCT(table_schema) FROM information_schema.tables` from psql. Note that if you use `mfdb('Baltic')`, the Postgres schema name will be lower-cased.
+
+Create a dump of your chosen schema with the following command:
+
+```
+pg_dump --schema=baltic -F tar mf > baltic.tar
+```
+
+This will make a dump of the "baltic" case study into "baltic.tar". It can then be restored onto another computer with the following:
+
+```
+pg_restore --clean -d mf baltic.tar
+```
+
+If you already have a baltic schema you wish to preserve, you can rename it first by issuing ALTER SCHEMA baltic RENAME TO baltic_o in psql. Once the restore is done you can rename the new schema and put the name of the old schema back.

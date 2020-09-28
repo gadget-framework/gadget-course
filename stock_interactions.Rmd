@@ -1,15 +1,3 @@
----
-title: "Stock interactions"
-output: 
-  html_document:
-    fig_height: 4
-    fig_width: 8
-    highlight: haddock
-    theme: united
-    toc: yes
-    toc_float: yes
-bibliography: library.bib
----
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
@@ -17,7 +5,7 @@ library(tidyverse)
 library(Rgadget)
 ```
 
-# Types of interations
+# Defining stock interations
 
 As we have already seen there are a number of ways we can define interactions between stocks. Here we will, however, explore further the various different mechanisms implemented in Gadget. These interaction can essentially be grouped into two categories:
 
@@ -28,7 +16,7 @@ As we have already seen there are a number of ways we can define interactions be
 We will illustrate these processes using a simple multistock model:
 
 ```{r}
-gd <- gadget.variant.dir('simple_multistock')
+gd <- gadget.variant.dir('simple_multistock_model')
 
 schedule <- 
   expand.grid(year = 1:30, step = 1:4) %>% 
@@ -87,7 +75,7 @@ stock_template <-
 
 We will use the stock template to define multiple stocks to illustrate the various possible interactions the user is able to define in a Gadget model. 
 
-# Fish recruits into a stock
+## Fish recruits into a stock
 
 We have already seen how to implment the most straitforward version of recruitment into a stock, that is the renewal process. To recap, the renewal process adds fish into a stock based on a predefined schedule on the number and age of fish at a given time step. The most obvious use of this feature is to define a non-parametric recruitment to a stock a the minimum age of the stock. However one can use it also to add migrations from a related to stock, where the dynamics of the related stock is not modelled. An example of this would be the sporadic migrations of cod from Greenlandic waters into Icelandic waters. 
 
@@ -278,7 +266,7 @@ fit$res.by.year %>%
 * Depletion of stock components is often a concern. Using the straying mechanism set up a three stock model where individual are slowly dispersed between all three components. Define a fishing fleet that targets only one of the stocks and investigate how different dispersion levels affect the depletion of all stocks. 
 * Gadget allow you to set up a catch at age model. Use the movement mechanism to define a model with a maximum age of 10, where each age is a separate stock. How would you define the fleets for this model so you could use commercial catch at age directly into the model? 
 
-# Spawning
+## Spawning
 
 The spawning process allows the user to define recruits into as stock as function of the size of another stock. A number of relationships can be defined:
 
@@ -364,7 +352,7 @@ fit$res.by.year %>%
 
 The code above defines a Ricker recruitment function between the parent and offspring stocks. As evident from the graph above the relationship between the two stocks is a fairly deterministic. This type of relationship, however, is hardly ever observed without error (both in process and observation). To include process variation into the model Gadget has another trick up its sleave, Time variables.
 
-## Time variables
+### Time variables
 
 Time variables allow Gadget to change the value of parameters with time. They are an extension to the Gadget formulae functionality and can be use (almost) where ever you can use Gadget formulae. To define a time variable you will need to define a data frame with the start time for a particular value, which will be valid until the next change. Example uses might be shifts fleet selection due to changes in regulation and temperature effects in growth. In the case of the simple stock recruitment relationship above we may want change the value for $\mu$ with time. To introduce time variables into this model you will need to create a special file:
 
@@ -419,7 +407,7 @@ fit$res.by.year %>%
 * Instead of the Ricker function try to parametrise the Beverton and Holt recruitment function for the example above. 
 * In the ling example consider how you would project the recruitment into the future.
 
-# Consumption 
+## Consumption 
 
 
 In Gadget there are a number of predator-prey relations that can be defined. They include the obvious case where one substock predates the other. Additionally a cannibalistic relationship can be defined if the substocks are modelled as an immature and a mature part of the same species. The predation in Gadget is implemented as follows. Each predator will conceptually be assigned **availability** of a certain prey in comparison with other food sources and a **feeding level**, i.e., fraction of available food the predator wants to consume. Combining these two terms the amount that the predator wants to consume is calculated.

@@ -1,21 +1,8 @@
----
-title: "Gadget troubleshooting"
-output: 
-  html_document:
-    fig_height: 4
-    fig_width: 8
-    highlight: haddock
-    theme: united
-    toc: yes
-    toc_float: yes
-bibliography: library.bib
----
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Troubleshooting tips
+# Troubleshooting Gadget models
 
 Uh oh. You ran callGadget and a bunch of red gibberish error message about 
 something with a null status popped out. Now what?

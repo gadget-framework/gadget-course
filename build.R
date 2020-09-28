@@ -8,6 +8,11 @@ if (length(args) == 0) {
 
 # Remove old model outputs
 unlink("*_model", recursive = TRUE)
+unlink("_book", recursive = TRUE)
+unlink("*_files", recursive = TRUE)
+unlink("*_assets", recursive = TRUE)
+
+
 
 if (args[[1]] == '--serve') {
     output_dir <- tempfile(fileext = ".build-docs")
@@ -16,6 +21,9 @@ if (args[[1]] == '--serve') {
     output_dir <- args[[1]]
     serve_output <- FALSE
 }
+
+
+
 
 for (f in c(
         "index.Rmd",

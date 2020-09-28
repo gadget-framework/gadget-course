@@ -1,16 +1,3 @@
----
-title: "Building more complex Gadget models"
-output: 
-  html_document:
-    fig_height: 4
-    fig_width: 8
-    highlight: haddock
-    theme: united
-    toc: yes
-    toc_float: yes
-bibliography: library.bib
----
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 #require("knitr")
@@ -18,7 +5,7 @@ knitr::opts_chunk$set(echo = TRUE, message = FALSE, warning = FALSE)
 
 #fs::dir_delete('ling_model')
 ```
-
+# Building more complex Gadget models
 ## Defining growth
 
 Let us begin by setting the scene with time and area in the typical fashion:

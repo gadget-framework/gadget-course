@@ -1,6 +1,6 @@
-```
+---
 title: "Fitting a model to data"
-```
+---
 
 
 ```{r setup, include=FALSE}

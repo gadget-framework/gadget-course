@@ -1,5 +1,6 @@
-
-
+---
+title: "Getting started with the Gadget framework"
+---
 ```{r setup, include=FALSE}
 # install.packages(c('pdftools','magick'))
 knitr::opts_chunk$set(echo = TRUE)

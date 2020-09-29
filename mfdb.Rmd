@@ -1,6 +1,6 @@
-```
+---
 title: "MFDB"
-```
+---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
@@ -508,8 +508,9 @@ See `mfdb_sample_count` for more information or the demo directory for concrete 
 
 ## Uploading the DATRAS database to MFDB
 
+The following gives an illustrative example of how the DATRAS survey data are uploaded to MFDB.
+
 ```{r, eval=FALSE}
-# devtools::install_github('mareframe/mfdb',ref='6.x')
 # devtools::install_github('ices-tools-prod/icesDatras')
 # devtools::install_github('ices-tools-prod/icesFO',dependencies = FALSE)
 # devtools::install_github('fishvice/tidyices')

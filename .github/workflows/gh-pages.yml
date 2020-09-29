@@ -11,23 +11,25 @@ name: Render documentation
 jobs:
   documentation:
     runs-on: ubuntu-latest
+    container: rocker/verse
     steps:
-      - uses: actions/checkout@v1
-      - uses: r-lib/actions/setup-r@v1
-      - uses: r-lib/actions/setup-pandoc@v1
+#      - uses: actions/checkout@v1
+#      - uses: r-lib/actions/setup-r@v1
+#      - uses: r-lib/actions/setup-pandoc@v1
+#      - uses: r-lib/actions/setup-tinytex@v1
 
-      - name: Install tikz
-        run: sudo apt install graphviz imagemagick
+#      - name: Install tikz
+#        run: sudo apt install graphviz imagemagick
 
       - name: Install build-docs prerequisites
-        run: Rscript -e 'install.packages(c("bookdown","gadget2","mfdb","rmarkdown","magick", "pdftools","tinytex","devtools","tidyverse"))'
+        run: Rscript -e 'install.packages(c("gadget2","mfdb","rmarkdown"))'
 
       - name: Install Rgadget2
-        run:  devtools::install_github("hafro/rgadget")
+        run:  remotes::install_github("hafro/rgadget")
         shell: Rscript {0}
 
-      - name: Install LaTeX
-        run: Rscript -e 'tinytex::install_tinytex()'
+#      - name: Install LaTeX
+#        run: Rscript -e 'tinytex::install_tinytex()'
 
 
       - name: Render Documentation

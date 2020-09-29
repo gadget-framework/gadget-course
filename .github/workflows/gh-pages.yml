@@ -1,0 +1,33 @@
+# Based on:-
+# * https://ropenscilabs.github.io/actions_sandbox/websites-using-pkgdown-bookdown-and-blogdown.html#action-to-deploy-a-bookdown-site
+# * https://github.com/peaceiris/actions-gh-pages
+on:
+  push:
+     branches:
+       - master
+
+name: Render documentation
+
+jobs:
+  documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-pandoc@v1
+
+      - name: Install tikz
+        run: sudo apt install graphviz
+
+      - name: Install build-docs prerequisites
+        run: Rscript -e 'install.packages(c("bookdown","gadget2","mfdb","rmarkdown","magick", "pdftools"))'
+
+      - name: Render Documentation
+        run: Rscript -e 'bookdown::render_book("index.Rmd")'
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+          publish_branch: gh-pages
+          publish_dir: _gadget_course

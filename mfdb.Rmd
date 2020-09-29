@@ -1,3 +1,7 @@
+```
+title: "MFDB"
+```
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -366,7 +370,14 @@ mfdb_import_division(mdb,
 
 ### Define sampling types
 
-Any survey data can have a sampling type defined, which then can be used when querying data. If you want to use a sampling type, then define it using `mfdb_import_sampling_type()`. It is useful to give the different survey and commercial samples from various sampling projects separate to be able handle them differently when defining the likelihood function for the model. The function requires
+Any survey data can have a sampling type defined, which then can be used when querying data. If you want to use a sampling type, then define it using `mfdb_import_sampling_type()`. It is useful to give the different survey and commercial samples from various sampling projects separate to be able handle them differently when defining the likelihood function for the model. The function requires three columns to be defined:
+
+* `id`
+* `name` key to be used for the samples
+* `description` of the sampling type
+
+An example of the definition of sampling types for Icelandic waters:
+
 ```{r eval=FALSE}
 mfdb_import_sampling_type(mdb, data.frame(
   id = 1:18,
@@ -419,7 +430,7 @@ mfdb_import_tow_taxonomy(mdb, tows)
 ```
 
 
-## Import data
+## Importing data
 
 ### Import temperature data
 
@@ -437,9 +448,35 @@ mfdb_import_temperature(mdb,
 
 Obviously it it would be more useful to have actual temperature data stored in these area cells but since this is rarely used in Gadget models it will not be considered further here. 
 
-### Import survey data
+### Importing survey/commercial samples
 
-Finally, import any survey data using `mfdb_import_survey()`. Ideally upload your data in separate chunks. For example, if you have length and age-length data, don't combine them in R, upload them separately and both will be used when querying for length data. This keeps the process simple, and allows you to swap out data as necessary.
+The function `mfdb_import_survey()` allows the user to import biological samples from various sources. Ideally data should be uploaded in separate chunks based on the data source. For example, if you have length and age-length data, don't combine them in R, instead upload them separately and both will be used when querying for length data. This keeps the process simple, and allows you to swap out only the data that needs to be update as necessary. The function accepts data frames of the following format:
+
+* `institute` *Optional*. An institute name, see `mfdb::institute` for possible values
+* `tow` *Optional*. Tow defined previously with `mfdb_import_tow_taxonomy(...)`
+* `gear` *Optional*. Gear name, see `mfdb::gear` for possible values
+* `vessel` *Optional*. Vessel defined previously with `mfdb_import_vessel_taxonomy(...)`
+* `sampling_type` *Optional*. A sampling_type, see `mfdb::sampling_type` for possible values 
+* `year` **Required** Year each sample was taken, e.g. `c(2000,2001)`
+* `month` **Required**. Month (1–12) each sample was taken, e.g. `c(1,12)`
+* `areacell` **Required**. Areacell sample was taken within
+* `species` *Optional*, default `c(NA)`. Species of sample, see `mfdb::species` for possible values
+* `age` *Optional*, default `c(NA)`. Age of sample, or mean age
+* `sex` *Optional*, default `c(NA)`. Sex of sample, see `mfdb::sex` for possible values
+* `maturity_stage` 
+* `length` *Optional*, default `c(NA)`. Length of sample / mean length of all samples
+* `length_var` *Optional*, default `c(NA)`. Sample variance, if data is already aggregated
+* `length_min` *Optional*, default `c(NA)`. Minimum theoretical length, if data is already aggregated
+* `weight` *Optional*, default `c(NA)`. Weight of sample / mean weight of all samples
+* `weight_var` *Optional*, default `c(NA)`. Sample variance, if data is already aggregated
+* `weight_total` *Optional*, default `c(NA)`. Total weight of all samples, can be used with `count = NA` to represent an unknown number of samples
+* `count` *Optional*, default `c(1)`. Number of samples this row represents (i.e. if the data is aggregated)
+
+```{r eval = FALSE}
+mfdb_import_survey(mdb,samples,data_source = 'the_source')
+```
+
+Note that the `data_source` argument gives a name for the uploaded data set and it allows you repeat the re-upload only this chunk of data if and when corrected data become available. 
 
 ### Import stomach survey
 

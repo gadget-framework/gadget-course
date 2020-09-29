@@ -1,5 +1,5 @@
 [simann]
-simanniter 2000 ; number of simulated annealing iterations, normally set to 1000000 for ling
+simanniter 200 ; number of simulated annealing iterations, normally set to 1000000 for ling
 simanneps 1e-03 ; minimum epsilon, simann halt criteria
 t         30000000   ; simulated annealing initial temperature
 rt        0.85  ; temperature reduction factor
@@ -12,7 +12,7 @@ uratio    0.7   ; upper limit for ratio when adjusting step length
 check     4     ; number of temperature loops to check
 seed 5908
 [hooke]
-hookeiter 1000  ; number of hooke & jeeves iterations, normally set to 40000 for ling
+hookeiter 100  ; number of hooke & jeeves iterations, normally set to 40000 for ling
 hookeeps  1e-04 ; minimum epsilon, hooke & jeeves halt criteria
 rho       0.5   ; value for the resizing multiplier
 lambda    0     ; initial value for the step length

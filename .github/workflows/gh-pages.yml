@@ -22,10 +22,11 @@ jobs:
       - name: Install build-docs prerequisites
         run: Rscript -e 'install.packages(c("bookdown","gadget2","mfdb","rmarkdown","magick", "pdftools","tinytex","devtools","tidyverse"))'
 
-      - name: Install build-docs Rgadget2
-        run: Rscript -e 'devtools::install_github("hafro/rgadget")'
+      - name: Install Rgadget2
+        run:  devtools::install_github("hafro/rgadget")
+        shell: Rscript {0}
 
-      - name: Install build-docs prerequisites
+      - name: Install LaTeX
         run: Rscript -e 'tinytex::install_tinytex()'
 
 

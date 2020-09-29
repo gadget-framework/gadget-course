@@ -11,6 +11,7 @@ unlink("*_model", recursive = TRUE)
 unlink("_book", recursive = TRUE)
 unlink("*_files", recursive = TRUE)
 unlink("*_assets", recursive = TRUE)
+unlink("_gadget_course", recursive = TRUE)
 
 
 
@@ -22,27 +23,6 @@ if (args[[1]] == '--serve') {
     serve_output <- FALSE
 }
 
-
-
-
-for (f in c(
-        "index.Rmd",
-        "introduction.Rmd",
-        "Tidyverse.Rmd",
-        "troubleshooting.Rmd",
-        "getting_started.Rmd",
-        "Gadget_installation.Rmd",
-        "day2_lingmodel.Rmd",
-        "day3_fitlingmodel.Rmd",
-        "day4_multi_area.Rmd",
-        "mfdb.Rmd",
-        "stock_interactions.Rmd",
-#        "suitability.Rmd",
-        "")) {
-    if (nchar(f) == 0) next
-    rmarkdown::render(f, output_dir = output_dir, output_format = "html_document")
-}
-
-if (serve_output) {
-    servr::httd(dir = output_dir, host = "0.0.0.0", port = 8000)
-}
+bookdown::serve_book(dir = ".", output_dir = "_gadget_course",
+                     preview = TRUE, in_session = TRUE, quiet = FALSE,
+                     host = "0.0.0.0", port = 8000)

@@ -1,3 +1,7 @@
+```
+title: "Fitting a model to data"
+```
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, cache=TRUE, autodep=TRUE, warning = FALSE,message = FALSE)
@@ -767,7 +771,6 @@ run <- gadget.iterative(comp = 'ldist.gil',
                         wgts = 'WGTS3')
 
 ```
-
 
 ## Visualize Gadget statistical model fit
 

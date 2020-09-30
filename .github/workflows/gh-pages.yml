@@ -28,6 +28,7 @@ jobs:
 #          mkdir -p ~/.ssh
 #          for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip;ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
 #          cat ~/.ssh/known_hosts
+
       
       - name: Install build-docs prerequisites
         run: Rscript -e 'install.packages(c("gadget2","bookdown","mfdb","rmarkdown","magick","pdftools", "patchwork","mapproj","tidyverse","remotes","curl", "TTR", "zoo", "xts", "quantmod", "quadprog", "plyr", "tseries", "reshape2"))'

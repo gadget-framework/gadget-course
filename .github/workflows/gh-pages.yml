@@ -11,26 +11,26 @@ name: Render documentation
 jobs:
   documentation:
     runs-on: ubuntu-latest
-    container: rocker/verse
+#    container: rocker/verse
     steps:
       - uses: actions/checkout@v1
-#      - uses: r-lib/actions/setup-r@v1
-#      - uses: r-lib/actions/setup-pandoc@v1
-#      - uses: r-lib/actions/setup-tinytex@v1
+      - uses: r-lib/actions/setup-r@v1
+      - uses: r-lib/actions/setup-pandoc@v1
+      - uses: r-lib/actions/setup-tinytex@v1
 
-#      - name: Install tikz
-#        run: sudo apt install graphviz imagemagick
+      - name: Install tikz
+        run: sudo apt install graphviz imagemagick
       - name: Distribution dependencies
         run: sudo apt-get update && sudo apt-get install -y libpoppler-cpp-dev dnsutils
 
-      - name: "Prepare SSH key and known hosts"
-        run: |
-          mkdir -p ~/.ssh
-          for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip;ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
-          cat ~/.ssh/known_hosts
+#      - name: "Prepare SSH key and known hosts"
+#        run: |
+#          mkdir -p ~/.ssh
+#          for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip;ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
+#          cat ~/.ssh/known_hosts
       
       - name: Install build-docs prerequisites
-        run: Rscript -e 'install.packages(c("gadget2","mfdb","rmarkdown","magick","pdftools", "patchwork","mapproj"))'
+        run: Rscript -e 'install.packages(c("gadget2","mfdb","rmarkdown","magick","pdftools", "patchwork","mapproj","tidyverse"))'
       
       - name: Install fishvice/mar
         run: Rscript -e 'install.packages(c("maps", "mapdata"))  ; remotes::install_github("hafro/geo")'

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>B Troubleshooting Gadget models | Building models using the Gadget framework</title>
+  <meta name="description" content="B Troubleshooting Gadget models | Building models using the Gadget framework" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="B Troubleshooting Gadget models | Building models using the Gadget framework" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="B Troubleshooting Gadget models | Building models using the Gadget framework" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="installing-gadget-from-source.html"/>
+<link rel="next" href="references.html"/>
+<script src="assets/jquery-2.2.3/jquery.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="assets/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="assets/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="assets/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="assets/datatables-binding-0.15/datatables.js"></script>
+<link href="assets/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="assets/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="assets/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="assets/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="assets/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Building Gadget models</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About this course</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#course-objectives"><i class="fa fa-check"></i><b>1.1</b> Course objectives</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#your-a-priori-homework"><i class="fa fa-check"></i><b>1.2</b> Your a priori homework</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#reading-material"><i class="fa fa-check"></i><b>1.3</b> Reading material</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="general-context-of-gadget.html"><a href="general-context-of-gadget.html"><i class="fa fa-check"></i><b>2</b> General context of Gadget</a><ul>
+<li class="chapter" data-level="2.1" data-path="general-context-of-gadget.html"><a href="general-context-of-gadget.html#gadget-a-toolbox-for-fisheries-stock-assessments"><i class="fa fa-check"></i><b>2.1</b> Gadget – a toolbox for fisheries stock assessments</a></li>
+<li class="chapter" data-level="2.2" data-path="general-context-of-gadget.html"><a href="general-context-of-gadget.html#description-of-gadget"><i class="fa fa-check"></i><b>2.2</b> Description of Gadget</a></li>
+<li class="chapter" data-level="2.3" data-path="general-context-of-gadget.html"><a href="general-context-of-gadget.html#this-course"><i class="fa fa-check"></i><b>2.3</b> This course</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html"><i class="fa fa-check"></i><b>3</b> Introduction to Tidyverse</a><ul>
+<li class="chapter" data-level="3.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#idealogy-behind-r-for-data-science"><i class="fa fa-check"></i><b>3.1</b> Idealogy behind R for Data Science</a></li>
+<li class="chapter" data-level="3.2" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#the-foundation-tibbles-tidy-data-and-piping"><i class="fa fa-check"></i><b>3.2</b> The foundation: tibbles, tidy data, and piping</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#tibbles"><i class="fa fa-check"></i><b>3.2.1</b> Tibbles</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#tidy-data"><i class="fa fa-check"></i><b>3.3</b> Tidy data</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#piping"><i class="fa fa-check"></i><b>3.3.1</b> Piping</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#the-power-of-tidyverse-all-you-need-in-a-handful-of-functions"><i class="fa fa-check"></i><b>3.4</b> The power of tidyverse: all you need in a handful of functions</a></li>
+<li class="chapter" data-level="3.5" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#plotting-in-tidyverse"><i class="fa fa-check"></i><b>3.5</b> Plotting in tidyverse</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#ggplot-key-components"><i class="fa fa-check"></i><b>3.5.1</b> ggplot: Key components</a></li>
+<li class="chapter" data-level="3.5.2" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#aesthetic"><i class="fa fa-check"></i><b>3.5.2</b> aesthetic</a></li>
+<li class="chapter" data-level="3.5.3" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#facetting"><i class="fa fa-check"></i><b>3.5.3</b> Facetting</a></li>
+<li class="chapter" data-level="3.5.4" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#adding-layers"><i class="fa fa-check"></i><b>3.5.4</b> Adding layers</a></li>
+<li class="chapter" data-level="3.5.5" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#add-a-line-to-a-scatterplot"><i class="fa fa-check"></i><b>3.5.5</b> Add a line to a scatterplot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#statistical-summary-graphs"><i class="fa fa-check"></i><b>3.6</b> Statistical summary graphs</a></li>
+<li class="chapter" data-level="3.7" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#other-statistical-summaries"><i class="fa fa-check"></i><b>3.7</b> Other statistical summaries</a></li>
+<li class="chapter" data-level="3.8" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#some-controls"><i class="fa fa-check"></i><b>3.8</b> Some controls</a><ul>
+<li class="chapter" data-level="3.8.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#labels"><i class="fa fa-check"></i><b>3.8.1</b> labels</a></li>
+<li class="chapter" data-level="3.8.2" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#legend-position"><i class="fa fa-check"></i><b>3.8.2</b> Legend position</a></li>
+<li class="chapter" data-level="3.8.3" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#breaks"><i class="fa fa-check"></i><b>3.8.3</b> breaks</a></li>
+<li class="chapter" data-level="3.8.4" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#limits"><i class="fa fa-check"></i><b>3.8.4</b> limits</a></li>
+</ul></li>
+<li class="chapter" data-level="3.9" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#further-readings"><i class="fa fa-check"></i><b>3.9</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html"><i class="fa fa-check"></i><b>4</b> Getting started with the Gadget framework</a><ul>
+<li class="chapter" data-level="4.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#what-is-rgadget"><i class="fa fa-check"></i><b>4.1</b> What is Rgadget?</a></li>
+<li class="chapter" data-level="4.2" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#using-rgadget"><i class="fa fa-check"></i><b>4.2</b> Using Rgadget</a></li>
+<li class="chapter" data-level="4.3" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#creating-model-input-files"><i class="fa fa-check"></i><b>4.3</b> Creating model input files</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#time-file"><i class="fa fa-check"></i><b>4.3.1</b> Time file</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#area-file"><i class="fa fa-check"></i><b>4.3.2</b> Area file</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#stockfiles"><i class="fa fa-check"></i><b>4.3.3</b> Stockfiles</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#starting-a-simulation"><i class="fa fa-check"></i><b>4.4</b> Starting a simulation</a></li>
+<li class="chapter" data-level="4.5" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#gadget-variables"><i class="fa fa-check"></i><b>4.5</b> Gadget variables</a></li>
+<li class="chapter" data-level="4.6" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#predation"><i class="fa fa-check"></i><b>4.6</b> Predation</a></li>
+<li class="chapter" data-level="4.7" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#fleet-operations"><i class="fa fa-check"></i><b>4.7</b> Fleet operations</a><ul>
+<li class="chapter" data-level="4.7.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#excercise"><i class="fa fa-check"></i><b>4.7.1</b> Excercise</a></li>
+</ul></li>
+<li class="chapter" data-level="4.8" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#recruitment"><i class="fa fa-check"></i><b>4.8</b> Recruitment</a><ul>
+<li class="chapter" data-level="4.8.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#exercise-1"><i class="fa fa-check"></i><b>4.8.1</b> Exercise</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html"><i class="fa fa-check"></i><b>5</b> Defining stock interations</a><ul>
+<li class="chapter" data-level="5.1" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#fish-recruits-into-a-stock"><i class="fa fa-check"></i><b>5.1</b> Fish recruits into a stock</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#excercise"><i class="fa fa-check"></i><b>5.1.1</b> Excercise</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#spawning"><i class="fa fa-check"></i><b>5.2</b> Spawning</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#time-variables"><i class="fa fa-check"></i><b>5.2.1</b> Time variables</a></li>
+<li class="chapter" data-level="5.2.2" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#excercise-1"><i class="fa fa-check"></i><b>5.2.2</b> Excercise</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#consumption"><i class="fa fa-check"></i><b>5.3</b> Consumption</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#excercise-2"><i class="fa fa-check"></i><b>5.3.1</b> Excercise</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html"><i class="fa fa-check"></i><b>6</b> Building complex Gadget models</a><ul>
+<li class="chapter" data-level="6.1" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#defining-growth"><i class="fa fa-check"></i><b>6.1</b> Defining growth</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#growth"><i class="fa fa-check"></i><b>6.1.1</b> Growth</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#ling-stock-assessment-in-icelandic-waters"><i class="fa fa-check"></i><b>6.2</b> Ling stock assessment in Icelandic waters</a></li>
+<li class="chapter" data-level="6.3" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#model-initiation"><i class="fa fa-check"></i><b>6.3</b> Model initiation</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#maturation-as-multi-stock-models"><i class="fa fa-check"></i><b>6.3.1</b> Maturation as multi-‘stock’ models</a></li>
+<li class="chapter" data-level="6.3.2" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#initial-conditions"><i class="fa fa-check"></i><b>6.3.2</b> Initial conditions</a></li>
+<li class="chapter" data-level="6.3.3" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#renewal"><i class="fa fa-check"></i><b>6.3.3</b> Renewal</a></li>
+<li class="chapter" data-level="6.3.4" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#reference-weight"><i class="fa fa-check"></i><b>6.3.4</b> Reference Weight</a></li>
+<li class="chapter" data-level="6.3.5" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#is-fished-eaten"><i class="fa fa-check"></i><b>6.3.5</b> Is fished / eaten</a></li>
+<li class="chapter" data-level="6.3.6" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#set-up-fleets-using-catch-or-effort-data"><i class="fa fa-check"></i><b>6.3.6</b> Set up fleets using catch or effort data</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#run-the-simulation-using-pre-determined-parameters"><i class="fa fa-check"></i><b>6.4</b> Run the simulation using pre-determined parameters</a></li>
+<li class="chapter" data-level="6.5" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#talking-points"><i class="fa fa-check"></i><b>6.5</b> Talking points</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html"><i class="fa fa-check"></i><b>7</b> Fitting a model to data</a><ul>
+<li class="chapter" data-level="7.1" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#introducing-likelihood-functions"><i class="fa fa-check"></i><b>7.1</b> Introducing likelihood functions</a></li>
+<li class="chapter" data-level="7.2" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#incorporating-data-ling-case-study-cont."><i class="fa fa-check"></i><b>7.2</b> Incorporating data (Ling case study cont.)</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#exercise"><i class="fa fa-check"></i><b>7.2.1</b> Exercise</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#setting-up-likelihood-components"><i class="fa fa-check"></i><b>7.3</b> Setting up likelihood components</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#setting-up-survey-indices"><i class="fa fa-check"></i><b>7.3.1</b> Setting up survey indices</a></li>
+<li class="chapter" data-level="7.3.2" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#penalty-functions"><i class="fa fa-check"></i><b>7.3.2</b> Penalty functions</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#fitting-a-gadget-model-to-data"><i class="fa fa-check"></i><b>7.4</b> Fitting a Gadget model to data</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#create-starting-values"><i class="fa fa-check"></i><b>7.4.1</b> Create starting values</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#set-optimisation-routine"><i class="fa fa-check"></i><b>7.5</b> Set optimisation routine</a></li>
+<li class="chapter" data-level="7.6" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#using-the-iterative-reweighting-function-to-fit-a-gadget-statistical-model"><i class="fa fa-check"></i><b>7.6</b> Using the iterative reweighting function to fit a Gadget statistical model</a></li>
+<li class="chapter" data-level="7.7" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#visualize-gadget-statistical-model-fit"><i class="fa fa-check"></i><b>7.7</b> Visualize Gadget statistical model fit</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="defining-multi-area-models.html"><a href="defining-multi-area-models.html"><i class="fa fa-check"></i><b>8</b> Defining multi area models</a><ul>
+<li class="chapter" data-level="8.1" data-path="defining-multi-area-models.html"><a href="defining-multi-area-models.html#alternate-structures-multiple-areas"><i class="fa fa-check"></i><b>8.1</b> Alternate structures: multiple areas</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="defining-multi-area-models.html"><a href="defining-multi-area-models.html#migration"><i class="fa fa-check"></i><b>8.1.1</b> Migration</a></li>
+<li class="chapter" data-level="8.1.2" data-path="defining-multi-area-models.html"><a href="defining-multi-area-models.html#using-data-from-multiple-areas"><i class="fa fa-check"></i><b>8.1.2</b> Using data from multiple areas</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html"><i class="fa fa-check"></i><b>9</b> Processing input data with MFDB</a><ul>
+<li class="chapter" data-level="9.1" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#working-with-data"><i class="fa fa-check"></i><b>9.1</b> Working with data</a></li>
+<li class="chapter" data-level="9.2" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#description-of-the-mfdb-system"><i class="fa fa-check"></i><b>9.2</b> Description of the MFDB system</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#installing-mfdb"><i class="fa fa-check"></i><b>9.2.1</b> Installing MFDB</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#importing-data"><i class="fa fa-check"></i><b>9.3</b> Importing data</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#connect-to-database"><i class="fa fa-check"></i><b>9.3.1</b> Connect to database</a></li>
+<li class="chapter" data-level="9.3.2" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#defining-taxonomies"><i class="fa fa-check"></i><b>9.3.2</b> Defining taxonomies</a></li>
+<li class="chapter" data-level="9.3.3" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#define-areas-divisions"><i class="fa fa-check"></i><b>9.3.3</b> Define areas &amp; divisions</a></li>
+<li class="chapter" data-level="9.3.4" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#define-sampling-types"><i class="fa fa-check"></i><b>9.3.4</b> Define sampling types</a></li>
+<li class="chapter" data-level="9.3.5" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#define-vessel-taxonomy"><i class="fa fa-check"></i><b>9.3.5</b> Define vessel taxonomy</a></li>
+<li class="chapter" data-level="9.3.6" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#define-tow-taxonomy"><i class="fa fa-check"></i><b>9.3.6</b> Define tow taxonomy</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#importing-data-1"><i class="fa fa-check"></i><b>9.4</b> Importing data</a><ul>
+<li class="chapter" data-level="9.4.1" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#import-temperature-data"><i class="fa fa-check"></i><b>9.4.1</b> Import temperature data</a></li>
+<li class="chapter" data-level="9.4.2" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#importing-surveycommercial-samples"><i class="fa fa-check"></i><b>9.4.2</b> Importing survey/commercial samples</a></li>
+<li class="chapter" data-level="9.4.3" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#import-stomach-survey"><i class="fa fa-check"></i><b>9.4.3</b> Import stomach survey</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#querying-data"><i class="fa fa-check"></i><b>9.5</b> Querying data</a></li>
+<li class="chapter" data-level="9.6" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#uploading-the-datras-database-to-mfdb"><i class="fa fa-check"></i><b>9.6</b> Uploading the DATRAS database to MFDB</a></li>
+<li class="chapter" data-level="9.7" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#dumping-restoring-a-db"><i class="fa fa-check"></i><b>9.7</b> Dumping / Restoring a DB</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html"><i class="fa fa-check"></i><b>A</b> Installing Gadget from source</a><ul>
+<li class="chapter" data-level="A.1" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#command-line-version"><i class="fa fa-check"></i><b>A.1</b> Command line version</a><ul>
+<li class="chapter" data-level="A.1.1" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#linux"><i class="fa fa-check"></i><b>A.1.1</b> Linux</a></li>
+<li class="chapter" data-level="A.1.2" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#mac"><i class="fa fa-check"></i><b>A.1.2</b> Mac</a></li>
+<li class="chapter" data-level="A.1.3" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#windows"><i class="fa fa-check"></i><b>A.1.3</b> Windows</a></li>
+</ul></li>
+<li class="chapter" data-level="A.2" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#download-compile-and-install"><i class="fa fa-check"></i><b>A.2</b> Download, compile and install</a><ul>
+<li class="chapter" data-level="A.2.1" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#standard-procedure"><i class="fa fa-check"></i><b>A.2.1</b> Standard procedure</a></li>
+<li class="chapter" data-level="A.2.2" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#recommended-via-git"><i class="fa fa-check"></i><b>A.2.2</b> Recommended: via Git</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html"><i class="fa fa-check"></i><b>B</b> Troubleshooting Gadget models</a><ul>
+<li class="chapter" data-level="B.0.1" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#file-data-gadget-cannot-be-found"><i class="fa fa-check"></i><b>B.0.1</b> File / data / Gadget cannot be found</a></li>
+<li class="chapter" data-level="B.0.2" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#fleet-data-likelihood-problems"><i class="fa fa-check"></i><b>B.0.2</b> Fleet / Data / Likelihood problems</a></li>
+<li class="chapter" data-level="B.0.3" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#starting-value-is-outside-the-bounds-of-the-parameter"><i class="fa fa-check"></i><b>B.0.3</b> Starting value is outside the bounds of the parameter</a></li>
+<li class="chapter" data-level="B.0.4" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#update-gadget-and-rgadget-restart-the-rsession"><i class="fa fa-check"></i><b>B.0.4</b> Update Gadget and Rgadget, restart the Rsession</a></li>
+<li class="chapter" data-level="B.1" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#list-of-known-gadget-quirks"><i class="fa fa-check"></i><b>B.1</b> List of known Gadget quirks</a></li>
+<li class="chapter" data-level="B.2" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#gadget-is-working-properly-but-results-are-strange"><i class="fa fa-check"></i><b>B.2</b> Gadget is working properly, but results are strange</a><ul>
+<li class="chapter" data-level="B.2.1" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#programming-errors"><i class="fa fa-check"></i><b>B.2.1</b> Programming errors</a></li>
+<li class="chapter" data-level="B.2.2" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#old-files-hanging-around-in-the-gadget-model-directory"><i class="fa fa-check"></i><b>B.2.2</b> Old files hanging around in the Gadget model directory</a></li>
+<li class="chapter" data-level="B.2.3" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#gadget-iterative-gives-errors"><i class="fa fa-check"></i><b>B.2.3</b> Gadget iterative gives errors</a></li>
+<li class="chapter" data-level="B.2.4" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#the-gadget-working-directory-is-incorporating-files-from-another-gadget-model"><i class="fa fa-check"></i><b>B.2.4</b> The Gadget working directory is incorporating files from another Gadget model</a></li>
+<li class="chapter" data-level="B.2.5" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#your-model-is-not-good"><i class="fa fa-check"></i><b>B.2.5</b> Your model is not good</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>C</b> References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Building models using the Gadget framework</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="troubleshooting-gadget-models" class="section level1">
+<h1><span class="header-section-number">B</span> Troubleshooting Gadget models</h1>
+<p>Uh oh. You ran callGadget and a bunch of red gibberish error message about
+something with a null status popped out. Now what?</p>
+<p>First step is to print a log from a Gadget run, but ONLY when Gadget is running a <strong>simulation</strong>. If run while optimising, you could end up with a crashed computer as well. Open the log and see what the last line tells you. Most often it tells you that a file or data can not be found.</p>
+<div id="file-data-gadget-cannot-be-found" class="section level3">
+<h3><span class="header-section-number">B.0.1</span> File / data / Gadget cannot be found</h3>
+<p>Look for the file that is missing according to the log and make a note of its locatino. Then check all directories involved to see that it matches the search directories:
+* What is your current R working directory in relation to your file paths?
+* What is your Gadget working directory in relation to your model? Set the via Gadget using <code>Sys.setenv(GADGET_WORKING_DIR=normalizePath(pathname))</code>.
+* Where is your Gadget executable in relation to where callGadget thinks it is? The default can be found and changed under the <code>gadget.exe</code> argument within callGadget.</p>
+</div>
+<div id="fleet-data-likelihood-problems" class="section level3">
+<h3><span class="header-section-number">B.0.2</span> Fleet / Data / Likelihood problems</h3>
+<div id="fleet-does-not-exist-in-an-area" class="section level4">
+<h4><span class="header-section-number">B.0.2.1</span> Fleet does not exist in an area</h4>
+<p>You may get an error whenever there are data assigned to a fleet that came from
+an area where that fleet does not exist. When using Rgadget, fleet catch/landings data frames need to have an attribute assigned to them that specifies the areas <em>in which the fleet exists</em>. This information is used to assign fleets to areas in
+the model. Note that it <em>does not matter whether data from all areas where the fleet exists are in the file or not</em>. So for example, a fleet assigned to areas 1
+&amp; 2 can have data only coming from area 1, but a fleet assigned only to area 1
+cannot also have data coming from area 2.</p>
+</div>
+<div id="certain-likelihood-scores-or-values-are-not-being-calculated" class="section level4">
+<h4><span class="header-section-number">B.0.2.2</span> Certain likelihood scores or values are not being calculated</h4>
+<p>If you find that a likelihood component is not returning realistic values, it is wise first to check that temporal and spatial the structure of your model and the structure of your data match. It is also important to check that different sources of data are consistent. For example, you will run into problems if you have a catchdistribution likelihood component with catchdistribution data that comes from a time and place that does not match any catch data being extracted.</p>
+</div>
+</div>
+<div id="starting-value-is-outside-the-bounds-of-the-parameter" class="section level3">
+<h3><span class="header-section-number">B.0.3</span> Starting value is outside the bounds of the parameter</h3>
+<p>This problem is exactly as it states - check your parameter file. Sometimes this
+happens due to a programming error, but sometimes this also happens when, after running a Gadget optimisation run, Gadget leaves you with an optimised parameter value that is ever
+so slightly beyond the bounds that you specified within the optimisation run.
+Parameter bounds in the optimisation routine are not set as hard bounds, rather as a penalty, defined by the BoundLikelihood likelihood component, its value and weight. The penalty is calculated as the distance of the parameter value from its bound x the likelihood component value x its weight. Therefore, if the likelihood increases strongly as the bound is approached in the optimisation search, then there may be a small space beyond the bound where the optimisation algorithm could converge if the penalties or weights are not high enough.</p>
+</div>
+<div id="update-gadget-and-rgadget-restart-the-rsession" class="section level3">
+<h3><span class="header-section-number">B.0.4</span> Update Gadget and Rgadget, restart the Rsession</h3>
+<p>Package incompatibilities? Bug fixes? No good explanations here as to when this should be done, it just works sometimes and should be done regularly anyway (roughly monthly at a minimum).</p>
+</div>
+<div id="list-of-known-gadget-quirks" class="section level2">
+<h2><span class="header-section-number">B.1</span> List of known Gadget quirks</h2>
+<p>Once in a while, you get a far more interesting error in the log. These can be
+difficult to figure out, but here are a few known bugs that may be causing it.</p>
+<ul>
+<li><p>Survey indices with more than one are <strong>must</strong> have data for both areas within a given year, if that year is present in the data at all</p></li>
+<li><p>Where little age data are present, the simulated annealing optimisation routine can tend to get stuck in local optima where biomass is very high. For example, if recruitment is estimated each year as in the ling example, then at least one recruitment value will be optimised very close to the upper bound, but open further investigation, results with lower likelihood can be found away from these bounds. The reason for this is unknown and efforts are underway to analyze the reason for this problem, but in the meantime it can have serious consequences on model results. Therefore, it is best practice to always set the seed for the optimisation run and create a profile of the likelihood score while varying the value of any suspect parameters. In this case of recruitment estimates, the upper bound that applies to all recruitment estimates may need to be varied instead of the parameter value itself, because any change in a single year’s recruitment parameter will affect other year’s recruitment values as well as growth.</p></li>
+</ul>
+</div>
+<div id="gadget-is-working-properly-but-results-are-strange" class="section level2">
+<h2><span class="header-section-number">B.2</span> Gadget is working properly, but results are strange</h2>
+<div id="programming-errors" class="section level3">
+<h3><span class="header-section-number">B.2.1</span> Programming errors</h3>
+<p>This is most likely to be a programming error in an Rgadget script that has caused strange input or
+settings, so the first step is to carefully check over the Gadget files. The most likely culprits are
+<em>trying to include the same parameter in multiple places, but accidentally naming it incorrectly (thereby generating an additional poorly specified parameter)
+</em>wrongly specified likelihood component names that end up not grouped within the call to <code>gadget.reiterative</code></p>
+</div>
+<div id="old-files-hanging-around-in-the-gadget-model-directory" class="section level3">
+<h3><span class="header-section-number">B.2.2</span> Old files hanging around in the Gadget model directory</h3>
+<p>If nothing is obvious, delete all Gadget files in the project, check all working directories, and rewrite the Gadget files. Perhaps some old model specifications were not rewritten by new ones, or old likelihood components that were written by a previous version are still hanging around in the folders. In general, when developing a set of Rgadget script of a single Gadget model, it is best practice to delete all
+generated Gadget files while testing and running it. This is because simple programming errors, for
+example in naming a likelihood component, can cause serious problems in your model structure (e.g.,
+including the same data in two separate likelihood components). If the incorrectly generated files
+are not deleted, Gadget may read them and incorporate them as part of your model.</p>
+</div>
+<div id="gadget-iterative-gives-errors" class="section level3">
+<h3><span class="header-section-number">B.2.3</span> Gadget iterative gives errors</h3>
+<p>Step through your model files looking for bugs, especially in the
+likelihood files. Look at the weights that are being assigned in every
+instance, which could lead you to problematic data or likelihood structures.</p>
+</div>
+<div id="the-gadget-working-directory-is-incorporating-files-from-another-gadget-model" class="section level3">
+<h3><span class="header-section-number">B.2.4</span> The Gadget working directory is incorporating files from another Gadget model</h3>
+<p>When recreating Gadget files and calling Gadget, check all working directories carefully. <em>This is especially problematic when working on two scripts of two different models simultaneously in the same R session.</em> Because there is only one Gadget working directory per R session environment,
+which is set using <code>Sys.setenv(GADGET_WORKING_DIR=normalizePath(pathname))</code>, if you set
+the Gadget working directory containing project A’s data, and don’t switch it back to project
+B’s working directory when running project B, then you may start including project A data
+and likelihood components into a project B model run. More on file and path organization can be found in the Gadget User Guide section 1.3 ‘Running Gadget’.</p>
+</div>
+<div id="your-model-is-not-good" class="section level3">
+<h3><span class="header-section-number">B.2.5</span> Your model is not good</h3>
+<p>If these errors are ruled out, you will have to look at the model results themselves. Some starting
+places:
+* Did your model converge? If no, increase optimisation length or change optimisation parameters or methods. In complex models or those no age data, it has been observed that the simulated annealing algorithm needs to run for a long time to avoid landing in local optimum.
+* Is there understocking? Try restricting parameter bounds so that the model begins in a more realistic starting point.
+* Are parameter bound constricting? Loosen them if necessary.
+* Are parameter bounds realistic? Check to make sure parameter values are not on the wrong scale or have the wrong interpretation.
+* Are there more ‘NAs’ than data in your likelihood function? Because NAs are not actually included in Gadget, to consider this question you need to compare the model structure (e.g., # age-length bins) to the number of data points you include in the likelihood. For example, if you have 10 ages x 100 lengths = 1000 bins, but only 50 data points to compare with, then the optimisation routine can have a hard time fitting that data source. Try changing the aggregation levels of the data (grouping attributes of the data frame) to larger aggregations for the purpose of comparing the model to data.
+* <strong>Does the growth process look realistic</strong>? This is an important question to ask of all Gadget models, since Gadget models are more likely to be used in scenarios where there is little or poor ageing data. In this scenario, model results hinge heavily on how growth is modeled. Therefore, results for growth-related paramters should be scrutinized carefully (e.g., Linfinity and k in Von Bertalannfy growth, alpha &amp; beta in the translation of lengths to weights, maxlengthgroupgrowth should be reduced, especially when the beta paramater hits a bound).
+* Check the list of known Gadget quirks.</p>
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="installing-gadget-from-source.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/lunr.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/hafro/gadget-course/edit/master/troubleshooting.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/hafro/gadget-course/blob/master/troubleshooting.Rmd",
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

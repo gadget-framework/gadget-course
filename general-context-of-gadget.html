@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>2 General context of Gadget | Building models using the Gadget framework</title>
+  <meta name="description" content="2 General context of Gadget | Building models using the Gadget framework" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="2 General context of Gadget | Building models using the Gadget framework" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="2 General context of Gadget | Building models using the Gadget framework" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="index.html"/>
+<link rel="next" href="introduction-to-tidyverse.html"/>
+<script src="assets/jquery-2.2.3/jquery.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="assets/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="assets/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="assets/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="assets/datatables-binding-0.15/datatables.js"></script>
+<link href="assets/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="assets/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="assets/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="assets/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="assets/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Building Gadget models</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About this course</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#course-objectives"><i class="fa fa-check"></i><b>1.1</b> Course objectives</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#your-a-priori-homework"><i class="fa fa-check"></i><b>1.2</b> Your a priori homework</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#reading-material"><i class="fa fa-check"></i><b>1.3</b> Reading material</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="general-context-of-gadget.html"><a href="general-context-of-gadget.html"><i class="fa fa-check"></i><b>2</b> General context of Gadget</a><ul>
+<li class="chapter" data-level="2.1" data-path="general-context-of-gadget.html"><a href="general-context-of-gadget.html#gadget-a-toolbox-for-fisheries-stock-assessments"><i class="fa fa-check"></i><b>2.1</b> Gadget – a toolbox for fisheries stock assessments</a></li>
+<li class="chapter" data-level="2.2" data-path="general-context-of-gadget.html"><a href="general-context-of-gadget.html#description-of-gadget"><i class="fa fa-check"></i><b>2.2</b> Description of Gadget</a></li>
+<li class="chapter" data-level="2.3" data-path="general-context-of-gadget.html"><a href="general-context-of-gadget.html#this-course"><i class="fa fa-check"></i><b>2.3</b> This course</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html"><i class="fa fa-check"></i><b>3</b> Introduction to Tidyverse</a><ul>
+<li class="chapter" data-level="3.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#idealogy-behind-r-for-data-science"><i class="fa fa-check"></i><b>3.1</b> Idealogy behind R for Data Science</a></li>
+<li class="chapter" data-level="3.2" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#the-foundation-tibbles-tidy-data-and-piping"><i class="fa fa-check"></i><b>3.2</b> The foundation: tibbles, tidy data, and piping</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#tibbles"><i class="fa fa-check"></i><b>3.2.1</b> Tibbles</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#tidy-data"><i class="fa fa-check"></i><b>3.3</b> Tidy data</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#piping"><i class="fa fa-check"></i><b>3.3.1</b> Piping</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#the-power-of-tidyverse-all-you-need-in-a-handful-of-functions"><i class="fa fa-check"></i><b>3.4</b> The power of tidyverse: all you need in a handful of functions</a></li>
+<li class="chapter" data-level="3.5" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#plotting-in-tidyverse"><i class="fa fa-check"></i><b>3.5</b> Plotting in tidyverse</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#ggplot-key-components"><i class="fa fa-check"></i><b>3.5.1</b> ggplot: Key components</a></li>
+<li class="chapter" data-level="3.5.2" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#aesthetic"><i class="fa fa-check"></i><b>3.5.2</b> aesthetic</a></li>
+<li class="chapter" data-level="3.5.3" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#facetting"><i class="fa fa-check"></i><b>3.5.3</b> Facetting</a></li>
+<li class="chapter" data-level="3.5.4" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#adding-layers"><i class="fa fa-check"></i><b>3.5.4</b> Adding layers</a></li>
+<li class="chapter" data-level="3.5.5" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#add-a-line-to-a-scatterplot"><i class="fa fa-check"></i><b>3.5.5</b> Add a line to a scatterplot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#statistical-summary-graphs"><i class="fa fa-check"></i><b>3.6</b> Statistical summary graphs</a></li>
+<li class="chapter" data-level="3.7" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#other-statistical-summaries"><i class="fa fa-check"></i><b>3.7</b> Other statistical summaries</a></li>
+<li class="chapter" data-level="3.8" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#some-controls"><i class="fa fa-check"></i><b>3.8</b> Some controls</a><ul>
+<li class="chapter" data-level="3.8.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#labels"><i class="fa fa-check"></i><b>3.8.1</b> labels</a></li>
+<li class="chapter" data-level="3.8.2" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#legend-position"><i class="fa fa-check"></i><b>3.8.2</b> Legend position</a></li>
+<li class="chapter" data-level="3.8.3" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#breaks"><i class="fa fa-check"></i><b>3.8.3</b> breaks</a></li>
+<li class="chapter" data-level="3.8.4" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#limits"><i class="fa fa-check"></i><b>3.8.4</b> limits</a></li>
+</ul></li>
+<li class="chapter" data-level="3.9" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#further-readings"><i class="fa fa-check"></i><b>3.9</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html"><i class="fa fa-check"></i><b>4</b> Getting started with the Gadget framework</a><ul>
+<li class="chapter" data-level="4.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#what-is-rgadget"><i class="fa fa-check"></i><b>4.1</b> What is Rgadget?</a></li>
+<li class="chapter" data-level="4.2" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#using-rgadget"><i class="fa fa-check"></i><b>4.2</b> Using Rgadget</a></li>
+<li class="chapter" data-level="4.3" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#creating-model-input-files"><i class="fa fa-check"></i><b>4.3</b> Creating model input files</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#time-file"><i class="fa fa-check"></i><b>4.3.1</b> Time file</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#area-file"><i class="fa fa-check"></i><b>4.3.2</b> Area file</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#stockfiles"><i class="fa fa-check"></i><b>4.3.3</b> Stockfiles</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#starting-a-simulation"><i class="fa fa-check"></i><b>4.4</b> Starting a simulation</a></li>
+<li class="chapter" data-level="4.5" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#gadget-variables"><i class="fa fa-check"></i><b>4.5</b> Gadget variables</a></li>
+<li class="chapter" data-level="4.6" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#predation"><i class="fa fa-check"></i><b>4.6</b> Predation</a></li>
+<li class="chapter" data-level="4.7" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#fleet-operations"><i class="fa fa-check"></i><b>4.7</b> Fleet operations</a><ul>
+<li class="chapter" data-level="4.7.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#excercise"><i class="fa fa-check"></i><b>4.7.1</b> Excercise</a></li>
+</ul></li>
+<li class="chapter" data-level="4.8" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#recruitment"><i class="fa fa-check"></i><b>4.8</b> Recruitment</a><ul>
+<li class="chapter" data-level="4.8.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#exercise-1"><i class="fa fa-check"></i><b>4.8.1</b> Exercise</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html"><i class="fa fa-check"></i><b>5</b> Defining stock interations</a><ul>
+<li class="chapter" data-level="5.1" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#fish-recruits-into-a-stock"><i class="fa fa-check"></i><b>5.1</b> Fish recruits into a stock</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#excercise"><i class="fa fa-check"></i><b>5.1.1</b> Excercise</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#spawning"><i class="fa fa-check"></i><b>5.2</b> Spawning</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#time-variables"><i class="fa fa-check"></i><b>5.2.1</b> Time variables</a></li>
+<li class="chapter" data-level="5.2.2" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#excercise-1"><i class="fa fa-check"></i><b>5.2.2</b> Excercise</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#consumption"><i class="fa fa-check"></i><b>5.3</b> Consumption</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#excercise-2"><i class="fa fa-check"></i><b>5.3.1</b> Excercise</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html"><i class="fa fa-check"></i><b>6</b> Building complex Gadget models</a><ul>
+<li class="chapter" data-level="6.1" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#defining-growth"><i class="fa fa-check"></i><b>6.1</b> Defining growth</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#growth"><i class="fa fa-check"></i><b>6.1.1</b> Growth</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#ling-stock-assessment-in-icelandic-waters"><i class="fa fa-check"></i><b>6.2</b> Ling stock assessment in Icelandic waters</a></li>
+<li class="chapter" data-level="6.3" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#model-initiation"><i class="fa fa-check"></i><b>6.3</b> Model initiation</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#maturation-as-multi-stock-models"><i class="fa fa-check"></i><b>6.3.1</b> Maturation as multi-‘stock’ models</a></li>
+<li class="chapter" data-level="6.3.2" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#initial-conditions"><i class="fa fa-check"></i><b>6.3.2</b> Initial conditions</a></li>
+<li class="chapter" data-level="6.3.3" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#renewal"><i class="fa fa-check"></i><b>6.3.3</b> Renewal</a></li>
+<li class="chapter" data-level="6.3.4" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#reference-weight"><i class="fa fa-check"></i><b>6.3.4</b> Reference Weight</a></li>
+<li class="chapter" data-level="6.3.5" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#is-fished-eaten"><i class="fa fa-check"></i><b>6.3.5</b> Is fished / eaten</a></li>
+<li class="chapter" data-level="6.3.6" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#set-up-fleets-using-catch-or-effort-data"><i class="fa fa-check"></i><b>6.3.6</b> Set up fleets using catch or effort data</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#run-the-simulation-using-pre-determined-parameters"><i class="fa fa-check"></i><b>6.4</b> Run the simulation using pre-determined parameters</a></li>
+<li class="chapter" data-level="6.5" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#talking-points"><i class="fa fa-check"></i><b>6.5</b> Talking points</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html"><i class="fa fa-check"></i><b>7</b> Fitting a model to data</a><ul>
+<li class="chapter" data-level="7.1" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#introducing-likelihood-functions"><i class="fa fa-check"></i><b>7.1</b> Introducing likelihood functions</a></li>
+<li class="chapter" data-level="7.2" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#incorporating-data-ling-case-study-cont."><i class="fa fa-check"></i><b>7.2</b> Incorporating data (Ling case study cont.)</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#exercise"><i class="fa fa-check"></i><b>7.2.1</b> Exercise</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#setting-up-likelihood-components"><i class="fa fa-check"></i><b>7.3</b> Setting up likelihood components</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#setting-up-survey-indices"><i class="fa fa-check"></i><b>7.3.1</b> Setting up survey indices</a></li>
+<li class="chapter" data-level="7.3.2" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#penalty-functions"><i class="fa fa-check"></i><b>7.3.2</b> Penalty functions</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#fitting-a-gadget-model-to-data"><i class="fa fa-check"></i><b>7.4</b> Fitting a Gadget model to data</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#create-starting-values"><i class="fa fa-check"></i><b>7.4.1</b> Create starting values</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#set-optimisation-routine"><i class="fa fa-check"></i><b>7.5</b> Set optimisation routine</a></li>
+<li class="chapter" data-level="7.6" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#using-the-iterative-reweighting-function-to-fit-a-gadget-statistical-model"><i class="fa fa-check"></i><b>7.6</b> Using the iterative reweighting function to fit a Gadget statistical model</a></li>
+<li class="chapter" data-level="7.7" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#visualize-gadget-statistical-model-fit"><i class="fa fa-check"></i><b>7.7</b> Visualize Gadget statistical model fit</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="defining-multi-area-models.html"><a href="defining-multi-area-models.html"><i class="fa fa-check"></i><b>8</b> Defining multi area models</a><ul>
+<li class="chapter" data-level="8.1" data-path="defining-multi-area-models.html"><a href="defining-multi-area-models.html#alternate-structures-multiple-areas"><i class="fa fa-check"></i><b>8.1</b> Alternate structures: multiple areas</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="defining-multi-area-models.html"><a href="defining-multi-area-models.html#migration"><i class="fa fa-check"></i><b>8.1.1</b> Migration</a></li>
+<li class="chapter" data-level="8.1.2" data-path="defining-multi-area-models.html"><a href="defining-multi-area-models.html#using-data-from-multiple-areas"><i class="fa fa-check"></i><b>8.1.2</b> Using data from multiple areas</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html"><i class="fa fa-check"></i><b>9</b> Processing input data with MFDB</a><ul>
+<li class="chapter" data-level="9.1" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#working-with-data"><i class="fa fa-check"></i><b>9.1</b> Working with data</a></li>
+<li class="chapter" data-level="9.2" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#description-of-the-mfdb-system"><i class="fa fa-check"></i><b>9.2</b> Description of the MFDB system</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#installing-mfdb"><i class="fa fa-check"></i><b>9.2.1</b> Installing MFDB</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#importing-data"><i class="fa fa-check"></i><b>9.3</b> Importing data</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#connect-to-database"><i class="fa fa-check"></i><b>9.3.1</b> Connect to database</a></li>
+<li class="chapter" data-level="9.3.2" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#defining-taxonomies"><i class="fa fa-check"></i><b>9.3.2</b> Defining taxonomies</a></li>
+<li class="chapter" data-level="9.3.3" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#define-areas-divisions"><i class="fa fa-check"></i><b>9.3.3</b> Define areas &amp; divisions</a></li>
+<li class="chapter" data-level="9.3.4" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#define-sampling-types"><i class="fa fa-check"></i><b>9.3.4</b> Define sampling types</a></li>
+<li class="chapter" data-level="9.3.5" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#define-vessel-taxonomy"><i class="fa fa-check"></i><b>9.3.5</b> Define vessel taxonomy</a></li>
+<li class="chapter" data-level="9.3.6" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#define-tow-taxonomy"><i class="fa fa-check"></i><b>9.3.6</b> Define tow taxonomy</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#importing-data-1"><i class="fa fa-check"></i><b>9.4</b> Importing data</a><ul>
+<li class="chapter" data-level="9.4.1" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#import-temperature-data"><i class="fa fa-check"></i><b>9.4.1</b> Import temperature data</a></li>
+<li class="chapter" data-level="9.4.2" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#importing-surveycommercial-samples"><i class="fa fa-check"></i><b>9.4.2</b> Importing survey/commercial samples</a></li>
+<li class="chapter" data-level="9.4.3" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#import-stomach-survey"><i class="fa fa-check"></i><b>9.4.3</b> Import stomach survey</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#querying-data"><i class="fa fa-check"></i><b>9.5</b> Querying data</a></li>
+<li class="chapter" data-level="9.6" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#uploading-the-datras-database-to-mfdb"><i class="fa fa-check"></i><b>9.6</b> Uploading the DATRAS database to MFDB</a></li>
+<li class="chapter" data-level="9.7" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#dumping-restoring-a-db"><i class="fa fa-check"></i><b>9.7</b> Dumping / Restoring a DB</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html"><i class="fa fa-check"></i><b>A</b> Installing Gadget from source</a><ul>
+<li class="chapter" data-level="A.1" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#command-line-version"><i class="fa fa-check"></i><b>A.1</b> Command line version</a><ul>
+<li class="chapter" data-level="A.1.1" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#linux"><i class="fa fa-check"></i><b>A.1.1</b> Linux</a></li>
+<li class="chapter" data-level="A.1.2" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#mac"><i class="fa fa-check"></i><b>A.1.2</b> Mac</a></li>
+<li class="chapter" data-level="A.1.3" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#windows"><i class="fa fa-check"></i><b>A.1.3</b> Windows</a></li>
+</ul></li>
+<li class="chapter" data-level="A.2" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#download-compile-and-install"><i class="fa fa-check"></i><b>A.2</b> Download, compile and install</a><ul>
+<li class="chapter" data-level="A.2.1" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#standard-procedure"><i class="fa fa-check"></i><b>A.2.1</b> Standard procedure</a></li>
+<li class="chapter" data-level="A.2.2" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#recommended-via-git"><i class="fa fa-check"></i><b>A.2.2</b> Recommended: via Git</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html"><i class="fa fa-check"></i><b>B</b> Troubleshooting Gadget models</a><ul>
+<li class="chapter" data-level="B.0.1" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#file-data-gadget-cannot-be-found"><i class="fa fa-check"></i><b>B.0.1</b> File / data / Gadget cannot be found</a></li>
+<li class="chapter" data-level="B.0.2" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#fleet-data-likelihood-problems"><i class="fa fa-check"></i><b>B.0.2</b> Fleet / Data / Likelihood problems</a></li>
+<li class="chapter" data-level="B.0.3" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#starting-value-is-outside-the-bounds-of-the-parameter"><i class="fa fa-check"></i><b>B.0.3</b> Starting value is outside the bounds of the parameter</a></li>
+<li class="chapter" data-level="B.0.4" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#update-gadget-and-rgadget-restart-the-rsession"><i class="fa fa-check"></i><b>B.0.4</b> Update Gadget and Rgadget, restart the Rsession</a></li>
+<li class="chapter" data-level="B.1" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#list-of-known-gadget-quirks"><i class="fa fa-check"></i><b>B.1</b> List of known Gadget quirks</a></li>
+<li class="chapter" data-level="B.2" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#gadget-is-working-properly-but-results-are-strange"><i class="fa fa-check"></i><b>B.2</b> Gadget is working properly, but results are strange</a><ul>
+<li class="chapter" data-level="B.2.1" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#programming-errors"><i class="fa fa-check"></i><b>B.2.1</b> Programming errors</a></li>
+<li class="chapter" data-level="B.2.2" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#old-files-hanging-around-in-the-gadget-model-directory"><i class="fa fa-check"></i><b>B.2.2</b> Old files hanging around in the Gadget model directory</a></li>
+<li class="chapter" data-level="B.2.3" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#gadget-iterative-gives-errors"><i class="fa fa-check"></i><b>B.2.3</b> Gadget iterative gives errors</a></li>
+<li class="chapter" data-level="B.2.4" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#the-gadget-working-directory-is-incorporating-files-from-another-gadget-model"><i class="fa fa-check"></i><b>B.2.4</b> The Gadget working directory is incorporating files from another Gadget model</a></li>
+<li class="chapter" data-level="B.2.5" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#your-model-is-not-good"><i class="fa fa-check"></i><b>B.2.5</b> Your model is not good</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>C</b> References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Building models using the Gadget framework</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="general-context-of-gadget" class="section level1">
+<h1><span class="header-section-number">2</span> General context of Gadget</h1>
+<p>Ecosystem considerations appear to be an obvious, and necessary part,
+of the management of marine resources. Several international
+organizations have stressed the importance of studying ecosystems
+interactions in terms of management <span class="citation">[eg. @sinclair2002responsible,
+@nammco1997]</span>. Optimum fisheries management based on ecosystem
+consideration is however an elusive target. Even if the model
+sufficiently describes the target ecosystem, <span class="citation">@voss2014regional</span>
+illustrated that the definition of the this optimum is dependent on
+the manager’s view of the resource. Although the rationale for
+ecosystem based approach to fisheries management is strong its
+adoption has been slow, which <span class="citation">@mollmann2013implementing</span> suggests
+is due to lack of strategy. However the effects of species
+interactions on the management of a commercially exploited stock is a fairly
+complicated and data intensive excercise, as it requires data not
+directly observed by fisheries. <span class="citation">@dickey2013ecosystem</span> note
+therefore that the state of knowledge is not sufficient to embark on
+ecosystem engineering, although in theory this would have desirable effects
+on the status of key resources, as such an undertaking may have
+undesirable and unforseen consequences.</p>
+<p>The choice of a modelling approach used to assimilate biological
+information such as those obtained from scientific surveys also needs
+some consideration. There are a number of approaches to ecosystems
+models. According to <span class="citation">@plaganyi2007models</span> they broadly fall broadly into
+four categories:</p>
+<ul>
+<li>Whole ecosystem approaches, where all trophic levels of the
+ecosystem are modelled <span class="citation">[e.g. @christensen2004ecopath]</span>.</li>
+<li>Dynamic systems models, where where the whole ecosystem and
+possibly its effects to coastal communities is modelled
+<span class="citation">[e.g. @link2010northeast]</span>.</li>
+<li>Extensions of single–species assesment models
+<span class="citation">[e.g. @livingston1998incorporation]</span>.</li>
+<li>Minimum realistic models, where only a few but significant
+interactions are included. Examples of cases are models built using
+the Gadget framework <span class="citation">[@begley2004overview]</span>.</li>
+</ul>
+<p>Obviously these approaches differ substantiantly both in scope and
+objectives. Minimimum realistic models and singles species extensions
+are, as the names suggest, more focussed on answering key questions
+and their parameters are estimated statistically. Modelling
+approaches, like those using Atlantis <span class="citation">[@fulton2005ecological]</span> or
+Ecopath with Ecosim <span class="citation">[@christensen2004ecopath]</span>, often try to
+include a larger part of the ecosystem where it becomes harder to
+estimate the model parameters through comparisons with real
+data. These grand models tend to be more useful when answering
+strategic questions, such as discussed by <span class="citation">@fulton2011lessons</span>,
+rather than more tactical issues such as direct advice on next years
+quota.</p>
+<div id="gadget-a-toolbox-for-fisheries-stock-assessments" class="section level2">
+<h2><span class="header-section-number">2.1</span> Gadget – a toolbox for fisheries stock assessments</h2>
+<p>Modelling approaches such as those allowed by Atlantis have, although
+interesting, tended to have quite obvious drawbacks in terms of
+comparisons to real data. Estimates of process parameters are far from
+trivial in this setting, both in terms of available data and more
+importantly computation time. A fullblown Atlantis model will
+generally take a substantial time for a single simulation and as such
+not obvious how one would obtain an ``optimal’’ fit in a statistical
+sense. That said, these types of model can provide valuable insight
+into how an ecosystems would behave. In particular one could study
+certain performance metrics, such as ecosystem indicators <span class="citation">[as
+described in @fulton2005ecological]</span>, and various stock assessment
+models.</p>
+<p>It has been observed that in various settings single species models of
+a marine resource fail to explain model deviations. To answer these
+questions extensions to the normal single species have been developed
+<span class="citation">[as discussed in @magnusson1995msvpa and references therein
+]</span>. These extensions attempt to ecompass
+significant processes that affect the species of interest. A special
+type of these approaches are the mimimally realistic models mentioned
+above <span class="citation">[also referred to as MICE models as discussed
+in @plaganyi2014multispecies]</span>.</p>
+<p>A special modelling framework, Gadget <span class="citation">[**G**lobally
+**a**pplicable, area--**d**isaggregated
+**e**cosystem **t**oolbox, described
+in @begley2005gadget]</span>, was developed to aid in the study of
+various statistical processes involved in multi–species
+assessments. The development of Gadget conceptually dates back to
+MULTSPEC <span class="citation">[@bogstad1997multspec]</span>, which described a multi–species
+model for fish and marine mammals in the Barents sea. Many of the
+underlying concepts and most of the codebase that forms the Gadget
+framework was date back to Bormicon <span class="citation">[@stefansson1997bormicon,
+@stefansson1998framework]</span>, which was developed as a continuation of a
+multi-species sampling program <span class="citation">[described in @mrifjolst]</span>,
+which has been under constant developement and iterations. Notable
+iterations include the Fleksibest framework
+<span class="citation">[@guldbrandsen2002fleksibest]</span>, a fork of Bormicon which was
+merged back with Bormicon to form Gadget as part of the dst<span class="math inline">\(^2\)</span>
+project <span class="citation">[@dst2]</span>.</p>
+<p>The dst<span class="math inline">\(^2\)</span> project was multi-objective project funded by the European
+Union and began in 1999. The bas
+idea was to <code>develop fisheries science as far as information will support'' the development of statistically sound models of marine ecological processes,</code>but strictly no further’’. Four main
+objectives were the following:</p>
+<ul>
+<li>Collect relevant data and provide objective means to analyse
+them. This included the development of Gadget and a specialised data
+warehouse.</li>
+<li>Validate present stock assessment.</li>
+<li>Evaluate the appropriateness of complicated models when
+providing management advice.</li>
+<li>Evaluate and validate reference points used in management.</li>
+</ul>
+<p>A substantial amount of analysis has subsequently been made on Cod in
+Icelandic waters using the Gadget modeling framework. Notably
+<span class="citation">@taylor2007simple</span> which describes a thorough analysis of the
+available data and potential weaknesses. In it a single species single
+area model is considered. A continuation of this work in a multi-stock
+multi-species multi-area setting are described in
+<span class="citation">@taylor2011gadget</span>. There it is seen that substantial improvements
+in the model fit are possible by considering a north – south division
+in the cod stock.</p>
+<p>These developments have not been restricted to single–species
+models. A number of species have been analysed in a multi–species
+setting using Gadget. Notable implementaions include a model of the
+Barents sea of cod, capelin, herring and minke whales
+<span class="citation">@lindstrom2009modelling</span> and subsquently
+<span class="citation">@howell2010combined</span> where FLR <span class="citation">@kell2007flr</span> is used in
+connection with Gadget in a harvest control simulation.</p>
+<p><img src="introduction_files/figure-html/unnamed-chunk-1-1.png" width="672" />
+An illustration of a typical stock assessment process and the
+types of uncertainty associated with each step within Gadget.</p>
+</div>
+<div id="description-of-gadget" class="section level2">
+<h2><span class="header-section-number">2.2</span> Description of Gadget</h2>
+<p>Gadget is essentially three things, an ecosystem simulator, a
+likelihood function that takes the output from the ecosystem simulator
+and compares to data, and a function mininimizer. Gadget’s simulation
+module allows for a fairly configurable ecosystem simulation. Its
+fundamental unit, a <strong>stock</strong> (or more accurately substock),
+represents a group of individuals that is homogenous with respect to
+various processes. These processes include growth, predation
+(including commercial fisheries) and migration. In this setup
+different stages of the life history of a particular species would be
+represented as separate stocks and individuals ``moved’’ between
+stocks when required. The simulation takes place in a set number of
+<strong>years</strong> or <strong>observations</strong> and <strong>time-steps</strong> within
+an observation. Years can be broken down into a maximum of 12 time-steps.
+The time-steps within the observations allow for the
+emulation of the annual cycles of the ecosystem, such as recruitment
+and stock migrations.</p>
+<p>The stock unit within Gadget is simply a representation of the total
+number of individuals within a certain age and length group from one or
+more certain area. When stocks live in multiple areas, they
+optionally migrate among areas during definable time-steps.
+In this setup, processes such as fleet
+harvest or recruitment can be restricted to take place only in certain
+areas. Harvesting of the substocks is defined through fleets that fish
+according to effort and (length–based) selection functions.</p>
+<p>Gadget’s likelihood module processes the output from the ecosystem
+simulation after aggregating across certain dimensions. Within the likelihood module,
+a number of datasets can be compared to the model output. In addition
+to a suite of functions designed to work with different types of
+survey indices, various other types of data , can be contrasted to
+the model output including compositional data (such as length distributions,
+age distributions, age- and length-distribution, or proportions mature) or
+tagging data to name a few. Each dataset is compared to model output at its own aggregation
+level, with missing data handled in a robust manner.</p>
+<p>In contrast with Gadget, age-based or stock production type stock
+assessments require data in a fairly processed form. For instance when
+using VPA one requires the total catch in numbers of individuals by
+age. However, apart from catches of fin whales in the North Atlantic
+<span class="citation">@iwcistfin</span>, one rarely has all catches by numbers at
+age. Therefore the age distribution of catches needs to be
+approximated using some combination of age readings, length
+distributions, total catches in tonnes and weight at age <span class="citation">[as noted
+in @hirst2005estimating]</span>. Essentially using VPA requires a two-step
+modelling process.</p>
+<p>Gadget’s function minimizer, based on the negative log–likelihood
+(but implemented as a simple sum of squares), varies the
+model parameters, runs a full simulation, and calculates a new
+output. This process is repeated until a minimum is obtained. The
+model has three alternative optimising algorithms linked to it, a wide
+area search <em>simulated annealing</em> <span class="citation">[@corana1987minimizing]</span>,
+a local search <em>Hooke and Jeeves algorithm</em>
+<span class="citation">[@HookeJeeves1961]</span> and finally one based on the
+Broyden-Fletcher-Goldfarb-Shanno algorithm (<em>BFGS</em>).</p>
+<p>The simulated annealing and Hooke-Jeeves algorithms are not gradient
+based, and there is therefore no requirement for the likelihood
+surface to be smooth. Consequently neither of the two algorithms
+returns estimates of the Hessian matrix. Simulated annealing is more
+robust than Hooke and Jeeves and can find a global optima where there
+are multiple optima but needs about 2-3 times the order of magnitude
+in iterations than the Hooke and Jeeves algorithm to converge.</p>
+<p>BFGS is a quasi-Newton optimisation method that
+uses information about the gradient of the function at the current
+point to calculate the best direction to look for a better point.
+Using this information the BFGS algorithm can iteratively calculate a
+better approximation to the inverse Hessian matrix. When compared to
+the two other algorithms implemented in Gadget, BFGS is a very local
+search compared to simulated annealing and is more computationally
+intensive than the Hooke and Jeeves. However the gradient search in
+BFGS is more accurate than the step-wise search of Hooke and Jeeves and
+may therefore give a more accurate estimation of the optimum. The
+BFGS algorithm used in Gadget is derived from that presented by
+<span class="citation">@bertsekas1999nonlinear</span>.</p>
+<p>The total objective function to be minimised is a weighted sum of the
+different components. The estimation could be difficult due to groups
+of correlated parameters or multiple local optima. Therefore the
+optimisation procedure often involves a combination of the more robust
+simulated annealing, to make the results less sensitive to the initial
+(starting) values, and the local search algorithms (Hooke and
+Jeeves and BFGS), to obtain more accurate final values in the
+neighborhood of the global optimum.</p>
+</div>
+<div id="this-course" class="section level2">
+<h2><span class="header-section-number">2.3</span> This course</h2>
+<p>During this course we will attempt to introduce how the key topic listed here above are implemented in Gadget. You will learn how to set up a simulation model using Gadget using the Rgadget functions. We will briefly discuss the how you can add data to your model and subsequently fit the model, but fuller analysis of how to include data into the model is very case specific and requires an analysis of a developed model.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="introduction-to-tidyverse.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/lunr.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/hafro/gadget-course/edit/master/introduction.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/hafro/gadget-course/blob/master/introduction.Rmd",
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>3 Introduction to Tidyverse | Building models using the Gadget framework</title>
+  <meta name="description" content="3 Introduction to Tidyverse | Building models using the Gadget framework" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="3 Introduction to Tidyverse | Building models using the Gadget framework" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="3 Introduction to Tidyverse | Building models using the Gadget framework" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="general-context-of-gadget.html"/>
+<link rel="next" href="getting-started-with-the-gadget-framework.html"/>
+<script src="assets/jquery-2.2.3/jquery.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="assets/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="assets/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="assets/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="assets/datatables-binding-0.15/datatables.js"></script>
+<link href="assets/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="assets/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="assets/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="assets/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="assets/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Building Gadget models</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About this course</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#course-objectives"><i class="fa fa-check"></i><b>1.1</b> Course objectives</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#your-a-priori-homework"><i class="fa fa-check"></i><b>1.2</b> Your a priori homework</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#reading-material"><i class="fa fa-check"></i><b>1.3</b> Reading material</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="general-context-of-gadget.html"><a href="general-context-of-gadget.html"><i class="fa fa-check"></i><b>2</b> General context of Gadget</a><ul>
+<li class="chapter" data-level="2.1" data-path="general-context-of-gadget.html"><a href="general-context-of-gadget.html#gadget-a-toolbox-for-fisheries-stock-assessments"><i class="fa fa-check"></i><b>2.1</b> Gadget – a toolbox for fisheries stock assessments</a></li>
+<li class="chapter" data-level="2.2" data-path="general-context-of-gadget.html"><a href="general-context-of-gadget.html#description-of-gadget"><i class="fa fa-check"></i><b>2.2</b> Description of Gadget</a></li>
+<li class="chapter" data-level="2.3" data-path="general-context-of-gadget.html"><a href="general-context-of-gadget.html#this-course"><i class="fa fa-check"></i><b>2.3</b> This course</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html"><i class="fa fa-check"></i><b>3</b> Introduction to Tidyverse</a><ul>
+<li class="chapter" data-level="3.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#idealogy-behind-r-for-data-science"><i class="fa fa-check"></i><b>3.1</b> Idealogy behind R for Data Science</a></li>
+<li class="chapter" data-level="3.2" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#the-foundation-tibbles-tidy-data-and-piping"><i class="fa fa-check"></i><b>3.2</b> The foundation: tibbles, tidy data, and piping</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#tibbles"><i class="fa fa-check"></i><b>3.2.1</b> Tibbles</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#tidy-data"><i class="fa fa-check"></i><b>3.3</b> Tidy data</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#piping"><i class="fa fa-check"></i><b>3.3.1</b> Piping</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#the-power-of-tidyverse-all-you-need-in-a-handful-of-functions"><i class="fa fa-check"></i><b>3.4</b> The power of tidyverse: all you need in a handful of functions</a></li>
+<li class="chapter" data-level="3.5" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#plotting-in-tidyverse"><i class="fa fa-check"></i><b>3.5</b> Plotting in tidyverse</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#ggplot-key-components"><i class="fa fa-check"></i><b>3.5.1</b> ggplot: Key components</a></li>
+<li class="chapter" data-level="3.5.2" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#aesthetic"><i class="fa fa-check"></i><b>3.5.2</b> aesthetic</a></li>
+<li class="chapter" data-level="3.5.3" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#facetting"><i class="fa fa-check"></i><b>3.5.3</b> Facetting</a></li>
+<li class="chapter" data-level="3.5.4" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#adding-layers"><i class="fa fa-check"></i><b>3.5.4</b> Adding layers</a></li>
+<li class="chapter" data-level="3.5.5" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#add-a-line-to-a-scatterplot"><i class="fa fa-check"></i><b>3.5.5</b> Add a line to a scatterplot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#statistical-summary-graphs"><i class="fa fa-check"></i><b>3.6</b> Statistical summary graphs</a></li>
+<li class="chapter" data-level="3.7" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#other-statistical-summaries"><i class="fa fa-check"></i><b>3.7</b> Other statistical summaries</a></li>
+<li class="chapter" data-level="3.8" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#some-controls"><i class="fa fa-check"></i><b>3.8</b> Some controls</a><ul>
+<li class="chapter" data-level="3.8.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#labels"><i class="fa fa-check"></i><b>3.8.1</b> labels</a></li>
+<li class="chapter" data-level="3.8.2" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#legend-position"><i class="fa fa-check"></i><b>3.8.2</b> Legend position</a></li>
+<li class="chapter" data-level="3.8.3" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#breaks"><i class="fa fa-check"></i><b>3.8.3</b> breaks</a></li>
+<li class="chapter" data-level="3.8.4" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#limits"><i class="fa fa-check"></i><b>3.8.4</b> limits</a></li>
+</ul></li>
+<li class="chapter" data-level="3.9" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#further-readings"><i class="fa fa-check"></i><b>3.9</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html"><i class="fa fa-check"></i><b>4</b> Getting started with the Gadget framework</a><ul>
+<li class="chapter" data-level="4.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#what-is-rgadget"><i class="fa fa-check"></i><b>4.1</b> What is Rgadget?</a></li>
+<li class="chapter" data-level="4.2" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#using-rgadget"><i class="fa fa-check"></i><b>4.2</b> Using Rgadget</a></li>
+<li class="chapter" data-level="4.3" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#creating-model-input-files"><i class="fa fa-check"></i><b>4.3</b> Creating model input files</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#time-file"><i class="fa fa-check"></i><b>4.3.1</b> Time file</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#area-file"><i class="fa fa-check"></i><b>4.3.2</b> Area file</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#stockfiles"><i class="fa fa-check"></i><b>4.3.3</b> Stockfiles</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#starting-a-simulation"><i class="fa fa-check"></i><b>4.4</b> Starting a simulation</a></li>
+<li class="chapter" data-level="4.5" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#gadget-variables"><i class="fa fa-check"></i><b>4.5</b> Gadget variables</a></li>
+<li class="chapter" data-level="4.6" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#predation"><i class="fa fa-check"></i><b>4.6</b> Predation</a></li>
+<li class="chapter" data-level="4.7" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#fleet-operations"><i class="fa fa-check"></i><b>4.7</b> Fleet operations</a><ul>
+<li class="chapter" data-level="4.7.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#excercise"><i class="fa fa-check"></i><b>4.7.1</b> Excercise</a></li>
+</ul></li>
+<li class="chapter" data-level="4.8" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#recruitment"><i class="fa fa-check"></i><b>4.8</b> Recruitment</a><ul>
+<li class="chapter" data-level="4.8.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#exercise-1"><i class="fa fa-check"></i><b>4.8.1</b> Exercise</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html"><i class="fa fa-check"></i><b>5</b> Defining stock interations</a><ul>
+<li class="chapter" data-level="5.1" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#fish-recruits-into-a-stock"><i class="fa fa-check"></i><b>5.1</b> Fish recruits into a stock</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#excercise"><i class="fa fa-check"></i><b>5.1.1</b> Excercise</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#spawning"><i class="fa fa-check"></i><b>5.2</b> Spawning</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#time-variables"><i class="fa fa-check"></i><b>5.2.1</b> Time variables</a></li>
+<li class="chapter" data-level="5.2.2" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#excercise-1"><i class="fa fa-check"></i><b>5.2.2</b> Excercise</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#consumption"><i class="fa fa-check"></i><b>5.3</b> Consumption</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#excercise-2"><i class="fa fa-check"></i><b>5.3.1</b> Excercise</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html"><i class="fa fa-check"></i><b>6</b> Building complex Gadget models</a><ul>
+<li class="chapter" data-level="6.1" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#defining-growth"><i class="fa fa-check"></i><b>6.1</b> Defining growth</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#growth"><i class="fa fa-check"></i><b>6.1.1</b> Growth</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#ling-stock-assessment-in-icelandic-waters"><i class="fa fa-check"></i><b>6.2</b> Ling stock assessment in Icelandic waters</a></li>
+<li class="chapter" data-level="6.3" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#model-initiation"><i class="fa fa-check"></i><b>6.3</b> Model initiation</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#maturation-as-multi-stock-models"><i class="fa fa-check"></i><b>6.3.1</b> Maturation as multi-‘stock’ models</a></li>
+<li class="chapter" data-level="6.3.2" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#initial-conditions"><i class="fa fa-check"></i><b>6.3.2</b> Initial conditions</a></li>
+<li class="chapter" data-level="6.3.3" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#renewal"><i class="fa fa-check"></i><b>6.3.3</b> Renewal</a></li>
+<li class="chapter" data-level="6.3.4" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#reference-weight"><i class="fa fa-check"></i><b>6.3.4</b> Reference Weight</a></li>
+<li class="chapter" data-level="6.3.5" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#is-fished-eaten"><i class="fa fa-check"></i><b>6.3.5</b> Is fished / eaten</a></li>
+<li class="chapter" data-level="6.3.6" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#set-up-fleets-using-catch-or-effort-data"><i class="fa fa-check"></i><b>6.3.6</b> Set up fleets using catch or effort data</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#run-the-simulation-using-pre-determined-parameters"><i class="fa fa-check"></i><b>6.4</b> Run the simulation using pre-determined parameters</a></li>
+<li class="chapter" data-level="6.5" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#talking-points"><i class="fa fa-check"></i><b>6.5</b> Talking points</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html"><i class="fa fa-check"></i><b>7</b> Fitting a model to data</a><ul>
+<li class="chapter" data-level="7.1" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#introducing-likelihood-functions"><i class="fa fa-check"></i><b>7.1</b> Introducing likelihood functions</a></li>
+<li class="chapter" data-level="7.2" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#incorporating-data-ling-case-study-cont."><i class="fa fa-check"></i><b>7.2</b> Incorporating data (Ling case study cont.)</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#exercise"><i class="fa fa-check"></i><b>7.2.1</b> Exercise</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#setting-up-likelihood-components"><i class="fa fa-check"></i><b>7.3</b> Setting up likelihood components</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#setting-up-survey-indices"><i class="fa fa-check"></i><b>7.3.1</b> Setting up survey indices</a></li>
+<li class="chapter" data-level="7.3.2" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#penalty-functions"><i class="fa fa-check"></i><b>7.3.2</b> Penalty functions</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#fitting-a-gadget-model-to-data"><i class="fa fa-check"></i><b>7.4</b> Fitting a Gadget model to data</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#create-starting-values"><i class="fa fa-check"></i><b>7.4.1</b> Create starting values</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#set-optimisation-routine"><i class="fa fa-check"></i><b>7.5</b> Set optimisation routine</a></li>
+<li class="chapter" data-level="7.6" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#using-the-iterative-reweighting-function-to-fit-a-gadget-statistical-model"><i class="fa fa-check"></i><b>7.6</b> Using the iterative reweighting function to fit a Gadget statistical model</a></li>
+<li class="chapter" data-level="7.7" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#visualize-gadget-statistical-model-fit"><i class="fa fa-check"></i><b>7.7</b> Visualize Gadget statistical model fit</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="defining-multi-area-models.html"><a href="defining-multi-area-models.html"><i class="fa fa-check"></i><b>8</b> Defining multi area models</a><ul>
+<li class="chapter" data-level="8.1" data-path="defining-multi-area-models.html"><a href="defining-multi-area-models.html#alternate-structures-multiple-areas"><i class="fa fa-check"></i><b>8.1</b> Alternate structures: multiple areas</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="defining-multi-area-models.html"><a href="defining-multi-area-models.html#migration"><i class="fa fa-check"></i><b>8.1.1</b> Migration</a></li>
+<li class="chapter" data-level="8.1.2" data-path="defining-multi-area-models.html"><a href="defining-multi-area-models.html#using-data-from-multiple-areas"><i class="fa fa-check"></i><b>8.1.2</b> Using data from multiple areas</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html"><i class="fa fa-check"></i><b>9</b> Processing input data with MFDB</a><ul>
+<li class="chapter" data-level="9.1" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#working-with-data"><i class="fa fa-check"></i><b>9.1</b> Working with data</a></li>
+<li class="chapter" data-level="9.2" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#description-of-the-mfdb-system"><i class="fa fa-check"></i><b>9.2</b> Description of the MFDB system</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#installing-mfdb"><i class="fa fa-check"></i><b>9.2.1</b> Installing MFDB</a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#importing-data"><i class="fa fa-check"></i><b>9.3</b> Importing data</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#connect-to-database"><i class="fa fa-check"></i><b>9.3.1</b> Connect to database</a></li>
+<li class="chapter" data-level="9.3.2" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#defining-taxonomies"><i class="fa fa-check"></i><b>9.3.2</b> Defining taxonomies</a></li>
+<li class="chapter" data-level="9.3.3" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#define-areas-divisions"><i class="fa fa-check"></i><b>9.3.3</b> Define areas &amp; divisions</a></li>
+<li class="chapter" data-level="9.3.4" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#define-sampling-types"><i class="fa fa-check"></i><b>9.3.4</b> Define sampling types</a></li>
+<li class="chapter" data-level="9.3.5" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#define-vessel-taxonomy"><i class="fa fa-check"></i><b>9.3.5</b> Define vessel taxonomy</a></li>
+<li class="chapter" data-level="9.3.6" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#define-tow-taxonomy"><i class="fa fa-check"></i><b>9.3.6</b> Define tow taxonomy</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#importing-data-1"><i class="fa fa-check"></i><b>9.4</b> Importing data</a><ul>
+<li class="chapter" data-level="9.4.1" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#import-temperature-data"><i class="fa fa-check"></i><b>9.4.1</b> Import temperature data</a></li>
+<li class="chapter" data-level="9.4.2" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#importing-surveycommercial-samples"><i class="fa fa-check"></i><b>9.4.2</b> Importing survey/commercial samples</a></li>
+<li class="chapter" data-level="9.4.3" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#import-stomach-survey"><i class="fa fa-check"></i><b>9.4.3</b> Import stomach survey</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#querying-data"><i class="fa fa-check"></i><b>9.5</b> Querying data</a></li>
+<li class="chapter" data-level="9.6" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#uploading-the-datras-database-to-mfdb"><i class="fa fa-check"></i><b>9.6</b> Uploading the DATRAS database to MFDB</a></li>
+<li class="chapter" data-level="9.7" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#dumping-restoring-a-db"><i class="fa fa-check"></i><b>9.7</b> Dumping / Restoring a DB</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html"><i class="fa fa-check"></i><b>A</b> Installing Gadget from source</a><ul>
+<li class="chapter" data-level="A.1" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#command-line-version"><i class="fa fa-check"></i><b>A.1</b> Command line version</a><ul>
+<li class="chapter" data-level="A.1.1" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#linux"><i class="fa fa-check"></i><b>A.1.1</b> Linux</a></li>
+<li class="chapter" data-level="A.1.2" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#mac"><i class="fa fa-check"></i><b>A.1.2</b> Mac</a></li>
+<li class="chapter" data-level="A.1.3" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#windows"><i class="fa fa-check"></i><b>A.1.3</b> Windows</a></li>
+</ul></li>
+<li class="chapter" data-level="A.2" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#download-compile-and-install"><i class="fa fa-check"></i><b>A.2</b> Download, compile and install</a><ul>
+<li class="chapter" data-level="A.2.1" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#standard-procedure"><i class="fa fa-check"></i><b>A.2.1</b> Standard procedure</a></li>
+<li class="chapter" data-level="A.2.2" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#recommended-via-git"><i class="fa fa-check"></i><b>A.2.2</b> Recommended: via Git</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html"><i class="fa fa-check"></i><b>B</b> Troubleshooting Gadget models</a><ul>
+<li class="chapter" data-level="B.0.1" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#file-data-gadget-cannot-be-found"><i class="fa fa-check"></i><b>B.0.1</b> File / data / Gadget cannot be found</a></li>
+<li class="chapter" data-level="B.0.2" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#fleet-data-likelihood-problems"><i class="fa fa-check"></i><b>B.0.2</b> Fleet / Data / Likelihood problems</a></li>
+<li class="chapter" data-level="B.0.3" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#starting-value-is-outside-the-bounds-of-the-parameter"><i class="fa fa-check"></i><b>B.0.3</b> Starting value is outside the bounds of the parameter</a></li>
+<li class="chapter" data-level="B.0.4" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#update-gadget-and-rgadget-restart-the-rsession"><i class="fa fa-check"></i><b>B.0.4</b> Update Gadget and Rgadget, restart the Rsession</a></li>
+<li class="chapter" data-level="B.1" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#list-of-known-gadget-quirks"><i class="fa fa-check"></i><b>B.1</b> List of known Gadget quirks</a></li>
+<li class="chapter" data-level="B.2" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#gadget-is-working-properly-but-results-are-strange"><i class="fa fa-check"></i><b>B.2</b> Gadget is working properly, but results are strange</a><ul>
+<li class="chapter" data-level="B.2.1" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#programming-errors"><i class="fa fa-check"></i><b>B.2.1</b> Programming errors</a></li>
+<li class="chapter" data-level="B.2.2" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#old-files-hanging-around-in-the-gadget-model-directory"><i class="fa fa-check"></i><b>B.2.2</b> Old files hanging around in the Gadget model directory</a></li>
+<li class="chapter" data-level="B.2.3" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#gadget-iterative-gives-errors"><i class="fa fa-check"></i><b>B.2.3</b> Gadget iterative gives errors</a></li>
+<li class="chapter" data-level="B.2.4" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#the-gadget-working-directory-is-incorporating-files-from-another-gadget-model"><i class="fa fa-check"></i><b>B.2.4</b> The Gadget working directory is incorporating files from another Gadget model</a></li>
+<li class="chapter" data-level="B.2.5" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#your-model-is-not-good"><i class="fa fa-check"></i><b>B.2.5</b> Your model is not good</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>C</b> References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Building models using the Gadget framework</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="introduction-to-tidyverse" class="section level1">
+<h1><span class="header-section-number">3</span> Introduction to Tidyverse</h1>
+<div id="idealogy-behind-r-for-data-science" class="section level2">
+<h2><span class="header-section-number">3.1</span> Idealogy behind R for Data Science</h2>
+<p>Tidyverse is a collection of R packages that enables tools for data science, and is
+especially useful for data wrangling, manipulation, visualization, and communication
+of large data sets. Extensions of tidyverse
+also enable direct connections and manipulation with SQL databases (e.g, dbplyr). Here
+we briefly introduce some main concepts when this programming, all derived directly from
+the open access book R for Data Science by Garrett Grolemund and Hadley Wickham (which
+can be found <a href="https://r4ds.had.co.nz/">here</a>).</p>
+<p>As you can read <a href="https://r4ds.had.co.nz/introduction.html">here</a>, the main idea behind
+using tidyverse is that exploratory data analysis in R is composed of a few main steps:
+first is importing and tidying data, then iteratively transforming, visualising, and
+modeling data to understand patterns held by them, and finally communicating results
+effectively. Tidyverse was designed as a programming method and collection of functions
+that are focused on easing these tasks into a simple uniform routine that can be applied
+to any dataset. Standardizing the approach taken toward any data science project then
+aids reproducability of any project as well as the ability to collaborate on a project.</p>
+</div>
+<div id="the-foundation-tibbles-tidy-data-and-piping" class="section level2">
+<h2><span class="header-section-number">3.2</span> The foundation: tibbles, tidy data, and piping</h2>
+<div id="tibbles" class="section level3">
+<h3><span class="header-section-number">3.2.1</span> Tibbles</h3>
+<p>First we need to install and load Tidyverse. After that we can have a look at what at
+the main form of data storage, called a tibble:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="introduction-to-tidyverse.html#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">&#39;tidyverse&#39;</span>)</span>
+<span id="cb1-2"><a href="introduction-to-tidyverse.html#cb1-2"></a><span class="kw">install.packages</span>(<span class="st">&#39;nycflights13&#39;</span>) <span class="co"># this is an example data package</span></span></code></pre></div>
+<pre><code>## ── [1mAttaching packages[22m ─────────────────────────────────────── tidyverse 1.3.0 ──</code></pre>
+<pre><code>## [32m✔[39m [34mggplot2[39m 3.3.2     [32m✔[39m [34mpurrr  [39m 0.3.4
+## [32m✔[39m [34mtibble [39m 3.0.3     [32m✔[39m [34mdplyr  [39m 1.0.2
+## [32m✔[39m [34mtidyr  [39m 1.1.2     [32m✔[39m [34mstringr[39m 1.4.0
+## [32m✔[39m [34mreadr  [39m 1.3.1     [32m✔[39m [34mforcats[39m 0.5.0</code></pre>
+<pre><code>## ── [1mConflicts[22m ────────────────────────────────────────── tidyverse_conflicts() ──
+## [31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
+## [31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="introduction-to-tidyverse.html#cb5-1"></a><span class="kw">library</span>(nycflights13)</span></code></pre></div>
+<p>Note that a tibble is essentially the same as a data frame (for example made with data.frame) but with some useful information printed (e.g., dimensions and data types), as well as some restrictions placed on how it an be manipulated. These help prevent common errors. For example, recycling is possible as it is in data frames but less flexible:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="introduction-to-tidyverse.html#cb6-1"></a>flights<span class="op">$</span>year &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2013</span>, <span class="dv">2014</span>)</span>
+<span id="cb6-2"><a href="introduction-to-tidyverse.html#cb6-2"></a><span class="kw">try</span>(flights<span class="op">$</span>year &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">2014</span>, <span class="dv">7</span>))</span></code></pre></div>
+</div>
+</div>
+<div id="tidy-data" class="section level2">
+<h2><span class="header-section-number">3.3</span> Tidy data</h2>
+<p>In addition, the above data may look like a standard data set obtained from anywhere,
+but it is not. It has already been formatted as ‘tidy data’. Although data can be
+represented a variety of ways in tables for visualization, but for data manipulation
+and analysis, there is only one format that is much easier to use than others.
+Therefore, all data should be transformed into this format before analyzing. This
+format is called the ‘tidy’ dataset in tidyverse, and following three rules make a
+dataset ‘tidy’:
+1. Each variable must have its own column.
+2. Each observation must have its own row.
+3. Each value must have its own cell.</p>
+<p>If, for example, the flights dataset were organized such that each carrier, origin, or
+dest had their own sets of columns, the data would no longer be tidy.</p>
+<div id="piping" class="section level3">
+<h3><span class="header-section-number">3.3.1</span> Piping</h3>
+<p>In base R programming, functions wrap around the objects that they are applied to, which
+are often indexed, and this manipulated object is saved as a new one. What is written is
+arranged like an onion: in the following example, the first step of the command is in
+the center of code (calling the object flights), followed by indexing the 15th and 16th
+columns. As we move away from the center, a function is applied, and finally the output
+of that function is assigned to a new object.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="introduction-to-tidyverse.html#cb7-1"></a>sub &lt;-<span class="st"> </span><span class="kw">apply</span>(flights[,<span class="kw">c</span>(<span class="dv">15</span><span class="op">:</span><span class="dv">16</span>)], <span class="dv">2</span>, mean, <span class="dt">na.rm =</span> T)</span></code></pre></div>
+<p>Piping, or using ‘%&gt;%’ to pass objects from one function to the next, introduces a
+programming method that makes the process more intuitive by alligning the code with the
+order of operation:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="introduction-to-tidyverse.html#cb8-1"></a>flights <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb8-2"><a href="introduction-to-tidyverse.html#cb8-2"></a><span class="st">  </span><span class="kw">select</span>(<span class="dv">15</span>, <span class="dv">16</span>) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># or use select(air_time, distance)</span></span>
+<span id="cb8-3"><a href="introduction-to-tidyverse.html#cb8-3"></a><span class="st">  </span><span class="kw">apply</span>(., <span class="dv">2</span>, mean, <span class="dt">na.rm =</span> T) -&gt;<span class="st"> </span>sub</span></code></pre></div>
+<p>In the above code, the flight tibble was piped into the ‘select’ function, which indexed
+its 15th and 16th rows only. ‘Select’ does not require an argument where flights is
+referenced because it was built to accept a piped argument implicitly. Note that
+selecting by column name (no quotations needed) is also possible and
+more useful in most cases. After being piped to ‘select’, the result was then piped to
+the function ‘apply’. ‘Apply’ is an older function that is not built to implicitly
+accept piped objects; therefore, it requires the placeholder ‘.’ to be placed
+where the input data frame is expected. Finally, this modified data frame
+is assigned to ‘sub’ at the end, but alternatively it could have been assigned at the
+beginning as in the non-piped version.</p>
+</div>
+</div>
+<div id="the-power-of-tidyverse-all-you-need-in-a-handful-of-functions" class="section level2">
+<h2><span class="header-section-number">3.4</span> The power of tidyverse: all you need in a handful of functions</h2>
+<p>As in the ‘select’ function, there are a variety of functions that come with the
+tidyverse package, but only a small set are needed to do almost any kind of data
+wrangling that you ever wanted to do. These are the only functions we touch on in this
+brief introduction. However, beyond tidyverse, there are also a variety of
+packages that implement more advanced piping-compatible functions that speed the
+manipulation of large data sets in particular (e.g., dbplyr, purrrlyr).</p>
+<p>The most commonly used tidyverse commands, with a brief description, include:
+* select() - select columns
+* filter() - retain rows according to boolean criteria
+* arrange() - sorts data
+* rename() - renames existing columns
+* mutate() - writes new columns
+* group_by() / ungroup() - groups data according to column values (such as factors)
+* summarise() - reduces dataset to an aggregated leve. Used after grouping (which
+defines the aggregation level) and along with functions that define how to aggregate
+(e.g., count(), n(), sum(), mean()).
+* gather() / spread() - converts data between the tidy format and ‘long’ formats
+* full_join(), left_join(), etc. - joins data contained in two data frames according to
+certain criteria that define how rows are compatible (i.e., joining in relational
+databases)</p>
+<p>Below is an example of how the function ‘apply’ in the previous example can be replaced
+using tidyverse commands, as well as functions such as ‘aggregate’ using ‘group_by’ and ‘summarise’</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="introduction-to-tidyverse.html#cb9-1"></a>  flights <span class="op">%&gt;%</span></span>
+<span id="cb9-2"><a href="introduction-to-tidyverse.html#cb9-2"></a><span class="st">  </span><span class="kw">select</span>(air_time, distance) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb9-3"><a href="introduction-to-tidyverse.html#cb9-3"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mn_airtime =</span> <span class="kw">mean</span>(air_time, <span class="dt">na.rm =</span> T),</span>
+<span id="cb9-4"><a href="introduction-to-tidyverse.html#cb9-4"></a>            <span class="dt">mn_distance =</span> <span class="kw">mean</span>(distance))</span></code></pre></div>
+<pre><code>## [90m# A tibble: 1 x 2[39m
+##   mn_airtime mn_distance
+##        [3m[90m&lt;dbl&gt;[39m[23m       [3m[90m&lt;dbl&gt;[39m[23m
+## [90m1[39m       151.       [4m1[24m040.</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="introduction-to-tidyverse.html#cb11-1"></a> <span class="co"># or if the operation should occur by groupings:</span></span>
+<span id="cb11-2"><a href="introduction-to-tidyverse.html#cb11-2"></a>  flights <span class="op">%&gt;%</span></span>
+<span id="cb11-3"><a href="introduction-to-tidyverse.html#cb11-3"></a><span class="st">  </span><span class="kw">select</span>(dest, air_time, distance) <span class="op">%&gt;%</span></span>
+<span id="cb11-4"><a href="introduction-to-tidyverse.html#cb11-4"></a><span class="st">  </span><span class="kw">group_by</span>(dest) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb11-5"><a href="introduction-to-tidyverse.html#cb11-5"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mn_airtime =</span> <span class="kw">mean</span>(air_time, <span class="dt">na.rm =</span> T),</span>
+<span id="cb11-6"><a href="introduction-to-tidyverse.html#cb11-6"></a>            <span class="dt">mn_distance =</span> <span class="kw">mean</span>(distance))</span></code></pre></div>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<pre><code>## [90m# A tibble: 105 x 3[39m
+##    dest  mn_airtime mn_distance
+##    [3m[90m&lt;chr&gt;[39m[23m      [3m[90m&lt;dbl&gt;[39m[23m       [3m[90m&lt;dbl&gt;[39m[23m
+## [90m 1[39m ABQ        249.        [4m1[24m826 
+## [90m 2[39m ACK         42.1        199 
+## [90m 3[39m ALB         31.8        143 
+## [90m 4[39m ANC        413.        [4m3[24m370 
+## [90m 5[39m ATL        113.         757.
+## [90m 6[39m AUS        213.        [4m1[24m514.
+## [90m 7[39m AVL         89.9        584.
+## [90m 8[39m BDL         25.5        116 
+## [90m 9[39m BGR         54.1        378 
+## [90m10[39m BHM        123.         866.
+## [90m# … with 95 more rows[39m</code></pre>
+<p>Here is a smattering of demonstrations on how to use the other important functions and their equivalents in base R:</p>
+<div id="filter" class="section level4">
+<h4><span class="header-section-number">3.4.0.1</span> filter()</h4>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="introduction-to-tidyverse.html#cb14-1"></a><span class="co">#filter()</span></span>
+<span id="cb14-2"><a href="introduction-to-tidyverse.html#cb14-2"></a>flights[flights<span class="op">$</span>month<span class="op">==</span><span class="dv">3</span> <span class="op">&amp;</span><span class="st"> </span>flights<span class="op">$</span>dest<span class="op">==</span><span class="st">&quot;DEN&quot;</span>,]</span></code></pre></div>
+<pre><code>## [90m# A tibble: 643 x 19[39m
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m    [3m[90m&lt;int&gt;[39m[23m          [3m[90m&lt;int&gt;[39m[23m     [3m[90m&lt;dbl&gt;[39m[23m    [3m[90m&lt;int&gt;[39m[23m          [3m[90m&lt;int&gt;[39m[23m
+## [90m 1[39m  [4m2[24m013     3     1      630            630         0      831            910
+## [90m 2[39m  [4m2[24m013     3     1      648            649        -[31m1[39m      830            912
+## [90m 3[39m  [4m2[24m013     3     1      649            649         0      839            920
+## [90m 4[39m  [4m2[24m013     3     1      814            815        -[31m1[39m     [4m1[24m012           [4m1[24m056
+## [90m 5[39m  [4m2[24m013     3     1      827            830        -[31m3[39m     [4m1[24m045           [4m1[24m106
+## [90m 6[39m  [4m2[24m013     3     1      843            800        43     [4m1[24m042           [4m1[24m031
+## [90m 7[39m  [4m2[24m013     3     1      857            900        -[31m3[39m     [4m1[24m057           [4m1[24m135
+## [90m 8[39m  [4m2[24m013     3     1      922            925        -[31m3[39m     [4m1[24m115           [4m1[24m205
+## [90m 9[39m  [4m2[24m013     3     1     [4m1[24m056           [4m1[24m100        -[31m4[39m     [4m1[24m258           [4m1[24m326
+## [90m10[39m  [4m2[24m013     3     1     [4m1[24m144           [4m1[24m137         7     [4m1[24m327           [4m1[24m403
+## [90m# … with 633 more rows, and 11 more variables: arr_delay [3m[90m&lt;dbl&gt;[90m[23m, carrier [3m[90m&lt;chr&gt;[90m[23m,[39m
+## [90m#   flight [3m[90m&lt;int&gt;[90m[23m, tailnum [3m[90m&lt;chr&gt;[90m[23m, origin [3m[90m&lt;chr&gt;[90m[23m, dest [3m[90m&lt;chr&gt;[90m[23m, air_time [3m[90m&lt;dbl&gt;[90m[23m,[39m
+## [90m#   distance [3m[90m&lt;dbl&gt;[90m[23m, hour [3m[90m&lt;dbl&gt;[90m[23m, minute [3m[90m&lt;dbl&gt;[90m[23m, time_hour [3m[90m&lt;dttm&gt;[90m[23m[39m</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="introduction-to-tidyverse.html#cb16-1"></a>flights <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb16-2"><a href="introduction-to-tidyverse.html#cb16-2"></a><span class="st">  </span><span class="kw">filter</span>(month <span class="op">==</span><span class="st"> </span><span class="dv">3</span>, dest <span class="op">==</span><span class="st"> &quot;DEN&quot;</span>)</span></code></pre></div>
+<pre><code>## [90m# A tibble: 643 x 19[39m
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m    [3m[90m&lt;int&gt;[39m[23m          [3m[90m&lt;int&gt;[39m[23m     [3m[90m&lt;dbl&gt;[39m[23m    [3m[90m&lt;int&gt;[39m[23m          [3m[90m&lt;int&gt;[39m[23m
+## [90m 1[39m  [4m2[24m013     3     1      630            630         0      831            910
+## [90m 2[39m  [4m2[24m013     3     1      648            649        -[31m1[39m      830            912
+## [90m 3[39m  [4m2[24m013     3     1      649            649         0      839            920
+## [90m 4[39m  [4m2[24m013     3     1      814            815        -[31m1[39m     [4m1[24m012           [4m1[24m056
+## [90m 5[39m  [4m2[24m013     3     1      827            830        -[31m3[39m     [4m1[24m045           [4m1[24m106
+## [90m 6[39m  [4m2[24m013     3     1      843            800        43     [4m1[24m042           [4m1[24m031
+## [90m 7[39m  [4m2[24m013     3     1      857            900        -[31m3[39m     [4m1[24m057           [4m1[24m135
+## [90m 8[39m  [4m2[24m013     3     1      922            925        -[31m3[39m     [4m1[24m115           [4m1[24m205
+## [90m 9[39m  [4m2[24m013     3     1     [4m1[24m056           [4m1[24m100        -[31m4[39m     [4m1[24m258           [4m1[24m326
+## [90m10[39m  [4m2[24m013     3     1     [4m1[24m144           [4m1[24m137         7     [4m1[24m327           [4m1[24m403
+## [90m# … with 633 more rows, and 11 more variables: arr_delay [3m[90m&lt;dbl&gt;[90m[23m, carrier [3m[90m&lt;chr&gt;[90m[23m,[39m
+## [90m#   flight [3m[90m&lt;int&gt;[90m[23m, tailnum [3m[90m&lt;chr&gt;[90m[23m, origin [3m[90m&lt;chr&gt;[90m[23m, dest [3m[90m&lt;chr&gt;[90m[23m, air_time [3m[90m&lt;dbl&gt;[90m[23m,[39m
+## [90m#   distance [3m[90m&lt;dbl&gt;[90m[23m, hour [3m[90m&lt;dbl&gt;[90m[23m, minute [3m[90m&lt;dbl&gt;[90m[23m, time_hour [3m[90m&lt;dttm&gt;[90m[23m[39m</code></pre>
+</div>
+<div id="arrange" class="section level4">
+<h4><span class="header-section-number">3.4.0.2</span> arrange()</h4>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="introduction-to-tidyverse.html#cb18-1"></a>o &lt;-<span class="st"> </span><span class="kw">order</span>(flights<span class="op">$</span>distance)</span>
+<span id="cb18-2"><a href="introduction-to-tidyverse.html#cb18-2"></a>flights[o,<span class="kw">c</span>(<span class="st">&#39;year&#39;</span>,<span class="st">&#39;month&#39;</span>,<span class="st">&#39;day&#39;</span>,<span class="st">&#39;distance&#39;</span>)]</span></code></pre></div>
+<pre><code>## [90m# A tibble: 336,776 x 4[39m
+##     year month   day distance
+##    [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m    [3m[90m&lt;dbl&gt;[39m[23m
+## [90m 1[39m  [4m2[24m013     7    27       17
+## [90m 2[39m  [4m2[24m013     1     3       80
+## [90m 3[39m  [4m2[24m013     1     4       80
+## [90m 4[39m  [4m2[24m013     1     4       80
+## [90m 5[39m  [4m2[24m013     1     4       80
+## [90m 6[39m  [4m2[24m013     1     5       80
+## [90m 7[39m  [4m2[24m013     1     6       80
+## [90m 8[39m  [4m2[24m013     1     7       80
+## [90m 9[39m  [4m2[24m013     1     8       80
+## [90m10[39m  [4m2[24m013     1     9       80
+## [90m# … with 336,766 more rows[39m</code></pre>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="introduction-to-tidyverse.html#cb20-1"></a>flights[<span class="kw">rev</span>(o),<span class="kw">c</span>(<span class="st">&#39;year&#39;</span>,<span class="st">&#39;month&#39;</span>,<span class="st">&#39;day&#39;</span>,<span class="st">&#39;distance&#39;</span>)]</span></code></pre></div>
+<pre><code>## [90m# A tibble: 336,776 x 4[39m
+##     year month   day distance
+##    [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m    [3m[90m&lt;dbl&gt;[39m[23m
+## [90m 1[39m  [4m2[24m013     9    30     [4m4[24m983
+## [90m 2[39m  [4m2[24m013     9    29     [4m4[24m983
+## [90m 3[39m  [4m2[24m013     9    28     [4m4[24m983
+## [90m 4[39m  [4m2[24m013     9    27     [4m4[24m983
+## [90m 5[39m  [4m2[24m013     9    25     [4m4[24m983
+## [90m 6[39m  [4m2[24m013     9    23     [4m4[24m983
+## [90m 7[39m  [4m2[24m013     9    22     [4m4[24m983
+## [90m 8[39m  [4m2[24m013     9    21     [4m4[24m983
+## [90m 9[39m  [4m2[24m013     9    20     [4m4[24m983
+## [90m10[39m  [4m2[24m013     9    18     [4m4[24m983
+## [90m# … with 336,766 more rows[39m</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="introduction-to-tidyverse.html#cb22-1"></a>flights <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-2"><a href="introduction-to-tidyverse.html#cb22-2"></a><span class="st">  </span><span class="kw">select</span>(year, month, day, distance) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb22-3"><a href="introduction-to-tidyverse.html#cb22-3"></a><span class="st">  </span><span class="kw">arrange</span>(distance)</span></code></pre></div>
+<pre><code>## [90m# A tibble: 336,776 x 4[39m
+##     year month   day distance
+##    [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m    [3m[90m&lt;dbl&gt;[39m[23m
+## [90m 1[39m  [4m2[24m013     7    27       17
+## [90m 2[39m  [4m2[24m013     1     3       80
+## [90m 3[39m  [4m2[24m013     1     4       80
+## [90m 4[39m  [4m2[24m013     1     4       80
+## [90m 5[39m  [4m2[24m013     1     4       80
+## [90m 6[39m  [4m2[24m013     1     5       80
+## [90m 7[39m  [4m2[24m013     1     6       80
+## [90m 8[39m  [4m2[24m013     1     7       80
+## [90m 9[39m  [4m2[24m013     1     8       80
+## [90m10[39m  [4m2[24m013     1     9       80
+## [90m# … with 336,766 more rows[39m</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="introduction-to-tidyverse.html#cb24-1"></a>flights <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb24-2"><a href="introduction-to-tidyverse.html#cb24-2"></a><span class="st">  </span><span class="kw">select</span>(year, month, day, distance) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb24-3"><a href="introduction-to-tidyverse.html#cb24-3"></a><span class="st">  </span><span class="kw">arrange</span>(<span class="kw">desc</span>(distance))</span></code></pre></div>
+<pre><code>## [90m# A tibble: 336,776 x 4[39m
+##     year month   day distance
+##    [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m    [3m[90m&lt;dbl&gt;[39m[23m
+## [90m 1[39m  [4m2[24m013     1     1     [4m4[24m983
+## [90m 2[39m  [4m2[24m013     1     2     [4m4[24m983
+## [90m 3[39m  [4m2[24m013     1     3     [4m4[24m983
+## [90m 4[39m  [4m2[24m013     1     4     [4m4[24m983
+## [90m 5[39m  [4m2[24m013     1     5     [4m4[24m983
+## [90m 6[39m  [4m2[24m013     1     6     [4m4[24m983
+## [90m 7[39m  [4m2[24m013     1     7     [4m4[24m983
+## [90m 8[39m  [4m2[24m013     1     8     [4m4[24m983
+## [90m 9[39m  [4m2[24m013     1     9     [4m4[24m983
+## [90m10[39m  [4m2[24m013     1    10     [4m4[24m983
+## [90m# … with 336,766 more rows[39m</code></pre>
+</div>
+<div id="rename" class="section level4">
+<h4><span class="header-section-number">3.4.0.3</span> rename()</h4>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="introduction-to-tidyverse.html#cb26-1"></a>flights2 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(flights, <span class="dt">year2 =</span> flights<span class="op">$</span>year)</span>
+<span id="cb26-2"><a href="introduction-to-tidyverse.html#cb26-2"></a>flights2 &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(flights2[<span class="kw">c</span>(<span class="kw">dim</span>(flights2)[<span class="dv">2</span>],<span class="dv">2</span><span class="op">:</span>(<span class="kw">dim</span>(flights2)[<span class="dv">2</span>]<span class="op">-</span><span class="dv">1</span>))])</span>
+<span id="cb26-3"><a href="introduction-to-tidyverse.html#cb26-3"></a>flights2</span></code></pre></div>
+<pre><code>## [90m# A tibble: 336,776 x 19[39m
+##    year2 month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m    [3m[90m&lt;int&gt;[39m[23m          [3m[90m&lt;int&gt;[39m[23m     [3m[90m&lt;dbl&gt;[39m[23m    [3m[90m&lt;int&gt;[39m[23m          [3m[90m&lt;int&gt;[39m[23m
+## [90m 1[39m  [4m2[24m013     1     1      517            515         2      830            819
+## [90m 2[39m  [4m2[24m013     1     1      533            529         4      850            830
+## [90m 3[39m  [4m2[24m013     1     1      542            540         2      923            850
+## [90m 4[39m  [4m2[24m013     1     1      544            545        -[31m1[39m     [4m1[24m004           [4m1[24m022
+## [90m 5[39m  [4m2[24m013     1     1      554            600        -[31m6[39m      812            837
+## [90m 6[39m  [4m2[24m013     1     1      554            558        -[31m4[39m      740            728
+## [90m 7[39m  [4m2[24m013     1     1      555            600        -[31m5[39m      913            854
+## [90m 8[39m  [4m2[24m013     1     1      557            600        -[31m3[39m      709            723
+## [90m 9[39m  [4m2[24m013     1     1      557            600        -[31m3[39m      838            846
+## [90m10[39m  [4m2[24m013     1     1      558            600        -[31m2[39m      753            745
+## [90m# … with 336,766 more rows, and 11 more variables: arr_delay [3m[90m&lt;dbl&gt;[90m[23m,[39m
+## [90m#   carrier [3m[90m&lt;chr&gt;[90m[23m, flight [3m[90m&lt;int&gt;[90m[23m, tailnum [3m[90m&lt;chr&gt;[90m[23m, origin [3m[90m&lt;chr&gt;[90m[23m, dest [3m[90m&lt;chr&gt;[90m[23m,[39m
+## [90m#   air_time [3m[90m&lt;dbl&gt;[90m[23m, distance [3m[90m&lt;dbl&gt;[90m[23m, hour [3m[90m&lt;dbl&gt;[90m[23m, minute [3m[90m&lt;dbl&gt;[90m[23m, time_hour [3m[90m&lt;dttm&gt;[90m[23m[39m</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="introduction-to-tidyverse.html#cb28-1"></a>flights2 &lt;-<span class="st"> </span></span>
+<span id="cb28-2"><a href="introduction-to-tidyverse.html#cb28-2"></a><span class="st">  </span>flights <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb28-3"><a href="introduction-to-tidyverse.html#cb28-3"></a><span class="st">  </span><span class="kw">rename</span>(<span class="dt">year2 =</span> year)</span>
+<span id="cb28-4"><a href="introduction-to-tidyverse.html#cb28-4"></a>flights2</span></code></pre></div>
+<pre><code>## [90m# A tibble: 336,776 x 19[39m
+##    year2 month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m    [3m[90m&lt;int&gt;[39m[23m          [3m[90m&lt;int&gt;[39m[23m     [3m[90m&lt;dbl&gt;[39m[23m    [3m[90m&lt;int&gt;[39m[23m          [3m[90m&lt;int&gt;[39m[23m
+## [90m 1[39m  [4m2[24m013     1     1      517            515         2      830            819
+## [90m 2[39m  [4m2[24m013     1     1      533            529         4      850            830
+## [90m 3[39m  [4m2[24m013     1     1      542            540         2      923            850
+## [90m 4[39m  [4m2[24m013     1     1      544            545        -[31m1[39m     [4m1[24m004           [4m1[24m022
+## [90m 5[39m  [4m2[24m013     1     1      554            600        -[31m6[39m      812            837
+## [90m 6[39m  [4m2[24m013     1     1      554            558        -[31m4[39m      740            728
+## [90m 7[39m  [4m2[24m013     1     1      555            600        -[31m5[39m      913            854
+## [90m 8[39m  [4m2[24m013     1     1      557            600        -[31m3[39m      709            723
+## [90m 9[39m  [4m2[24m013     1     1      557            600        -[31m3[39m      838            846
+## [90m10[39m  [4m2[24m013     1     1      558            600        -[31m2[39m      753            745
+## [90m# … with 336,766 more rows, and 11 more variables: arr_delay [3m[90m&lt;dbl&gt;[90m[23m,[39m
+## [90m#   carrier [3m[90m&lt;chr&gt;[90m[23m, flight [3m[90m&lt;int&gt;[90m[23m, tailnum [3m[90m&lt;chr&gt;[90m[23m, origin [3m[90m&lt;chr&gt;[90m[23m, dest [3m[90m&lt;chr&gt;[90m[23m,[39m
+## [90m#   air_time [3m[90m&lt;dbl&gt;[90m[23m, distance [3m[90m&lt;dbl&gt;[90m[23m, hour [3m[90m&lt;dbl&gt;[90m[23m, minute [3m[90m&lt;dbl&gt;[90m[23m, time_hour [3m[90m&lt;dttm&gt;[90m[23m[39m</code></pre>
+</div>
+<div id="mutate" class="section level4">
+<h4><span class="header-section-number">3.4.0.4</span> mutate()</h4>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="introduction-to-tidyverse.html#cb30-1"></a>flights2 &lt;-<span class="st"> </span><span class="kw">as_tibble</span>(<span class="kw">data.frame</span>(flights, <span class="dt">air_time_hr =</span> flights<span class="op">$</span>air_time<span class="op">/</span><span class="dv">60</span>, <span class="dt">distance_1000m =</span> flights<span class="op">$</span>distance<span class="op">/</span><span class="dv">1000</span>))</span>
+<span id="cb30-2"><a href="introduction-to-tidyverse.html#cb30-2"></a></span>
+<span id="cb30-3"><a href="introduction-to-tidyverse.html#cb30-3"></a></span>
+<span id="cb30-4"><a href="introduction-to-tidyverse.html#cb30-4"></a>flights2 &lt;-</span>
+<span id="cb30-5"><a href="introduction-to-tidyverse.html#cb30-5"></a><span class="st">  </span>flights <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb30-6"><a href="introduction-to-tidyverse.html#cb30-6"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">air_time_hr =</span> air_time<span class="op">/</span><span class="dv">60</span>, <span class="dt">distance_1000m =</span> distance<span class="op">/</span><span class="dv">1000</span>)</span>
+<span id="cb30-7"><a href="introduction-to-tidyverse.html#cb30-7"></a>flights2</span></code></pre></div>
+<pre><code>## [90m# A tibble: 336,776 x 21[39m
+##     year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time
+##    [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m    [3m[90m&lt;int&gt;[39m[23m          [3m[90m&lt;int&gt;[39m[23m     [3m[90m&lt;dbl&gt;[39m[23m    [3m[90m&lt;int&gt;[39m[23m          [3m[90m&lt;int&gt;[39m[23m
+## [90m 1[39m  [4m2[24m013     1     1      517            515         2      830            819
+## [90m 2[39m  [4m2[24m013     1     1      533            529         4      850            830
+## [90m 3[39m  [4m2[24m013     1     1      542            540         2      923            850
+## [90m 4[39m  [4m2[24m013     1     1      544            545        -[31m1[39m     [4m1[24m004           [4m1[24m022
+## [90m 5[39m  [4m2[24m013     1     1      554            600        -[31m6[39m      812            837
+## [90m 6[39m  [4m2[24m013     1     1      554            558        -[31m4[39m      740            728
+## [90m 7[39m  [4m2[24m013     1     1      555            600        -[31m5[39m      913            854
+## [90m 8[39m  [4m2[24m013     1     1      557            600        -[31m3[39m      709            723
+## [90m 9[39m  [4m2[24m013     1     1      557            600        -[31m3[39m      838            846
+## [90m10[39m  [4m2[24m013     1     1      558            600        -[31m2[39m      753            745
+## [90m# … with 336,766 more rows, and 13 more variables: arr_delay [3m[90m&lt;dbl&gt;[90m[23m,[39m
+## [90m#   carrier [3m[90m&lt;chr&gt;[90m[23m, flight [3m[90m&lt;int&gt;[90m[23m, tailnum [3m[90m&lt;chr&gt;[90m[23m, origin [3m[90m&lt;chr&gt;[90m[23m, dest [3m[90m&lt;chr&gt;[90m[23m,[39m
+## [90m#   air_time [3m[90m&lt;dbl&gt;[90m[23m, distance [3m[90m&lt;dbl&gt;[90m[23m, hour [3m[90m&lt;dbl&gt;[90m[23m, minute [3m[90m&lt;dbl&gt;[90m[23m, time_hour [3m[90m&lt;dttm&gt;[90m[23m,[39m
+## [90m#   air_time_hr [3m[90m&lt;dbl&gt;[90m[23m, distance_1000m [3m[90m&lt;dbl&gt;[90m[23m[39m</code></pre>
+</div>
+<div id="group_by-with-count" class="section level4">
+<h4><span class="header-section-number">3.4.0.5</span> group_by() with count()</h4>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="introduction-to-tidyverse.html#cb32-1"></a><span class="co">#count() with group_by()</span></span>
+<span id="cb32-2"><a href="introduction-to-tidyverse.html#cb32-2"></a><span class="co">#this yields data in a &#39;long&#39; format</span></span>
+<span id="cb32-3"><a href="introduction-to-tidyverse.html#cb32-3"></a>flights2a &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">table</span>(flights[,<span class="kw">c</span>(<span class="st">&#39;origin&#39;</span>, <span class="st">&#39;dest&#39;</span>)]))</span>
+<span id="cb32-4"><a href="introduction-to-tidyverse.html#cb32-4"></a><span class="kw">head</span>(flights2a)</span></code></pre></div>
+<pre><code>##      origin
+## dest    EWR   JFK   LGA
+##   ABQ     0   254     0
+##   ACK     0   265     0
+##   ALB   439     0     0
+##   ANC     8     0     0
+##   ATL  5022  1930 10263
+##   AUS   968  1471     0</code></pre>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="introduction-to-tidyverse.html#cb34-1"></a><span class="co">#this yields &#39;tidy&#39; data</span></span>
+<span id="cb34-2"><a href="introduction-to-tidyverse.html#cb34-2"></a>flights2 &lt;-<span class="st"> </span></span>
+<span id="cb34-3"><a href="introduction-to-tidyverse.html#cb34-3"></a><span class="st">  </span>flights <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb34-4"><a href="introduction-to-tidyverse.html#cb34-4"></a><span class="st">  </span><span class="kw">group_by</span>(origin, dest) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb34-5"><a href="introduction-to-tidyverse.html#cb34-5"></a><span class="st">  </span><span class="kw">count</span>()</span>
+<span id="cb34-6"><a href="introduction-to-tidyverse.html#cb34-6"></a>flights2</span></code></pre></div>
+<pre><code>## [90m# A tibble: 224 x 3[39m
+## [90m# Groups:   origin, dest [224][39m
+##    origin dest      n
+##    [3m[90m&lt;chr&gt;[39m[23m  [3m[90m&lt;chr&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m
+## [90m 1[39m EWR    ALB     439
+## [90m 2[39m EWR    ANC       8
+## [90m 3[39m EWR    ATL    [4m5[24m022
+## [90m 4[39m EWR    AUS     968
+## [90m 5[39m EWR    AVL     265
+## [90m 6[39m EWR    BDL     443
+## [90m 7[39m EWR    BNA    [4m2[24m336
+## [90m 8[39m EWR    BOS    [4m5[24m327
+## [90m 9[39m EWR    BQN     297
+## [90m10[39m EWR    BTV     931
+## [90m# … with 214 more rows[39m</code></pre>
+</div>
+<div id="spread-gather-to-convert-between-long-and-tidy-formats" class="section level4">
+<h4><span class="header-section-number">3.4.0.6</span> spread() / gather() to convert between long and tidy formats:</h4>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="introduction-to-tidyverse.html#cb36-1"></a>flights2b &lt;-</span>
+<span id="cb36-2"><a href="introduction-to-tidyverse.html#cb36-2"></a><span class="st">  </span>flights2 <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb36-3"><a href="introduction-to-tidyverse.html#cb36-3"></a><span class="st">  </span><span class="kw">as_tibble</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb36-4"><a href="introduction-to-tidyverse.html#cb36-4"></a><span class="st">  </span><span class="kw">spread</span>(<span class="dt">key =</span> origin, <span class="dt">value =</span> n, <span class="dt">fill =</span> <span class="dv">0</span>)</span>
+<span id="cb36-5"><a href="introduction-to-tidyverse.html#cb36-5"></a></span>
+<span id="cb36-6"><a href="introduction-to-tidyverse.html#cb36-6"></a><span class="co">#result in the same formats </span></span>
+<span id="cb36-7"><a href="introduction-to-tidyverse.html#cb36-7"></a>flights2b</span></code></pre></div>
+<pre><code>## [90m# A tibble: 105 x 4[39m
+##    dest    EWR   JFK   LGA
+##    [3m[90m&lt;chr&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m
+## [90m 1[39m ABQ       0   254     0
+## [90m 2[39m ACK       0   265     0
+## [90m 3[39m ALB     439     0     0
+## [90m 4[39m ANC       8     0     0
+## [90m 5[39m ATL    [4m5[24m022  [4m1[24m930 [4m1[24m[4m0[24m263
+## [90m 6[39m AUS     968  [4m1[24m471     0
+## [90m 7[39m AVL     265     0    10
+## [90m 8[39m BDL     443     0     0
+## [90m 9[39m BGR       0     0   375
+## [90m10[39m BHM       0     1   296
+## [90m# … with 95 more rows[39m</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="introduction-to-tidyverse.html#cb38-1"></a><span class="kw">head</span>(flights2a) </span></code></pre></div>
+<pre><code>##      origin
+## dest    EWR   JFK   LGA
+##   ABQ     0   254     0
+##   ACK     0   265     0
+##   ALB   439     0     0
+##   ANC     8     0     0
+##   ATL  5022  1930 10263
+##   AUS   968  1471     0</code></pre>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="introduction-to-tidyverse.html#cb40-1"></a>flights2b <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb40-2"><a href="introduction-to-tidyverse.html#cb40-2"></a><span class="st">  </span><span class="kw">gather</span>(<span class="dt">key =</span> origin, <span class="dt">value =</span> n, <span class="op">-</span>dest) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb40-3"><a href="introduction-to-tidyverse.html#cb40-3"></a><span class="st">  </span><span class="kw">filter</span>(n<span class="op">!=</span><span class="dv">0</span>)</span></code></pre></div>
+<pre><code>## [90m# A tibble: 224 x 3[39m
+##    dest  origin     n
+##    [3m[90m&lt;chr&gt;[39m[23m [3m[90m&lt;chr&gt;[39m[23m  [3m[90m&lt;dbl&gt;[39m[23m
+## [90m 1[39m ALB   EWR      439
+## [90m 2[39m ANC   EWR        8
+## [90m 3[39m ATL   EWR     [4m5[24m022
+## [90m 4[39m AUS   EWR      968
+## [90m 5[39m AVL   EWR      265
+## [90m 6[39m BDL   EWR      443
+## [90m 7[39m BNA   EWR     [4m2[24m336
+## [90m 8[39m BOS   EWR     [4m5[24m327
+## [90m 9[39m BQN   EWR      297
+## [90m10[39m BTV   EWR      931
+## [90m# … with 214 more rows[39m</code></pre>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="introduction-to-tidyverse.html#cb42-1"></a><span class="kw">head</span>(flights2)</span></code></pre></div>
+<pre><code>## [90m# A tibble: 6 x 3[39m
+## [90m# Groups:   origin, dest [6][39m
+##   origin dest      n
+##   [3m[90m&lt;chr&gt;[39m[23m  [3m[90m&lt;chr&gt;[39m[23m [3m[90m&lt;int&gt;[39m[23m
+## [90m1[39m EWR    ALB     439
+## [90m2[39m EWR    ANC       8
+## [90m3[39m EWR    ATL    [4m5[24m022
+## [90m4[39m EWR    AUS     968
+## [90m5[39m EWR    AVL     265
+## [90m6[39m EWR    BDL     443</code></pre>
+</div>
+</div>
+<div id="plotting-in-tidyverse" class="section level2">
+<h2><span class="header-section-number">3.5</span> Plotting in tidyverse</h2>
+<p>Tidyverse also uses ggplot2, which is intended to simplify the process of creating plots
+so that data can be quickly and easily visualized as an iterative component of the
+exploratory analysis process. Some advantages include an clear method for translating
+data to visuals, having many preconfigured attributes available, and being able to build
+and modify previously stored plot objects without needing to recreate them. A downside
+is that to take advantage of the full power and flexibility of ggplot2 requires a wide
+knowledge of what is available as options to include in graphics, and therefore involve
+a long learning curve. However, the ultimate results are well worth the
+learning investment. For a basic explanation and cheat sheet see
+<a href="https://ggplot2.tidyverse.org/">here</a></p>
+<div id="ggplot-key-components" class="section level3">
+<h3><span class="header-section-number">3.5.1</span> ggplot: Key components</h3>
+<p>ggplot has <strong>three</strong> key components:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>data</strong>, this must be a <code>data.frame</code></p></li>
+<li><p>A set of aesthetic mappings (<code>aes</code>) between variables in the data and
+visual properties, and</p></li>
+<li><p>At least one <code>layer</code> which describes how to render each observation.</p></li>
+</ol>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="introduction-to-tidyverse.html#cb44-1"></a>sub &lt;-<span class="st"> </span></span>
+<span id="cb44-2"><a href="introduction-to-tidyverse.html#cb44-2"></a><span class="st">  </span>flights <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb44-3"><a href="introduction-to-tidyverse.html#cb44-3"></a><span class="st">  </span><span class="kw">sample_n</span>(<span class="dv">100</span>, <span class="dt">replace =</span> F) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb44-4"><a href="introduction-to-tidyverse.html#cb44-4"></a><span class="st">  </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(distance), <span class="op">!</span><span class="kw">is.na</span>(air_time), <span class="op">!</span><span class="kw">is.na</span>(origin), <span class="op">!</span><span class="kw">is.na</span>(month), <span class="op">!</span><span class="kw">is.na</span>(dest))</span>
+<span id="cb44-5"><a href="introduction-to-tidyverse.html#cb44-5"></a></span>
+<span id="cb44-6"><a href="introduction-to-tidyverse.html#cb44-6"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> sub, <span class="kw">aes</span>(<span class="dt">x =</span> distance, <span class="dt">y =</span> air_time)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>Different syntax, equivalent outcome:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="introduction-to-tidyverse.html#cb45-1"></a><span class="kw">ggplot</span>(sub, <span class="kw">aes</span>(distance, air_time)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span>
+<span id="cb45-2"><a href="introduction-to-tidyverse.html#cb45-2"></a><span class="kw">ggplot</span>()                    <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">data =</span> sub, <span class="kw">aes</span>(distance, air_time))</span>
+<span id="cb45-3"><a href="introduction-to-tidyverse.html#cb45-3"></a><span class="kw">ggplot</span>(<span class="dt">data =</span> sub)            <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> distance, <span class="dt">y =</span> air_time))</span>
+<span id="cb45-4"><a href="introduction-to-tidyverse.html#cb45-4"></a><span class="kw">ggplot</span>(sub)                   <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(distance, air_time))</span></code></pre></div>
+<p>Can be stored as an object for later use. This is a useful feature of Rgadget: because
+default plots are created in ggplot, they can be stored and modified by the user at a
+later point.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="introduction-to-tidyverse.html#cb46-1"></a>p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(sub, <span class="kw">aes</span>(distance, air_time)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span></code></pre></div>
+<p>The class:</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="introduction-to-tidyverse.html#cb47-1"></a><span class="kw">class</span>(p)</span></code></pre></div>
+<pre><code>## [1] &quot;gg&quot;     &quot;ggplot&quot;</code></pre>
+<p>The structure (a bit of Latin - not run here):</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="introduction-to-tidyverse.html#cb49-1"></a><span class="kw">str</span>(p)</span></code></pre></div>
+</div>
+<div id="aesthetic" class="section level3">
+<h3><span class="header-section-number">3.5.2</span> aesthetic</h3>
+<p>Adding more variables to a two dimensional scatterplot can be done by mapping the variables to an aesthetic (colour, fill, size, shape, alpha)</p>
+<div id="colour" class="section level4">
+<h4><span class="header-section-number">3.5.2.1</span> colour</h4>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="introduction-to-tidyverse.html#cb50-1"></a>p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(sub, <span class="kw">aes</span>(distance, air_time))</span>
+<span id="cb50-2"><a href="introduction-to-tidyverse.html#cb50-2"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">colour =</span> origin))</span>
+<span id="cb50-3"><a href="introduction-to-tidyverse.html#cb50-3"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">colour =</span> dest))</span></code></pre></div>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-6-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-6-2.png" width="50%" /></p>
+<p>Manual control of colours or other palette schemes (here brewer):</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="introduction-to-tidyverse.html#cb51-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">colour =</span> origin)) <span class="op">+</span></span>
+<span id="cb51-2"><a href="introduction-to-tidyverse.html#cb51-2"></a><span class="st">  </span><span class="kw">scale_colour_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;orange&quot;</span>,<span class="st">&quot;brown&quot;</span>,<span class="st">&quot;green&quot;</span>))</span>
+<span id="cb51-3"><a href="introduction-to-tidyverse.html#cb51-3"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">colour =</span> dest)) <span class="op">+</span></span>
+<span id="cb51-4"><a href="introduction-to-tidyverse.html#cb51-4"></a><span class="st">  </span><span class="kw">scale_colour_brewer</span>(<span class="dt">palette =</span> <span class="st">&quot;Set1&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning in RColorBrewer::brewer.pal(n, pal): n too large, allowed maximum for palette Set1 is 9
+## Returning the palette you asked for with that many colors</code></pre>
+<pre><code>## Warning: Removed 83 rows containing missing values (geom_point).</code></pre>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-7-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-7-2.png" width="50%" /></p>
+<p>Note, to view all the brewer palettes do:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="introduction-to-tidyverse.html#cb54-1"></a>RColorBrewer<span class="op">::</span><span class="kw">display.brewer.all</span>()</span></code></pre></div>
+</div>
+<div id="shape" class="section level4">
+<h4><span class="header-section-number">3.5.2.2</span> shape</h4>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="introduction-to-tidyverse.html#cb55-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(distance, air_time, <span class="dt">shape =</span> origin))</span></code></pre></div>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+</div>
+<div id="size" class="section level4">
+<h4><span class="header-section-number">3.5.2.3</span> size</h4>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="introduction-to-tidyverse.html#cb56-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(distance, air_time, <span class="dt">size =</span> month))</span></code></pre></div>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<p>One can also “fix” the aesthetic manually, e.g.:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="introduction-to-tidyverse.html#cb57-1"></a><span class="kw">ggplot</span>(sub, <span class="kw">aes</span>(distance, air_time)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">colour =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">shape =</span> <span class="dv">8</span>, <span class="dt">size =</span> <span class="dv">10</span>)</span></code></pre></div>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<p>Note here that the call to colour, shape, etc. is done outside the <code>aes</code>-call. One can also combine calls inside and outside the <code>aes</code>-function (here we showing overlay of adjacent datapoints):</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="introduction-to-tidyverse.html#cb58-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(distance, air_time, <span class="dt">size =</span> month), <span class="dt">alpha =</span> <span class="fl">0.3</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+</div>
+</div>
+<div id="facetting" class="section level3">
+<h3><span class="header-section-number">3.5.3</span> Facetting</h3>
+<p>Splitting a graph into subsets based on a categorical variable.</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="introduction-to-tidyverse.html#cb59-1"></a><span class="kw">ggplot</span>(sub) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb59-2"><a href="introduction-to-tidyverse.html#cb59-2"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(distance, air_time, <span class="dt">colour =</span> <span class="kw">as.factor</span>(year))) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb59-3"><a href="introduction-to-tidyverse.html#cb59-3"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>origin)</span></code></pre></div>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>One can also split the plot using two variables using the function <code>facet_grid</code>:</p>
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="introduction-to-tidyverse.html#cb60-1"></a><span class="kw">ggplot</span>(sub) <span class="op">+</span></span>
+<span id="cb60-2"><a href="introduction-to-tidyverse.html#cb60-2"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(distance, air_time)) <span class="op">+</span></span>
+<span id="cb60-3"><a href="introduction-to-tidyverse.html#cb60-3"></a><span class="st">  </span><span class="kw">facet_grid</span>(<span class="kw">as.factor</span>(year) <span class="op">~</span><span class="st"> </span>origin)</span></code></pre></div>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+</div>
+<div id="adding-layers" class="section level3">
+<h3><span class="header-section-number">3.5.4</span> Adding layers</h3>
+<p>The power of ggplot comes into place when one adds layers on top of other layers. Let’s for now look at only at two examples.</p>
+</div>
+<div id="add-a-line-to-a-scatterplot" class="section level3">
+<h3><span class="header-section-number">3.5.5</span> Add a line to a scatterplot</h3>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb61-1"><a href="introduction-to-tidyverse.html#cb61-1"></a><span class="kw">ggplot</span>(sub, <span class="kw">aes</span>(distance, air_time)) <span class="op">+</span></span>
+<span id="cb61-2"><a href="introduction-to-tidyverse.html#cb61-2"></a><span class="st">  </span><span class="kw">geom_point</span>() <span class="op">+</span></span>
+<span id="cb61-3"><a href="introduction-to-tidyverse.html#cb61-3"></a><span class="st">  </span><span class="kw">geom_line</span>()</span></code></pre></div>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<div id="add-a-smoother-to-a-scatterplot" class="section level4">
+<h4><span class="header-section-number">3.5.5.1</span> Add a smoother to a scatterplot</h4>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="introduction-to-tidyverse.html#cb62-1"></a>p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(sub, <span class="kw">aes</span>(distance, air_time))</span>
+<span id="cb62-2"><a href="introduction-to-tidyverse.html#cb62-2"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>()</span></code></pre></div>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="introduction-to-tidyverse.html#cb64-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_smooth</span>(<span class="dt">method =</span> <span class="st">&quot;lm&quot;</span>)</span></code></pre></div>
+<pre><code>## `geom_smooth()` using formula &#39;y ~ x&#39;</code></pre>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-16-1.png" width="33%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-16-2.png" width="33%" /></p>
+<pre><code>## `geom_smooth()` using method = &#39;loess&#39; and formula &#39;y ~ x&#39;</code></pre>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+<div id="statistical-summary-graphs" class="section level2">
+<h2><span class="header-section-number">3.6</span> Statistical summary graphs</h2>
+<hr />
+<p>There are some useful <em>inbuilt</em> routines within the ggplot2-packages which allows one to create some simple summary plots of the raw data.</p>
+<div id="bar-plot" class="section level4">
+<h4><span class="header-section-number">3.6.0.1</span> bar plot</h4>
+<p>One can create bar graph for discrete data using the <code>geom_bar</code></p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="introduction-to-tidyverse.html#cb67-1"></a><span class="kw">ggplot</span>(sub, <span class="kw">aes</span>(dest)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_bar</span>()</span></code></pre></div>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>The graph shows the number of observations we have of each destination. The original data is first transformed behind the scene into a table of counts, before being rendered.</p>
+</div>
+<div id="histograms" class="section level4">
+<h4><span class="header-section-number">3.6.0.2</span> histograms</h4>
+<p>For continuous data one uses the <code>geom_histogram</code>-function (left default bin-number, right bindwith specified as 50 mins):</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="introduction-to-tidyverse.html#cb68-1"></a>p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(sub, <span class="kw">aes</span>(air_time))</span>
+<span id="cb68-2"><a href="introduction-to-tidyverse.html#cb68-2"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>()</span></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="introduction-to-tidyverse.html#cb70-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">50</span>)</span></code></pre></div>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-19-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-19-2.png" width="50%" /></p>
+<p>One can add another variable (left) or better use facet (right):</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="introduction-to-tidyverse.html#cb71-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> origin))</span></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="introduction-to-tidyverse.html#cb73-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_histogram</span>() <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>origin, <span class="dt">ncol =</span> <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-20-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-20-2.png" width="50%" /></p>
+</div>
+<div id="frequency-polygons" class="section level4">
+<h4><span class="header-section-number">3.6.0.3</span> Frequency polygons</h4>
+<p>Alternatives to histograms for continuous data are frequency polygons:</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="introduction-to-tidyverse.html#cb75-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_freqpoly</span>(<span class="dt">lwd =</span> <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="introduction-to-tidyverse.html#cb77-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_freqpoly</span>(<span class="kw">aes</span>(<span class="dt">colour =</span> origin), <span class="dt">lwd =</span> <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</code></pre>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-21-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-21-2.png" width="50%" /></p>
+</div>
+<div id="box-plots" class="section level4">
+<h4><span class="header-section-number">3.6.0.4</span> Box-plots</h4>
+<p>Boxplots, which are more condensed summaries of the data than histograms, are called using <code>geom_boxplot</code>. Here two versions of the same graph are used, the one on the left is the default, but on the right we have reordered the maturity variable on the x-axis such that the median value of length increases from left to right:</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="introduction-to-tidyverse.html#cb79-1"></a><span class="kw">ggplot</span>(sub, <span class="kw">aes</span>(dest, air_time)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span>
+<span id="cb79-2"><a href="introduction-to-tidyverse.html#cb79-2"></a>p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(sub, <span class="kw">aes</span>(<span class="kw">reorder</span>(dest, air_time), air_time)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_boxplot</span>()</span>
+<span id="cb79-3"><a href="introduction-to-tidyverse.html#cb79-3"></a>p</span></code></pre></div>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-22-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-22-2.png" width="50%" /></p>
+<p>It is sometimes useful to plot the “raw” data over summary plots. Using <code>geom_point</code> as an overlay is sometimes not very useful when points overlap too much; <code>geom_jitter</code> can sometimes be more useful:</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="introduction-to-tidyverse.html#cb80-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">size =</span> <span class="dv">1</span>)</span>
+<span id="cb80-2"><a href="introduction-to-tidyverse.html#cb80-2"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_jitter</span>(<span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">size =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-23-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-23-2.png" width="50%" /></p>
+<p>Read the help on <code>geom_violin</code> and create a code that results in this plot:</p>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+</div>
+</div>
+</div>
+</div>
+<div id="other-statistical-summaries" class="section level2">
+<h2><span class="header-section-number">3.7</span> Other statistical summaries</h2>
+<p>Using <code>stat_summary</code> one can call specific summary statistics. Here are examples of 4 plots, going from top-left to bottom right we have:</p>
+<ul>
+<li>Raw data with median length at age (red) superimposed</li>
+<li>A pointrange plot showing the mean and the range</li>
+<li>A pointrange plot showing the mean and the standard error</li>
+<li>A pointrange plot showing the bootstrap mean and standard error</li>
+</ul>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="introduction-to-tidyverse.html#cb81-1"></a>sub<span class="op">$</span>distance &lt;-<span class="st"> </span><span class="kw">round</span>(sub<span class="op">$</span>distance)</span>
+<span id="cb81-2"><a href="introduction-to-tidyverse.html#cb81-2"></a>p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(sub, <span class="kw">aes</span>(distance, air_time))</span>
+<span id="cb81-3"><a href="introduction-to-tidyverse.html#cb81-3"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>(<span class="dt">alpha =</span> <span class="fl">0.25</span>) <span class="op">+</span><span class="st"> </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> <span class="st">&quot;median&quot;</span>, <span class="dt">geom =</span> <span class="st">&quot;point&quot;</span>, <span class="dt">colour =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning: `fun.y` is deprecated. Use `fun` instead.</code></pre>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="introduction-to-tidyverse.html#cb83-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">stat_summary</span>(<span class="dt">fun.y =</span> <span class="st">&quot;mean&quot;</span>, <span class="dt">fun.ymin =</span> <span class="st">&quot;min&quot;</span>, <span class="dt">fun.ymax =</span> <span class="st">&quot;max&quot;</span>, <span class="dt">geom =</span> <span class="st">&quot;pointrange&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning: `fun.y` is deprecated. Use `fun` instead.</code></pre>
+<pre><code>## Warning: `fun.ymin` is deprecated. Use `fun.min` instead.</code></pre>
+<pre><code>## Warning: `fun.ymax` is deprecated. Use `fun.max` instead.</code></pre>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="introduction-to-tidyverse.html#cb87-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> <span class="st">&quot;mean_se&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning: Removed 37 rows containing missing values (geom_segment).</code></pre>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="introduction-to-tidyverse.html#cb89-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> <span class="st">&quot;mean_cl_boot&quot;</span>)</span></code></pre></div>
+<pre><code>## Warning: Computation failed in `stat_summary()`:
+## Hmisc package required for this function</code></pre>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-25-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-25-2.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-25-3.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-25-4.png" width="50%" /></p>
+</div>
+<div id="some-controls" class="section level2">
+<h2><span class="header-section-number">3.8</span> Some controls</h2>
+<div id="labels" class="section level3">
+<h3><span class="header-section-number">3.8.1</span> labels</h3>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="introduction-to-tidyverse.html#cb91-1"></a>p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(sub, <span class="kw">aes</span>(distance, air_time, <span class="dt">colour =</span> origin)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_point</span>()</span>
+<span id="cb91-2"><a href="introduction-to-tidyverse.html#cb91-2"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Distance (miles)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Air time (minutes)&quot;</span>, </span>
+<span id="cb91-3"><a href="introduction-to-tidyverse.html#cb91-3"></a>         <span class="dt">colour =</span> <span class="st">&quot;Origin&quot;</span>, </span>
+<span id="cb91-4"><a href="introduction-to-tidyverse.html#cb91-4"></a>         <span class="dt">title =</span> <span class="st">&quot;My flight plot&quot;</span>,</span>
+<span id="cb91-5"><a href="introduction-to-tidyverse.html#cb91-5"></a>         <span class="dt">subtitle =</span> <span class="st">&quot;My nice subtitle&quot;</span>,</span>
+<span id="cb91-6"><a href="introduction-to-tidyverse.html#cb91-6"></a>         <span class="dt">caption =</span> <span class="st">&quot;My caption&quot;</span>)</span></code></pre></div>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+</div>
+<div id="legend-position" class="section level3">
+<h3><span class="header-section-number">3.8.2</span> Legend position</h3>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="introduction-to-tidyverse.html#cb92-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)</span>
+<span id="cb92-2"><a href="introduction-to-tidyverse.html#cb92-2"></a>p &lt;-<span class="st"> </span>p <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="kw">c</span>(<span class="fl">0.8</span>, <span class="fl">0.3</span>))</span>
+<span id="cb92-3"><a href="introduction-to-tidyverse.html#cb92-3"></a>p</span></code></pre></div>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-27-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-27-2.png" width="50%" /></p>
+</div>
+<div id="breaks" class="section level3">
+<h3><span class="header-section-number">3.8.3</span> breaks</h3>
+<p>Controls which values appear as tick marks</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="introduction-to-tidyverse.html#cb93-1"></a>p <span class="op">+</span></span>
+<span id="cb93-2"><a href="introduction-to-tidyverse.html#cb93-2"></a><span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">5</span>, <span class="dv">45</span>, <span class="dt">by =</span> <span class="dv">10</span>)<span class="op">*</span><span class="dv">100</span>) <span class="op">+</span></span>
+<span id="cb93-3"><a href="introduction-to-tidyverse.html#cb93-3"></a><span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">breaks =</span> <span class="kw">seq</span>(<span class="dv">50</span>, <span class="dv">400</span>, <span class="dt">by =</span> <span class="dv">50</span>))</span></code></pre></div>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+</div>
+<div id="limits" class="section level3">
+<h3><span class="header-section-number">3.8.4</span> limits</h3>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="introduction-to-tidyverse.html#cb94-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">ylim</span>(<span class="dv">100</span>, <span class="dv">500</span>)</span></code></pre></div>
+<pre><code>## Warning: Removed 31 rows containing missing values (geom_point).</code></pre>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="introduction-to-tidyverse.html#cb96-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">ylim</span>(<span class="ot">NA</span>, <span class="dv">500</span>) <span class="co"># setting only upper limit</span></span></code></pre></div>
+<p><img src="Tidyverse_files/figure-html/unnamed-chunk-29-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-29-2.png" width="50%" /></p>
+</div>
+</div>
+<div id="further-readings" class="section level2">
+<h2><span class="header-section-number">3.9</span> Further readings</h2>
+<hr />
+<ul>
+<li>The ggplot2 site: <a href="http://ggplot2.tidyverse.org" class="uri">http://ggplot2.tidyverse.org</a></li>
+<li>The ggplot2 book in the making: <a href="https://github.com/hadley/ggplot2-book" class="uri">https://github.com/hadley/ggplot2-book</a>
+<ul>
+<li>A rendered version of the book: <a href="http://www.hafro.is/~einarhj/education/ggplot2" class="uri">http://www.hafro.is/~einarhj/education/ggplot2</a>
+<ul>
+<li>needs to be updates</li>
+</ul></li>
+</ul></li>
+<li><a href="http://r4ds.had.co.nz/data-visualisation.html">R4DS - Data visualisation</a></li>
+<li>R graphics cookbook: <a href="http://www.cookbook-r.com/Graphs" class="uri">http://www.cookbook-r.com/Graphs</a></li>
+<li><a href="https://github.com/rstudio/cheatsheets/raw/master/data-visualization-2.1.pdf">Data Visualization Cheat Sheet</a></li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="general-context-of-gadget.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="getting-started-with-the-gadget-framework.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/lunr.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/hafro/gadget-course/edit/master/Tidyverse.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/hafro/gadget-course/blob/master/Tidyverse.Rmd",
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

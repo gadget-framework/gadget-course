@@ -1,0 +1,114 @@
+
+
+
+
+# (APPENDIX) Appendix {-} 
+
+# Installing Gadget from source
+
+Gadget development repository is housed on the [MFRI github site](https://github.com/Hafro/gadget2). For convenience Gadget has been wrapped up in a R-package  available from CRAN using the following command:
+
+```
+install.packages('gadget2')
+
+```
+or if you need the bleeding edge version of Gadget you can also install it directly with:
+
+```
+devtools::install_github('hafro/gadget2')
+```
+
+Windows users note that you may want to install the `icesTAF` R package to be able to convert Windows line-endings to unix line-endings with the `dos2unix` function, which when not corrected could cause all kinds of grieve. 
+
+
+## Command line version
+
+Alternatively you can install gadget from source as a command line tool. Basic
+installation instructions can be found on the github site but below they are given step-by-step. Notice
+that the extremely useful resource 'Gadget User Guide' is included as a pdf with the installation, but it is also available [on-line](https://hafro.github.io/gadget2/userguide/). 
+
+To compile Gadget one needs a working C++ compiler and a version of Make installed on the
+computer.
+
+### Linux
+
+The compiler and Make should be installed automatically on most linux distributions but on ubuntu one needs to install build-essentials:
+```
+sudo apt-get install build-essential
+```
+
+### Mac
+
+It should be sufficient to install XCode through the Appstore and through XCode's preferences install commandline tools.
+
+### Windows
+
+The easiest way is to install uses
+[Rtools](https://cran.r-project.org/bin/windows/Rtools/) . During the install process 
+allow the installer to append to the system path. Also you may want to install the `icesTAF` R package to be able to convert Windows line-endings to unix line-endings with the `dos2unix` function. 
+
+## Download, compile and install
+
+### Standard procedure
+
+To install Gadget you can simply click the "download as a zip file" button. Unzip this file and within command prompt/terminal application make your way to the resulting folder, typically called gadget-master, and simply type:
+```
+make
+```
+Recommended: for convenience you may want to install the resulting gadget executable to a location in the system path, thus allowing the gadget executable to called in any directory. On *nix based system you can simply type:
+```
+sudo make install
+```
+Be aware of where your gadget executable is located (for example by searching for
+'gadget' on your computer). Whenever Gadget is run via Rgadget, this executable will be
+called, so Gadget's path should be listed within R as a search path. This should be
+take care of when installed using `sudo make install`.
+
+If it is not possible to install gadget for all users of the computer, due to lack of privileges (such as administrator rights) on the computer, one can move the gadget binary to a position on the search path. E.g. if you want to store the gadget binary a directory name `bin` on your home directory you can:
+
+```
+## if the bin directory does not exist create it
+mkdir ~/bin 
+## move the gadget binary to ~/bin
+mv gadget ~/bin
+
+## update the path (if needed)
+echo PATH=$HOME/bin:$PATH >> ~/.bash_profile
+echo export PATH >> ~/.bash_profile
+```
+
+and then Rgadget should be able to find gadget. 
+
+### Recommended: via Git
+
+We recommend installing via Git because it provides for easy updating and if you don't
+already use git, then this is a good time to start: can be extremely useful later for
+version control and sharing of your Gadget models while under development. This subject
+will be touched upon on the last day of the course. To download and/or install Git, follow the instructions found
+[here](https://www.linode.com/docs/development/version-control/how-to-install-git-on-linux-mac-and-windows/). 
+Note that Git comes prepackaged with Linux systems so it only needs to be installed via 
+the instructions on that website.
+
+Next, Gadget can be cloned (rather than downloaded) from the github website using Git. 
+From terminal, use: 
+
+```
+git clone https://github.com/Hafro/gadget.git
+```
+Navigate to the gadget directory, then install:
+```
+cd <gadget path>
+cd gadget
+make 
+sudo make install
+```
+To check that gadget is installed, you can try opening the manual:
+```
+man gadget
+```
+To update, navigate to the gadget directory then use:
+```
+git pull
+sudo make install
+```
+

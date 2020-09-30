@@ -179,13 +179,33 @@ library(tidyverse)
 #bcareas <- c(1015, 1014, 1018, 1011, 1012, 1023, 1023, 1021, 1032, 1031,
 #             1042, 1041, 1052, 1053, 1051, 1054, 1061, 1071, 1081, 1082)
 
+
+sr2d <- 
+  function (data, cell.col = "sr", col.names = c("lat", "lon")) 
+  {
+    if (!("tbl_sql" %in% class(data))) {
+        mod <- function(x, y) x%%y
+    }
+    sr <- data %>% dplyr::select_(.dots = stats::setNames(cell.col, 
+        "sr")) %>% dplyr::distinct() %>% dplyr::mutate(r = floor(sr/10)) %>% 
+        dplyr::mutate(s = round(sr - r * 10, 0) + 1, lat = floor(r/100)) %>% 
+        dplyr::mutate(lon = mod(r - lat * 100, 50)) %>% dplyr::mutate(halfb = (r - 
+        100 * lat - lon)/100) %>% dplyr::mutate(lon = -(lon + 
+        0.5), lat = lat + 60 + halfb + 0.25) %>% dplyr::mutate(lat = lat + 
+        ifelse(s == 1, 0, ifelse(s %in% 2:3, 0.125, -0.125)), 
+        lon = lon + ifelse(s == 1, 0, ifelse(s %in% c(2, 4), 
+            -0.25, 0.25))) %>% dplyr::select_(.dots = stats::setNames(c("sr", 
+        "lat", "lon"), c(cell.col, col.names)))
+    data %>% dplyr::left_join(sr, by = "sr")
+}
+
 reitmapping <- 
   read.table(
         system.file("demo-data", "reitmapping.tsv", package="mfdb"),
         header=TRUE,
         as.is=TRUE) %>%
   mutate(sr=as.numeric(GRIDCELL)) %>% 
-  mar:::sr2d()
+  sr2d()
 
 
 scale_fill_crayola <- function(n = 100, ...) {

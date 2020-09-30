@@ -20,16 +20,16 @@ jobs:
 
 #      - name: Install tikz
 #        run: sudo apt install graphviz imagemagick
+      - name: Distribution dependencies
+        run: sudo apt-get update && sudo apt-get install -y libpoppler-cpp-dev dnsutils
+
       - name: "Prepare SSH key and known hosts"
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KEY_PRIVATE }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
+          for ip in $(dig @8.8.8.8 github.com +short); do ssh-keyscan github.com,$ip;ssh-keyscan $ip; done 2>/dev/null >> ~/.ssh/known_hosts
+          cat ~/.ssh/known_hosts
       
-      - name: Distribution dependencies
-        run: sudo apt-get update && sudo apt-get install -y libpoppler-cpp-dev
-
       - name: Install build-docs prerequisites
         run: Rscript -e 'install.packages(c("gadget2","mfdb","rmarkdown","magick","pdftools", "patchwork","mapproj"))'
       

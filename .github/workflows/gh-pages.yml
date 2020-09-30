@@ -5,7 +5,7 @@ on:
   push:
      branches:
        - master
-
+ 
 name: Render documentation
 
 jobs:

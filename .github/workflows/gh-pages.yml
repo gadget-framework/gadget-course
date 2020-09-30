@@ -20,6 +20,8 @@ jobs:
 
 #      - name: Install tikz
 #        run: sudo apt install graphviz imagemagick
+      - name: Install necessary tools
+        run: sudo apt install libpoppler-cpp-dev
 
       - name: Install build-docs prerequisites
         run: Rscript -e 'install.packages(c("gadget2","mfdb","rmarkdown","magick","pdftools"))'

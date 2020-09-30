@@ -20,6 +20,13 @@ jobs:
 
 #      - name: Install tikz
 #        run: sudo apt install graphviz imagemagick
+      - name: "Prepare SSH key and known hosts"
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY_PRIVATE }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan github.com >> ~/.ssh/known_hosts
+      
       - name: Distribution dependencies
         run: sudo apt-get update && sudo apt-get install -y libpoppler-cpp-dev
 

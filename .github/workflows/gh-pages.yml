@@ -20,6 +20,9 @@ jobs:
 
 #      - name: Install tikz
 #        run: sudo apt install graphviz imagemagick
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
+
       - name: Distribution dependencies
         run: sudo apt-get install -y libpoppler-cpp-dev
 
@@ -32,9 +35,6 @@ jobs:
 
 #      - name: Install LaTeX
 #        run: Rscript -e 'tinytex::install_tinytex()'
-
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
 
       - name: Render Documentation
         run: Rscript -e 'bookdown::render_book("index.Rmd")'

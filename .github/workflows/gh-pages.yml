@@ -21,7 +21,7 @@ jobs:
       - name: Install tikz
         run: sudo apt install graphviz imagemagick
       - name: Distribution dependencies
-        run: sudo apt-get update && sudo apt-get install -y libpoppler-cpp-dev dnsutils libcurl4-openssl-dev
+        run: sudo apt-get update && sudo apt-get install -y libpoppler-cpp-dev dnsutils libcurl4-openssl-dev libmagick++-dev
 
 #      - name: "Prepare SSH key and known hosts"
 #        run: |
@@ -31,13 +31,13 @@ jobs:
 
       
       - name: Install build-docs prerequisites
-        run: Rscript -e 'install.packages(c("gadget2","bookdown","mfdb","rmarkdown","magick","pdftools", "patchwork","mapproj","tidyverse","remotes","curl", "TTR", "zoo", "xts", "quantmod", "quadprog", "plyr", "tseries", "reshape2"))'
+        run: Rscript -e 'install.packages(c("gadget2","bookdown","mfdb","rmarkdown","magick","pdftools", "patchwork","mapproj","tidyverse","remotes","curl", "TTR", "zoo", "xts", "quantmod", "quadprog", "plyr", "tseries", "reshape2","nycflights13"))'
       
       - name: Install fishvice/mar
         run: Rscript -e 'install.packages(c("maps", "mapdata"))  ; remotes::install_github("hafro/geo")'
 
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
+#      - name: Setup tmate session
+#        uses: mxschmitt/action-tmate@v3
         
       - name: Install Rgadget2
         run:  remotes::install_github("hafro/rgadget")

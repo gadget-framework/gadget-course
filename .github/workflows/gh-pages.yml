@@ -25,6 +25,9 @@ jobs:
 
       - name: Install build-docs prerequisites
         run: Rscript -e 'install.packages(c("gadget2","mfdb","rmarkdown","magick","pdftools", "patchwork"))'
+      
+      - name: Install fishvice/mar
+        run: Rscript -e 'install.packages(c("maps", "mapdata"))  ; remotes::install_github("hafro/geo")'
 
       - name: Install Rgadget2
         run:  remotes::install_github("hafro/rgadget")

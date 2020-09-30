@@ -30,7 +30,7 @@ jobs:
 #          cat ~/.ssh/known_hosts
       
       - name: Install build-docs prerequisites
-        run: Rscript -e 'install.packages(c("gadget2","mfdb","rmarkdown","magick","pdftools", "patchwork","mapproj","tidyverse"))'
+        run: Rscript -e 'install.packages(c("gadget2","mfdb","rmarkdown","magick","pdftools", "patchwork","mapproj","tidyverse","remotes"))'
       
       - name: Install fishvice/mar
         run: Rscript -e 'install.packages(c("maps", "mapdata"))  ; remotes::install_github("hafro/geo")'

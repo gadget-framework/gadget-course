@@ -22,7 +22,7 @@ jobs:
 #        run: sudo apt install graphviz imagemagick
 
       - name: Install build-docs prerequisites
-        run: Rscript -e 'install.packages(c("gadget2","mfdb","rmarkdown"))'
+        run: Rscript -e 'install.packages(c("gadget2","mfdb","rmarkdown","magick"))'
 
       - name: Install Rgadget2
         run:  remotes::install_github("hafro/rgadget")

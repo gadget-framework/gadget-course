@@ -31,7 +31,7 @@ jobs:
 
       
       - name: Install build-docs prerequisites
-        run: Rscript -e 'install.packages(c("gadget2","bookdown","mfdb","rmarkdown","magick","pdftools", "patchwork","mapproj","tidyverse","remotes","curl", "TTR", "zoo", "xts", "quantmod", "quadprog", "plyr", "tseries", "reshape2","nycflights13"))'
+        run: Rscript -e 'install.packages(c("DT","gadget2","bookdown","mfdb","rmarkdown","magick","pdftools", "patchwork","mapproj","tidyverse","remotes","curl", "TTR", "zoo", "xts", "quantmod", "quadprog", "plyr", "tseries", "reshape2","nycflights13"))'
       
       - name: Install fishvice/mar
         run: Rscript -e 'install.packages(c("maps", "mapdata"))  ; remotes::install_github("hafro/geo")'

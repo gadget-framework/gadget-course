@@ -20,13 +20,11 @@ jobs:
 
 #      - name: Install tikz
 #        run: sudo apt install graphviz imagemagick
-      - name: Setup tmate session
-        uses: mxschmitt/action-tmate@v3
       - name: Distribution dependencies
         run: sudo apt-get install -y libpoppler-cpp-dev
 
       - name: Install build-docs prerequisites
-        run: Rscript -e 'install.packages(c("gadget2","mfdb","rmarkdown","magick","pdftools"))'
+        run: Rscript -e 'install.packages(c("gadget2","mfdb","rmarkdown","magick","pdftools", "patchwork"))'
 
       - name: Install Rgadget2
         run:  remotes::install_github("hafro/rgadget")
@@ -35,6 +33,8 @@ jobs:
 #      - name: Install LaTeX
 #        run: Rscript -e 'tinytex::install_tinytex()'
 
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@v3
 
       - name: Render Documentation
         run: Rscript -e 'bookdown::render_book("index.Rmd")'

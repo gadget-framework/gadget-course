@@ -11,12 +11,13 @@ rmd_files:
   "day2_lingmodel.Rmd",
   'day3_fitlingmodel.Rmd',
   "day4_multi_area.Rmd",
+  "minke_whale_model.Rmd",
   "mfdb.Rmd",
   "Gadget_installation.Rmd",
   "troubleshooting.Rmd",
   "references.Rmd"
   ]
-  
+
 output_dir: "_gadget_course"
 
 view: https://github.com/hafro/gadget-course/blob/master/%s

@@ -43,9 +43,9 @@ install.packages('nycflights13') # this is an example data package
 
 ```
 ## [32m✔[39m [34mggplot2[39m 3.3.2     [32m✔[39m [34mpurrr  [39m 0.3.4
-## [32m✔[39m [34mtibble [39m 3.0.3     [32m✔[39m [34mdplyr  [39m 1.0.2
+## [32m✔[39m [34mtibble [39m 3.0.4     [32m✔[39m [34mdplyr  [39m 1.0.2
 ## [32m✔[39m [34mtidyr  [39m 1.1.2     [32m✔[39m [34mstringr[39m 1.4.0
-## [32m✔[39m [34mreadr  [39m 1.3.1     [32m✔[39m [34mforcats[39m 0.5.0
+## [32m✔[39m [34mreadr  [39m 1.4.0     [32m✔[39m [34mforcats[39m 0.5.0
 ```
 
 ```
@@ -646,7 +646,7 @@ p + geom_point(aes(colour = dest)) +
 ```
 
 ```
-## Warning: Removed 83 rows containing missing values (geom_point).
+## Warning: Removed 75 rows containing missing values (geom_point).
 ```
 
 <img src="Tidyverse_files/figure-html/unnamed-chunk-7-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-7-2.png" width="50%" />
@@ -915,7 +915,7 @@ p + stat_summary(fun.data = "mean_se")
 ```
 
 ```
-## Warning: Removed 37 rows containing missing values (geom_segment).
+## Warning: Removed 40 rows containing missing values (geom_segment).
 ```
 
 ```r
@@ -977,7 +977,7 @@ p + ylim(100, 500)
 ```
 
 ```
-## Warning: Removed 31 rows containing missing values (geom_point).
+## Warning: Removed 29 rows containing missing values (geom_point).
 ```
 
 ```r

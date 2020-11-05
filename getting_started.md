@@ -527,7 +527,7 @@ read_lines(paste(gd,'simple_log',sep='/'))[-(58:175)]
 ```
 
 ```
-##  [1] "Gadget version 2.3.5 running on fv-az32 Wed Sep 30 22:04:55 2020"                          
+##  [1] "Gadget version 2.3.5 running on fv-az50-217 Thu Nov  5 21:38:36 2020"                      
 ##  [2] "Log file to record Gadget actions that take place during this run"                         
 ##  [3] ""                                                                                          
 ##  [4] "Starting Gadget from directory: /home/runner/work/gadget-course/gadget-course/simple_model"
@@ -734,7 +734,7 @@ After running this, assuming we did everything correctly, we should see that the
 file in the directory called `params.out` is no longer empty:
 
 ```
-## ; Gadget version 2.3.5 running on fv-az32 Wed Sep 30 22:04:56 2020
+## ; Gadget version 2.3.5 running on fv-az50-217 Thu Nov  5 21:38:37 2020
 ## ; a simulation run was performed giving a likelihood value of 0
 ## ; -- data --
 ## switch	value		lower	upper	optimise
@@ -754,12 +754,6 @@ read.gadget.parameters('simple_model/params.out') %>%
   write.gadget.parameters(file = 'simple_model/params.in')
 
 gadget_evaluate(params.in = 'params.in')
-```
-
-```
-## Warning in system(run.string, intern = TRUE, ignore.stderr = ignore.stderr):
-## running command '/home/runner/work/_temp/Library/gadget2/bin/gadget -s -i
-## params.in 2>/dev/null' had status 1
 ```
 
 ```

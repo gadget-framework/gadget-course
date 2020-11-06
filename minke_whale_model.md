@@ -166,7 +166,8 @@ whale_f <-
                 recruitment = list(spawn_function = 'baleen', 
                                    num_births = '#whale_num_births', 
                                    resil_a = '#whale_resil.a',
-                                   K = '#whale_k', 
+                                   ## everything is in multiples of 1e4
+                                   K = to.gadget.formulae(quote(whale_k*1e4)),  
                                    z = '#whale_z'), 
                 stockparameters = list(mean = '#whale_f.recl',
                                        stddev = '#whale_f.recsd',

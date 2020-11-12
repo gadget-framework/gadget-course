@@ -785,7 +785,7 @@ later point.</p>
 <span id="cb51-4"><a href="introduction-to-tidyverse.html#cb51-4"></a><span class="st">  </span><span class="kw">scale_colour_brewer</span>(<span class="dt">palette =</span> <span class="st">&quot;Set1&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning in RColorBrewer::brewer.pal(n, pal): n too large, allowed maximum for palette Set1 is 9
 ## Returning the palette you asked for with that many colors</code></pre>
-<pre><code>## Warning: Removed 79 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 64 rows containing missing values (geom_point).</code></pre>
 <p><img src="Tidyverse_files/figure-html/unnamed-chunk-7-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-7-2.png" width="50%" /></p>
 <p>Note, to view all the brewer palettes do:</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="introduction-to-tidyverse.html#cb54-1"></a>RColorBrewer<span class="op">::</span><span class="kw">display.brewer.all</span>()</span></code></pre></div>
@@ -913,7 +913,7 @@ later point.</p>
 <pre><code>## Warning: `fun.ymin` is deprecated. Use `fun.min` instead.</code></pre>
 <pre><code>## Warning: `fun.ymax` is deprecated. Use `fun.max` instead.</code></pre>
 <div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="introduction-to-tidyverse.html#cb87-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> <span class="st">&quot;mean_se&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 33 rows containing missing values (geom_segment).</code></pre>
+<pre><code>## Warning: Removed 42 rows containing missing values (geom_segment).</code></pre>
 <div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="introduction-to-tidyverse.html#cb89-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> <span class="st">&quot;mean_cl_boot&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: Computation failed in `stat_summary()`:
 ## Hmisc package required for this function</code></pre>
@@ -949,7 +949,7 @@ later point.</p>
 <div id="limits" class="section level3">
 <h3><span class="header-section-number">3.8.4</span> limits</h3>
 <div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="introduction-to-tidyverse.html#cb94-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">ylim</span>(<span class="dv">100</span>, <span class="dv">500</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 29 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 36 rows containing missing values (geom_point).</code></pre>
 <div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="introduction-to-tidyverse.html#cb96-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">ylim</span>(<span class="ot">NA</span>, <span class="dv">500</span>) <span class="co"># setting only upper limit</span></span></code></pre></div>
 <p><img src="Tidyverse_files/figure-html/unnamed-chunk-29-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-29-2.png" width="50%" /></p>
 </div>

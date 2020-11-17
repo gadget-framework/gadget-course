@@ -354,47 +354,47 @@ grouping. Therefore the user should be careful to ensure that the definitions ma
 that bins do not overlap. In our example below, we show how to add those necessary attributes,
 although in reality to do this we also use another R package named ‘mfdb’ that is aimed at
 database management and data extraction [more on this in day 5].</p>
-<div class="sourceCode" id="cb257"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb257-1"><a href="fitting-a-model-to-data.html#cb257-1"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb257-2"><a href="fitting-a-model-to-data.html#cb257-2"></a><span class="kw">library</span>(Rgadget)</span>
-<span id="cb257-3"><a href="fitting-a-model-to-data.html#cb257-3"></a></span>
-<span id="cb257-4"><a href="fitting-a-model-to-data.html#cb257-4"></a><span class="co">#assuming you are beginning in a fresh session; this information should be in an </span></span>
-<span id="cb257-5"><a href="fitting-a-model-to-data.html#cb257-5"></a><span class="co">#initialization script</span></span>
-<span id="cb257-6"><a href="fitting-a-model-to-data.html#cb257-6"></a></span>
-<span id="cb257-7"><a href="fitting-a-model-to-data.html#cb257-7"></a>base_dir &lt;-<span class="st"> &#39;ling_model&#39;</span></span>
-<span id="cb257-8"><a href="fitting-a-model-to-data.html#cb257-8"></a>vers &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;01-base&#39;</span>)</span>
-<span id="cb257-9"><a href="fitting-a-model-to-data.html#cb257-9"></a>gd &lt;-<span class="st"> </span><span class="kw">normalizePath</span>(<span class="kw">gadget.variant.dir</span>(<span class="kw">sprintf</span>(<span class="kw">paste0</span>(<span class="st">&quot;%s/&quot;</span>,vers),base_dir)))</span>
-<span id="cb257-10"><a href="fitting-a-model-to-data.html#cb257-10"></a></span>
-<span id="cb257-11"><a href="fitting-a-model-to-data.html#cb257-11"></a>ling.imm &lt;-<span class="st"> </span><span class="kw">gadgetstock</span>(<span class="st">&#39;lingimm&#39;</span>,gd)</span>
-<span id="cb257-12"><a href="fitting-a-model-to-data.html#cb257-12"></a>ling.mat &lt;-<span class="st"> </span><span class="kw">gadgetstock</span>(<span class="st">&#39;lingmat&#39;</span>,gd)</span>
-<span id="cb257-13"><a href="fitting-a-model-to-data.html#cb257-13"></a>area_file &lt;-<span class="st"> </span><span class="kw">read.gadget.file</span>(gd, <span class="st">&#39;Modelfiles/area&#39;</span>)</span>
-<span id="cb257-14"><a href="fitting-a-model-to-data.html#cb257-14"></a></span>
-<span id="cb257-15"><a href="fitting-a-model-to-data.html#cb257-15"></a>minage &lt;-<span class="st"> </span>ling.imm[[<span class="dv">1</span>]]<span class="op">$</span>minage</span>
-<span id="cb257-16"><a href="fitting-a-model-to-data.html#cb257-16"></a>maxage &lt;-<span class="st"> </span>ling.mat[[<span class="dv">1</span>]]<span class="op">$</span>maxage</span>
-<span id="cb257-17"><a href="fitting-a-model-to-data.html#cb257-17"></a>maxlength &lt;-<span class="st"> </span>ling.mat[[<span class="dv">1</span>]]<span class="op">$</span>maxlength </span>
-<span id="cb257-18"><a href="fitting-a-model-to-data.html#cb257-18"></a>minlength &lt;-<span class="st"> </span>ling.imm[[<span class="dv">1</span>]]<span class="op">$</span>minlength</span>
-<span id="cb257-19"><a href="fitting-a-model-to-data.html#cb257-19"></a>dl &lt;-<span class="st"> </span>ling.imm[[<span class="dv">1</span>]]<span class="op">$</span>dl</span>
-<span id="cb257-20"><a href="fitting-a-model-to-data.html#cb257-20"></a></span>
-<span id="cb257-21"><a href="fitting-a-model-to-data.html#cb257-21"></a></span>
-<span id="cb257-22"><a href="fitting-a-model-to-data.html#cb257-22"></a></span>
-<span id="cb257-23"><a href="fitting-a-model-to-data.html#cb257-23"></a>create_intervals &lt;-<span class="st">  </span><span class="cf">function</span> (prefix, vect) {</span>
-<span id="cb257-24"><a href="fitting-a-model-to-data.html#cb257-24"></a>  </span>
-<span id="cb257-25"><a href="fitting-a-model-to-data.html#cb257-25"></a>  x&lt;-</span>
-<span id="cb257-26"><a href="fitting-a-model-to-data.html#cb257-26"></a><span class="st">    </span><span class="kw">structure</span>(vect[<span class="dv">1</span><span class="op">:</span>(<span class="kw">length</span>(vect)<span class="op">-</span><span class="dv">1</span>)], <span class="dt">names =</span> <span class="kw">paste0</span>(prefix, vect[<span class="dv">1</span><span class="op">:</span>(<span class="kw">length</span>(vect)<span class="op">-</span><span class="dv">1</span>)])) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb257-27"><a href="fitting-a-model-to-data.html#cb257-27"></a><span class="st">    </span><span class="kw">as.list</span>(.) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb257-28"><a href="fitting-a-model-to-data.html#cb257-28"></a><span class="st">    </span>purrr<span class="op">::</span><span class="kw">map</span>(<span class="op">~</span><span class="kw">structure</span>(<span class="kw">seq</span>(.,vect[<span class="op">-</span><span class="dv">1</span>][<span class="kw">which</span>(vect[<span class="dv">1</span><span class="op">:</span>(<span class="kw">length</span>(vect)<span class="op">-</span><span class="dv">1</span>)]<span class="op">==</span>.)],<span class="dv">1</span>)[<span class="op">-</span><span class="kw">length</span>(<span class="kw">seq</span>(.,vect[<span class="op">-</span><span class="dv">1</span>][<span class="kw">which</span>(vect[<span class="dv">1</span><span class="op">:</span>(<span class="kw">length</span>(vect)<span class="op">-</span><span class="dv">1</span>)]<span class="op">==</span>.)],<span class="dv">1</span>))], </span>
-<span id="cb257-29"><a href="fitting-a-model-to-data.html#cb257-29"></a>                          <span class="dt">min =</span> ., </span>
-<span id="cb257-30"><a href="fitting-a-model-to-data.html#cb257-30"></a>                          <span class="dt">max =</span> vect[<span class="op">-</span><span class="dv">1</span>][<span class="kw">which</span>(vect[<span class="dv">1</span><span class="op">:</span>(<span class="kw">length</span>(vect)<span class="op">-</span><span class="dv">1</span>)]<span class="op">==</span>.)]))</span>
-<span id="cb257-31"><a href="fitting-a-model-to-data.html#cb257-31"></a>  </span>
-<span id="cb257-32"><a href="fitting-a-model-to-data.html#cb257-32"></a>  x[[<span class="kw">length</span>(x)]] &lt;-<span class="st"> </span><span class="kw">c</span>(x[[<span class="kw">length</span>(x)]], <span class="kw">attributes</span>(x[[<span class="kw">length</span>(x)]])<span class="op">$</span>max) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb257-33"><a href="fitting-a-model-to-data.html#cb257-33"></a><span class="st">    </span><span class="kw">structure</span>(., </span>
-<span id="cb257-34"><a href="fitting-a-model-to-data.html#cb257-34"></a>              <span class="dt">min =</span> <span class="kw">min</span>(.), </span>
-<span id="cb257-35"><a href="fitting-a-model-to-data.html#cb257-35"></a>              <span class="dt">max =</span> <span class="kw">max</span>(.))</span>
-<span id="cb257-36"><a href="fitting-a-model-to-data.html#cb257-36"></a>  </span>
-<span id="cb257-37"><a href="fitting-a-model-to-data.html#cb257-37"></a>  </span>
-<span id="cb257-38"><a href="fitting-a-model-to-data.html#cb257-38"></a>  <span class="kw">return</span>(x)</span>
-<span id="cb257-39"><a href="fitting-a-model-to-data.html#cb257-39"></a>}</span>
-<span id="cb257-40"><a href="fitting-a-model-to-data.html#cb257-40"></a><span class="co">#just to see what this function does:</span></span>
-<span id="cb257-41"><a href="fitting-a-model-to-data.html#cb257-41"></a><span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)) <span class="op">%&gt;%</span><span class="st"> </span>.[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]</span></code></pre></div>
+<div class="sourceCode" id="cb256"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb256-1"><a href="fitting-a-model-to-data.html#cb256-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb256-2"><a href="fitting-a-model-to-data.html#cb256-2"></a><span class="kw">library</span>(Rgadget)</span>
+<span id="cb256-3"><a href="fitting-a-model-to-data.html#cb256-3"></a></span>
+<span id="cb256-4"><a href="fitting-a-model-to-data.html#cb256-4"></a><span class="co">#assuming you are beginning in a fresh session; this information should be in an </span></span>
+<span id="cb256-5"><a href="fitting-a-model-to-data.html#cb256-5"></a><span class="co">#initialization script</span></span>
+<span id="cb256-6"><a href="fitting-a-model-to-data.html#cb256-6"></a></span>
+<span id="cb256-7"><a href="fitting-a-model-to-data.html#cb256-7"></a>base_dir &lt;-<span class="st"> &#39;ling_model&#39;</span></span>
+<span id="cb256-8"><a href="fitting-a-model-to-data.html#cb256-8"></a>vers &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;01-base&#39;</span>)</span>
+<span id="cb256-9"><a href="fitting-a-model-to-data.html#cb256-9"></a>gd &lt;-<span class="st"> </span><span class="kw">normalizePath</span>(<span class="kw">gadget.variant.dir</span>(<span class="kw">sprintf</span>(<span class="kw">paste0</span>(<span class="st">&quot;%s/&quot;</span>,vers),base_dir)))</span>
+<span id="cb256-10"><a href="fitting-a-model-to-data.html#cb256-10"></a></span>
+<span id="cb256-11"><a href="fitting-a-model-to-data.html#cb256-11"></a>ling.imm &lt;-<span class="st"> </span><span class="kw">gadgetstock</span>(<span class="st">&#39;lingimm&#39;</span>,gd)</span>
+<span id="cb256-12"><a href="fitting-a-model-to-data.html#cb256-12"></a>ling.mat &lt;-<span class="st"> </span><span class="kw">gadgetstock</span>(<span class="st">&#39;lingmat&#39;</span>,gd)</span>
+<span id="cb256-13"><a href="fitting-a-model-to-data.html#cb256-13"></a>area_file &lt;-<span class="st"> </span><span class="kw">read.gadget.file</span>(gd, <span class="st">&#39;Modelfiles/area&#39;</span>)</span>
+<span id="cb256-14"><a href="fitting-a-model-to-data.html#cb256-14"></a></span>
+<span id="cb256-15"><a href="fitting-a-model-to-data.html#cb256-15"></a>minage &lt;-<span class="st"> </span>ling.imm[[<span class="dv">1</span>]]<span class="op">$</span>minage</span>
+<span id="cb256-16"><a href="fitting-a-model-to-data.html#cb256-16"></a>maxage &lt;-<span class="st"> </span>ling.mat[[<span class="dv">1</span>]]<span class="op">$</span>maxage</span>
+<span id="cb256-17"><a href="fitting-a-model-to-data.html#cb256-17"></a>maxlength &lt;-<span class="st"> </span>ling.mat[[<span class="dv">1</span>]]<span class="op">$</span>maxlength </span>
+<span id="cb256-18"><a href="fitting-a-model-to-data.html#cb256-18"></a>minlength &lt;-<span class="st"> </span>ling.imm[[<span class="dv">1</span>]]<span class="op">$</span>minlength</span>
+<span id="cb256-19"><a href="fitting-a-model-to-data.html#cb256-19"></a>dl &lt;-<span class="st"> </span>ling.imm[[<span class="dv">1</span>]]<span class="op">$</span>dl</span>
+<span id="cb256-20"><a href="fitting-a-model-to-data.html#cb256-20"></a></span>
+<span id="cb256-21"><a href="fitting-a-model-to-data.html#cb256-21"></a></span>
+<span id="cb256-22"><a href="fitting-a-model-to-data.html#cb256-22"></a></span>
+<span id="cb256-23"><a href="fitting-a-model-to-data.html#cb256-23"></a>create_intervals &lt;-<span class="st">  </span><span class="cf">function</span> (prefix, vect) {</span>
+<span id="cb256-24"><a href="fitting-a-model-to-data.html#cb256-24"></a>  </span>
+<span id="cb256-25"><a href="fitting-a-model-to-data.html#cb256-25"></a>  x&lt;-</span>
+<span id="cb256-26"><a href="fitting-a-model-to-data.html#cb256-26"></a><span class="st">    </span><span class="kw">structure</span>(vect[<span class="dv">1</span><span class="op">:</span>(<span class="kw">length</span>(vect)<span class="op">-</span><span class="dv">1</span>)], <span class="dt">names =</span> <span class="kw">paste0</span>(prefix, vect[<span class="dv">1</span><span class="op">:</span>(<span class="kw">length</span>(vect)<span class="op">-</span><span class="dv">1</span>)])) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb256-27"><a href="fitting-a-model-to-data.html#cb256-27"></a><span class="st">    </span><span class="kw">as.list</span>(.) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb256-28"><a href="fitting-a-model-to-data.html#cb256-28"></a><span class="st">    </span>purrr<span class="op">::</span><span class="kw">map</span>(<span class="op">~</span><span class="kw">structure</span>(<span class="kw">seq</span>(.,vect[<span class="op">-</span><span class="dv">1</span>][<span class="kw">which</span>(vect[<span class="dv">1</span><span class="op">:</span>(<span class="kw">length</span>(vect)<span class="op">-</span><span class="dv">1</span>)]<span class="op">==</span>.)],<span class="dv">1</span>)[<span class="op">-</span><span class="kw">length</span>(<span class="kw">seq</span>(.,vect[<span class="op">-</span><span class="dv">1</span>][<span class="kw">which</span>(vect[<span class="dv">1</span><span class="op">:</span>(<span class="kw">length</span>(vect)<span class="op">-</span><span class="dv">1</span>)]<span class="op">==</span>.)],<span class="dv">1</span>))], </span>
+<span id="cb256-29"><a href="fitting-a-model-to-data.html#cb256-29"></a>                          <span class="dt">min =</span> ., </span>
+<span id="cb256-30"><a href="fitting-a-model-to-data.html#cb256-30"></a>                          <span class="dt">max =</span> vect[<span class="op">-</span><span class="dv">1</span>][<span class="kw">which</span>(vect[<span class="dv">1</span><span class="op">:</span>(<span class="kw">length</span>(vect)<span class="op">-</span><span class="dv">1</span>)]<span class="op">==</span>.)]))</span>
+<span id="cb256-31"><a href="fitting-a-model-to-data.html#cb256-31"></a>  </span>
+<span id="cb256-32"><a href="fitting-a-model-to-data.html#cb256-32"></a>  x[[<span class="kw">length</span>(x)]] &lt;-<span class="st"> </span><span class="kw">c</span>(x[[<span class="kw">length</span>(x)]], <span class="kw">attributes</span>(x[[<span class="kw">length</span>(x)]])<span class="op">$</span>max) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb256-33"><a href="fitting-a-model-to-data.html#cb256-33"></a><span class="st">    </span><span class="kw">structure</span>(., </span>
+<span id="cb256-34"><a href="fitting-a-model-to-data.html#cb256-34"></a>              <span class="dt">min =</span> <span class="kw">min</span>(.), </span>
+<span id="cb256-35"><a href="fitting-a-model-to-data.html#cb256-35"></a>              <span class="dt">max =</span> <span class="kw">max</span>(.))</span>
+<span id="cb256-36"><a href="fitting-a-model-to-data.html#cb256-36"></a>  </span>
+<span id="cb256-37"><a href="fitting-a-model-to-data.html#cb256-37"></a>  </span>
+<span id="cb256-38"><a href="fitting-a-model-to-data.html#cb256-38"></a>  <span class="kw">return</span>(x)</span>
+<span id="cb256-39"><a href="fitting-a-model-to-data.html#cb256-39"></a>}</span>
+<span id="cb256-40"><a href="fitting-a-model-to-data.html#cb256-40"></a><span class="co">#just to see what this function does:</span></span>
+<span id="cb256-41"><a href="fitting-a-model-to-data.html#cb256-41"></a><span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)) <span class="op">%&gt;%</span><span class="st"> </span>.[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]</span></code></pre></div>
 <pre><code>## $len20
 ## [1] 20 21 22 23
 ## attr(,&quot;min&quot;)
@@ -415,31 +415,31 @@ database management and data extraction [more on this in day 5].</p>
 ## [1] 28
 ## attr(,&quot;max&quot;)
 ## [1] 32</code></pre>
-<div class="sourceCode" id="cb259"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb259-1"><a href="fitting-a-model-to-data.html#cb259-1"></a><span class="co">#catch distribution data available:</span></span>
-<span id="cb259-2"><a href="fitting-a-model-to-data.html#cb259-2"></a><span class="co">#length distributions do not regard age bins</span></span>
-<span id="cb259-3"><a href="fitting-a-model-to-data.html#cb259-3"></a>ldist.surv &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/ldist_sur.csv&#39;</span>),</span>
-<span id="cb259-4"><a href="fitting-a-model-to-data.html#cb259-4"></a>                        <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
-<span id="cb259-5"><a href="fitting-a-model-to-data.html#cb259-5"></a>                        <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)),</span>
-<span id="cb259-6"><a href="fitting-a-model-to-data.html#cb259-6"></a>                        <span class="dt">age =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;all&#39;</span>,<span class="kw">seq</span>(minage, maxage, maxage<span class="op">-</span>minage))</span>
-<span id="cb259-7"><a href="fitting-a-model-to-data.html#cb259-7"></a>)</span>
-<span id="cb259-8"><a href="fitting-a-model-to-data.html#cb259-8"></a>ldist.lln &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/ldist_lln.csv&#39;</span>),</span>
-<span id="cb259-9"><a href="fitting-a-model-to-data.html#cb259-9"></a>                       <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
-<span id="cb259-10"><a href="fitting-a-model-to-data.html#cb259-10"></a>                       <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)),</span>
-<span id="cb259-11"><a href="fitting-a-model-to-data.html#cb259-11"></a>                       <span class="dt">age =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;all&#39;</span>,<span class="kw">seq</span>(minage, maxage, maxage<span class="op">-</span>minage))</span>
-<span id="cb259-12"><a href="fitting-a-model-to-data.html#cb259-12"></a>)</span>
-<span id="cb259-13"><a href="fitting-a-model-to-data.html#cb259-13"></a>ldist.bmt &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/ldist_bmt.csv&#39;</span>),</span>
-<span id="cb259-14"><a href="fitting-a-model-to-data.html#cb259-14"></a>                       <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
-<span id="cb259-15"><a href="fitting-a-model-to-data.html#cb259-15"></a>                       <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)),</span>
-<span id="cb259-16"><a href="fitting-a-model-to-data.html#cb259-16"></a>                       <span class="dt">age =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;all&#39;</span>,<span class="kw">seq</span>(minage, maxage, maxage<span class="op">-</span>minage))</span>
-<span id="cb259-17"><a href="fitting-a-model-to-data.html#cb259-17"></a>)</span>
-<span id="cb259-18"><a href="fitting-a-model-to-data.html#cb259-18"></a>ldist.gil &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/ldist_gil.csv&#39;</span>),</span>
-<span id="cb259-19"><a href="fitting-a-model-to-data.html#cb259-19"></a>                       <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
-<span id="cb259-20"><a href="fitting-a-model-to-data.html#cb259-20"></a>                       <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)),</span>
-<span id="cb259-21"><a href="fitting-a-model-to-data.html#cb259-21"></a>                       <span class="dt">age =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;all&#39;</span>,<span class="kw">seq</span>(minage, maxage, maxage<span class="op">-</span>minage))</span>
-<span id="cb259-22"><a href="fitting-a-model-to-data.html#cb259-22"></a>)</span>
-<span id="cb259-23"><a href="fitting-a-model-to-data.html#cb259-23"></a></span>
-<span id="cb259-24"><a href="fitting-a-model-to-data.html#cb259-24"></a><span class="kw">attributes</span>(ldist.surv) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb259-25"><a href="fitting-a-model-to-data.html#cb259-25"></a><span class="st">  </span>purrr<span class="op">::</span><span class="kw">map</span>(head)</span></code></pre></div>
+<div class="sourceCode" id="cb258"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb258-1"><a href="fitting-a-model-to-data.html#cb258-1"></a><span class="co">#catch distribution data available:</span></span>
+<span id="cb258-2"><a href="fitting-a-model-to-data.html#cb258-2"></a><span class="co">#length distributions do not regard age bins</span></span>
+<span id="cb258-3"><a href="fitting-a-model-to-data.html#cb258-3"></a>ldist.surv &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/ldist_sur.csv&#39;</span>),</span>
+<span id="cb258-4"><a href="fitting-a-model-to-data.html#cb258-4"></a>                        <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
+<span id="cb258-5"><a href="fitting-a-model-to-data.html#cb258-5"></a>                        <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)),</span>
+<span id="cb258-6"><a href="fitting-a-model-to-data.html#cb258-6"></a>                        <span class="dt">age =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;all&#39;</span>,<span class="kw">seq</span>(minage, maxage, maxage<span class="op">-</span>minage))</span>
+<span id="cb258-7"><a href="fitting-a-model-to-data.html#cb258-7"></a>)</span>
+<span id="cb258-8"><a href="fitting-a-model-to-data.html#cb258-8"></a>ldist.lln &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/ldist_lln.csv&#39;</span>),</span>
+<span id="cb258-9"><a href="fitting-a-model-to-data.html#cb258-9"></a>                       <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
+<span id="cb258-10"><a href="fitting-a-model-to-data.html#cb258-10"></a>                       <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)),</span>
+<span id="cb258-11"><a href="fitting-a-model-to-data.html#cb258-11"></a>                       <span class="dt">age =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;all&#39;</span>,<span class="kw">seq</span>(minage, maxage, maxage<span class="op">-</span>minage))</span>
+<span id="cb258-12"><a href="fitting-a-model-to-data.html#cb258-12"></a>)</span>
+<span id="cb258-13"><a href="fitting-a-model-to-data.html#cb258-13"></a>ldist.bmt &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/ldist_bmt.csv&#39;</span>),</span>
+<span id="cb258-14"><a href="fitting-a-model-to-data.html#cb258-14"></a>                       <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
+<span id="cb258-15"><a href="fitting-a-model-to-data.html#cb258-15"></a>                       <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)),</span>
+<span id="cb258-16"><a href="fitting-a-model-to-data.html#cb258-16"></a>                       <span class="dt">age =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;all&#39;</span>,<span class="kw">seq</span>(minage, maxage, maxage<span class="op">-</span>minage))</span>
+<span id="cb258-17"><a href="fitting-a-model-to-data.html#cb258-17"></a>)</span>
+<span id="cb258-18"><a href="fitting-a-model-to-data.html#cb258-18"></a>ldist.gil &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/ldist_gil.csv&#39;</span>),</span>
+<span id="cb258-19"><a href="fitting-a-model-to-data.html#cb258-19"></a>                       <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
+<span id="cb258-20"><a href="fitting-a-model-to-data.html#cb258-20"></a>                       <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)),</span>
+<span id="cb258-21"><a href="fitting-a-model-to-data.html#cb258-21"></a>                       <span class="dt">age =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;all&#39;</span>,<span class="kw">seq</span>(minage, maxage, maxage<span class="op">-</span>minage))</span>
+<span id="cb258-22"><a href="fitting-a-model-to-data.html#cb258-22"></a>)</span>
+<span id="cb258-23"><a href="fitting-a-model-to-data.html#cb258-23"></a></span>
+<span id="cb258-24"><a href="fitting-a-model-to-data.html#cb258-24"></a><span class="kw">attributes</span>(ldist.surv) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb258-25"><a href="fitting-a-model-to-data.html#cb258-25"></a><span class="st">  </span>purrr<span class="op">::</span><span class="kw">map</span>(head)</span></code></pre></div>
 <pre><code>## $names
 ## [1] &quot;year&quot;   &quot;step&quot;   &quot;area&quot;   &quot;age&quot;    &quot;length&quot; &quot;number&quot;
 ## 
@@ -533,29 +533,29 @@ database management and data extraction [more on this in day 5].</p>
 ## [1] 3
 ## attr(,&quot;max&quot;)
 ## [1] 15</code></pre>
-<div class="sourceCode" id="cb261"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb261-1"><a href="fitting-a-model-to-data.html#cb261-1"></a><span class="co">#age bins needed for age-length distributions</span></span>
-<span id="cb261-2"><a href="fitting-a-model-to-data.html#cb261-2"></a>aldist.surv &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/aldist_sur.csv&#39;</span>),</span>
-<span id="cb261-3"><a href="fitting-a-model-to-data.html#cb261-3"></a>                         <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
-<span id="cb261-4"><a href="fitting-a-model-to-data.html#cb261-4"></a>                         <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)),</span>
-<span id="cb261-5"><a href="fitting-a-model-to-data.html#cb261-5"></a>                         <span class="dt">age =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;age&#39;</span>,<span class="kw">c</span>(minage<span class="op">:</span><span class="dv">11</span>, maxage))</span>
-<span id="cb261-6"><a href="fitting-a-model-to-data.html#cb261-6"></a>)</span>
-<span id="cb261-7"><a href="fitting-a-model-to-data.html#cb261-7"></a>aldist.lln &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/aldist_lln.csv&#39;</span>),</span>
-<span id="cb261-8"><a href="fitting-a-model-to-data.html#cb261-8"></a>                        <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
-<span id="cb261-9"><a href="fitting-a-model-to-data.html#cb261-9"></a>                        <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)),</span>
-<span id="cb261-10"><a href="fitting-a-model-to-data.html#cb261-10"></a>                        <span class="dt">age =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;age&#39;</span>,<span class="kw">c</span>(minage<span class="op">:</span><span class="dv">11</span>, maxage))</span>
-<span id="cb261-11"><a href="fitting-a-model-to-data.html#cb261-11"></a>)</span>
-<span id="cb261-12"><a href="fitting-a-model-to-data.html#cb261-12"></a>aldist.bmt &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/aldist_bmt.csv&#39;</span>),</span>
-<span id="cb261-13"><a href="fitting-a-model-to-data.html#cb261-13"></a>                        <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
-<span id="cb261-14"><a href="fitting-a-model-to-data.html#cb261-14"></a>                        <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)),</span>
-<span id="cb261-15"><a href="fitting-a-model-to-data.html#cb261-15"></a>                        <span class="dt">age =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;age&#39;</span>,<span class="kw">c</span>(minage<span class="op">:</span><span class="dv">11</span>, maxage))</span>
-<span id="cb261-16"><a href="fitting-a-model-to-data.html#cb261-16"></a>)</span>
-<span id="cb261-17"><a href="fitting-a-model-to-data.html#cb261-17"></a>aldist.gil &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/aldist_gil.csv&#39;</span>),</span>
-<span id="cb261-18"><a href="fitting-a-model-to-data.html#cb261-18"></a>                        <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
-<span id="cb261-19"><a href="fitting-a-model-to-data.html#cb261-19"></a>                        <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)),</span>
-<span id="cb261-20"><a href="fitting-a-model-to-data.html#cb261-20"></a>                        <span class="dt">age =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;age&#39;</span>,<span class="kw">c</span>(minage<span class="op">:</span><span class="dv">11</span>, maxage))</span>
-<span id="cb261-21"><a href="fitting-a-model-to-data.html#cb261-21"></a>)</span>
-<span id="cb261-22"><a href="fitting-a-model-to-data.html#cb261-22"></a></span>
-<span id="cb261-23"><a href="fitting-a-model-to-data.html#cb261-23"></a><span class="kw">attributes</span>(aldist.surv)<span class="op">$</span>age <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">3</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb260"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb260-1"><a href="fitting-a-model-to-data.html#cb260-1"></a><span class="co">#age bins needed for age-length distributions</span></span>
+<span id="cb260-2"><a href="fitting-a-model-to-data.html#cb260-2"></a>aldist.surv &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/aldist_sur.csv&#39;</span>),</span>
+<span id="cb260-3"><a href="fitting-a-model-to-data.html#cb260-3"></a>                         <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
+<span id="cb260-4"><a href="fitting-a-model-to-data.html#cb260-4"></a>                         <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)),</span>
+<span id="cb260-5"><a href="fitting-a-model-to-data.html#cb260-5"></a>                         <span class="dt">age =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;age&#39;</span>,<span class="kw">c</span>(minage<span class="op">:</span><span class="dv">11</span>, maxage))</span>
+<span id="cb260-6"><a href="fitting-a-model-to-data.html#cb260-6"></a>)</span>
+<span id="cb260-7"><a href="fitting-a-model-to-data.html#cb260-7"></a>aldist.lln &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/aldist_lln.csv&#39;</span>),</span>
+<span id="cb260-8"><a href="fitting-a-model-to-data.html#cb260-8"></a>                        <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
+<span id="cb260-9"><a href="fitting-a-model-to-data.html#cb260-9"></a>                        <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)),</span>
+<span id="cb260-10"><a href="fitting-a-model-to-data.html#cb260-10"></a>                        <span class="dt">age =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;age&#39;</span>,<span class="kw">c</span>(minage<span class="op">:</span><span class="dv">11</span>, maxage))</span>
+<span id="cb260-11"><a href="fitting-a-model-to-data.html#cb260-11"></a>)</span>
+<span id="cb260-12"><a href="fitting-a-model-to-data.html#cb260-12"></a>aldist.bmt &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/aldist_bmt.csv&#39;</span>),</span>
+<span id="cb260-13"><a href="fitting-a-model-to-data.html#cb260-13"></a>                        <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
+<span id="cb260-14"><a href="fitting-a-model-to-data.html#cb260-14"></a>                        <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)),</span>
+<span id="cb260-15"><a href="fitting-a-model-to-data.html#cb260-15"></a>                        <span class="dt">age =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;age&#39;</span>,<span class="kw">c</span>(minage<span class="op">:</span><span class="dv">11</span>, maxage))</span>
+<span id="cb260-16"><a href="fitting-a-model-to-data.html#cb260-16"></a>)</span>
+<span id="cb260-17"><a href="fitting-a-model-to-data.html#cb260-17"></a>aldist.gil &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/aldist_gil.csv&#39;</span>),</span>
+<span id="cb260-18"><a href="fitting-a-model-to-data.html#cb260-18"></a>                        <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
+<span id="cb260-19"><a href="fitting-a-model-to-data.html#cb260-19"></a>                        <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl)),</span>
+<span id="cb260-20"><a href="fitting-a-model-to-data.html#cb260-20"></a>                        <span class="dt">age =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;age&#39;</span>,<span class="kw">c</span>(minage<span class="op">:</span><span class="dv">11</span>, maxage))</span>
+<span id="cb260-21"><a href="fitting-a-model-to-data.html#cb260-21"></a>)</span>
+<span id="cb260-22"><a href="fitting-a-model-to-data.html#cb260-22"></a></span>
+<span id="cb260-23"><a href="fitting-a-model-to-data.html#cb260-23"></a><span class="kw">attributes</span>(aldist.surv)<span class="op">$</span>age <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">3</span>)</span></code></pre></div>
 <pre><code>## $age3
 ## [1] 3
 ## attr(,&quot;min&quot;)
@@ -576,14 +576,14 @@ database management and data extraction [more on this in day 5].</p>
 ## [1] 5
 ## attr(,&quot;max&quot;)
 ## [1] 6</code></pre>
-<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="fitting-a-model-to-data.html#cb263-1"></a><span class="co">#stock distribution data available:</span></span>
-<span id="cb263-2"><a href="fitting-a-model-to-data.html#cb263-2"></a>matp.surv &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/matp_sur.csv&#39;</span>),</span>
-<span id="cb263-3"><a href="fitting-a-model-to-data.html#cb263-3"></a>                       <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
-<span id="cb263-4"><a href="fitting-a-model-to-data.html#cb263-4"></a>                       <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl<span class="op">*</span><span class="dv">2</span>)),</span>
-<span id="cb263-5"><a href="fitting-a-model-to-data.html#cb263-5"></a>                       <span class="dt">age =</span> <span class="kw">list</span>(<span class="dt">mat_ages =</span> ling.mat[[<span class="dv">1</span>]]<span class="op">$</span>minage<span class="op">:</span>ling.mat[[<span class="dv">1</span>]]<span class="op">$</span>maxage)</span>
-<span id="cb263-6"><a href="fitting-a-model-to-data.html#cb263-6"></a>)</span>
-<span id="cb263-7"><a href="fitting-a-model-to-data.html#cb263-7"></a></span>
-<span id="cb263-8"><a href="fitting-a-model-to-data.html#cb263-8"></a><span class="co">#attributes(matp.surv)</span></span></code></pre></div>
+<div class="sourceCode" id="cb262"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb262-1"><a href="fitting-a-model-to-data.html#cb262-1"></a><span class="co">#stock distribution data available:</span></span>
+<span id="cb262-2"><a href="fitting-a-model-to-data.html#cb262-2"></a>matp.surv &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/matp_sur.csv&#39;</span>),</span>
+<span id="cb262-3"><a href="fitting-a-model-to-data.html#cb262-3"></a>                       <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
+<span id="cb262-4"><a href="fitting-a-model-to-data.html#cb262-4"></a>                       <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>,<span class="kw">seq</span>(minlength, maxlength, dl<span class="op">*</span><span class="dv">2</span>)),</span>
+<span id="cb262-5"><a href="fitting-a-model-to-data.html#cb262-5"></a>                       <span class="dt">age =</span> <span class="kw">list</span>(<span class="dt">mat_ages =</span> ling.mat[[<span class="dv">1</span>]]<span class="op">$</span>minage<span class="op">:</span>ling.mat[[<span class="dv">1</span>]]<span class="op">$</span>maxage)</span>
+<span id="cb262-6"><a href="fitting-a-model-to-data.html#cb262-6"></a>)</span>
+<span id="cb262-7"><a href="fitting-a-model-to-data.html#cb262-7"></a></span>
+<span id="cb262-8"><a href="fitting-a-model-to-data.html#cb262-8"></a><span class="co">#attributes(matp.surv)</span></span></code></pre></div>
 <p>For ling, length-based indices were used by choosing 7 ‘slices’ of abundance indices across the
 length range of ling observed. Index bounds are defined as above, generally inclusive of the
 lower bound only, but open-ended for the smallest and largest bins. It is important to note
@@ -593,50 +593,50 @@ these data as length-based indices, rather than age-based or acoustic indices, f
 also important to keep in mind
 here that each slice will have its own estimated catchability per survey (single data frame below)
 and area combination (multiple areas may be within a data frame).</p>
-<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="fitting-a-model-to-data.html#cb264-1"></a><span class="co">#survey index data available: </span></span>
-<span id="cb264-2"><a href="fitting-a-model-to-data.html#cb264-2"></a>slices &lt;-<span class="st"> </span></span>
-<span id="cb264-3"><a href="fitting-a-model-to-data.html#cb264-3"></a><span class="st">  </span><span class="kw">list</span>(<span class="st">&#39;len20&#39;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">20</span>,<span class="dv">52</span>), <span class="st">&#39;len52&#39;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">52</span>,<span class="dv">60</span>), <span class="st">&#39;len60&#39;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">60</span>,<span class="dv">72</span>), </span>
-<span id="cb264-4"><a href="fitting-a-model-to-data.html#cb264-4"></a>       <span class="st">&#39;len72&#39;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">72</span>,<span class="dv">80</span>), <span class="st">&#39;len80&#39;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">80</span>,<span class="dv">92</span>), <span class="st">&#39;len92&#39;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">92</span>,<span class="dv">100</span>), </span>
-<span id="cb264-5"><a href="fitting-a-model-to-data.html#cb264-5"></a>       <span class="st">&#39;len100&#39;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">100</span>,<span class="dv">160</span>) )</span>
-<span id="cb264-6"><a href="fitting-a-model-to-data.html#cb264-6"></a></span>
-<span id="cb264-7"><a href="fitting-a-model-to-data.html#cb264-7"></a><span class="co"># just to illustrate slices:</span></span>
-<span id="cb264-8"><a href="fitting-a-model-to-data.html#cb264-8"></a></span>
-<span id="cb264-9"><a href="fitting-a-model-to-data.html#cb264-9"></a>ldist.surv <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb264-10"><a href="fitting-a-model-to-data.html#cb264-10"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">length =</span> <span class="kw">substring</span>(length, <span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span>as.numeric) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb264-11"><a href="fitting-a-model-to-data.html#cb264-11"></a><span class="st">  </span><span class="kw">filter</span>(year <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">2000</span>,<span class="dv">2005</span>,<span class="dv">2010</span>,<span class="dv">2015</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb264-12"><a href="fitting-a-model-to-data.html#cb264-12"></a><span class="st">  </span><span class="kw">group_by</span>(year,length) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb264-13"><a href="fitting-a-model-to-data.html#cb264-13"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">sum</span>(number)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb264-14"><a href="fitting-a-model-to-data.html#cb264-14"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> length, <span class="dt">y =</span> n)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span></span>
-<span id="cb264-15"><a href="fitting-a-model-to-data.html#cb264-15"></a><span class="st">  </span><span class="kw">geom_vline</span>(<span class="kw">aes</span>(<span class="dt">xintercept =</span> length), </span>
-<span id="cb264-16"><a href="fitting-a-model-to-data.html#cb264-16"></a>             <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&#39;orange&#39;</span>, </span>
-<span id="cb264-17"><a href="fitting-a-model-to-data.html#cb264-17"></a>             <span class="dt">data =</span> slices <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb264-18"><a href="fitting-a-model-to-data.html#cb264-18"></a><span class="st">               </span><span class="kw">bind_rows</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb264-19"><a href="fitting-a-model-to-data.html#cb264-19"></a><span class="st">               </span><span class="kw">t</span>() <span class="op">%&gt;%</span><span class="st"> </span>.[<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>] <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb264-20"><a href="fitting-a-model-to-data.html#cb264-20"></a><span class="st">               </span><span class="kw">tibble</span>(<span class="dt">length =</span> .)) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb264-21"><a href="fitting-a-model-to-data.html#cb264-21"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>year)</span></code></pre></div>
+<div class="sourceCode" id="cb263"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb263-1"><a href="fitting-a-model-to-data.html#cb263-1"></a><span class="co">#survey index data available: </span></span>
+<span id="cb263-2"><a href="fitting-a-model-to-data.html#cb263-2"></a>slices &lt;-<span class="st"> </span></span>
+<span id="cb263-3"><a href="fitting-a-model-to-data.html#cb263-3"></a><span class="st">  </span><span class="kw">list</span>(<span class="st">&#39;len20&#39;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">20</span>,<span class="dv">52</span>), <span class="st">&#39;len52&#39;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">52</span>,<span class="dv">60</span>), <span class="st">&#39;len60&#39;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">60</span>,<span class="dv">72</span>), </span>
+<span id="cb263-4"><a href="fitting-a-model-to-data.html#cb263-4"></a>       <span class="st">&#39;len72&#39;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">72</span>,<span class="dv">80</span>), <span class="st">&#39;len80&#39;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">80</span>,<span class="dv">92</span>), <span class="st">&#39;len92&#39;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">92</span>,<span class="dv">100</span>), </span>
+<span id="cb263-5"><a href="fitting-a-model-to-data.html#cb263-5"></a>       <span class="st">&#39;len100&#39;</span> =<span class="st"> </span><span class="kw">c</span>(<span class="dv">100</span>,<span class="dv">160</span>) )</span>
+<span id="cb263-6"><a href="fitting-a-model-to-data.html#cb263-6"></a></span>
+<span id="cb263-7"><a href="fitting-a-model-to-data.html#cb263-7"></a><span class="co"># just to illustrate slices:</span></span>
+<span id="cb263-8"><a href="fitting-a-model-to-data.html#cb263-8"></a></span>
+<span id="cb263-9"><a href="fitting-a-model-to-data.html#cb263-9"></a>ldist.surv <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb263-10"><a href="fitting-a-model-to-data.html#cb263-10"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">length =</span> <span class="kw">substring</span>(length, <span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span>as.numeric) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb263-11"><a href="fitting-a-model-to-data.html#cb263-11"></a><span class="st">  </span><span class="kw">filter</span>(year <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">2000</span>,<span class="dv">2005</span>,<span class="dv">2010</span>,<span class="dv">2015</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb263-12"><a href="fitting-a-model-to-data.html#cb263-12"></a><span class="st">  </span><span class="kw">group_by</span>(year,length) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb263-13"><a href="fitting-a-model-to-data.html#cb263-13"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">sum</span>(number)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb263-14"><a href="fitting-a-model-to-data.html#cb263-14"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> length, <span class="dt">y =</span> n)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span></span>
+<span id="cb263-15"><a href="fitting-a-model-to-data.html#cb263-15"></a><span class="st">  </span><span class="kw">geom_vline</span>(<span class="kw">aes</span>(<span class="dt">xintercept =</span> length), </span>
+<span id="cb263-16"><a href="fitting-a-model-to-data.html#cb263-16"></a>             <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&#39;orange&#39;</span>, </span>
+<span id="cb263-17"><a href="fitting-a-model-to-data.html#cb263-17"></a>             <span class="dt">data =</span> slices <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb263-18"><a href="fitting-a-model-to-data.html#cb263-18"></a><span class="st">               </span><span class="kw">bind_rows</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb263-19"><a href="fitting-a-model-to-data.html#cb263-19"></a><span class="st">               </span><span class="kw">t</span>() <span class="op">%&gt;%</span><span class="st"> </span>.[<span class="op">-</span><span class="dv">1</span>,<span class="dv">1</span>] <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb263-20"><a href="fitting-a-model-to-data.html#cb263-20"></a><span class="st">               </span><span class="kw">tibble</span>(<span class="dt">length =</span> .)) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb263-21"><a href="fitting-a-model-to-data.html#cb263-21"></a><span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span>year)</span></code></pre></div>
 <p><img src="day3_fitlingmodel_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
-<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="fitting-a-model-to-data.html#cb265-1"></a><span class="co"># set up aggregation info for length-based survey indices</span></span>
-<span id="cb265-2"><a href="fitting-a-model-to-data.html#cb265-2"></a>SI1 &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/SI1.csv&#39;</span>),</span>
-<span id="cb265-3"><a href="fitting-a-model-to-data.html#cb265-3"></a>                 <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
-<span id="cb265-4"><a href="fitting-a-model-to-data.html#cb265-4"></a>                 <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>, slices[[<span class="dv">1</span>]]))</span>
-<span id="cb265-5"><a href="fitting-a-model-to-data.html#cb265-5"></a>SI2 &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/SI2.csv&#39;</span>),</span>
-<span id="cb265-6"><a href="fitting-a-model-to-data.html#cb265-6"></a>                 <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
-<span id="cb265-7"><a href="fitting-a-model-to-data.html#cb265-7"></a>                 <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>, slices[[<span class="dv">2</span>]]))</span>
-<span id="cb265-8"><a href="fitting-a-model-to-data.html#cb265-8"></a>SI3 &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/SI3.csv&#39;</span>),</span>
-<span id="cb265-9"><a href="fitting-a-model-to-data.html#cb265-9"></a>                 <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
-<span id="cb265-10"><a href="fitting-a-model-to-data.html#cb265-10"></a>                 <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>, slices[[<span class="dv">3</span>]]))</span>
-<span id="cb265-11"><a href="fitting-a-model-to-data.html#cb265-11"></a>SI4 &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/SI4.csv&#39;</span>),</span>
-<span id="cb265-12"><a href="fitting-a-model-to-data.html#cb265-12"></a>                 <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
-<span id="cb265-13"><a href="fitting-a-model-to-data.html#cb265-13"></a>                 <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>, slices[[<span class="dv">4</span>]]))</span>
-<span id="cb265-14"><a href="fitting-a-model-to-data.html#cb265-14"></a>SI5 &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/SI5.csv&#39;</span>),</span>
-<span id="cb265-15"><a href="fitting-a-model-to-data.html#cb265-15"></a>                 <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
-<span id="cb265-16"><a href="fitting-a-model-to-data.html#cb265-16"></a>                 <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>, slices[[<span class="dv">5</span>]]))</span>
-<span id="cb265-17"><a href="fitting-a-model-to-data.html#cb265-17"></a>SI6 &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/SI6.csv&#39;</span>),</span>
-<span id="cb265-18"><a href="fitting-a-model-to-data.html#cb265-18"></a>                 <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
-<span id="cb265-19"><a href="fitting-a-model-to-data.html#cb265-19"></a>                 <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>, slices[[<span class="dv">6</span>]]))</span>
-<span id="cb265-20"><a href="fitting-a-model-to-data.html#cb265-20"></a>SI7 &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/SI7.csv&#39;</span>),</span>
-<span id="cb265-21"><a href="fitting-a-model-to-data.html#cb265-21"></a>                 <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
-<span id="cb265-22"><a href="fitting-a-model-to-data.html#cb265-22"></a>                 <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>, slices[[<span class="dv">7</span>]]))</span></code></pre></div>
+<div class="sourceCode" id="cb264"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb264-1"><a href="fitting-a-model-to-data.html#cb264-1"></a><span class="co"># set up aggregation info for length-based survey indices</span></span>
+<span id="cb264-2"><a href="fitting-a-model-to-data.html#cb264-2"></a>SI1 &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/SI1.csv&#39;</span>),</span>
+<span id="cb264-3"><a href="fitting-a-model-to-data.html#cb264-3"></a>                 <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
+<span id="cb264-4"><a href="fitting-a-model-to-data.html#cb264-4"></a>                 <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>, slices[[<span class="dv">1</span>]]))</span>
+<span id="cb264-5"><a href="fitting-a-model-to-data.html#cb264-5"></a>SI2 &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/SI2.csv&#39;</span>),</span>
+<span id="cb264-6"><a href="fitting-a-model-to-data.html#cb264-6"></a>                 <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
+<span id="cb264-7"><a href="fitting-a-model-to-data.html#cb264-7"></a>                 <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>, slices[[<span class="dv">2</span>]]))</span>
+<span id="cb264-8"><a href="fitting-a-model-to-data.html#cb264-8"></a>SI3 &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/SI3.csv&#39;</span>),</span>
+<span id="cb264-9"><a href="fitting-a-model-to-data.html#cb264-9"></a>                 <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
+<span id="cb264-10"><a href="fitting-a-model-to-data.html#cb264-10"></a>                 <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>, slices[[<span class="dv">3</span>]]))</span>
+<span id="cb264-11"><a href="fitting-a-model-to-data.html#cb264-11"></a>SI4 &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/SI4.csv&#39;</span>),</span>
+<span id="cb264-12"><a href="fitting-a-model-to-data.html#cb264-12"></a>                 <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
+<span id="cb264-13"><a href="fitting-a-model-to-data.html#cb264-13"></a>                 <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>, slices[[<span class="dv">4</span>]]))</span>
+<span id="cb264-14"><a href="fitting-a-model-to-data.html#cb264-14"></a>SI5 &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/SI5.csv&#39;</span>),</span>
+<span id="cb264-15"><a href="fitting-a-model-to-data.html#cb264-15"></a>                 <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
+<span id="cb264-16"><a href="fitting-a-model-to-data.html#cb264-16"></a>                 <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>, slices[[<span class="dv">5</span>]]))</span>
+<span id="cb264-17"><a href="fitting-a-model-to-data.html#cb264-17"></a>SI6 &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/SI6.csv&#39;</span>),</span>
+<span id="cb264-18"><a href="fitting-a-model-to-data.html#cb264-18"></a>                 <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
+<span id="cb264-19"><a href="fitting-a-model-to-data.html#cb264-19"></a>                 <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>, slices[[<span class="dv">6</span>]]))</span>
+<span id="cb264-20"><a href="fitting-a-model-to-data.html#cb264-20"></a>SI7 &lt;-<span class="st"> </span><span class="kw">structure</span>(<span class="kw">read_csv</span>(<span class="st">&#39;data_provided/SI7.csv&#39;</span>),</span>
+<span id="cb264-21"><a href="fitting-a-model-to-data.html#cb264-21"></a>                 <span class="dt">area =</span> <span class="kw">list</span>(area_file[[<span class="dv">1</span>]]<span class="op">$</span>areas) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">set_names</span>(.),</span>
+<span id="cb264-22"><a href="fitting-a-model-to-data.html#cb264-22"></a>                 <span class="dt">length =</span> <span class="kw">create_intervals</span>(<span class="st">&#39;len&#39;</span>, slices[[<span class="dv">7</span>]]))</span></code></pre></div>
 <div id="exercise-3" class="section level3">
 <h3><span class="header-section-number">7.2.1</span> Exercise</h3>
 <ul>
@@ -662,64 +662,64 @@ multivariate logistic function (<code>mvlogistic</code>). Many of these function
 specific data situations (e.g., including tagging or predation data into a likelihood component).
 More on these functions can be read in the <a href="https://hafro.github.io/gadget/docs/userguide">Gadget User Guide</a>. To change the default setting to
 the stratified sum of squares, for example, one would include an additional argument <code>function = 'stratified',</code> to the <code>gadget_update</code> call.</p>
-<div class="sourceCode" id="cb266"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb266-1"><a href="fitting-a-model-to-data.html#cb266-1"></a>lik &lt;-</span>
-<span id="cb266-2"><a href="fitting-a-model-to-data.html#cb266-2"></a><span class="st">  </span><span class="kw">gadgetlikelihood</span>(<span class="st">&#39;likelihood&#39;</span>,gd,<span class="dt">missingOkay =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb266-3"><a href="fitting-a-model-to-data.html#cb266-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;catchdistribution&quot;</span>,</span>
-<span id="cb266-4"><a href="fitting-a-model-to-data.html#cb266-4"></a>                <span class="dt">name =</span> <span class="st">&quot;ldist.surv&quot;</span>,</span>
-<span id="cb266-5"><a href="fitting-a-model-to-data.html#cb266-5"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
-<span id="cb266-6"><a href="fitting-a-model-to-data.html#cb266-6"></a>                <span class="dt">data =</span> ldist.surv,</span>
-<span id="cb266-7"><a href="fitting-a-model-to-data.html#cb266-7"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;surv&quot;</span>),</span>
-<span id="cb266-8"><a href="fitting-a-model-to-data.html#cb266-8"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb266-9"><a href="fitting-a-model-to-data.html#cb266-9"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;catchdistribution&quot;</span>,</span>
-<span id="cb266-10"><a href="fitting-a-model-to-data.html#cb266-10"></a>                <span class="dt">name =</span> <span class="st">&quot;aldist.surv&quot;</span>,</span>
-<span id="cb266-11"><a href="fitting-a-model-to-data.html#cb266-11"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
-<span id="cb266-12"><a href="fitting-a-model-to-data.html#cb266-12"></a>                <span class="dt">data =</span> aldist.surv, </span>
-<span id="cb266-13"><a href="fitting-a-model-to-data.html#cb266-13"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;surv&quot;</span>),</span>
-<span id="cb266-14"><a href="fitting-a-model-to-data.html#cb266-14"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb266-15"><a href="fitting-a-model-to-data.html#cb266-15"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;catchdistribution&quot;</span>,</span>
-<span id="cb266-16"><a href="fitting-a-model-to-data.html#cb266-16"></a>                <span class="dt">name =</span> <span class="st">&quot;ldist.lln&quot;</span>,</span>
-<span id="cb266-17"><a href="fitting-a-model-to-data.html#cb266-17"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
-<span id="cb266-18"><a href="fitting-a-model-to-data.html#cb266-18"></a>                <span class="dt">data =</span> ldist.lln, </span>
-<span id="cb266-19"><a href="fitting-a-model-to-data.html#cb266-19"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;lln&quot;</span>),</span>
-<span id="cb266-20"><a href="fitting-a-model-to-data.html#cb266-20"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb266-21"><a href="fitting-a-model-to-data.html#cb266-21"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;catchdistribution&quot;</span>,</span>
-<span id="cb266-22"><a href="fitting-a-model-to-data.html#cb266-22"></a>                <span class="dt">name =</span> <span class="st">&quot;aldist.lln&quot;</span>,</span>
-<span id="cb266-23"><a href="fitting-a-model-to-data.html#cb266-23"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
-<span id="cb266-24"><a href="fitting-a-model-to-data.html#cb266-24"></a>                <span class="dt">data =</span> aldist.lln,</span>
-<span id="cb266-25"><a href="fitting-a-model-to-data.html#cb266-25"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;lln&quot;</span>),</span>
-<span id="cb266-26"><a href="fitting-a-model-to-data.html#cb266-26"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb266-27"><a href="fitting-a-model-to-data.html#cb266-27"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;catchdistribution&quot;</span>,</span>
-<span id="cb266-28"><a href="fitting-a-model-to-data.html#cb266-28"></a>                <span class="dt">name =</span> <span class="st">&quot;ldist.gil&quot;</span>,</span>
-<span id="cb266-29"><a href="fitting-a-model-to-data.html#cb266-29"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
-<span id="cb266-30"><a href="fitting-a-model-to-data.html#cb266-30"></a>                <span class="dt">data =</span> ldist.gil,</span>
-<span id="cb266-31"><a href="fitting-a-model-to-data.html#cb266-31"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;gil&quot;</span>),</span>
-<span id="cb266-32"><a href="fitting-a-model-to-data.html#cb266-32"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb266-33"><a href="fitting-a-model-to-data.html#cb266-33"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;catchdistribution&quot;</span>,</span>
-<span id="cb266-34"><a href="fitting-a-model-to-data.html#cb266-34"></a>                <span class="dt">name =</span> <span class="st">&quot;aldist.gil&quot;</span>,</span>
-<span id="cb266-35"><a href="fitting-a-model-to-data.html#cb266-35"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
-<span id="cb266-36"><a href="fitting-a-model-to-data.html#cb266-36"></a>                <span class="dt">data =</span> aldist.gil,</span>
-<span id="cb266-37"><a href="fitting-a-model-to-data.html#cb266-37"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;gil&quot;</span>),</span>
-<span id="cb266-38"><a href="fitting-a-model-to-data.html#cb266-38"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb266-39"><a href="fitting-a-model-to-data.html#cb266-39"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;catchdistribution&quot;</span>,</span>
-<span id="cb266-40"><a href="fitting-a-model-to-data.html#cb266-40"></a>                <span class="dt">name =</span> <span class="st">&quot;ldist.bmt&quot;</span>,</span>
-<span id="cb266-41"><a href="fitting-a-model-to-data.html#cb266-41"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
-<span id="cb266-42"><a href="fitting-a-model-to-data.html#cb266-42"></a>                <span class="dt">data =</span> ldist.bmt,</span>
-<span id="cb266-43"><a href="fitting-a-model-to-data.html#cb266-43"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;bmt&quot;</span>),</span>
-<span id="cb266-44"><a href="fitting-a-model-to-data.html#cb266-44"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb266-45"><a href="fitting-a-model-to-data.html#cb266-45"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;catchdistribution&quot;</span>,</span>
-<span id="cb266-46"><a href="fitting-a-model-to-data.html#cb266-46"></a>                <span class="dt">name =</span> <span class="st">&quot;aldist.bmt&quot;</span>,</span>
-<span id="cb266-47"><a href="fitting-a-model-to-data.html#cb266-47"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
-<span id="cb266-48"><a href="fitting-a-model-to-data.html#cb266-48"></a>                <span class="dt">data =</span> aldist.bmt,</span>
-<span id="cb266-49"><a href="fitting-a-model-to-data.html#cb266-49"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;bmt&quot;</span>),</span>
-<span id="cb266-50"><a href="fitting-a-model-to-data.html#cb266-50"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb266-51"><a href="fitting-a-model-to-data.html#cb266-51"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;stockdistribution&quot;</span>,</span>
-<span id="cb266-52"><a href="fitting-a-model-to-data.html#cb266-52"></a>                <span class="dt">name =</span> <span class="st">&quot;matp.surv&quot;</span>,</span>
-<span id="cb266-53"><a href="fitting-a-model-to-data.html#cb266-53"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
-<span id="cb266-54"><a href="fitting-a-model-to-data.html#cb266-54"></a>                <span class="dt">data =</span> matp.surv,</span>
-<span id="cb266-55"><a href="fitting-a-model-to-data.html#cb266-55"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;surv&quot;</span>),</span>
-<span id="cb266-56"><a href="fitting-a-model-to-data.html#cb266-56"></a>                <span class="dt">stocknames =</span><span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) </span>
-<span id="cb266-57"><a href="fitting-a-model-to-data.html#cb266-57"></a></span>
-<span id="cb266-58"><a href="fitting-a-model-to-data.html#cb266-58"></a>lik</span></code></pre></div>
+<div class="sourceCode" id="cb265"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb265-1"><a href="fitting-a-model-to-data.html#cb265-1"></a>lik &lt;-</span>
+<span id="cb265-2"><a href="fitting-a-model-to-data.html#cb265-2"></a><span class="st">  </span><span class="kw">gadgetlikelihood</span>(<span class="st">&#39;likelihood&#39;</span>,gd,<span class="dt">missingOkay =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb265-3"><a href="fitting-a-model-to-data.html#cb265-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;catchdistribution&quot;</span>,</span>
+<span id="cb265-4"><a href="fitting-a-model-to-data.html#cb265-4"></a>                <span class="dt">name =</span> <span class="st">&quot;ldist.surv&quot;</span>,</span>
+<span id="cb265-5"><a href="fitting-a-model-to-data.html#cb265-5"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
+<span id="cb265-6"><a href="fitting-a-model-to-data.html#cb265-6"></a>                <span class="dt">data =</span> ldist.surv,</span>
+<span id="cb265-7"><a href="fitting-a-model-to-data.html#cb265-7"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;surv&quot;</span>),</span>
+<span id="cb265-8"><a href="fitting-a-model-to-data.html#cb265-8"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb265-9"><a href="fitting-a-model-to-data.html#cb265-9"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;catchdistribution&quot;</span>,</span>
+<span id="cb265-10"><a href="fitting-a-model-to-data.html#cb265-10"></a>                <span class="dt">name =</span> <span class="st">&quot;aldist.surv&quot;</span>,</span>
+<span id="cb265-11"><a href="fitting-a-model-to-data.html#cb265-11"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
+<span id="cb265-12"><a href="fitting-a-model-to-data.html#cb265-12"></a>                <span class="dt">data =</span> aldist.surv, </span>
+<span id="cb265-13"><a href="fitting-a-model-to-data.html#cb265-13"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;surv&quot;</span>),</span>
+<span id="cb265-14"><a href="fitting-a-model-to-data.html#cb265-14"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb265-15"><a href="fitting-a-model-to-data.html#cb265-15"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;catchdistribution&quot;</span>,</span>
+<span id="cb265-16"><a href="fitting-a-model-to-data.html#cb265-16"></a>                <span class="dt">name =</span> <span class="st">&quot;ldist.lln&quot;</span>,</span>
+<span id="cb265-17"><a href="fitting-a-model-to-data.html#cb265-17"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
+<span id="cb265-18"><a href="fitting-a-model-to-data.html#cb265-18"></a>                <span class="dt">data =</span> ldist.lln, </span>
+<span id="cb265-19"><a href="fitting-a-model-to-data.html#cb265-19"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;lln&quot;</span>),</span>
+<span id="cb265-20"><a href="fitting-a-model-to-data.html#cb265-20"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb265-21"><a href="fitting-a-model-to-data.html#cb265-21"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;catchdistribution&quot;</span>,</span>
+<span id="cb265-22"><a href="fitting-a-model-to-data.html#cb265-22"></a>                <span class="dt">name =</span> <span class="st">&quot;aldist.lln&quot;</span>,</span>
+<span id="cb265-23"><a href="fitting-a-model-to-data.html#cb265-23"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
+<span id="cb265-24"><a href="fitting-a-model-to-data.html#cb265-24"></a>                <span class="dt">data =</span> aldist.lln,</span>
+<span id="cb265-25"><a href="fitting-a-model-to-data.html#cb265-25"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;lln&quot;</span>),</span>
+<span id="cb265-26"><a href="fitting-a-model-to-data.html#cb265-26"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb265-27"><a href="fitting-a-model-to-data.html#cb265-27"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;catchdistribution&quot;</span>,</span>
+<span id="cb265-28"><a href="fitting-a-model-to-data.html#cb265-28"></a>                <span class="dt">name =</span> <span class="st">&quot;ldist.gil&quot;</span>,</span>
+<span id="cb265-29"><a href="fitting-a-model-to-data.html#cb265-29"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
+<span id="cb265-30"><a href="fitting-a-model-to-data.html#cb265-30"></a>                <span class="dt">data =</span> ldist.gil,</span>
+<span id="cb265-31"><a href="fitting-a-model-to-data.html#cb265-31"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;gil&quot;</span>),</span>
+<span id="cb265-32"><a href="fitting-a-model-to-data.html#cb265-32"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb265-33"><a href="fitting-a-model-to-data.html#cb265-33"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;catchdistribution&quot;</span>,</span>
+<span id="cb265-34"><a href="fitting-a-model-to-data.html#cb265-34"></a>                <span class="dt">name =</span> <span class="st">&quot;aldist.gil&quot;</span>,</span>
+<span id="cb265-35"><a href="fitting-a-model-to-data.html#cb265-35"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
+<span id="cb265-36"><a href="fitting-a-model-to-data.html#cb265-36"></a>                <span class="dt">data =</span> aldist.gil,</span>
+<span id="cb265-37"><a href="fitting-a-model-to-data.html#cb265-37"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;gil&quot;</span>),</span>
+<span id="cb265-38"><a href="fitting-a-model-to-data.html#cb265-38"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb265-39"><a href="fitting-a-model-to-data.html#cb265-39"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;catchdistribution&quot;</span>,</span>
+<span id="cb265-40"><a href="fitting-a-model-to-data.html#cb265-40"></a>                <span class="dt">name =</span> <span class="st">&quot;ldist.bmt&quot;</span>,</span>
+<span id="cb265-41"><a href="fitting-a-model-to-data.html#cb265-41"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
+<span id="cb265-42"><a href="fitting-a-model-to-data.html#cb265-42"></a>                <span class="dt">data =</span> ldist.bmt,</span>
+<span id="cb265-43"><a href="fitting-a-model-to-data.html#cb265-43"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;bmt&quot;</span>),</span>
+<span id="cb265-44"><a href="fitting-a-model-to-data.html#cb265-44"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb265-45"><a href="fitting-a-model-to-data.html#cb265-45"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;catchdistribution&quot;</span>,</span>
+<span id="cb265-46"><a href="fitting-a-model-to-data.html#cb265-46"></a>                <span class="dt">name =</span> <span class="st">&quot;aldist.bmt&quot;</span>,</span>
+<span id="cb265-47"><a href="fitting-a-model-to-data.html#cb265-47"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
+<span id="cb265-48"><a href="fitting-a-model-to-data.html#cb265-48"></a>                <span class="dt">data =</span> aldist.bmt,</span>
+<span id="cb265-49"><a href="fitting-a-model-to-data.html#cb265-49"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;bmt&quot;</span>),</span>
+<span id="cb265-50"><a href="fitting-a-model-to-data.html#cb265-50"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb265-51"><a href="fitting-a-model-to-data.html#cb265-51"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;stockdistribution&quot;</span>,</span>
+<span id="cb265-52"><a href="fitting-a-model-to-data.html#cb265-52"></a>                <span class="dt">name =</span> <span class="st">&quot;matp.surv&quot;</span>,</span>
+<span id="cb265-53"><a href="fitting-a-model-to-data.html#cb265-53"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
+<span id="cb265-54"><a href="fitting-a-model-to-data.html#cb265-54"></a>                <span class="dt">data =</span> matp.surv,</span>
+<span id="cb265-55"><a href="fitting-a-model-to-data.html#cb265-55"></a>                <span class="dt">fleetnames =</span> <span class="kw">c</span>(<span class="st">&quot;surv&quot;</span>),</span>
+<span id="cb265-56"><a href="fitting-a-model-to-data.html#cb265-56"></a>                <span class="dt">stocknames =</span><span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) </span>
+<span id="cb265-57"><a href="fitting-a-model-to-data.html#cb265-57"></a></span>
+<span id="cb265-58"><a href="fitting-a-model-to-data.html#cb265-58"></a>lik</span></code></pre></div>
 <pre><code>## ; Generated by Rgadget 0.5
 ## ; 
 ## [component]
@@ -861,7 +861,7 @@ aggregation files (‘Agg/…’) that define the bin structure as defined by da
 all likelihood components, these data and agg files will be written alongside this likelihood
 file, and a reference to this likelihood file will also be drawn within the ‘main’ file.</p>
 <p>You can also see how individual aggregation files will be printed by e.g.:</p>
-<div class="sourceCode" id="cb268"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb268-1"><a href="fitting-a-model-to-data.html#cb268-1"></a>lik[[<span class="dv">2</span>]]<span class="op">$</span>ageaggfile</span></code></pre></div>
+<div class="sourceCode" id="cb267"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb267-1"><a href="fitting-a-model-to-data.html#cb267-1"></a>lik[[<span class="dv">2</span>]]<span class="op">$</span>ageaggfile</span></code></pre></div>
 <pre><code>## ; Generated by Rgadget 0.5
 ## age3 3
 ## age4 4
@@ -903,56 +903,56 @@ Each survey index is
 matched to stock size observations at a given time and area; therefore, if there are two
 length- or age-based survey index series with the same time and area, they can each be
 incorporated as separate likelihood components as long as they have different names.</p>
-<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="fitting-a-model-to-data.html#cb270-1"></a>lik &lt;-</span>
-<span id="cb270-2"><a href="fitting-a-model-to-data.html#cb270-2"></a><span class="st">  </span>lik <span class="op">%&gt;%</span><span class="st">  </span></span>
-<span id="cb270-3"><a href="fitting-a-model-to-data.html#cb270-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;surveyindices&quot;</span>,</span>
-<span id="cb270-4"><a href="fitting-a-model-to-data.html#cb270-4"></a>                <span class="dt">name =</span> <span class="kw">paste0</span>(<span class="st">&quot;si.&quot;</span>, <span class="kw">names</span>(slices)[<span class="dv">1</span>]),</span>
-<span id="cb270-5"><a href="fitting-a-model-to-data.html#cb270-5"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
-<span id="cb270-6"><a href="fitting-a-model-to-data.html#cb270-6"></a>                <span class="dt">data =</span> SI1,</span>
-<span id="cb270-7"><a href="fitting-a-model-to-data.html#cb270-7"></a>                <span class="dt">fittype =</span> <span class="st">&#39;loglinearfit&#39;</span>,</span>
-<span id="cb270-8"><a href="fitting-a-model-to-data.html#cb270-8"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb270-9"><a href="fitting-a-model-to-data.html#cb270-9"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;surveyindices&quot;</span>,</span>
-<span id="cb270-10"><a href="fitting-a-model-to-data.html#cb270-10"></a>                <span class="dt">name =</span> <span class="kw">paste0</span>(<span class="st">&quot;si.&quot;</span>, <span class="kw">names</span>(slices)[<span class="dv">2</span>]),</span>
-<span id="cb270-11"><a href="fitting-a-model-to-data.html#cb270-11"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
-<span id="cb270-12"><a href="fitting-a-model-to-data.html#cb270-12"></a>                <span class="dt">data =</span> SI2,</span>
-<span id="cb270-13"><a href="fitting-a-model-to-data.html#cb270-13"></a>                <span class="dt">fittype =</span> <span class="st">&#39;loglinearfit&#39;</span>,</span>
-<span id="cb270-14"><a href="fitting-a-model-to-data.html#cb270-14"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb270-15"><a href="fitting-a-model-to-data.html#cb270-15"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;surveyindices&quot;</span>,</span>
-<span id="cb270-16"><a href="fitting-a-model-to-data.html#cb270-16"></a>                <span class="dt">name =</span> <span class="kw">paste0</span>(<span class="st">&quot;si.&quot;</span>, <span class="kw">names</span>(slices)[<span class="dv">3</span>]),</span>
-<span id="cb270-17"><a href="fitting-a-model-to-data.html#cb270-17"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
-<span id="cb270-18"><a href="fitting-a-model-to-data.html#cb270-18"></a>                <span class="dt">data =</span> SI3,</span>
-<span id="cb270-19"><a href="fitting-a-model-to-data.html#cb270-19"></a>                <span class="dt">fittype =</span> <span class="st">&#39;fixedslopeloglinearfit&#39;</span>,</span>
-<span id="cb270-20"><a href="fitting-a-model-to-data.html#cb270-20"></a>                <span class="dt">slope=</span><span class="dv">1</span>,</span>
-<span id="cb270-21"><a href="fitting-a-model-to-data.html#cb270-21"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb270-22"><a href="fitting-a-model-to-data.html#cb270-22"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;surveyindices&quot;</span>,</span>
-<span id="cb270-23"><a href="fitting-a-model-to-data.html#cb270-23"></a>                <span class="dt">name =</span> <span class="kw">paste0</span>(<span class="st">&quot;si.&quot;</span>, <span class="kw">names</span>(slices)[<span class="dv">4</span>]),</span>
-<span id="cb270-24"><a href="fitting-a-model-to-data.html#cb270-24"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
-<span id="cb270-25"><a href="fitting-a-model-to-data.html#cb270-25"></a>                <span class="dt">data =</span> SI4,</span>
-<span id="cb270-26"><a href="fitting-a-model-to-data.html#cb270-26"></a>                <span class="dt">fittype =</span> <span class="st">&#39;fixedslopeloglinearfit&#39;</span>,</span>
-<span id="cb270-27"><a href="fitting-a-model-to-data.html#cb270-27"></a>                <span class="dt">slope=</span><span class="dv">1</span>,</span>
-<span id="cb270-28"><a href="fitting-a-model-to-data.html#cb270-28"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb270-29"><a href="fitting-a-model-to-data.html#cb270-29"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;surveyindices&quot;</span>,</span>
-<span id="cb270-30"><a href="fitting-a-model-to-data.html#cb270-30"></a>                <span class="dt">name =</span> <span class="kw">paste0</span>(<span class="st">&quot;si.&quot;</span>, <span class="kw">names</span>(slices)[<span class="dv">5</span>]),</span>
-<span id="cb270-31"><a href="fitting-a-model-to-data.html#cb270-31"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
-<span id="cb270-32"><a href="fitting-a-model-to-data.html#cb270-32"></a>                <span class="dt">data =</span> SI5,</span>
-<span id="cb270-33"><a href="fitting-a-model-to-data.html#cb270-33"></a>                <span class="dt">fittype =</span> <span class="st">&#39;fixedslopeloglinearfit&#39;</span>,</span>
-<span id="cb270-34"><a href="fitting-a-model-to-data.html#cb270-34"></a>                <span class="dt">slope=</span><span class="dv">1</span>,</span>
-<span id="cb270-35"><a href="fitting-a-model-to-data.html#cb270-35"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb270-36"><a href="fitting-a-model-to-data.html#cb270-36"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;surveyindices&quot;</span>,</span>
-<span id="cb270-37"><a href="fitting-a-model-to-data.html#cb270-37"></a>                <span class="dt">name =</span> <span class="kw">paste0</span>(<span class="st">&quot;si.&quot;</span>, <span class="kw">names</span>(slices)[<span class="dv">6</span>]),</span>
-<span id="cb270-38"><a href="fitting-a-model-to-data.html#cb270-38"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
-<span id="cb270-39"><a href="fitting-a-model-to-data.html#cb270-39"></a>                <span class="dt">data =</span> SI6,</span>
-<span id="cb270-40"><a href="fitting-a-model-to-data.html#cb270-40"></a>                <span class="dt">fittype =</span> <span class="st">&#39;fixedslopeloglinearfit&#39;</span>,</span>
-<span id="cb270-41"><a href="fitting-a-model-to-data.html#cb270-41"></a>                <span class="dt">slope=</span><span class="dv">1</span>,</span>
-<span id="cb270-42"><a href="fitting-a-model-to-data.html#cb270-42"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb270-43"><a href="fitting-a-model-to-data.html#cb270-43"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;surveyindices&quot;</span>,</span>
-<span id="cb270-44"><a href="fitting-a-model-to-data.html#cb270-44"></a>                <span class="dt">name =</span> <span class="kw">paste0</span>(<span class="st">&quot;si.&quot;</span>, <span class="kw">names</span>(slices)[<span class="dv">7</span>]),</span>
-<span id="cb270-45"><a href="fitting-a-model-to-data.html#cb270-45"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
-<span id="cb270-46"><a href="fitting-a-model-to-data.html#cb270-46"></a>                <span class="dt">data =</span> SI7,</span>
-<span id="cb270-47"><a href="fitting-a-model-to-data.html#cb270-47"></a>                <span class="dt">fittype =</span> <span class="st">&#39;fixedslopeloglinearfit&#39;</span>,</span>
-<span id="cb270-48"><a href="fitting-a-model-to-data.html#cb270-48"></a>                <span class="dt">slope=</span><span class="dv">1</span>,</span>
-<span id="cb270-49"><a href="fitting-a-model-to-data.html#cb270-49"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) </span>
-<span id="cb270-50"><a href="fitting-a-model-to-data.html#cb270-50"></a>lik </span></code></pre></div>
+<div class="sourceCode" id="cb269"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb269-1"><a href="fitting-a-model-to-data.html#cb269-1"></a>lik &lt;-</span>
+<span id="cb269-2"><a href="fitting-a-model-to-data.html#cb269-2"></a><span class="st">  </span>lik <span class="op">%&gt;%</span><span class="st">  </span></span>
+<span id="cb269-3"><a href="fitting-a-model-to-data.html#cb269-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;surveyindices&quot;</span>,</span>
+<span id="cb269-4"><a href="fitting-a-model-to-data.html#cb269-4"></a>                <span class="dt">name =</span> <span class="kw">paste0</span>(<span class="st">&quot;si.&quot;</span>, <span class="kw">names</span>(slices)[<span class="dv">1</span>]),</span>
+<span id="cb269-5"><a href="fitting-a-model-to-data.html#cb269-5"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
+<span id="cb269-6"><a href="fitting-a-model-to-data.html#cb269-6"></a>                <span class="dt">data =</span> SI1,</span>
+<span id="cb269-7"><a href="fitting-a-model-to-data.html#cb269-7"></a>                <span class="dt">fittype =</span> <span class="st">&#39;loglinearfit&#39;</span>,</span>
+<span id="cb269-8"><a href="fitting-a-model-to-data.html#cb269-8"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb269-9"><a href="fitting-a-model-to-data.html#cb269-9"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;surveyindices&quot;</span>,</span>
+<span id="cb269-10"><a href="fitting-a-model-to-data.html#cb269-10"></a>                <span class="dt">name =</span> <span class="kw">paste0</span>(<span class="st">&quot;si.&quot;</span>, <span class="kw">names</span>(slices)[<span class="dv">2</span>]),</span>
+<span id="cb269-11"><a href="fitting-a-model-to-data.html#cb269-11"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
+<span id="cb269-12"><a href="fitting-a-model-to-data.html#cb269-12"></a>                <span class="dt">data =</span> SI2,</span>
+<span id="cb269-13"><a href="fitting-a-model-to-data.html#cb269-13"></a>                <span class="dt">fittype =</span> <span class="st">&#39;loglinearfit&#39;</span>,</span>
+<span id="cb269-14"><a href="fitting-a-model-to-data.html#cb269-14"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb269-15"><a href="fitting-a-model-to-data.html#cb269-15"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;surveyindices&quot;</span>,</span>
+<span id="cb269-16"><a href="fitting-a-model-to-data.html#cb269-16"></a>                <span class="dt">name =</span> <span class="kw">paste0</span>(<span class="st">&quot;si.&quot;</span>, <span class="kw">names</span>(slices)[<span class="dv">3</span>]),</span>
+<span id="cb269-17"><a href="fitting-a-model-to-data.html#cb269-17"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
+<span id="cb269-18"><a href="fitting-a-model-to-data.html#cb269-18"></a>                <span class="dt">data =</span> SI3,</span>
+<span id="cb269-19"><a href="fitting-a-model-to-data.html#cb269-19"></a>                <span class="dt">fittype =</span> <span class="st">&#39;fixedslopeloglinearfit&#39;</span>,</span>
+<span id="cb269-20"><a href="fitting-a-model-to-data.html#cb269-20"></a>                <span class="dt">slope=</span><span class="dv">1</span>,</span>
+<span id="cb269-21"><a href="fitting-a-model-to-data.html#cb269-21"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb269-22"><a href="fitting-a-model-to-data.html#cb269-22"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;surveyindices&quot;</span>,</span>
+<span id="cb269-23"><a href="fitting-a-model-to-data.html#cb269-23"></a>                <span class="dt">name =</span> <span class="kw">paste0</span>(<span class="st">&quot;si.&quot;</span>, <span class="kw">names</span>(slices)[<span class="dv">4</span>]),</span>
+<span id="cb269-24"><a href="fitting-a-model-to-data.html#cb269-24"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
+<span id="cb269-25"><a href="fitting-a-model-to-data.html#cb269-25"></a>                <span class="dt">data =</span> SI4,</span>
+<span id="cb269-26"><a href="fitting-a-model-to-data.html#cb269-26"></a>                <span class="dt">fittype =</span> <span class="st">&#39;fixedslopeloglinearfit&#39;</span>,</span>
+<span id="cb269-27"><a href="fitting-a-model-to-data.html#cb269-27"></a>                <span class="dt">slope=</span><span class="dv">1</span>,</span>
+<span id="cb269-28"><a href="fitting-a-model-to-data.html#cb269-28"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb269-29"><a href="fitting-a-model-to-data.html#cb269-29"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;surveyindices&quot;</span>,</span>
+<span id="cb269-30"><a href="fitting-a-model-to-data.html#cb269-30"></a>                <span class="dt">name =</span> <span class="kw">paste0</span>(<span class="st">&quot;si.&quot;</span>, <span class="kw">names</span>(slices)[<span class="dv">5</span>]),</span>
+<span id="cb269-31"><a href="fitting-a-model-to-data.html#cb269-31"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
+<span id="cb269-32"><a href="fitting-a-model-to-data.html#cb269-32"></a>                <span class="dt">data =</span> SI5,</span>
+<span id="cb269-33"><a href="fitting-a-model-to-data.html#cb269-33"></a>                <span class="dt">fittype =</span> <span class="st">&#39;fixedslopeloglinearfit&#39;</span>,</span>
+<span id="cb269-34"><a href="fitting-a-model-to-data.html#cb269-34"></a>                <span class="dt">slope=</span><span class="dv">1</span>,</span>
+<span id="cb269-35"><a href="fitting-a-model-to-data.html#cb269-35"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb269-36"><a href="fitting-a-model-to-data.html#cb269-36"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;surveyindices&quot;</span>,</span>
+<span id="cb269-37"><a href="fitting-a-model-to-data.html#cb269-37"></a>                <span class="dt">name =</span> <span class="kw">paste0</span>(<span class="st">&quot;si.&quot;</span>, <span class="kw">names</span>(slices)[<span class="dv">6</span>]),</span>
+<span id="cb269-38"><a href="fitting-a-model-to-data.html#cb269-38"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
+<span id="cb269-39"><a href="fitting-a-model-to-data.html#cb269-39"></a>                <span class="dt">data =</span> SI6,</span>
+<span id="cb269-40"><a href="fitting-a-model-to-data.html#cb269-40"></a>                <span class="dt">fittype =</span> <span class="st">&#39;fixedslopeloglinearfit&#39;</span>,</span>
+<span id="cb269-41"><a href="fitting-a-model-to-data.html#cb269-41"></a>                <span class="dt">slope=</span><span class="dv">1</span>,</span>
+<span id="cb269-42"><a href="fitting-a-model-to-data.html#cb269-42"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb269-43"><a href="fitting-a-model-to-data.html#cb269-43"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;surveyindices&quot;</span>,</span>
+<span id="cb269-44"><a href="fitting-a-model-to-data.html#cb269-44"></a>                <span class="dt">name =</span> <span class="kw">paste0</span>(<span class="st">&quot;si.&quot;</span>, <span class="kw">names</span>(slices)[<span class="dv">7</span>]),</span>
+<span id="cb269-45"><a href="fitting-a-model-to-data.html#cb269-45"></a>                <span class="dt">weight =</span> <span class="dv">1</span>,</span>
+<span id="cb269-46"><a href="fitting-a-model-to-data.html#cb269-46"></a>                <span class="dt">data =</span> SI7,</span>
+<span id="cb269-47"><a href="fitting-a-model-to-data.html#cb269-47"></a>                <span class="dt">fittype =</span> <span class="st">&#39;fixedslopeloglinearfit&#39;</span>,</span>
+<span id="cb269-48"><a href="fitting-a-model-to-data.html#cb269-48"></a>                <span class="dt">slope=</span><span class="dv">1</span>,</span>
+<span id="cb269-49"><a href="fitting-a-model-to-data.html#cb269-49"></a>                <span class="dt">stocknames =</span> <span class="kw">c</span>(<span class="st">&quot;lingimm&quot;</span>,<span class="st">&quot;lingmat&quot;</span>)) </span>
+<span id="cb269-50"><a href="fitting-a-model-to-data.html#cb269-50"></a>lik </span></code></pre></div>
 <p>Finally, there are two components to the likelihood that do not incorporate data but
 are instead used to ensure that the optimisation search algorithm remains within
 reasonable ranges of the defined model. The first component provides penalties to for
@@ -974,23 +974,23 @@ of the predators. For example, if landings of the fleets exceeds available bioma
 then the penalty is applied. The understocking penalty likelihood is then defined as
 the sum of the number of prey that are ‘missing’, raised to a power set by default
 to 2, and multiplied by the likelihood weight of 100 as indicated below.</p>
-<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="fitting-a-model-to-data.html#cb271-1"></a>lik &lt;-</span>
-<span id="cb271-2"><a href="fitting-a-model-to-data.html#cb271-2"></a><span class="st">  </span>lik <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb271-3"><a href="fitting-a-model-to-data.html#cb271-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;penalty&quot;</span>,</span>
-<span id="cb271-4"><a href="fitting-a-model-to-data.html#cb271-4"></a>                <span class="dt">name =</span> <span class="st">&quot;bounds&quot;</span>,</span>
-<span id="cb271-5"><a href="fitting-a-model-to-data.html#cb271-5"></a>                <span class="dt">weight =</span> <span class="st">&quot;0.5&quot;</span>,</span>
-<span id="cb271-6"><a href="fitting-a-model-to-data.html#cb271-6"></a>                <span class="dt">data =</span> <span class="kw">data.frame</span>(</span>
-<span id="cb271-7"><a href="fitting-a-model-to-data.html#cb271-7"></a>                  <span class="dt">switch =</span> <span class="kw">c</span>(<span class="st">&quot;default&quot;</span>),</span>
-<span id="cb271-8"><a href="fitting-a-model-to-data.html#cb271-8"></a>                  <span class="dt">power =</span> <span class="kw">c</span>(<span class="dv">2</span>),</span>
-<span id="cb271-9"><a href="fitting-a-model-to-data.html#cb271-9"></a>                  <span class="dt">upperW=</span><span class="dv">10000</span>,</span>
-<span id="cb271-10"><a href="fitting-a-model-to-data.html#cb271-10"></a>                  <span class="dt">lowerW=</span><span class="dv">10000</span>,</span>
-<span id="cb271-11"><a href="fitting-a-model-to-data.html#cb271-11"></a>                  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)) <span class="op">%&gt;%</span></span>
-<span id="cb271-12"><a href="fitting-a-model-to-data.html#cb271-12"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;understocking&quot;</span>,</span>
-<span id="cb271-13"><a href="fitting-a-model-to-data.html#cb271-13"></a>                <span class="dt">name =</span> <span class="st">&quot;understocking&quot;</span>,</span>
-<span id="cb271-14"><a href="fitting-a-model-to-data.html#cb271-14"></a>                <span class="dt">weight =</span> <span class="st">&quot;100&quot;</span>)</span>
-<span id="cb271-15"><a href="fitting-a-model-to-data.html#cb271-15"></a></span>
-<span id="cb271-16"><a href="fitting-a-model-to-data.html#cb271-16"></a>lik <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb271-17"><a href="fitting-a-model-to-data.html#cb271-17"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span></code></pre></div>
+<div class="sourceCode" id="cb270"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb270-1"><a href="fitting-a-model-to-data.html#cb270-1"></a>lik &lt;-</span>
+<span id="cb270-2"><a href="fitting-a-model-to-data.html#cb270-2"></a><span class="st">  </span>lik <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb270-3"><a href="fitting-a-model-to-data.html#cb270-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;penalty&quot;</span>,</span>
+<span id="cb270-4"><a href="fitting-a-model-to-data.html#cb270-4"></a>                <span class="dt">name =</span> <span class="st">&quot;bounds&quot;</span>,</span>
+<span id="cb270-5"><a href="fitting-a-model-to-data.html#cb270-5"></a>                <span class="dt">weight =</span> <span class="st">&quot;0.5&quot;</span>,</span>
+<span id="cb270-6"><a href="fitting-a-model-to-data.html#cb270-6"></a>                <span class="dt">data =</span> <span class="kw">data.frame</span>(</span>
+<span id="cb270-7"><a href="fitting-a-model-to-data.html#cb270-7"></a>                  <span class="dt">switch =</span> <span class="kw">c</span>(<span class="st">&quot;default&quot;</span>),</span>
+<span id="cb270-8"><a href="fitting-a-model-to-data.html#cb270-8"></a>                  <span class="dt">power =</span> <span class="kw">c</span>(<span class="dv">2</span>),</span>
+<span id="cb270-9"><a href="fitting-a-model-to-data.html#cb270-9"></a>                  <span class="dt">upperW=</span><span class="dv">10000</span>,</span>
+<span id="cb270-10"><a href="fitting-a-model-to-data.html#cb270-10"></a>                  <span class="dt">lowerW=</span><span class="dv">10000</span>,</span>
+<span id="cb270-11"><a href="fitting-a-model-to-data.html#cb270-11"></a>                  <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb270-12"><a href="fitting-a-model-to-data.html#cb270-12"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;understocking&quot;</span>,</span>
+<span id="cb270-13"><a href="fitting-a-model-to-data.html#cb270-13"></a>                <span class="dt">name =</span> <span class="st">&quot;understocking&quot;</span>,</span>
+<span id="cb270-14"><a href="fitting-a-model-to-data.html#cb270-14"></a>                <span class="dt">weight =</span> <span class="st">&quot;100&quot;</span>)</span>
+<span id="cb270-15"><a href="fitting-a-model-to-data.html#cb270-15"></a></span>
+<span id="cb270-16"><a href="fitting-a-model-to-data.html#cb270-16"></a>lik <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb270-17"><a href="fitting-a-model-to-data.html#cb270-17"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span></code></pre></div>
 <p>Notice that when the likelihood file is written, so are all the supporting
 aggregation files under the ‘Aggfiles’ folder.</p>
 </div>
@@ -1008,9 +1008,9 @@ optimisation (0). Therefore, this simulation was run with very unrealistic param
 Obviously this is not a helpful run in itself, but it is at least useful for
 conveniently generating an initial parameter file with the correct Gadget
 structure containing all the parameters specified throughout the Gadget model files.</p>
-<div class="sourceCode" id="cb272"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb272-1"><a href="fitting-a-model-to-data.html#cb272-1"></a><span class="kw">gadget_evaluate</span>(gd,<span class="dt">log =</span> <span class="st">&#39;ling_log&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb271"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb271-1"><a href="fitting-a-model-to-data.html#cb271-1"></a><span class="kw">gadget_evaluate</span>(gd,<span class="dt">log =</span> <span class="st">&#39;ling_log&#39;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;/home/runner/work/gadget-course/gadget-course/ling_model/01-base&quot;</code></pre>
-<div class="sourceCode" id="cb274"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb274-1"><a href="fitting-a-model-to-data.html#cb274-1"></a><span class="kw">read.gadget.parameters</span>(<span class="kw">paste0</span>(gd,<span class="st">&#39;/params.out&#39;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb273"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb273-1"><a href="fitting-a-model-to-data.html#cb273-1"></a><span class="kw">read.gadget.parameters</span>(<span class="kw">paste0</span>(gd,<span class="st">&#39;/params.out&#39;</span>))</span></code></pre></div>
 <pre><code>## [90m# A tibble: 81 x 5[39m
 ##    switch              value lower upper optimise
 ##  [90m*[39m [3m[90m&lt;chr&gt;[39m[23m               [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m    [3m[90m&lt;dbl&gt;[39m[23m
@@ -1029,29 +1029,29 @@ structure containing all the parameters specified throughout the Gadget model fi
 values to more realistic ones using <code>init_guess</code>. This function uses the <code>grepl</code>
 function internally to match names, so that large chunks of parameters with similar
 names can have their bounds similarly changed.</p>
-<div class="sourceCode" id="cb276"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb276-1"><a href="fitting-a-model-to-data.html#cb276-1"></a>lw_pars &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.00000228</span>, <span class="fl">3.20</span>) <span class="co">#same values as in day 2</span></span>
-<span id="cb276-2"><a href="fitting-a-model-to-data.html#cb276-2"></a></span>
-<span id="cb276-3"><a href="fitting-a-model-to-data.html#cb276-3"></a><span class="co">## update the input parameters with sane initial guesses</span></span>
-<span id="cb276-4"><a href="fitting-a-model-to-data.html#cb276-4"></a><span class="kw">read.gadget.parameters</span>(<span class="kw">sprintf</span>(<span class="st">&#39;%s/params.out&#39;</span>,gd)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb276-5"><a href="fitting-a-model-to-data.html#cb276-5"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;rec.[0-9]|init.[0-9]&#39;</span>,<span class="dv">1</span>,<span class="fl">0.001</span>,<span class="dv">1000</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span></span>
-<span id="cb276-6"><a href="fitting-a-model-to-data.html#cb276-6"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;recl&#39;</span>,<span class="dv">12</span>,<span class="dv">4</span>,<span class="dv">20</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb276-7"><a href="fitting-a-model-to-data.html#cb276-7"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;rec.sd&#39;</span>,<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">20</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb276-8"><a href="fitting-a-model-to-data.html#cb276-8"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;Linf&#39;</span>,<span class="dv">160</span>, <span class="dv">100</span>, <span class="dv">200</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb276-9"><a href="fitting-a-model-to-data.html#cb276-9"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;k$&#39;</span>,<span class="dv">90</span>, <span class="dv">40</span>, <span class="dv">100</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb276-10"><a href="fitting-a-model-to-data.html#cb276-10"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;bbin&#39;</span>,<span class="dv">6</span>, <span class="fl">1e-08</span>, <span class="dv">100</span>, <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb276-11"><a href="fitting-a-model-to-data.html#cb276-11"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;alpha&#39;</span>, <span class="fl">0.5</span>,  <span class="fl">0.01</span>, <span class="dv">3</span>, <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb276-12"><a href="fitting-a-model-to-data.html#cb276-12"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;l50&#39;</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">100</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb276-13"><a href="fitting-a-model-to-data.html#cb276-13"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;walpha&#39;</span>,lw_pars[<span class="dv">1</span>], <span class="fl">1e-10</span>, <span class="dv">1</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb276-14"><a href="fitting-a-model-to-data.html#cb276-14"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;wbeta&#39;</span>,lw_pars[<span class="dv">2</span>], <span class="dv">2</span>, <span class="dv">4</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb276-15"><a href="fitting-a-model-to-data.html#cb276-15"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;M$&#39;</span>,<span class="fl">0.15</span>,<span class="fl">0.001</span>,<span class="dv">1</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb276-16"><a href="fitting-a-model-to-data.html#cb276-16"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;rec.scalar&#39;</span>,<span class="dv">400</span>,<span class="dv">1</span>,<span class="dv">500</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb276-17"><a href="fitting-a-model-to-data.html#cb276-17"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;init.scalar&#39;</span>,<span class="dv">200</span>,<span class="dv">1</span>,<span class="dv">300</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb276-18"><a href="fitting-a-model-to-data.html#cb276-18"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;mat2&#39;</span>,<span class="dv">60</span>,<span class="fl">0.75</span><span class="op">*</span><span class="dv">60</span>,<span class="fl">1.25</span><span class="op">*</span><span class="dv">60</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb276-19"><a href="fitting-a-model-to-data.html#cb276-19"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;mat1&#39;</span>,<span class="dv">70</span>,  <span class="dv">10</span>, <span class="dv">200</span>, <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb276-20"><a href="fitting-a-model-to-data.html#cb276-20"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;init.F&#39;</span>,<span class="fl">0.4</span>,<span class="fl">0.1</span>,<span class="dv">1</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb276-21"><a href="fitting-a-model-to-data.html#cb276-21"></a><span class="st">  </span><span class="kw">write.gadget.parameters</span>(.,<span class="dt">file=</span><span class="kw">sprintf</span>(<span class="st">&#39;%s/params.in&#39;</span>,gd))</span>
-<span id="cb276-22"><a href="fitting-a-model-to-data.html#cb276-22"></a></span>
-<span id="cb276-23"><a href="fitting-a-model-to-data.html#cb276-23"></a><span class="kw">read.gadget.parameters</span>(<span class="kw">sprintf</span>(<span class="st">&#39;%s/params.in&#39;</span>,gd))</span></code></pre></div>
+<div class="sourceCode" id="cb275"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb275-1"><a href="fitting-a-model-to-data.html#cb275-1"></a>lw_pars &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.00000228</span>, <span class="fl">3.20</span>) <span class="co">#same values as in day 2</span></span>
+<span id="cb275-2"><a href="fitting-a-model-to-data.html#cb275-2"></a></span>
+<span id="cb275-3"><a href="fitting-a-model-to-data.html#cb275-3"></a><span class="co">## update the input parameters with sane initial guesses</span></span>
+<span id="cb275-4"><a href="fitting-a-model-to-data.html#cb275-4"></a><span class="kw">read.gadget.parameters</span>(<span class="kw">sprintf</span>(<span class="st">&#39;%s/params.out&#39;</span>,gd)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb275-5"><a href="fitting-a-model-to-data.html#cb275-5"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;rec.[0-9]|init.[0-9]&#39;</span>,<span class="dv">1</span>,<span class="fl">0.001</span>,<span class="dv">1000</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span></span>
+<span id="cb275-6"><a href="fitting-a-model-to-data.html#cb275-6"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;recl&#39;</span>,<span class="dv">12</span>,<span class="dv">4</span>,<span class="dv">20</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb275-7"><a href="fitting-a-model-to-data.html#cb275-7"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;rec.sd&#39;</span>,<span class="dv">5</span>, <span class="dv">4</span>, <span class="dv">20</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb275-8"><a href="fitting-a-model-to-data.html#cb275-8"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;Linf&#39;</span>,<span class="dv">160</span>, <span class="dv">100</span>, <span class="dv">200</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb275-9"><a href="fitting-a-model-to-data.html#cb275-9"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;k$&#39;</span>,<span class="dv">90</span>, <span class="dv">40</span>, <span class="dv">100</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb275-10"><a href="fitting-a-model-to-data.html#cb275-10"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;bbin&#39;</span>,<span class="dv">6</span>, <span class="fl">1e-08</span>, <span class="dv">100</span>, <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb275-11"><a href="fitting-a-model-to-data.html#cb275-11"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;alpha&#39;</span>, <span class="fl">0.5</span>,  <span class="fl">0.01</span>, <span class="dv">3</span>, <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb275-12"><a href="fitting-a-model-to-data.html#cb275-12"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;l50&#39;</span>,<span class="dv">50</span>,<span class="dv">10</span>,<span class="dv">100</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb275-13"><a href="fitting-a-model-to-data.html#cb275-13"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;walpha&#39;</span>,lw_pars[<span class="dv">1</span>], <span class="fl">1e-10</span>, <span class="dv">1</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb275-14"><a href="fitting-a-model-to-data.html#cb275-14"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;wbeta&#39;</span>,lw_pars[<span class="dv">2</span>], <span class="dv">2</span>, <span class="dv">4</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb275-15"><a href="fitting-a-model-to-data.html#cb275-15"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;M$&#39;</span>,<span class="fl">0.15</span>,<span class="fl">0.001</span>,<span class="dv">1</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb275-16"><a href="fitting-a-model-to-data.html#cb275-16"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;rec.scalar&#39;</span>,<span class="dv">400</span>,<span class="dv">1</span>,<span class="dv">500</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb275-17"><a href="fitting-a-model-to-data.html#cb275-17"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;init.scalar&#39;</span>,<span class="dv">200</span>,<span class="dv">1</span>,<span class="dv">300</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb275-18"><a href="fitting-a-model-to-data.html#cb275-18"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;mat2&#39;</span>,<span class="dv">60</span>,<span class="fl">0.75</span><span class="op">*</span><span class="dv">60</span>,<span class="fl">1.25</span><span class="op">*</span><span class="dv">60</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb275-19"><a href="fitting-a-model-to-data.html#cb275-19"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;mat1&#39;</span>,<span class="dv">70</span>,  <span class="dv">10</span>, <span class="dv">200</span>, <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb275-20"><a href="fitting-a-model-to-data.html#cb275-20"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;init.F&#39;</span>,<span class="fl">0.4</span>,<span class="fl">0.1</span>,<span class="dv">1</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb275-21"><a href="fitting-a-model-to-data.html#cb275-21"></a><span class="st">  </span><span class="kw">write.gadget.parameters</span>(.,<span class="dt">file=</span><span class="kw">sprintf</span>(<span class="st">&#39;%s/params.in&#39;</span>,gd))</span>
+<span id="cb275-22"><a href="fitting-a-model-to-data.html#cb275-22"></a></span>
+<span id="cb275-23"><a href="fitting-a-model-to-data.html#cb275-23"></a><span class="kw">read.gadget.parameters</span>(<span class="kw">sprintf</span>(<span class="st">&#39;%s/params.in&#39;</span>,gd))</span></code></pre></div>
 <pre><code>## [90m# A tibble: 81 x 5[39m
 ##    switch                     value    lower upper optimise
 ##  [90m*[39m [3m[90m&lt;chr&gt;[39m[23m                      [3m[90m&lt;dbl&gt;[39m[23m    [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m    [3m[90m&lt;dbl&gt;[39m[23m
@@ -1085,9 +1085,9 @@ Change the likelihood component function for age-length data to the appropriate 
 <p>To run an optimisation via <code>gadget_optimize</code> is simple, the user provides an input parameter file with starting values
 (below as <code>params.in = 'params.in'</code>), and providing a file name to which final parameter
 values should be written (below as <code>params.out = 'params.init'</code>).</p>
-<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="fitting-a-model-to-data.html#cb278-1"></a><span class="kw">timestamp</span>()</span>
-<span id="cb278-2"><a href="fitting-a-model-to-data.html#cb278-2"></a><span class="kw">gadget_optimize</span>(gd,<span class="dt">params.in =</span> <span class="st">&#39;params.in&#39;</span>, <span class="dt">params.out =</span> <span class="st">&#39;params.init&#39;</span>)</span>
-<span id="cb278-3"><a href="fitting-a-model-to-data.html#cb278-3"></a><span class="kw">timestamp</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb277"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb277-1"><a href="fitting-a-model-to-data.html#cb277-1"></a><span class="kw">timestamp</span>()</span>
+<span id="cb277-2"><a href="fitting-a-model-to-data.html#cb277-2"></a><span class="kw">gadget_optimize</span>(gd,<span class="dt">params.in =</span> <span class="st">&#39;params.in&#39;</span>, <span class="dt">params.out =</span> <span class="st">&#39;params.init&#39;</span>)</span>
+<span id="cb277-3"><a href="fitting-a-model-to-data.html#cb277-3"></a><span class="kw">timestamp</span>()</span></code></pre></div>
 <p>Now that reasonable bounds and starting values have been set for an
 optimisation run, default settings can be used to run a short and simple
 Gadget optimisation. If you open the <code>params.init</code> file, comments can be found
@@ -1125,8 +1125,8 @@ so in some complex cases it may be necessary to rely mostly on simulating anneal
 whereas in other more well-defined cases it may be possible to rely mostly on the
 faster algorithms. At this point in development, speeding Gadget runs is mostly
 done by using computers with multiple cores and faster processors.</p>
-<div class="sourceCode" id="cb279"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb279-1"><a href="fitting-a-model-to-data.html#cb279-1"></a>optinfo &lt;-<span class="st"> </span><span class="kw">read.gadget.file</span>(<span class="st">&#39;data_provided&#39;</span>, <span class="st">&#39;optinfofile&#39;</span>)</span>
-<span id="cb279-2"><a href="fitting-a-model-to-data.html#cb279-2"></a>optinfo</span></code></pre></div>
+<div class="sourceCode" id="cb278"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb278-1"><a href="fitting-a-model-to-data.html#cb278-1"></a>optinfo &lt;-<span class="st"> </span><span class="kw">read.gadget.file</span>(<span class="st">&#39;data_provided&#39;</span>, <span class="st">&#39;optinfofile&#39;</span>)</span>
+<span id="cb278-2"><a href="fitting-a-model-to-data.html#cb278-2"></a>optinfo</span></code></pre></div>
 <pre><code>## ; Generated by Rgadget 0.5
 ## [simann]
 ## simanniter   200     ; number of simulated annealing iterations, normally set to 1000000 for ling
@@ -1156,9 +1156,9 @@ done by using computers with multiple cores and faster processors.</p>
 last default optimisation values left off (in the ‘params.init’ file).
 The ‘params.opt’ file will therefore be the result of a longer and more
 well-defined search as described by the ‘optinfofile’.</p>
-<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="fitting-a-model-to-data.html#cb281-1"></a><span class="kw">timestamp</span>()</span>
-<span id="cb281-2"><a href="fitting-a-model-to-data.html#cb281-2"></a><span class="kw">gadget_optimize</span>(gd,<span class="dt">params.in =</span> <span class="st">&#39;params.in&#39;</span>, <span class="dt">params.out =</span> <span class="st">&#39;params.init&#39;</span>, <span class="dt">control =</span> optinfo)</span>
-<span id="cb281-3"><a href="fitting-a-model-to-data.html#cb281-3"></a><span class="kw">timestamp</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb280"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb280-1"><a href="fitting-a-model-to-data.html#cb280-1"></a><span class="kw">timestamp</span>()</span>
+<span id="cb280-2"><a href="fitting-a-model-to-data.html#cb280-2"></a><span class="kw">gadget_optimize</span>(gd,<span class="dt">params.in =</span> <span class="st">&#39;params.in&#39;</span>, <span class="dt">params.out =</span> <span class="st">&#39;params.init&#39;</span>, <span class="dt">control =</span> optinfo)</span>
+<span id="cb280-3"><a href="fitting-a-model-to-data.html#cb280-3"></a><span class="kw">timestamp</span>()</span></code></pre></div>
 <div id="exercise-5" class="section level4">
 <h4><span class="header-section-number">7.5.0.1</span> Exercise</h4>
 <ul>
@@ -1222,21 +1222,21 @@ is achieved in step 2: likelihood components that should behave similarly, such
 as survey indices representing similar age ranges, are weighted and optimized
 together.</p>
 <p>The <code>gadget.iterative</code> function implements the iterative reweighting heuristic and is invoked in the following manner:</p>
-<div class="sourceCode" id="cb282"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb282-1"><a href="fitting-a-model-to-data.html#cb282-1"></a><span class="co">## In its current version, gadget.iterative needs to be run from within the</span></span>
-<span id="cb282-2"><a href="fitting-a-model-to-data.html#cb282-2"></a><span class="co">## directory that contains the Gadget model</span></span>
-<span id="cb282-3"><a href="fitting-a-model-to-data.html#cb282-3"></a>old &lt;-<span class="st"> </span><span class="kw">getwd</span>()</span>
-<span id="cb282-4"><a href="fitting-a-model-to-data.html#cb282-4"></a><span class="kw">file.copy</span>(<span class="kw">sprintf</span>(<span class="st">&#39;%s/optinfofile&#39;</span>,<span class="st">&#39;data_provided&#39;</span>),gd)</span></code></pre></div>
+<div class="sourceCode" id="cb281"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb281-1"><a href="fitting-a-model-to-data.html#cb281-1"></a><span class="co">## In its current version, gadget.iterative needs to be run from within the</span></span>
+<span id="cb281-2"><a href="fitting-a-model-to-data.html#cb281-2"></a><span class="co">## directory that contains the Gadget model</span></span>
+<span id="cb281-3"><a href="fitting-a-model-to-data.html#cb281-3"></a>old &lt;-<span class="st"> </span><span class="kw">getwd</span>()</span>
+<span id="cb281-4"><a href="fitting-a-model-to-data.html#cb281-4"></a><span class="kw">file.copy</span>(<span class="kw">sprintf</span>(<span class="st">&#39;%s/optinfofile&#39;</span>,<span class="st">&#39;data_provided&#39;</span>),gd)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
-<div class="sourceCode" id="cb284"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb284-1"><a href="fitting-a-model-to-data.html#cb284-1"></a><span class="kw">setwd</span>(gd)</span>
-<span id="cb284-2"><a href="fitting-a-model-to-data.html#cb284-2"></a></span>
-<span id="cb284-3"><a href="fitting-a-model-to-data.html#cb284-3"></a><span class="co">## run gadget iterative</span></span>
-<span id="cb284-4"><a href="fitting-a-model-to-data.html#cb284-4"></a><span class="co">## </span><span class="al">WARNING</span><span class="co">: Each time gadget.iterative runs with the given optinfofile,</span></span>
-<span id="cb284-5"><a href="fitting-a-model-to-data.html#cb284-5"></a><span class="co">## it takes 11 mins to run on a reasonably fast computer with 2 cores.</span></span>
-<span id="cb284-6"><a href="fitting-a-model-to-data.html#cb284-6"></a><span class="kw">timestamp</span>() </span></code></pre></div>
-<pre><code>## ##------ Tue Nov 17 15:27:59 2020 ------##</code></pre>
-<div class="sourceCode" id="cb286"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb286-1"><a href="fitting-a-model-to-data.html#cb286-1"></a>run &lt;-<span class="st"> </span><span class="kw">gadget.iterative</span>()</span>
-<span id="cb286-2"><a href="fitting-a-model-to-data.html#cb286-2"></a><span class="kw">timestamp</span>()</span></code></pre></div>
-<pre><code>## ##------ Tue Nov 17 15:32:00 2020 ------##</code></pre>
+<div class="sourceCode" id="cb283"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb283-1"><a href="fitting-a-model-to-data.html#cb283-1"></a><span class="kw">setwd</span>(gd)</span>
+<span id="cb283-2"><a href="fitting-a-model-to-data.html#cb283-2"></a></span>
+<span id="cb283-3"><a href="fitting-a-model-to-data.html#cb283-3"></a><span class="co">## run gadget iterative</span></span>
+<span id="cb283-4"><a href="fitting-a-model-to-data.html#cb283-4"></a><span class="co">## </span><span class="al">WARNING</span><span class="co">: Each time gadget.iterative runs with the given optinfofile,</span></span>
+<span id="cb283-5"><a href="fitting-a-model-to-data.html#cb283-5"></a><span class="co">## it takes 11 mins to run on a reasonably fast computer with 2 cores.</span></span>
+<span id="cb283-6"><a href="fitting-a-model-to-data.html#cb283-6"></a><span class="kw">timestamp</span>() </span></code></pre></div>
+<pre><code>## ##------ Tue Nov 17 16:59:46 2020 ------##</code></pre>
+<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb285-1"><a href="fitting-a-model-to-data.html#cb285-1"></a>run &lt;-<span class="st"> </span><span class="kw">gadget.iterative</span>()</span>
+<span id="cb285-2"><a href="fitting-a-model-to-data.html#cb285-2"></a><span class="kw">timestamp</span>()</span></code></pre></div>
+<pre><code>## ##------ Tue Nov 17 17:03:07 2020 ------##</code></pre>
 <p>This will start an iterative run that will estimate the weights for all likelihood
 components, and run a final optimisation run with the resulting likelihood weights.
 Penalising likelihood components, such as <code>boundlikelihood</code> and <code>understocking</code>, are
@@ -1268,27 +1268,27 @@ Alternatively, if both sets of results should be kept, then the ‘WGTS’ folde
 should be renamed by changing the default argument <code>wgts = 'WGTS'</code>. This is
 especially important when visualizing model results in the next step using
 <code>gadget.fit</code>.</p>
-<div class="sourceCode" id="cb288"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb288-1"><a href="fitting-a-model-to-data.html#cb288-1"></a>run &lt;-<span class="st"> </span><span class="kw">gadget.iterative</span>(<span class="dt">grouping =</span> <span class="kw">list</span>(<span class="dt">sind1=</span><span class="kw">c</span>(<span class="st">&#39;si.len20&#39;</span>,<span class="st">&#39;si.len52&#39;</span>,<span class="st">&#39;si.len60&#39;</span>),</span>
-<span id="cb288-2"><a href="fitting-a-model-to-data.html#cb288-2"></a>                                        <span class="dt">sind2=</span><span class="kw">c</span>(<span class="st">&#39;si.len72&#39;</span>,<span class="st">&#39;si.len80&#39;</span>,<span class="st">&#39;si.len92&#39;</span>,</span>
-<span id="cb288-3"><a href="fitting-a-model-to-data.html#cb288-3"></a>                                                <span class="st">&#39;si.len100&#39;</span>),</span>
-<span id="cb288-4"><a href="fitting-a-model-to-data.html#cb288-4"></a>                                        <span class="dt">comm=</span><span class="kw">c</span>(<span class="st">&#39;ldist.gil&#39;</span>,<span class="st">&#39;ldist.bmt&#39;</span>,</span>
-<span id="cb288-5"><a href="fitting-a-model-to-data.html#cb288-5"></a>                                               <span class="st">&#39;aldist.gil&#39;</span>,<span class="st">&#39;aldist.bmt&#39;</span>)),</span>
-<span id="cb288-6"><a href="fitting-a-model-to-data.html#cb288-6"></a>                        <span class="dt">wgts =</span> <span class="st">&#39;WGTS2&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb287-1"><a href="fitting-a-model-to-data.html#cb287-1"></a>run &lt;-<span class="st"> </span><span class="kw">gadget.iterative</span>(<span class="dt">grouping =</span> <span class="kw">list</span>(<span class="dt">sind1=</span><span class="kw">c</span>(<span class="st">&#39;si.len20&#39;</span>,<span class="st">&#39;si.len52&#39;</span>,<span class="st">&#39;si.len60&#39;</span>),</span>
+<span id="cb287-2"><a href="fitting-a-model-to-data.html#cb287-2"></a>                                        <span class="dt">sind2=</span><span class="kw">c</span>(<span class="st">&#39;si.len72&#39;</span>,<span class="st">&#39;si.len80&#39;</span>,<span class="st">&#39;si.len92&#39;</span>,</span>
+<span id="cb287-3"><a href="fitting-a-model-to-data.html#cb287-3"></a>                                                <span class="st">&#39;si.len100&#39;</span>),</span>
+<span id="cb287-4"><a href="fitting-a-model-to-data.html#cb287-4"></a>                                        <span class="dt">comm=</span><span class="kw">c</span>(<span class="st">&#39;ldist.gil&#39;</span>,<span class="st">&#39;ldist.bmt&#39;</span>,</span>
+<span id="cb287-5"><a href="fitting-a-model-to-data.html#cb287-5"></a>                                               <span class="st">&#39;aldist.gil&#39;</span>,<span class="st">&#39;aldist.bmt&#39;</span>)),</span>
+<span id="cb287-6"><a href="fitting-a-model-to-data.html#cb287-6"></a>                        <span class="dt">wgts =</span> <span class="st">&#39;WGTS2&#39;</span>)</span></code></pre></div>
 <p>Note that if a likelihood component is not present in the defined
 grouping list it is assumed that the component is treated individually.
 Sometimes this is not enough to prevent overfitting and therefore the
 user can define a maximum weight of sorts by defining the minimum CV
 for survey indices used for weight assignment. This is done using the
 <code>cv.floor</code> argument:</p>
-<div class="sourceCode" id="cb289"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb289-1"><a href="fitting-a-model-to-data.html#cb289-1"></a>run &lt;-<span class="st"> </span><span class="kw">gadget.iterative</span>(<span class="dt">cv.floor =</span> <span class="fl">0.2</span>,</span>
-<span id="cb289-2"><a href="fitting-a-model-to-data.html#cb289-2"></a>                        <span class="dt">wgts =</span> <span class="st">&#39;WGTS3&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb288"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb288-1"><a href="fitting-a-model-to-data.html#cb288-1"></a>run &lt;-<span class="st"> </span><span class="kw">gadget.iterative</span>(<span class="dt">cv.floor =</span> <span class="fl">0.2</span>,</span>
+<span id="cb288-2"><a href="fitting-a-model-to-data.html#cb288-2"></a>                        <span class="dt">wgts =</span> <span class="st">&#39;WGTS3&#39;</span>)</span></code></pre></div>
 <p>The <code>cv.floor</code> argument is often used after the final optimisation
 run has crashed so it is convenient to be able to pick up the “thread”
 where the run crashed and resume the final optimisation. The <code>resume.final</code>
 switch allows for this and essentially only runs the last optimisation, thereby
 assuming that the preceding steps have been completed:</p>
-<div class="sourceCode" id="cb290"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb290-1"><a href="fitting-a-model-to-data.html#cb290-1"></a>run &lt;-<span class="st"> </span><span class="kw">gadget.iterative</span>(<span class="dt">resume.final =</span> <span class="ot">TRUE</span>, <span class="dt">cv.floor =</span> <span class="fl">0.2</span>,</span>
-<span id="cb290-2"><a href="fitting-a-model-to-data.html#cb290-2"></a>                        <span class="dt">wgts =</span> <span class="st">&#39;WGTS3&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb289"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb289-1"><a href="fitting-a-model-to-data.html#cb289-1"></a>run &lt;-<span class="st"> </span><span class="kw">gadget.iterative</span>(<span class="dt">resume.final =</span> <span class="ot">TRUE</span>, <span class="dt">cv.floor =</span> <span class="fl">0.2</span>,</span>
+<span id="cb289-2"><a href="fitting-a-model-to-data.html#cb289-2"></a>                        <span class="dt">wgts =</span> <span class="st">&#39;WGTS3&#39;</span>)</span></code></pre></div>
 <p>Related to <code>resume.final</code> there are the <code>run.final</code> and <code>run.serial</code> arguments
 that instruct the function to whether to run the final optimisation from the
 beginning and whether all optimisations should be run on a single core respectively.</p>
@@ -1300,14 +1300,14 @@ its grouping. <code>gadget.iterative</code> allows you to have multiple <code>WG
 same model directory by setting the <code>wgts</code> argument. In addition the user can
 explicitly define (or remove) which component are to be used in the optimisation
 using a combination of the <code>comp</code> and <code>inverse</code> arguments:</p>
-<div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb291-1"><a href="fitting-a-model-to-data.html#cb291-1"></a><span class="co">## only want to fit to ldist.gil, all others discarded</span></span>
-<span id="cb291-2"><a href="fitting-a-model-to-data.html#cb291-2"></a>run &lt;-<span class="st"> </span><span class="kw">gadget.iterative</span>(<span class="dt">comp =</span> <span class="st">&#39;ldist.gil&#39;</span>,</span>
-<span id="cb291-3"><a href="fitting-a-model-to-data.html#cb291-3"></a>                        <span class="dt">wgts =</span> <span class="st">&#39;WGTS3&#39;</span>)</span>
-<span id="cb291-4"><a href="fitting-a-model-to-data.html#cb291-4"></a></span>
-<span id="cb291-5"><a href="fitting-a-model-to-data.html#cb291-5"></a><span class="co">## remove ldist.gil, all others kept</span></span>
-<span id="cb291-6"><a href="fitting-a-model-to-data.html#cb291-6"></a>run &lt;-<span class="st"> </span><span class="kw">gadget.iterative</span>(<span class="dt">comp =</span> <span class="st">&#39;ldist.gil&#39;</span>, </span>
-<span id="cb291-7"><a href="fitting-a-model-to-data.html#cb291-7"></a>                        <span class="dt">inverse =</span> <span class="ot">TRUE</span>,</span>
-<span id="cb291-8"><a href="fitting-a-model-to-data.html#cb291-8"></a>                        <span class="dt">wgts =</span> <span class="st">&#39;WGTS3&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb290"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb290-1"><a href="fitting-a-model-to-data.html#cb290-1"></a><span class="co">## only want to fit to ldist.gil, all others discarded</span></span>
+<span id="cb290-2"><a href="fitting-a-model-to-data.html#cb290-2"></a>run &lt;-<span class="st"> </span><span class="kw">gadget.iterative</span>(<span class="dt">comp =</span> <span class="st">&#39;ldist.gil&#39;</span>,</span>
+<span id="cb290-3"><a href="fitting-a-model-to-data.html#cb290-3"></a>                        <span class="dt">wgts =</span> <span class="st">&#39;WGTS3&#39;</span>)</span>
+<span id="cb290-4"><a href="fitting-a-model-to-data.html#cb290-4"></a></span>
+<span id="cb290-5"><a href="fitting-a-model-to-data.html#cb290-5"></a><span class="co">## remove ldist.gil, all others kept</span></span>
+<span id="cb290-6"><a href="fitting-a-model-to-data.html#cb290-6"></a>run &lt;-<span class="st"> </span><span class="kw">gadget.iterative</span>(<span class="dt">comp =</span> <span class="st">&#39;ldist.gil&#39;</span>, </span>
+<span id="cb290-7"><a href="fitting-a-model-to-data.html#cb290-7"></a>                        <span class="dt">inverse =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb290-8"><a href="fitting-a-model-to-data.html#cb290-8"></a>                        <span class="dt">wgts =</span> <span class="st">&#39;WGTS3&#39;</span>)</span></code></pre></div>
 </div>
 <div id="visualize-gadget-statistical-model-fit" class="section level2">
 <h2><span class="header-section-number">7.7</span> Visualize Gadget statistical model fit</h2>
@@ -1318,28 +1318,28 @@ that matches <code>gadget.reiterative</code>: the <code>wgts = 'WGTS'</code> arg
 by default gadget.fit will load the reiterative results stored under ‘WGTS’,
 but this can be changed. Here we load results from the first run of
 <code>gadget.iterative</code> where no grouping was implemented.</p>
-<div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb292-1"><a href="fitting-a-model-to-data.html#cb292-1"></a><span class="kw">setwd</span>(gd)  <span class="co"># Make sure we are in gd first</span></span>
-<span id="cb292-2"><a href="fitting-a-model-to-data.html#cb292-2"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb291"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb291-1"><a href="fitting-a-model-to-data.html#cb291-1"></a><span class="kw">setwd</span>(gd)  <span class="co"># Make sure we are in gd first</span></span>
+<span id="cb291-2"><a href="fitting-a-model-to-data.html#cb291-2"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>()</span></code></pre></div>
 <pre><code>## [1] &quot;Reading input data&quot;
 ## [1] &quot;Running Gadget&quot;
 ## [1] &quot;Reading output files&quot;
 ## [1] &quot;Gathering results&quot;
 ## [1] &quot;Merging input and output&quot;</code></pre>
-<div class="sourceCode" id="cb294"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb294-1"><a href="fitting-a-model-to-data.html#cb294-1"></a><span class="kw">theme_set</span>(<span class="kw">theme_light</span>()) <span class="co">## set the plot theme (optional)</span></span>
-<span id="cb294-2"><a href="fitting-a-model-to-data.html#cb294-2"></a></span>
-<span id="cb294-3"><a href="fitting-a-model-to-data.html#cb294-3"></a><span class="kw">library</span>(patchwork)  <span class="co">## optional packages </span></span>
-<span id="cb294-4"><a href="fitting-a-model-to-data.html#cb294-4"></a>scale_fill_crayola &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">n =</span> <span class="dv">100</span>, ...) {</span>
-<span id="cb294-5"><a href="fitting-a-model-to-data.html#cb294-5"></a>  </span>
-<span id="cb294-6"><a href="fitting-a-model-to-data.html#cb294-6"></a>  <span class="co"># taken from RColorBrewer::brewer.pal(12, &quot;Paired&quot;)</span></span>
-<span id="cb294-7"><a href="fitting-a-model-to-data.html#cb294-7"></a>  pal &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#A6CEE3&quot;</span>, <span class="st">&quot;#1F78B4&quot;</span>, <span class="st">&quot;#B2DF8A&quot;</span>, <span class="st">&quot;#33A02C&quot;</span>,</span>
-<span id="cb294-8"><a href="fitting-a-model-to-data.html#cb294-8"></a>           <span class="st">&quot;#FB9A99&quot;</span>, <span class="st">&quot;#E31A1C&quot;</span>, <span class="st">&quot;#FDBF6F&quot;</span>, <span class="st">&quot;#FF7F00&quot;</span>,</span>
-<span id="cb294-9"><a href="fitting-a-model-to-data.html#cb294-9"></a>           <span class="st">&quot;#CAB2D6&quot;</span>, <span class="st">&quot;#6A3D9A&quot;</span>, <span class="st">&quot;#FFFF99&quot;</span>, <span class="st">&quot;#B15928&quot;</span>)</span>
-<span id="cb294-10"><a href="fitting-a-model-to-data.html#cb294-10"></a>  pal &lt;-<span class="st"> </span><span class="kw">rep</span>(pal, n)</span>
-<span id="cb294-11"><a href="fitting-a-model-to-data.html#cb294-11"></a>  ggplot2<span class="op">::</span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> pal, ...)</span>
-<span id="cb294-12"><a href="fitting-a-model-to-data.html#cb294-12"></a>  </span>
-<span id="cb294-13"><a href="fitting-a-model-to-data.html#cb294-13"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb293"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb293-1"><a href="fitting-a-model-to-data.html#cb293-1"></a><span class="kw">theme_set</span>(<span class="kw">theme_light</span>()) <span class="co">## set the plot theme (optional)</span></span>
+<span id="cb293-2"><a href="fitting-a-model-to-data.html#cb293-2"></a></span>
+<span id="cb293-3"><a href="fitting-a-model-to-data.html#cb293-3"></a><span class="kw">library</span>(patchwork)  <span class="co">## optional packages </span></span>
+<span id="cb293-4"><a href="fitting-a-model-to-data.html#cb293-4"></a>scale_fill_crayola &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">n =</span> <span class="dv">100</span>, ...) {</span>
+<span id="cb293-5"><a href="fitting-a-model-to-data.html#cb293-5"></a>  </span>
+<span id="cb293-6"><a href="fitting-a-model-to-data.html#cb293-6"></a>  <span class="co"># taken from RColorBrewer::brewer.pal(12, &quot;Paired&quot;)</span></span>
+<span id="cb293-7"><a href="fitting-a-model-to-data.html#cb293-7"></a>  pal &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#A6CEE3&quot;</span>, <span class="st">&quot;#1F78B4&quot;</span>, <span class="st">&quot;#B2DF8A&quot;</span>, <span class="st">&quot;#33A02C&quot;</span>,</span>
+<span id="cb293-8"><a href="fitting-a-model-to-data.html#cb293-8"></a>           <span class="st">&quot;#FB9A99&quot;</span>, <span class="st">&quot;#E31A1C&quot;</span>, <span class="st">&quot;#FDBF6F&quot;</span>, <span class="st">&quot;#FF7F00&quot;</span>,</span>
+<span id="cb293-9"><a href="fitting-a-model-to-data.html#cb293-9"></a>           <span class="st">&quot;#CAB2D6&quot;</span>, <span class="st">&quot;#6A3D9A&quot;</span>, <span class="st">&quot;#FFFF99&quot;</span>, <span class="st">&quot;#B15928&quot;</span>)</span>
+<span id="cb293-10"><a href="fitting-a-model-to-data.html#cb293-10"></a>  pal &lt;-<span class="st"> </span><span class="kw">rep</span>(pal, n)</span>
+<span id="cb293-11"><a href="fitting-a-model-to-data.html#cb293-11"></a>  ggplot2<span class="op">::</span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> pal, ...)</span>
+<span id="cb293-12"><a href="fitting-a-model-to-data.html#cb293-12"></a>  </span>
+<span id="cb293-13"><a href="fitting-a-model-to-data.html#cb293-13"></a>}</span></code></pre></div>
 <p>The <code>fit</code> object is essentially a list of data.frames that contain the likelihood data merged with the model output.</p>
-<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb295-1"><a href="fitting-a-model-to-data.html#cb295-1"></a>fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">names</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb294"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb294-1"><a href="fitting-a-model-to-data.html#cb294-1"></a>fit <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">names</span>()</span></code></pre></div>
 <pre><code>##  [1] &quot;sidat&quot;             &quot;resTable&quot;          &quot;nesTable&quot;         
 ##  [4] &quot;suitability&quot;       &quot;stock.recruitment&quot; &quot;res.by.year&quot;      
 ##  [7] &quot;stomachcontent&quot;    &quot;likelihoodsummary&quot; &quot;catchdist.fleets&quot; 
@@ -1347,7 +1347,7 @@ but this can be changed. Here we load results from the first run of
 ## [13] &quot;stock.std&quot;         &quot;stock.prey&quot;        &quot;fleet.info&quot;       
 ## [16] &quot;predator.prey&quot;     &quot;params&quot;            &quot;catchstatistics&quot;</code></pre>
 <p>and one can access those data.frames simply by calling their name:</p>
-<div class="sourceCode" id="cb297"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb297-1"><a href="fitting-a-model-to-data.html#cb297-1"></a>fit<span class="op">$</span>sidat</span></code></pre></div>
+<div class="sourceCode" id="cb296"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb296-1"><a href="fitting-a-model-to-data.html#cb296-1"></a>fit<span class="op">$</span>sidat</span></code></pre></div>
 <pre><code>## [90m# A tibble: 238 x 20[39m
 ##    name   year  step  area label number intercept slope   sse stocknames sitype
 ##    [3m[90m&lt;chr&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;chr&gt;[39m[23m  [3m[90m&lt;dbl&gt;[39m[23m     [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;chr&gt;[39m[23m      [3m[90m&lt;chr&gt;[39m[23m 
@@ -1366,59 +1366,59 @@ but this can be changed. Here we load results from the first run of
 ## [90m#   upper [3m[90m&lt;int&gt;[90m[23m, predict [3m[90m&lt;dbl&gt;[90m[23m[39m</code></pre>
 <p>For further information on what the relevant data.frames contain refer to the help page for <code>gadget.fit</code>.</p>
 <p>In addition a plot routine for the <code>fit</code> object is implement in Rgadget. The input to the <code>plot</code> function is simply the <code>gadget.fit</code> object, the data set one wants to plot and the type. The default plot is a survey index plot:</p>
-<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="fitting-a-model-to-data.html#cb299-1"></a><span class="kw">plot</span>(fit)</span></code></pre></div>
+<div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb298-1"><a href="fitting-a-model-to-data.html#cb298-1"></a><span class="kw">plot</span>(fit)</span></code></pre></div>
 <p><img src="day3_fitlingmodel_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
 <p>To produce a likelihood summary:</p>
-<div class="sourceCode" id="cb300"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb300-1"><a href="fitting-a-model-to-data.html#cb300-1"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;summary&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="fitting-a-model-to-data.html#cb299-1"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;summary&#39;</span>)</span></code></pre></div>
 <p><img src="day3_fitlingmodel_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
 <p>A weighted summary plot:</p>
-<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb301-1"><a href="fitting-a-model-to-data.html#cb301-1"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;summary&#39;</span>,<span class="dt">type =</span> <span class="st">&#39;weighted&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb300"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb300-1"><a href="fitting-a-model-to-data.html#cb300-1"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;summary&#39;</span>,<span class="dt">type =</span> <span class="st">&#39;weighted&#39;</span>)</span></code></pre></div>
 <p><img src="day3_fitlingmodel_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
 <p>and a pie chart of likelihood components:</p>
-<div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb302-1"><a href="fitting-a-model-to-data.html#cb302-1"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;summary&#39;</span>,<span class="dt">type=</span><span class="st">&#39;pie&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb301-1"><a href="fitting-a-model-to-data.html#cb301-1"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;summary&#39;</span>,<span class="dt">type=</span><span class="st">&#39;pie&#39;</span>)</span></code></pre></div>
 <p><img src="day3_fitlingmodel_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
 <p>To plot the fit to catch proportions (either length or age) you simply do:</p>
-<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb303-1"><a href="fitting-a-model-to-data.html#cb303-1"></a>tmp &lt;-<span class="st"> </span><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;catchdist.fleets&#39;</span>)</span>
-<span id="cb303-2"><a href="fitting-a-model-to-data.html#cb303-2"></a><span class="kw">names</span>(tmp)</span></code></pre></div>
+<div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb302-1"><a href="fitting-a-model-to-data.html#cb302-1"></a>tmp &lt;-<span class="st"> </span><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;catchdist.fleets&#39;</span>)</span>
+<span id="cb302-2"><a href="fitting-a-model-to-data.html#cb302-2"></a><span class="kw">names</span>(tmp)</span></code></pre></div>
 <pre><code>## [1] &quot;aldist.bmt&quot;  &quot;aldist.gil&quot;  &quot;aldist.lln&quot;  &quot;aldist.surv&quot; &quot;ldist.bmt&quot;  
 ## [6] &quot;ldist.gil&quot;   &quot;ldist.lln&quot;   &quot;ldist.surv&quot;</code></pre>
 <p>and then plot them one by one:</p>
-<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb305-1"><a href="fitting-a-model-to-data.html#cb305-1"></a>tmp<span class="op">$</span>aldist.surv</span></code></pre></div>
+<div class="sourceCode" id="cb304"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb304-1"><a href="fitting-a-model-to-data.html#cb304-1"></a>tmp<span class="op">$</span>aldist.surv</span></code></pre></div>
 <p><img src="day3_fitlingmodel_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
-<div class="sourceCode" id="cb306"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb306-1"><a href="fitting-a-model-to-data.html#cb306-1"></a>tmp<span class="op">$</span>ldist.surv</span></code></pre></div>
+<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb305-1"><a href="fitting-a-model-to-data.html#cb305-1"></a>tmp<span class="op">$</span>ldist.surv</span></code></pre></div>
 <p><img src="day3_fitlingmodel_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
 <p>One can also produce bubble plots</p>
-<div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb307-1"><a href="fitting-a-model-to-data.html#cb307-1"></a>bubbles &lt;-<span class="st"> </span><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;catchdist.fleets&#39;</span>,<span class="dt">type=</span><span class="st">&#39;bubble&#39;</span>)</span>
-<span id="cb307-2"><a href="fitting-a-model-to-data.html#cb307-2"></a><span class="kw">names</span>(bubbles)</span></code></pre></div>
+<div class="sourceCode" id="cb306"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb306-1"><a href="fitting-a-model-to-data.html#cb306-1"></a>bubbles &lt;-<span class="st"> </span><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;catchdist.fleets&#39;</span>,<span class="dt">type=</span><span class="st">&#39;bubble&#39;</span>)</span>
+<span id="cb306-2"><a href="fitting-a-model-to-data.html#cb306-2"></a><span class="kw">names</span>(bubbles)</span></code></pre></div>
 <pre><code>## [1] &quot;ldist&quot;  &quot;aldist&quot;</code></pre>
 <p>Age bubbles</p>
-<div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb309-1"><a href="fitting-a-model-to-data.html#cb309-1"></a>bubbles<span class="op">$</span>aldist</span></code></pre></div>
+<div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb308-1"><a href="fitting-a-model-to-data.html#cb308-1"></a>bubbles<span class="op">$</span>aldist</span></code></pre></div>
 <p><img src="day3_fitlingmodel_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
 <p>Length bubbles</p>
-<div class="sourceCode" id="cb310"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb310-1"><a href="fitting-a-model-to-data.html#cb310-1"></a>bubbles<span class="op">$</span>ldist</span></code></pre></div>
+<div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb309-1"><a href="fitting-a-model-to-data.html#cb309-1"></a>bubbles<span class="op">$</span>ldist</span></code></pre></div>
 <p><img src="day3_fitlingmodel_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
 <p>One can also illustrate the fit to growth in the model:</p>
-<div class="sourceCode" id="cb311"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb311-1"><a href="fitting-a-model-to-data.html#cb311-1"></a>grplot &lt;-<span class="st"> </span><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;catchdist.fleets&#39;</span>,<span class="dt">type=</span><span class="st">&#39;growth&#39;</span>)</span>
-<span id="cb311-2"><a href="fitting-a-model-to-data.html#cb311-2"></a><span class="kw">names</span>(grplot)</span></code></pre></div>
+<div class="sourceCode" id="cb310"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb310-1"><a href="fitting-a-model-to-data.html#cb310-1"></a>grplot &lt;-<span class="st"> </span><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;catchdist.fleets&#39;</span>,<span class="dt">type=</span><span class="st">&#39;growth&#39;</span>)</span>
+<span id="cb310-2"><a href="fitting-a-model-to-data.html#cb310-2"></a><span class="kw">names</span>(grplot)</span></code></pre></div>
 <pre><code>## [1] &quot;aldist.bmt&quot;  &quot;aldist.gil&quot;  &quot;aldist.lln&quot;  &quot;aldist.surv&quot;</code></pre>
 <p>Illstrate the fit to the autumn survey</p>
-<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb313-1"><a href="fitting-a-model-to-data.html#cb313-1"></a>grplot<span class="op">$</span>aldist.surv</span></code></pre></div>
+<div class="sourceCode" id="cb312"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb312-1"><a href="fitting-a-model-to-data.html#cb312-1"></a>grplot<span class="op">$</span>aldist.surv</span></code></pre></div>
 <p><img src="day3_fitlingmodel_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
 <p>And the fit to maturity data:</p>
-<div class="sourceCode" id="cb314"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb314-1"><a href="fitting-a-model-to-data.html#cb314-1"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;stockdist&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb313-1"><a href="fitting-a-model-to-data.html#cb313-1"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;stockdist&#39;</span>)</span></code></pre></div>
 <pre><code>## $matp.surv</code></pre>
 <p><img src="day3_fitlingmodel_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
 <p>And selection by year and step</p>
-<div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb316-1"><a href="fitting-a-model-to-data.html#cb316-1"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&quot;suitability&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb315-1"><a href="fitting-a-model-to-data.html#cb315-1"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&quot;suitability&quot;</span>)</span></code></pre></div>
 <p><img src="day3_fitlingmodel_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
 <p>Age age compostion</p>
-<div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb317-1"><a href="fitting-a-model-to-data.html#cb317-1"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;stock.std&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">scale_fill_crayola</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb316-1"><a href="fitting-a-model-to-data.html#cb316-1"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;stock.std&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">scale_fill_crayola</span>()</span></code></pre></div>
 <p><img src="day3_fitlingmodel_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
 <p>And the standard ICES plots</p>
-<div class="sourceCode" id="cb318"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb318-1"><a href="fitting-a-model-to-data.html#cb318-1"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;total&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&#39;none&#39;</span>) <span class="op">+</span></span>
-<span id="cb318-2"><a href="fitting-a-model-to-data.html#cb318-2"></a><span class="st">  </span><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;F&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&#39;none&#39;</span>) <span class="op">+</span></span>
-<span id="cb318-3"><a href="fitting-a-model-to-data.html#cb318-3"></a><span class="st">  </span><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;catch&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&#39;none&#39;</span>) <span class="op">+</span></span>
-<span id="cb318-4"><a href="fitting-a-model-to-data.html#cb318-4"></a><span class="st">  </span><span class="kw">plot</span>(fit, <span class="dt">data=</span><span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;rec&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb317-1"><a href="fitting-a-model-to-data.html#cb317-1"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;total&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&#39;none&#39;</span>) <span class="op">+</span></span>
+<span id="cb317-2"><a href="fitting-a-model-to-data.html#cb317-2"></a><span class="st">  </span><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;F&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&#39;none&#39;</span>) <span class="op">+</span></span>
+<span id="cb317-3"><a href="fitting-a-model-to-data.html#cb317-3"></a><span class="st">  </span><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;catch&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&#39;none&#39;</span>) <span class="op">+</span></span>
+<span id="cb317-4"><a href="fitting-a-model-to-data.html#cb317-4"></a><span class="st">  </span><span class="kw">plot</span>(fit, <span class="dt">data=</span><span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;rec&#39;</span>)</span></code></pre></div>
 <p><img src="day3_fitlingmodel_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
 <div id="exercise-6" class="section level4">
 <h4><span class="header-section-number">7.7.0.1</span> Exercise</h4>

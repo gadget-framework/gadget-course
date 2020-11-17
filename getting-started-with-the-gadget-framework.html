@@ -318,8 +318,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="getting-started-with-the-gadget-framework" class="section level1">
 <h1><span class="header-section-number">4</span> Getting started with the Gadget framework</h1>
 <p>Install devtools, Rgadget and mfdb. Rgadget is under constant construction so please remember to update it regularly (e.g., monthly).</p>
-<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="getting-started-with-the-gadget-framework.html#cb98-1"></a><span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">&#39;devtools&#39;</span>,<span class="st">&#39;mfdb&#39;</span>))</span>
-<span id="cb98-2"><a href="getting-started-with-the-gadget-framework.html#cb98-2"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&#39;hafro/rgadget&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="getting-started-with-the-gadget-framework.html#cb97-1"></a><span class="kw">install.packages</span>(<span class="kw">c</span>(<span class="st">&#39;devtools&#39;</span>,<span class="st">&#39;mfdb&#39;</span>))</span>
+<span id="cb97-2"><a href="getting-started-with-the-gadget-framework.html#cb97-2"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&#39;hafro/rgadget&#39;</span>)</span></code></pre></div>
 <p>Note that you can update all packages, both from github and CRAN using the <code>update_packages</code> command from <code>devtools</code></p>
 <div id="what-is-rgadget" class="section level2">
 <h2><span class="header-section-number">4.1</span> What is Rgadget?</h2>
@@ -383,8 +383,8 @@ model fit, and diagnostics are beyond the scope of this course.</p>
 <div id="using-rgadget" class="section level2">
 <h2><span class="header-section-number">4.2</span> Using Rgadget</h2>
 <p>To use the Rgadget functions you will need to load it into your R workspace in the usual manner:</p>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="getting-started-with-the-gadget-framework.html#cb99-1"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb99-2"><a href="getting-started-with-the-gadget-framework.html#cb99-2"></a><span class="kw">library</span>(Rgadget)</span></code></pre></div>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="getting-started-with-the-gadget-framework.html#cb98-1"></a><span class="kw">library</span>(tidyverse)</span>
+<span id="cb98-2"><a href="getting-started-with-the-gadget-framework.html#cb98-2"></a><span class="kw">library</span>(Rgadget)</span></code></pre></div>
 <p>For convenience Rgadget will also load the tidyverse package as it is used extensively
 when interacting with Gadget and viewing the output. As noted above Rgadget has a number
 of functions and we will introduce the main functions in Rgadget as we go through
@@ -396,12 +396,12 @@ described in the <a href="https://hafro.github.io/gadget/docs/userguide">Gadget 
 Gadget file is structured by a list of named components and within those components there
 are named settings. As an example of this you can create your own custom Gadget file by
 specifying the components as named lists embedded within a named list:</p>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="getting-started-with-the-gadget-framework.html#cb100-1"></a>dummy &lt;-<span class="st"> </span></span>
-<span id="cb100-2"><a href="getting-started-with-the-gadget-framework.html#cb100-2"></a><span class="st">  </span><span class="kw">gadgetfile</span>(<span class="st">&#39;test&#39;</span>,<span class="dt">file_type =</span> <span class="st">&#39;generic&#39;</span>, </span>
-<span id="cb100-3"><a href="getting-started-with-the-gadget-framework.html#cb100-3"></a>             <span class="dt">components =</span> <span class="kw">list</span>(<span class="dt">fruit=</span><span class="kw">list</span>(<span class="dt">apple=</span><span class="dv">1</span>,<span class="dt">orange=</span><span class="dv">5</span>),</span>
-<span id="cb100-4"><a href="getting-started-with-the-gadget-framework.html#cb100-4"></a>                               <span class="dt">vegetable=</span><span class="kw">list</span>(<span class="dt">cucumber=</span><span class="dv">1</span>)))</span>
-<span id="cb100-5"><a href="getting-started-with-the-gadget-framework.html#cb100-5"></a></span>
-<span id="cb100-6"><a href="getting-started-with-the-gadget-framework.html#cb100-6"></a>dummy</span></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="getting-started-with-the-gadget-framework.html#cb99-1"></a>dummy &lt;-<span class="st"> </span></span>
+<span id="cb99-2"><a href="getting-started-with-the-gadget-framework.html#cb99-2"></a><span class="st">  </span><span class="kw">gadgetfile</span>(<span class="st">&#39;test&#39;</span>,<span class="dt">file_type =</span> <span class="st">&#39;generic&#39;</span>, </span>
+<span id="cb99-3"><a href="getting-started-with-the-gadget-framework.html#cb99-3"></a>             <span class="dt">components =</span> <span class="kw">list</span>(<span class="dt">fruit=</span><span class="kw">list</span>(<span class="dt">apple=</span><span class="dv">1</span>,<span class="dt">orange=</span><span class="dv">5</span>),</span>
+<span id="cb99-4"><a href="getting-started-with-the-gadget-framework.html#cb99-4"></a>                               <span class="dt">vegetable=</span><span class="kw">list</span>(<span class="dt">cucumber=</span><span class="dv">1</span>)))</span>
+<span id="cb99-5"><a href="getting-started-with-the-gadget-framework.html#cb99-5"></a></span>
+<span id="cb99-6"><a href="getting-started-with-the-gadget-framework.html#cb99-6"></a>dummy</span></code></pre></div>
 <pre><code>## ; Generated by Rgadget 0.5
 ## [fruit]
 ## apple    1
@@ -414,14 +414,14 @@ will be able to directly see if the format is incorrect, by comparing it to the 
 described in the <a href="https://hafro.github.io/gadget/docs/userguide">userguide</a>, before
 writing it to file. If you need however to access individual components of you can of
 course do so by calling the name of the component directly:</p>
-<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="getting-started-with-the-gadget-framework.html#cb102-1"></a>dummy<span class="op">$</span>fruit</span></code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="getting-started-with-the-gadget-framework.html#cb101-1"></a>dummy<span class="op">$</span>fruit</span></code></pre></div>
 <pre><code>## $apple
 ## [1] 1
 ## 
 ## $orange
 ## [1] 5</code></pre>
 <p>and if you want to investigate the structure further you can call <code>str</code> on the object:</p>
-<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="getting-started-with-the-gadget-framework.html#cb104-1"></a><span class="kw">str</span>(dummy)</span></code></pre></div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="getting-started-with-the-gadget-framework.html#cb103-1"></a><span class="kw">str</span>(dummy)</span></code></pre></div>
 <pre><code>## List of 2
 ##  $ fruit    :List of 2
 ##   ..$ apple : num 1
@@ -567,7 +567,7 @@ currently allowed for by <code>gadgetfile</code> by calling <code>gadget_filetyp
 </tbody>
 </table>
 <p>The output can then subsequently be written to a file using <code>write.gadget.file</code>:</p>
-<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="getting-started-with-the-gadget-framework.html#cb106-1"></a><span class="kw">write.gadget.file</span>(<span class="dt">obj=</span>dummy,<span class="dt">path=</span><span class="st">&#39;somewhere_over_the_rainbow&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="getting-started-with-the-gadget-framework.html#cb105-1"></a><span class="kw">write.gadget.file</span>(<span class="dt">obj=</span>dummy,<span class="dt">path=</span><span class="st">&#39;somewhere_over_the_rainbow&#39;</span>)</span></code></pre></div>
 </div>
 <div id="creating-model-input-files" class="section level2">
 <h2><span class="header-section-number">4.3</span> Creating model input files</h2>
@@ -575,8 +575,8 @@ currently allowed for by <code>gadgetfile</code> by calling <code>gadget_filetyp
 which we will refer to as the “Simple model”. This is done by first deciding where
 to put the model and the associated files. Rgadget helps you by creating a convenience
 function <code>gadget.variant.dir</code> whichs set up a working directory for the Gadget model:</p>
-<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="getting-started-with-the-gadget-framework.html#cb107-1"></a>gd &lt;-<span class="st"> </span><span class="kw">gadget.variant.dir</span>(<span class="st">&#39;simple_model&#39;</span>)</span>
-<span id="cb107-2"><a href="getting-started-with-the-gadget-framework.html#cb107-2"></a>gd</span></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="getting-started-with-the-gadget-framework.html#cb106-1"></a>gd &lt;-<span class="st"> </span><span class="kw">gadget.variant.dir</span>(<span class="st">&#39;simple_model&#39;</span>)</span>
+<span id="cb106-2"><a href="getting-started-with-the-gadget-framework.html#cb106-2"></a>gd</span></code></pre></div>
 <pre><code>## [1] &quot;simple_model&quot;
 ## attr(,&quot;mainfile&quot;)
 ## [1] &quot;main&quot;
@@ -598,21 +598,21 @@ stage.</p>
 <p>Gadget is structured as a forward simulator, so in order for it to run we will first need
 to define the time period (‘year’), and number of subannual time steps (‘step’), for the
 projection. We do so by creating a data frame setting up the schedule for the simulation:</p>
-<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="getting-started-with-the-gadget-framework.html#cb109-1"></a>schedule &lt;-<span class="st"> </span></span>
-<span id="cb109-2"><a href="getting-started-with-the-gadget-framework.html#cb109-2"></a><span class="st">  </span><span class="kw">expand.grid</span>(<span class="dt">year =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">step =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb109-3"><a href="getting-started-with-the-gadget-framework.html#cb109-3"></a><span class="st">  </span><span class="kw">arrange</span>(year)</span></code></pre></div>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="getting-started-with-the-gadget-framework.html#cb108-1"></a>schedule &lt;-<span class="st"> </span></span>
+<span id="cb108-2"><a href="getting-started-with-the-gadget-framework.html#cb108-2"></a><span class="st">  </span><span class="kw">expand.grid</span>(<span class="dt">year =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dt">step =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb108-3"><a href="getting-started-with-the-gadget-framework.html#cb108-3"></a><span class="st">  </span><span class="kw">arrange</span>(year)</span></code></pre></div>
 <p>and create a new <code>time</code> file using <code>gadgetfile</code> by explicitly setting the file type as
 ‘time’:</p>
-<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="getting-started-with-the-gadget-framework.html#cb110-1"></a><span class="co">## think about writing a special function for this using the schedule data.frame</span></span>
-<span id="cb110-2"><a href="getting-started-with-the-gadget-framework.html#cb110-2"></a></span>
-<span id="cb110-3"><a href="getting-started-with-the-gadget-framework.html#cb110-3"></a><span class="kw">gadgetfile</span>(<span class="st">&#39;Modelfiles/time&#39;</span>,</span>
-<span id="cb110-4"><a href="getting-started-with-the-gadget-framework.html#cb110-4"></a>           <span class="dt">file_type =</span> <span class="st">&#39;time&#39;</span>,</span>
-<span id="cb110-5"><a href="getting-started-with-the-gadget-framework.html#cb110-5"></a>           <span class="dt">components =</span> <span class="kw">list</span>(<span class="kw">list</span>(<span class="dt">firstyear =</span> <span class="kw">min</span>(schedule<span class="op">$</span>year),</span>
-<span id="cb110-6"><a href="getting-started-with-the-gadget-framework.html#cb110-6"></a>                                  <span class="dt">firststep=</span><span class="dv">1</span>,</span>
-<span id="cb110-7"><a href="getting-started-with-the-gadget-framework.html#cb110-7"></a>                                  <span class="dt">lastyear=</span><span class="kw">max</span>(schedule<span class="op">$</span>year),</span>
-<span id="cb110-8"><a href="getting-started-with-the-gadget-framework.html#cb110-8"></a>                                  <span class="dt">laststep=</span><span class="dv">4</span>,</span>
-<span id="cb110-9"><a href="getting-started-with-the-gadget-framework.html#cb110-9"></a>                                  <span class="dt">notimesteps=</span><span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>)))) <span class="op">%&gt;%</span><span class="st"> </span><span class="co">## number of time steps and step length in months</span></span>
-<span id="cb110-10"><a href="getting-started-with-the-gadget-framework.html#cb110-10"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span></code></pre></div>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="getting-started-with-the-gadget-framework.html#cb109-1"></a><span class="co">## think about writing a special function for this using the schedule data.frame</span></span>
+<span id="cb109-2"><a href="getting-started-with-the-gadget-framework.html#cb109-2"></a></span>
+<span id="cb109-3"><a href="getting-started-with-the-gadget-framework.html#cb109-3"></a><span class="kw">gadgetfile</span>(<span class="st">&#39;Modelfiles/time&#39;</span>,</span>
+<span id="cb109-4"><a href="getting-started-with-the-gadget-framework.html#cb109-4"></a>           <span class="dt">file_type =</span> <span class="st">&#39;time&#39;</span>,</span>
+<span id="cb109-5"><a href="getting-started-with-the-gadget-framework.html#cb109-5"></a>           <span class="dt">components =</span> <span class="kw">list</span>(<span class="kw">list</span>(<span class="dt">firstyear =</span> <span class="kw">min</span>(schedule<span class="op">$</span>year),</span>
+<span id="cb109-6"><a href="getting-started-with-the-gadget-framework.html#cb109-6"></a>                                  <span class="dt">firststep=</span><span class="dv">1</span>,</span>
+<span id="cb109-7"><a href="getting-started-with-the-gadget-framework.html#cb109-7"></a>                                  <span class="dt">lastyear=</span><span class="kw">max</span>(schedule<span class="op">$</span>year),</span>
+<span id="cb109-8"><a href="getting-started-with-the-gadget-framework.html#cb109-8"></a>                                  <span class="dt">laststep=</span><span class="dv">4</span>,</span>
+<span id="cb109-9"><a href="getting-started-with-the-gadget-framework.html#cb109-9"></a>                                  <span class="dt">notimesteps=</span><span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>)))) <span class="op">%&gt;%</span><span class="st"> </span><span class="co">## number of time steps and step length in months</span></span>
+<span id="cb109-10"><a href="getting-started-with-the-gadget-framework.html#cb109-10"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span></code></pre></div>
 <p>Note that arbitrary years and timesteps can be defined for the model, as appropriate for
 the data and the species simulated. One can for instance start the simulation in 1981 to 2019, with four timesteps with a timestep length of 1,2,4 and 5 months. Typically, though, Gadget models tend to be set up in a set number of year with quarterly timesteps.</p>
 </div>
@@ -622,13 +622,13 @@ the data and the species simulated. One can for instance start the simulation in
 Various processes, such as fleet operations and migrations, in the model can then be
 explicitly defined by area. As for the time file the areas are defined in the area file
 which you can create using <code>gadgetfile</code>:</p>
-<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="getting-started-with-the-gadget-framework.html#cb111-1"></a><span class="kw">gadgetfile</span>(<span class="st">&#39;Modelfiles/area&#39;</span>,</span>
-<span id="cb111-2"><a href="getting-started-with-the-gadget-framework.html#cb111-2"></a>           <span class="dt">file_type =</span> <span class="st">&#39;area&#39;</span>,</span>
-<span id="cb111-3"><a href="getting-started-with-the-gadget-framework.html#cb111-3"></a>           <span class="dt">components =</span> <span class="kw">list</span>(<span class="kw">list</span>(<span class="dt">areas =</span> <span class="dv">1</span>,</span>
-<span id="cb111-4"><a href="getting-started-with-the-gadget-framework.html#cb111-4"></a>                                  <span class="dt">size =</span> <span class="dv">1</span>,</span>
-<span id="cb111-5"><a href="getting-started-with-the-gadget-framework.html#cb111-5"></a>                                  <span class="dt">temperature =</span> schedule <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb111-6"><a href="getting-started-with-the-gadget-framework.html#cb111-6"></a><span class="st">                                    </span><span class="kw">mutate</span>(<span class="dt">area =</span> <span class="dv">1</span>, <span class="dt">temperature =</span> <span class="dv">5</span>)))) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb111-7"><a href="getting-started-with-the-gadget-framework.html#cb111-7"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span></code></pre></div>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="getting-started-with-the-gadget-framework.html#cb110-1"></a><span class="kw">gadgetfile</span>(<span class="st">&#39;Modelfiles/area&#39;</span>,</span>
+<span id="cb110-2"><a href="getting-started-with-the-gadget-framework.html#cb110-2"></a>           <span class="dt">file_type =</span> <span class="st">&#39;area&#39;</span>,</span>
+<span id="cb110-3"><a href="getting-started-with-the-gadget-framework.html#cb110-3"></a>           <span class="dt">components =</span> <span class="kw">list</span>(<span class="kw">list</span>(<span class="dt">areas =</span> <span class="dv">1</span>,</span>
+<span id="cb110-4"><a href="getting-started-with-the-gadget-framework.html#cb110-4"></a>                                  <span class="dt">size =</span> <span class="dv">1</span>,</span>
+<span id="cb110-5"><a href="getting-started-with-the-gadget-framework.html#cb110-5"></a>                                  <span class="dt">temperature =</span> schedule <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb110-6"><a href="getting-started-with-the-gadget-framework.html#cb110-6"></a><span class="st">                                    </span><span class="kw">mutate</span>(<span class="dt">area =</span> <span class="dv">1</span>, <span class="dt">temperature =</span> <span class="dv">5</span>)))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb110-7"><a href="getting-started-with-the-gadget-framework.html#cb110-7"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span></code></pre></div>
 <p>which will generate a file starting with:</p>
 <pre><code>## ; Generated by Rgadget 0.5
 ## areas    1
@@ -648,8 +648,8 @@ simulation to run.</p>
 <div id="stockfiles" class="section level3">
 <h3><span class="header-section-number">4.3.3</span> Stockfiles</h3>
 <p>Rgadget has a number of convenience functions when dealing with more complicated files. These functions are all derivatives of <code>gadgetfile</code> and thus can be written to file using <code>write.gadget.file</code>. Here we will start off by creating a skeleton stock file using the <code>gadgetstock</code> function:</p>
-<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="getting-started-with-the-gadget-framework.html#cb113-1"></a>stock &lt;-<span class="st"> </span><span class="kw">gadgetstock</span>(<span class="st">&#39;simple_stock&#39;</span>,gd,<span class="dt">missingOkay =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb113-2"><a href="getting-started-with-the-gadget-framework.html#cb113-2"></a>stock</span></code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="getting-started-with-the-gadget-framework.html#cb112-1"></a>stock &lt;-<span class="st"> </span><span class="kw">gadgetstock</span>(<span class="st">&#39;simple_stock&#39;</span>,gd,<span class="dt">missingOkay =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb112-2"><a href="getting-started-with-the-gadget-framework.html#cb112-2"></a>stock</span></code></pre></div>
 <pre><code>## ; Generated by Rgadget 0.5
 ## stockname    simple_stock
 ## livesonareas 
@@ -682,14 +682,14 @@ suggests, allows to you to update individual components of the file. The first a
 <code>gadget_update</code> after the stock file is the name of the component you want update followed
 by the variables within the component you want to update. So let’s start by setting
 mininum and maximum age and other similar attributes in the stock component:</p>
-<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="getting-started-with-the-gadget-framework.html#cb115-1"></a>  stock <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb115-2"><a href="getting-started-with-the-gadget-framework.html#cb115-2"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
-<span id="cb115-3"><a href="getting-started-with-the-gadget-framework.html#cb115-3"></a>                <span class="dt">livesonareas =</span> <span class="dv">1</span>,</span>
-<span id="cb115-4"><a href="getting-started-with-the-gadget-framework.html#cb115-4"></a>                <span class="dt">maxage =</span> <span class="dv">1</span>,</span>
-<span id="cb115-5"><a href="getting-started-with-the-gadget-framework.html#cb115-5"></a>                <span class="dt">minage =</span> <span class="dv">1</span>,</span>
-<span id="cb115-6"><a href="getting-started-with-the-gadget-framework.html#cb115-6"></a>                <span class="dt">minlength =</span> <span class="dv">0</span>,</span>
-<span id="cb115-7"><a href="getting-started-with-the-gadget-framework.html#cb115-7"></a>                <span class="dt">maxlength =</span> <span class="dv">2</span>,</span>
-<span id="cb115-8"><a href="getting-started-with-the-gadget-framework.html#cb115-8"></a>                <span class="dt">dl =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="getting-started-with-the-gadget-framework.html#cb114-1"></a>  stock <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb114-2"><a href="getting-started-with-the-gadget-framework.html#cb114-2"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
+<span id="cb114-3"><a href="getting-started-with-the-gadget-framework.html#cb114-3"></a>                <span class="dt">livesonareas =</span> <span class="dv">1</span>,</span>
+<span id="cb114-4"><a href="getting-started-with-the-gadget-framework.html#cb114-4"></a>                <span class="dt">maxage =</span> <span class="dv">1</span>,</span>
+<span id="cb114-5"><a href="getting-started-with-the-gadget-framework.html#cb114-5"></a>                <span class="dt">minage =</span> <span class="dv">1</span>,</span>
+<span id="cb114-6"><a href="getting-started-with-the-gadget-framework.html#cb114-6"></a>                <span class="dt">minlength =</span> <span class="dv">0</span>,</span>
+<span id="cb114-7"><a href="getting-started-with-the-gadget-framework.html#cb114-7"></a>                <span class="dt">maxlength =</span> <span class="dv">2</span>,</span>
+<span id="cb114-8"><a href="getting-started-with-the-gadget-framework.html#cb114-8"></a>                <span class="dt">dl =</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## ; Generated by Rgadget 0.5
 ## stockname    simple_stock
 ## livesonareas 1
@@ -718,30 +718,30 @@ mininum and maximum age and other similar attributes in the stock component:</p>
 <p>As <code>gadget_update</code> was designed to allow the user to edit the Gadget file using a piping
 mechanism, a la tidyverse, we can of course do multiple edits using <code>gadget_update</code> in one
 go:</p>
-<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="getting-started-with-the-gadget-framework.html#cb117-1"></a>stock &lt;-<span class="st"> </span></span>
-<span id="cb117-2"><a href="getting-started-with-the-gadget-framework.html#cb117-2"></a><span class="st">  </span>stock <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb117-3"><a href="getting-started-with-the-gadget-framework.html#cb117-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
-<span id="cb117-4"><a href="getting-started-with-the-gadget-framework.html#cb117-4"></a>                <span class="dt">livesonareas =</span> <span class="dv">1</span>,</span>
-<span id="cb117-5"><a href="getting-started-with-the-gadget-framework.html#cb117-5"></a>                <span class="dt">maxage =</span> <span class="dv">1</span>,</span>
-<span id="cb117-6"><a href="getting-started-with-the-gadget-framework.html#cb117-6"></a>                <span class="dt">minage =</span> <span class="dv">1</span>,</span>
-<span id="cb117-7"><a href="getting-started-with-the-gadget-framework.html#cb117-7"></a>                <span class="dt">minlength =</span> <span class="dv">0</span>,</span>
-<span id="cb117-8"><a href="getting-started-with-the-gadget-framework.html#cb117-8"></a>                <span class="dt">maxlength =</span> <span class="dv">2</span>,</span>
-<span id="cb117-9"><a href="getting-started-with-the-gadget-framework.html#cb117-9"></a>                <span class="dt">dl =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb117-10"><a href="getting-started-with-the-gadget-framework.html#cb117-10"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesgrow&#39;</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb117-11"><a href="getting-started-with-the-gadget-framework.html#cb117-11"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;naturalmortality&#39;</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb117-12"><a href="getting-started-with-the-gadget-framework.html#cb117-12"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;refweight&#39;</span>,<span class="dt">data=</span><span class="kw">tibble</span>(<span class="dt">length=</span><span class="dv">0</span><span class="op">:</span><span class="dv">2</span>,<span class="dt">mean=</span><span class="dv">0</span><span class="op">:</span><span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb117-13"><a href="getting-started-with-the-gadget-framework.html#cb117-13"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;initialconditions&#39;</span>,</span>
-<span id="cb117-14"><a href="getting-started-with-the-gadget-framework.html#cb117-14"></a>                <span class="dt">normalparam =</span> <span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">1</span>,</span>
-<span id="cb117-15"><a href="getting-started-with-the-gadget-framework.html#cb117-15"></a>                                     <span class="dt">area =</span> <span class="dv">1</span>,</span>
-<span id="cb117-16"><a href="getting-started-with-the-gadget-framework.html#cb117-16"></a>                                     <span class="dt">age.factor =</span> <span class="dv">1</span>,   </span>
-<span id="cb117-17"><a href="getting-started-with-the-gadget-framework.html#cb117-17"></a>                                     <span class="dt">area.factor =</span><span class="dv">1</span>,</span>
-<span id="cb117-18"><a href="getting-started-with-the-gadget-framework.html#cb117-18"></a>                                     <span class="dt">mean =</span> <span class="dv">1</span>,</span>
-<span id="cb117-19"><a href="getting-started-with-the-gadget-framework.html#cb117-19"></a>                                     <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
-<span id="cb117-20"><a href="getting-started-with-the-gadget-framework.html#cb117-20"></a>                                     <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
-<span id="cb117-21"><a href="getting-started-with-the-gadget-framework.html#cb117-21"></a>                                     <span class="dt">beta =</span> <span class="dv">1</span>))</span>
-<span id="cb117-22"><a href="getting-started-with-the-gadget-framework.html#cb117-22"></a>stock <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb117-23"><a href="getting-started-with-the-gadget-framework.html#cb117-23"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
-<span id="cb117-24"><a href="getting-started-with-the-gadget-framework.html#cb117-24"></a>stock</span></code></pre></div>
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="getting-started-with-the-gadget-framework.html#cb116-1"></a>stock &lt;-<span class="st"> </span></span>
+<span id="cb116-2"><a href="getting-started-with-the-gadget-framework.html#cb116-2"></a><span class="st">  </span>stock <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb116-3"><a href="getting-started-with-the-gadget-framework.html#cb116-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
+<span id="cb116-4"><a href="getting-started-with-the-gadget-framework.html#cb116-4"></a>                <span class="dt">livesonareas =</span> <span class="dv">1</span>,</span>
+<span id="cb116-5"><a href="getting-started-with-the-gadget-framework.html#cb116-5"></a>                <span class="dt">maxage =</span> <span class="dv">1</span>,</span>
+<span id="cb116-6"><a href="getting-started-with-the-gadget-framework.html#cb116-6"></a>                <span class="dt">minage =</span> <span class="dv">1</span>,</span>
+<span id="cb116-7"><a href="getting-started-with-the-gadget-framework.html#cb116-7"></a>                <span class="dt">minlength =</span> <span class="dv">0</span>,</span>
+<span id="cb116-8"><a href="getting-started-with-the-gadget-framework.html#cb116-8"></a>                <span class="dt">maxlength =</span> <span class="dv">2</span>,</span>
+<span id="cb116-9"><a href="getting-started-with-the-gadget-framework.html#cb116-9"></a>                <span class="dt">dl =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb116-10"><a href="getting-started-with-the-gadget-framework.html#cb116-10"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesgrow&#39;</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb116-11"><a href="getting-started-with-the-gadget-framework.html#cb116-11"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;naturalmortality&#39;</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb116-12"><a href="getting-started-with-the-gadget-framework.html#cb116-12"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;refweight&#39;</span>,<span class="dt">data=</span><span class="kw">tibble</span>(<span class="dt">length=</span><span class="dv">0</span><span class="op">:</span><span class="dv">2</span>,<span class="dt">mean=</span><span class="dv">0</span><span class="op">:</span><span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb116-13"><a href="getting-started-with-the-gadget-framework.html#cb116-13"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;initialconditions&#39;</span>,</span>
+<span id="cb116-14"><a href="getting-started-with-the-gadget-framework.html#cb116-14"></a>                <span class="dt">normalparam =</span> <span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">1</span>,</span>
+<span id="cb116-15"><a href="getting-started-with-the-gadget-framework.html#cb116-15"></a>                                     <span class="dt">area =</span> <span class="dv">1</span>,</span>
+<span id="cb116-16"><a href="getting-started-with-the-gadget-framework.html#cb116-16"></a>                                     <span class="dt">age.factor =</span> <span class="dv">1</span>,   </span>
+<span id="cb116-17"><a href="getting-started-with-the-gadget-framework.html#cb116-17"></a>                                     <span class="dt">area.factor =</span><span class="dv">1</span>,</span>
+<span id="cb116-18"><a href="getting-started-with-the-gadget-framework.html#cb116-18"></a>                                     <span class="dt">mean =</span> <span class="dv">1</span>,</span>
+<span id="cb116-19"><a href="getting-started-with-the-gadget-framework.html#cb116-19"></a>                                     <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
+<span id="cb116-20"><a href="getting-started-with-the-gadget-framework.html#cb116-20"></a>                                     <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
+<span id="cb116-21"><a href="getting-started-with-the-gadget-framework.html#cb116-21"></a>                                     <span class="dt">beta =</span> <span class="dv">1</span>))</span>
+<span id="cb116-22"><a href="getting-started-with-the-gadget-framework.html#cb116-22"></a>stock <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb116-23"><a href="getting-started-with-the-gadget-framework.html#cb116-23"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
+<span id="cb116-24"><a href="getting-started-with-the-gadget-framework.html#cb116-24"></a>stock</span></code></pre></div>
 <pre><code>## ; Generated by Rgadget 0.5
 ## stockname    simple_stock
 ## livesonareas 1
@@ -845,7 +845,7 @@ from the <code>alpha</code> and <code>beta</code> columns.</li>
 <p>The stock file essentially defines a stock with 10 000 fish that do not grow, consume
 or die for the duration of the simulation. By writing this file to the disk R has
 behind the scenes created a folder named <code>simple_model</code> with all the necessary files:</p>
-<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb119-1"><a href="getting-started-with-the-gadget-framework.html#cb119-1"></a>fs<span class="op">::</span><span class="kw">dir_ls</span>(gd)</span></code></pre></div>
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="getting-started-with-the-gadget-framework.html#cb118-1"></a>fs<span class="op">::</span><span class="kw">dir_ls</span>(gd)</span></code></pre></div>
 <pre><code>## [01;34msimple_model/Aggfiles[0m     [01;34msimple_model/Modelfiles[0m   simple_model/main         
 ## simple_model/simple_stock</code></pre>
 </div>
@@ -854,7 +854,7 @@ behind the scenes created a folder named <code>simple_model</code> with all the 
 <h2><span class="header-section-number">4.4</span> Starting a simulation</h2>
 <p>To test if this is working we can run a single simulation first to check for any errors
 or warning in our setup.</p>
-<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb121-1"><a href="getting-started-with-the-gadget-framework.html#cb121-1"></a><span class="kw">gadget_evaluate</span>(gd,<span class="dt">log =</span> <span class="st">&#39;simple_log&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="getting-started-with-the-gadget-framework.html#cb120-1"></a><span class="kw">gadget_evaluate</span>(gd,<span class="dt">log =</span> <span class="st">&#39;simple_log&#39;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;simple_model&quot;
 ## attr(,&quot;mainfile&quot;)
 ## [1] &quot;main&quot;
@@ -876,8 +876,8 @@ added to the directory, the parameter file (<code>params.out</code>) and the log
 (<code>simple_log</code>). We will discuss the parameter file in more detail in the following
 sections but for now lets look at the log file:</p>
 <p><strong>If and when you have errors, such as the ‘…status 1’ error above, the log file is the best place to start trying to figure out why the error occurs.</strong></p>
-<div class="sourceCode" id="cb124"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb124-1"><a href="getting-started-with-the-gadget-framework.html#cb124-1"></a><span class="kw">read_lines</span>(<span class="kw">paste</span>(gd,<span class="st">&#39;simple_log&#39;</span>,<span class="dt">sep=</span><span class="st">&#39;/&#39;</span>))[<span class="op">-</span>(<span class="dv">58</span><span class="op">:</span><span class="dv">175</span>)] </span></code></pre></div>
-<pre><code>##  [1] &quot;Gadget version 2.3.5 running on fv-az121-550 Tue Nov 17 15:27:16 2020&quot;                     
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb123-1"><a href="getting-started-with-the-gadget-framework.html#cb123-1"></a><span class="kw">read_lines</span>(<span class="kw">paste</span>(gd,<span class="st">&#39;simple_log&#39;</span>,<span class="dt">sep=</span><span class="st">&#39;/&#39;</span>))[<span class="op">-</span>(<span class="dv">58</span><span class="op">:</span><span class="dv">175</span>)] </span></code></pre></div>
+<pre><code>##  [1] &quot;Gadget version 2.3.5 running on fv-az76-763 Tue Nov 17 16:59:13 2020&quot;                      
 ##  [2] &quot;Log file to record Gadget actions that take place during this run&quot;                         
 ##  [3] &quot;&quot;                                                                                          
 ##  [4] &quot;Starting Gadget from directory: /home/runner/work/gadget-course/gadget-course/simple_model&quot;
@@ -948,17 +948,17 @@ sections but for now lets look at the log file:</p>
 ## [69] &quot;&quot;                                                                                          
 ## [70] &quot;Gadget simulation finished OK - runtime was 0 seconds&quot;</code></pre>
 <p>We can now gather the output from the model using <code>gadget.fit</code>:</p>
-<div class="sourceCode" id="cb126"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb126-1"><a href="getting-started-with-the-gadget-framework.html#cb126-1"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>,<span class="dt">gd =</span> gd)</span></code></pre></div>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb125-1"><a href="getting-started-with-the-gadget-framework.html#cb125-1"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>,<span class="dt">gd =</span> gd)</span></code></pre></div>
 <pre><code>## [1] &quot;Reading input data&quot;
 ## [1] &quot;Running Gadget&quot;
 ## [1] &quot;Reading output files&quot;
 ## [1] &quot;Gathering results&quot;
 ## [1] &quot;Merging input and output&quot;</code></pre>
-<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="getting-started-with-the-gadget-framework.html#cb128-1"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type =</span> <span class="st">&#39;num.total&#39;</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb127-1"><a href="getting-started-with-the-gadget-framework.html#cb127-1"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type =</span> <span class="st">&#39;num.total&#39;</span>) </span></code></pre></div>
 <p><img src="getting_started_files/figure-html/unnamed-chunk-20-1.png" width="672" />
 and the fit object contains a number of useful datasets that can be used for further
 analysis:</p>
-<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="getting-started-with-the-gadget-framework.html#cb129-1"></a><span class="kw">names</span>(fit)</span></code></pre></div>
+<div class="sourceCode" id="cb128"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb128-1"><a href="getting-started-with-the-gadget-framework.html#cb128-1"></a><span class="kw">names</span>(fit)</span></code></pre></div>
 <pre><code>##  [1] &quot;sidat&quot;             &quot;resTable&quot;          &quot;nesTable&quot;         
 ##  [4] &quot;suitability&quot;       &quot;stock.recruitment&quot; &quot;res.by.year&quot;      
 ##  [7] &quot;stomachcontent&quot;    &quot;likelihoodsummary&quot; &quot;catchdist.fleets&quot; 
@@ -971,8 +971,8 @@ analysis:</p>
 <p>It can be tedious to change all the input files whenever you want to try a different
 value for a certain input parameter. For example if you want to specify natural
 mortality as some thing else than 0 you can always do:</p>
-<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb131-1"><a href="getting-started-with-the-gadget-framework.html#cb131-1"></a><span class="kw">gadgetstock</span>(<span class="st">&#39;simple_stock&#39;</span>,gd) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb131-2"><a href="getting-started-with-the-gadget-framework.html#cb131-2"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;naturalmortality&#39;</span>,<span class="fl">0.2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb130"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb130-1"><a href="getting-started-with-the-gadget-framework.html#cb130-1"></a><span class="kw">gadgetstock</span>(<span class="st">&#39;simple_stock&#39;</span>,gd) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb130-2"><a href="getting-started-with-the-gadget-framework.html#cb130-2"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;naturalmortality&#39;</span>,<span class="fl">0.2</span>)</span></code></pre></div>
 <pre><code>## ; Generated by Rgadget 0.5
 ## stockname    simple_stock
 ## livesonareas 1
@@ -1006,8 +1006,8 @@ to do this, namely Gadget switches or parameters. A Gadget parameter can be inse
 instead of any number in the input file (apart from likelihood data), and are marked
 with the <code>#</code> character. So for the case of natural mortality we can now update the
 stock file to include a Gadget parameter by:</p>
-<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb133-1"><a href="getting-started-with-the-gadget-framework.html#cb133-1"></a><span class="kw">gadgetstock</span>(<span class="st">&#39;simple_stock&#39;</span>,gd) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb133-2"><a href="getting-started-with-the-gadget-framework.html#cb133-2"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;naturalmortality&#39;</span>,<span class="st">&quot;#M&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb132"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb132-1"><a href="getting-started-with-the-gadget-framework.html#cb132-1"></a><span class="kw">gadgetstock</span>(<span class="st">&#39;simple_stock&#39;</span>,gd) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb132-2"><a href="getting-started-with-the-gadget-framework.html#cb132-2"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;naturalmortality&#39;</span>,<span class="st">&quot;#M&quot;</span>)</span></code></pre></div>
 <pre><code>## ; Generated by Rgadget 0.5
 ## stockname    simple_stock
 ## livesonareas 1
@@ -1044,7 +1044,7 @@ Now write this to file and rerun run Gadget.</p>
 ## [1] &quot;gadget.variant&quot; &quot;list&quot;</code></pre>
 <p>After running this, assuming we did everything correctly, we should see that the
 file in the directory called <code>params.out</code> is no longer empty:</p>
-<pre><code>## ; Gadget version 2.3.5 running on fv-az121-550 Tue Nov 17 15:27:17 2020
+<pre><code>## ; Gadget version 2.3.5 running on fv-az76-763 Tue Nov 17 16:59:14 2020
 ## ; a simulation run was performed giving a likelihood value of 0
 ## ; -- data --
 ## switch   value       lower   upper   optimise
@@ -1055,11 +1055,11 @@ and lower bounds and whether the parameter should optimised (more on that later)
 then simply just change the value for M and rerun Gadget by supplying the parameter
 file as input. This can either be done by manually editing the parameter file or
 using the <code>init_guess</code> function:</p>
-<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="getting-started-with-the-gadget-framework.html#cb137-1"></a><span class="kw">read.gadget.parameters</span>(<span class="st">&#39;simple_model/params.out&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb137-2"><a href="getting-started-with-the-gadget-framework.html#cb137-2"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;M&#39;</span>,<span class="dt">value =</span> <span class="fl">0.2</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb137-3"><a href="getting-started-with-the-gadget-framework.html#cb137-3"></a><span class="st">  </span><span class="kw">write.gadget.parameters</span>(<span class="dt">file =</span> <span class="st">&#39;simple_model/params.in&#39;</span>)</span>
-<span id="cb137-4"><a href="getting-started-with-the-gadget-framework.html#cb137-4"></a></span>
-<span id="cb137-5"><a href="getting-started-with-the-gadget-framework.html#cb137-5"></a><span class="kw">gadget_evaluate</span>(<span class="dt">params.in =</span> <span class="st">&#39;params.in&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb136"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb136-1"><a href="getting-started-with-the-gadget-framework.html#cb136-1"></a><span class="kw">read.gadget.parameters</span>(<span class="st">&#39;simple_model/params.out&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb136-2"><a href="getting-started-with-the-gadget-framework.html#cb136-2"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;M&#39;</span>,<span class="dt">value =</span> <span class="fl">0.2</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb136-3"><a href="getting-started-with-the-gadget-framework.html#cb136-3"></a><span class="st">  </span><span class="kw">write.gadget.parameters</span>(<span class="dt">file =</span> <span class="st">&#39;simple_model/params.in&#39;</span>)</span>
+<span id="cb136-4"><a href="getting-started-with-the-gadget-framework.html#cb136-4"></a></span>
+<span id="cb136-5"><a href="getting-started-with-the-gadget-framework.html#cb136-5"></a><span class="kw">gadget_evaluate</span>(<span class="dt">params.in =</span> <span class="st">&#39;params.in&#39;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;.&quot;</code></pre>
 <p>Note that when supplying a parameter input you use the <code>i</code> argument in <code>callGadget</code>.</p>
 <p>Gadget parameters have a few more tricks up their sleeves. Notably you can apply
@@ -1078,21 +1078,21 @@ numbers.</p>
 <p>These formulas can be fairly complex and Rgadget provides mechanisms to manipulate
 Gadget formulae, both allowing you to evaluate the formula using <code>parse.gadget.formula</code>
 and transform a R statement with <code>to.gadget.formulae</code>:</p>
-<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="getting-started-with-the-gadget-framework.html#cb142-1"></a><span class="co">## R expression to Gadget formula</span></span>
-<span id="cb142-2"><a href="getting-started-with-the-gadget-framework.html#cb142-2"></a><span class="kw">to.gadget.formulae</span>(<span class="kw">quote</span>((<span class="dv">1</span><span class="op">+</span><span class="kw">exp</span>(a<span class="op">*</span>b))))</span></code></pre></div>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb141-1"><a href="getting-started-with-the-gadget-framework.html#cb141-1"></a><span class="co">## R expression to Gadget formula</span></span>
+<span id="cb141-2"><a href="getting-started-with-the-gadget-framework.html#cb141-2"></a><span class="kw">to.gadget.formulae</span>(<span class="kw">quote</span>((<span class="dv">1</span><span class="op">+</span><span class="kw">exp</span>(a<span class="op">*</span>b))))</span></code></pre></div>
 <pre><code>## [1] &quot;(+ 1 (exp (* #a #b)))&quot;</code></pre>
-<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="getting-started-with-the-gadget-framework.html#cb144-1"></a><span class="co">## Gadget formula to a R expression</span></span>
-<span id="cb144-2"><a href="getting-started-with-the-gadget-framework.html#cb144-2"></a><span class="kw">parse.gadget.formulae</span>(<span class="st">&#39;(* #a #b)&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb143-1"><a href="getting-started-with-the-gadget-framework.html#cb143-1"></a><span class="co">## Gadget formula to a R expression</span></span>
+<span id="cb143-2"><a href="getting-started-with-the-gadget-framework.html#cb143-2"></a><span class="kw">parse.gadget.formulae</span>(<span class="st">&#39;(* #a #b)&#39;</span>)</span></code></pre></div>
 <pre><code>## a * b</code></pre>
-<div class="sourceCode" id="cb146"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb146-1"><a href="getting-started-with-the-gadget-framework.html#cb146-1"></a><span class="co">## evaluate expression</span></span>
-<span id="cb146-2"><a href="getting-started-with-the-gadget-framework.html#cb146-2"></a><span class="kw">parse.gadget.formulae</span>(<span class="st">&#39;(* #a #b)&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb146-3"><a href="getting-started-with-the-gadget-framework.html#cb146-3"></a><span class="st">  </span><span class="kw">eval</span>(<span class="kw">list</span>(<span class="dt">a=</span><span class="dv">7</span>,<span class="dt">b=</span><span class="dv">6</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="getting-started-with-the-gadget-framework.html#cb145-1"></a><span class="co">## evaluate expression</span></span>
+<span id="cb145-2"><a href="getting-started-with-the-gadget-framework.html#cb145-2"></a><span class="kw">parse.gadget.formulae</span>(<span class="st">&#39;(* #a #b)&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb145-3"><a href="getting-started-with-the-gadget-framework.html#cb145-3"></a><span class="st">  </span><span class="kw">eval</span>(<span class="kw">list</span>(<span class="dt">a=</span><span class="dv">7</span>,<span class="dt">b=</span><span class="dv">6</span>))</span></code></pre></div>
 <pre><code>## [1] 42</code></pre>
 <p>For instance if you want the mean length at age, in for instance the initial
 conditions, to be based on the Von Bertanlanfy growth function:
 <span class="math display">\[l_a = L_\infty(1 - e^{-k(a - a_0)}) \]</span>
 you can do that for age 3 as an example using the <code>to.gadget.formulae</code> in the following manner:</p>
-<div class="sourceCode" id="cb148"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb148-1"><a href="getting-started-with-the-gadget-framework.html#cb148-1"></a><span class="kw">to.gadget.formulae</span>(<span class="kw">quote</span>(linf<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span><span class="kw">exp</span>(<span class="op">-</span><span class="dv">1</span><span class="op">*</span><span class="kw">k</span>(<span class="dv">3</span><span class="op">-</span>a0)))))</span></code></pre></div>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="getting-started-with-the-gadget-framework.html#cb147-1"></a><span class="kw">to.gadget.formulae</span>(<span class="kw">quote</span>(linf<span class="op">*</span>(<span class="dv">1</span><span class="op">-</span><span class="kw">exp</span>(<span class="op">-</span><span class="dv">1</span><span class="op">*</span><span class="kw">k</span>(<span class="dv">3</span><span class="op">-</span>a0)))))</span></code></pre></div>
 <pre><code>## [1] &quot;(* #linf (- 1 (exp (* (- 1) (k (- 3 #a0))))))&quot;</code></pre>
 <div id="exercise" class="section level4">
 <h4><span class="header-section-number">4.5.0.1</span> Exercise</h4>
@@ -1101,53 +1101,53 @@ you can do that for age 3 as an example using the <code>to.gadget.formulae</code
 of fish and the natural mortality using the parameter file. What happens to your stock
 when you change these values?</li>
 </ul>
-<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="getting-started-with-the-gadget-framework.html#cb150-1"></a> stock <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb150-2"><a href="getting-started-with-the-gadget-framework.html#cb150-2"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;naturalmortality&#39;</span>,<span class="st">&#39;#M&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb150-3"><a href="getting-started-with-the-gadget-framework.html#cb150-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;initialconditions&#39;</span>,</span>
-<span id="cb150-4"><a href="getting-started-with-the-gadget-framework.html#cb150-4"></a>                <span class="dt">normalparam =</span> <span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">1</span>,</span>
-<span id="cb150-5"><a href="getting-started-with-the-gadget-framework.html#cb150-5"></a>                                     <span class="dt">area =</span> <span class="dv">1</span>,</span>
-<span id="cb150-6"><a href="getting-started-with-the-gadget-framework.html#cb150-6"></a>                                     <span class="dt">age.factor =</span> <span class="st">&#39;#init.num&#39;</span>,   </span>
-<span id="cb150-7"><a href="getting-started-with-the-gadget-framework.html#cb150-7"></a>                                     <span class="dt">area.factor =</span><span class="dv">1</span>,</span>
-<span id="cb150-8"><a href="getting-started-with-the-gadget-framework.html#cb150-8"></a>                                     <span class="dt">mean =</span> <span class="dv">1</span>,</span>
-<span id="cb150-9"><a href="getting-started-with-the-gadget-framework.html#cb150-9"></a>                                     <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
-<span id="cb150-10"><a href="getting-started-with-the-gadget-framework.html#cb150-10"></a>                                     <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
-<span id="cb150-11"><a href="getting-started-with-the-gadget-framework.html#cb150-11"></a>                                     <span class="dt">beta =</span> <span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb150-12"><a href="getting-started-with-the-gadget-framework.html#cb150-12"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
-<span id="cb150-13"><a href="getting-started-with-the-gadget-framework.html#cb150-13"></a>  </span>
-<span id="cb150-14"><a href="getting-started-with-the-gadget-framework.html#cb150-14"></a>  <span class="kw">gadget_evaluate</span>(<span class="dt">params.in =</span> <span class="st">&#39;params.in&#39;</span>,<span class="dt">log =</span> <span class="st">&#39;test&#39;</span>)</span>
-<span id="cb150-15"><a href="getting-started-with-the-gadget-framework.html#cb150-15"></a>  </span>
-<span id="cb150-16"><a href="getting-started-with-the-gadget-framework.html#cb150-16"></a>  <span class="kw">read.gadget.parameters</span>(<span class="st">&#39;simple_model/params.out&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb150-17"><a href="getting-started-with-the-gadget-framework.html#cb150-17"></a><span class="st">    </span><span class="kw">init_guess</span>(<span class="st">&#39;M&#39;</span>,<span class="dt">value =</span> <span class="fl">0.2</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb150-18"><a href="getting-started-with-the-gadget-framework.html#cb150-18"></a><span class="st">    </span><span class="kw">init_guess</span>(<span class="st">&#39;init.num&#39;</span>, <span class="dt">value =</span> <span class="dv">3</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb150-19"><a href="getting-started-with-the-gadget-framework.html#cb150-19"></a><span class="st">    </span><span class="kw">write.gadget.parameters</span>(<span class="dt">file =</span> <span class="st">&#39;simple_model/params.in&#39;</span>)</span>
-<span id="cb150-20"><a href="getting-started-with-the-gadget-framework.html#cb150-20"></a>  </span>
-<span id="cb150-21"><a href="getting-started-with-the-gadget-framework.html#cb150-21"></a>  </span>
-<span id="cb150-22"><a href="getting-started-with-the-gadget-framework.html#cb150-22"></a>  <span class="kw">read.gadget.parameters</span>(<span class="st">&#39;simple_model/params.out&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb150-23"><a href="getting-started-with-the-gadget-framework.html#cb150-23"></a><span class="st">    </span><span class="kw">init_guess</span>(<span class="st">&#39;M&#39;</span>,<span class="dt">value =</span> <span class="fl">0.6</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb150-24"><a href="getting-started-with-the-gadget-framework.html#cb150-24"></a><span class="st">    </span><span class="kw">init_guess</span>(<span class="st">&#39;init.num&#39;</span>, <span class="dt">value =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb150-25"><a href="getting-started-with-the-gadget-framework.html#cb150-25"></a><span class="st">    </span><span class="kw">write.gadget.parameters</span>(<span class="dt">file =</span> <span class="st">&#39;simple_model/params.in2&#39;</span>)</span>
-<span id="cb150-26"><a href="getting-started-with-the-gadget-framework.html#cb150-26"></a>  </span>
-<span id="cb150-27"><a href="getting-started-with-the-gadget-framework.html#cb150-27"></a>  </span>
-<span id="cb150-28"><a href="getting-started-with-the-gadget-framework.html#cb150-28"></a>  </span>
-<span id="cb150-29"><a href="getting-started-with-the-gadget-framework.html#cb150-29"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, </span>
-<span id="cb150-30"><a href="getting-started-with-the-gadget-framework.html#cb150-30"></a>                  <span class="co">## make sure that this is relative to</span></span>
-<span id="cb150-31"><a href="getting-started-with-the-gadget-framework.html#cb150-31"></a>                  <span class="co">## gadget directory</span></span>
-<span id="cb150-32"><a href="getting-started-with-the-gadget-framework.html#cb150-32"></a>                  <span class="dt">params.file =</span> <span class="st">&#39;params.in&#39;</span>,</span>
-<span id="cb150-33"><a href="getting-started-with-the-gadget-framework.html#cb150-33"></a>                  <span class="dt">gd =</span> gd)</span>
-<span id="cb150-34"><a href="getting-started-with-the-gadget-framework.html#cb150-34"></a></span>
-<span id="cb150-35"><a href="getting-started-with-the-gadget-framework.html#cb150-35"></a></span>
-<span id="cb150-36"><a href="getting-started-with-the-gadget-framework.html#cb150-36"></a>fit2 &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, </span>
-<span id="cb150-37"><a href="getting-started-with-the-gadget-framework.html#cb150-37"></a>                  <span class="co">## make sure that this is relative to</span></span>
-<span id="cb150-38"><a href="getting-started-with-the-gadget-framework.html#cb150-38"></a>                  <span class="co">## gadget directory</span></span>
-<span id="cb150-39"><a href="getting-started-with-the-gadget-framework.html#cb150-39"></a>                  <span class="dt">params.file =</span> <span class="st">&#39;params.in2&#39;</span>,</span>
-<span id="cb150-40"><a href="getting-started-with-the-gadget-framework.html#cb150-40"></a>                  <span class="dt">gd =</span> gd)</span></code></pre></div>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="getting-started-with-the-gadget-framework.html#cb149-1"></a> stock <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb149-2"><a href="getting-started-with-the-gadget-framework.html#cb149-2"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;naturalmortality&#39;</span>,<span class="st">&#39;#M&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb149-3"><a href="getting-started-with-the-gadget-framework.html#cb149-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;initialconditions&#39;</span>,</span>
+<span id="cb149-4"><a href="getting-started-with-the-gadget-framework.html#cb149-4"></a>                <span class="dt">normalparam =</span> <span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">1</span>,</span>
+<span id="cb149-5"><a href="getting-started-with-the-gadget-framework.html#cb149-5"></a>                                     <span class="dt">area =</span> <span class="dv">1</span>,</span>
+<span id="cb149-6"><a href="getting-started-with-the-gadget-framework.html#cb149-6"></a>                                     <span class="dt">age.factor =</span> <span class="st">&#39;#init.num&#39;</span>,   </span>
+<span id="cb149-7"><a href="getting-started-with-the-gadget-framework.html#cb149-7"></a>                                     <span class="dt">area.factor =</span><span class="dv">1</span>,</span>
+<span id="cb149-8"><a href="getting-started-with-the-gadget-framework.html#cb149-8"></a>                                     <span class="dt">mean =</span> <span class="dv">1</span>,</span>
+<span id="cb149-9"><a href="getting-started-with-the-gadget-framework.html#cb149-9"></a>                                     <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
+<span id="cb149-10"><a href="getting-started-with-the-gadget-framework.html#cb149-10"></a>                                     <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
+<span id="cb149-11"><a href="getting-started-with-the-gadget-framework.html#cb149-11"></a>                                     <span class="dt">beta =</span> <span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb149-12"><a href="getting-started-with-the-gadget-framework.html#cb149-12"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
+<span id="cb149-13"><a href="getting-started-with-the-gadget-framework.html#cb149-13"></a>  </span>
+<span id="cb149-14"><a href="getting-started-with-the-gadget-framework.html#cb149-14"></a>  <span class="kw">gadget_evaluate</span>(<span class="dt">params.in =</span> <span class="st">&#39;params.in&#39;</span>,<span class="dt">log =</span> <span class="st">&#39;test&#39;</span>)</span>
+<span id="cb149-15"><a href="getting-started-with-the-gadget-framework.html#cb149-15"></a>  </span>
+<span id="cb149-16"><a href="getting-started-with-the-gadget-framework.html#cb149-16"></a>  <span class="kw">read.gadget.parameters</span>(<span class="st">&#39;simple_model/params.out&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb149-17"><a href="getting-started-with-the-gadget-framework.html#cb149-17"></a><span class="st">    </span><span class="kw">init_guess</span>(<span class="st">&#39;M&#39;</span>,<span class="dt">value =</span> <span class="fl">0.2</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb149-18"><a href="getting-started-with-the-gadget-framework.html#cb149-18"></a><span class="st">    </span><span class="kw">init_guess</span>(<span class="st">&#39;init.num&#39;</span>, <span class="dt">value =</span> <span class="dv">3</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb149-19"><a href="getting-started-with-the-gadget-framework.html#cb149-19"></a><span class="st">    </span><span class="kw">write.gadget.parameters</span>(<span class="dt">file =</span> <span class="st">&#39;simple_model/params.in&#39;</span>)</span>
+<span id="cb149-20"><a href="getting-started-with-the-gadget-framework.html#cb149-20"></a>  </span>
+<span id="cb149-21"><a href="getting-started-with-the-gadget-framework.html#cb149-21"></a>  </span>
+<span id="cb149-22"><a href="getting-started-with-the-gadget-framework.html#cb149-22"></a>  <span class="kw">read.gadget.parameters</span>(<span class="st">&#39;simple_model/params.out&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb149-23"><a href="getting-started-with-the-gadget-framework.html#cb149-23"></a><span class="st">    </span><span class="kw">init_guess</span>(<span class="st">&#39;M&#39;</span>,<span class="dt">value =</span> <span class="fl">0.6</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb149-24"><a href="getting-started-with-the-gadget-framework.html#cb149-24"></a><span class="st">    </span><span class="kw">init_guess</span>(<span class="st">&#39;init.num&#39;</span>, <span class="dt">value =</span> <span class="dv">10</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb149-25"><a href="getting-started-with-the-gadget-framework.html#cb149-25"></a><span class="st">    </span><span class="kw">write.gadget.parameters</span>(<span class="dt">file =</span> <span class="st">&#39;simple_model/params.in2&#39;</span>)</span>
+<span id="cb149-26"><a href="getting-started-with-the-gadget-framework.html#cb149-26"></a>  </span>
+<span id="cb149-27"><a href="getting-started-with-the-gadget-framework.html#cb149-27"></a>  </span>
+<span id="cb149-28"><a href="getting-started-with-the-gadget-framework.html#cb149-28"></a>  </span>
+<span id="cb149-29"><a href="getting-started-with-the-gadget-framework.html#cb149-29"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, </span>
+<span id="cb149-30"><a href="getting-started-with-the-gadget-framework.html#cb149-30"></a>                  <span class="co">## make sure that this is relative to</span></span>
+<span id="cb149-31"><a href="getting-started-with-the-gadget-framework.html#cb149-31"></a>                  <span class="co">## gadget directory</span></span>
+<span id="cb149-32"><a href="getting-started-with-the-gadget-framework.html#cb149-32"></a>                  <span class="dt">params.file =</span> <span class="st">&#39;params.in&#39;</span>,</span>
+<span id="cb149-33"><a href="getting-started-with-the-gadget-framework.html#cb149-33"></a>                  <span class="dt">gd =</span> gd)</span>
+<span id="cb149-34"><a href="getting-started-with-the-gadget-framework.html#cb149-34"></a></span>
+<span id="cb149-35"><a href="getting-started-with-the-gadget-framework.html#cb149-35"></a></span>
+<span id="cb149-36"><a href="getting-started-with-the-gadget-framework.html#cb149-36"></a>fit2 &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, </span>
+<span id="cb149-37"><a href="getting-started-with-the-gadget-framework.html#cb149-37"></a>                  <span class="co">## make sure that this is relative to</span></span>
+<span id="cb149-38"><a href="getting-started-with-the-gadget-framework.html#cb149-38"></a>                  <span class="co">## gadget directory</span></span>
+<span id="cb149-39"><a href="getting-started-with-the-gadget-framework.html#cb149-39"></a>                  <span class="dt">params.file =</span> <span class="st">&#39;params.in2&#39;</span>,</span>
+<span id="cb149-40"><a href="getting-started-with-the-gadget-framework.html#cb149-40"></a>                  <span class="dt">gd =</span> gd)</span></code></pre></div>
 <ul>
 <li>Play around with the Gadget formulae functions, e.g. parse and evaluate the
 following formula at <span class="math inline">\(\alpha = 0.1\)</span> and <span class="math inline">\(l_{50} = 75\)</span> :</li>
 </ul>
 <pre><code> (/ 1 (+ 1 (exp (* (* -1 #alpha) (- 50 #l50)))))</code></pre>
-<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="getting-started-with-the-gadget-framework.html#cb152-1"></a><span class="kw">parse.gadget.formulae</span>(<span class="st">&#39;(/ 1 (+ 1 (exp (* (* -1 #alpha) (- 50 #l50)))))&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb152-2"><a href="getting-started-with-the-gadget-framework.html#cb152-2"></a><span class="st">  </span><span class="kw">eval</span>(<span class="kw">list</span>(<span class="dt">alpha =</span> <span class="fl">0.1</span>, <span class="dt">l50 =</span> <span class="dv">75</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="getting-started-with-the-gadget-framework.html#cb151-1"></a><span class="kw">parse.gadget.formulae</span>(<span class="st">&#39;(/ 1 (+ 1 (exp (* (* -1 #alpha) (- 50 #l50)))))&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb151-2"><a href="getting-started-with-the-gadget-framework.html#cb151-2"></a><span class="st">  </span><span class="kw">eval</span>(<span class="kw">list</span>(<span class="dt">alpha =</span> <span class="fl">0.1</span>, <span class="dt">l50 =</span> <span class="dv">75</span>))</span></code></pre></div>
 </div>
 </div>
 <div id="predation" class="section level2">
@@ -1229,26 +1229,26 @@ particular suitability function behaves, which allows the user to input the
 function name, parameters and the length of the predators and prey. Below is an
 example of how to calculate and visualise the exponential suitability function for
 different sizes of the predator and prey.</p>
-<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="getting-started-with-the-gadget-framework.html#cb153-1"></a>prey.length &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">50</span></span>
-<span id="cb153-2"><a href="getting-started-with-the-gadget-framework.html#cb153-2"></a>pred.length &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">40</span>,<span class="dv">100</span>,<span class="dt">by=</span><span class="dv">10</span>) </span>
-<span id="cb153-3"><a href="getting-started-with-the-gadget-framework.html#cb153-3"></a></span>
-<span id="cb153-4"><a href="getting-started-with-the-gadget-framework.html#cb153-4"></a>param &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">alpha =</span> <span class="dv">-20</span>, <span class="dt">beta =</span> <span class="fl">0.5</span>,<span class="dt">gamma =</span> <span class="fl">0.1</span>, <span class="dt">delta =</span> <span class="dv">1</span>)</span>
-<span id="cb153-5"><a href="getting-started-with-the-gadget-framework.html#cb153-5"></a></span>
-<span id="cb153-6"><a href="getting-started-with-the-gadget-framework.html#cb153-6"></a>suit &lt;-<span class="st"> </span><span class="kw">suitability</span>(<span class="dt">params =</span> param, </span>
-<span id="cb153-7"><a href="getting-started-with-the-gadget-framework.html#cb153-7"></a>                    <span class="dt">l =</span> prey.length,</span>
-<span id="cb153-8"><a href="getting-started-with-the-gadget-framework.html#cb153-8"></a>                    <span class="dt">L =</span> pred.length,</span>
-<span id="cb153-9"><a href="getting-started-with-the-gadget-framework.html#cb153-9"></a>                    <span class="dt">type =</span> <span class="st">&#39;exponential&#39;</span>,</span>
-<span id="cb153-10"><a href="getting-started-with-the-gadget-framework.html#cb153-10"></a>                    <span class="dt">to.data.frame =</span> <span class="ot">TRUE</span>)</span>
-<span id="cb153-11"><a href="getting-started-with-the-gadget-framework.html#cb153-11"></a></span>
-<span id="cb153-12"><a href="getting-started-with-the-gadget-framework.html#cb153-12"></a><span class="kw">ggplot</span>(suit,<span class="kw">aes</span>(l,suit,<span class="dt">col=</span><span class="kw">as.factor</span>(L))) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="getting-started-with-the-gadget-framework.html#cb152-1"></a>prey.length &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">50</span></span>
+<span id="cb152-2"><a href="getting-started-with-the-gadget-framework.html#cb152-2"></a>pred.length &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">40</span>,<span class="dv">100</span>,<span class="dt">by=</span><span class="dv">10</span>) </span>
+<span id="cb152-3"><a href="getting-started-with-the-gadget-framework.html#cb152-3"></a></span>
+<span id="cb152-4"><a href="getting-started-with-the-gadget-framework.html#cb152-4"></a>param &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">alpha =</span> <span class="dv">-20</span>, <span class="dt">beta =</span> <span class="fl">0.5</span>,<span class="dt">gamma =</span> <span class="fl">0.1</span>, <span class="dt">delta =</span> <span class="dv">1</span>)</span>
+<span id="cb152-5"><a href="getting-started-with-the-gadget-framework.html#cb152-5"></a></span>
+<span id="cb152-6"><a href="getting-started-with-the-gadget-framework.html#cb152-6"></a>suit &lt;-<span class="st"> </span><span class="kw">suitability</span>(<span class="dt">params =</span> param, </span>
+<span id="cb152-7"><a href="getting-started-with-the-gadget-framework.html#cb152-7"></a>                    <span class="dt">l =</span> prey.length,</span>
+<span id="cb152-8"><a href="getting-started-with-the-gadget-framework.html#cb152-8"></a>                    <span class="dt">L =</span> pred.length,</span>
+<span id="cb152-9"><a href="getting-started-with-the-gadget-framework.html#cb152-9"></a>                    <span class="dt">type =</span> <span class="st">&#39;exponential&#39;</span>,</span>
+<span id="cb152-10"><a href="getting-started-with-the-gadget-framework.html#cb152-10"></a>                    <span class="dt">to.data.frame =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb152-11"><a href="getting-started-with-the-gadget-framework.html#cb152-11"></a></span>
+<span id="cb152-12"><a href="getting-started-with-the-gadget-framework.html#cb152-12"></a><span class="kw">ggplot</span>(suit,<span class="kw">aes</span>(l,suit,<span class="dt">col=</span><span class="kw">as.factor</span>(L))) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
 <p><img src="getting_started_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
 <p>In Gadget you can define whether a stock is available for consumption, i.e indicate that
 the stock is a prey, or is a predator (or both) by setting the <code>doeseat</code> and <code>iseaten</code>
 options in the stock file. You can make the stock available for consumption using the
 following <code>gadget_update</code> call:</p>
-<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="getting-started-with-the-gadget-framework.html#cb154-1"></a><span class="kw">gadgetstock</span>(<span class="st">&#39;simple_stock&#39;</span>,gd) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb154-2"><a href="getting-started-with-the-gadget-framework.html#cb154-2"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;iseaten&quot;</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb154-3"><a href="getting-started-with-the-gadget-framework.html#cb154-3"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span></code></pre></div>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="getting-started-with-the-gadget-framework.html#cb153-1"></a><span class="kw">gadgetstock</span>(<span class="st">&#39;simple_stock&#39;</span>,gd) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb153-2"><a href="getting-started-with-the-gadget-framework.html#cb153-2"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&quot;iseaten&quot;</span>,<span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb153-3"><a href="getting-started-with-the-gadget-framework.html#cb153-3"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span></code></pre></div>
 <p>It is a little more complicated to define the predation parameters so it will be
 covered at a later stage, when predator-prey interactions are discussed.</p>
 </div>
@@ -1287,9 +1287,9 @@ the length of the timestep, e.g. 0.25 for a quarter. When defining the harvest 
 the user needs to create a table of rates per timestep in a particular format. So
 for example if the user want set this effort to 1 for all years at step 2 the
 following code can be used:</p>
-<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="getting-started-with-the-gadget-framework.html#cb155-1"></a>harvest.rate &lt;-<span class="st"> </span></span>
-<span id="cb155-2"><a href="getting-started-with-the-gadget-framework.html#cb155-2"></a><span class="st">  </span><span class="kw">structure</span>(<span class="kw">data.frame</span>(<span class="dt">year=</span><span class="kw">unique</span>(schedule<span class="op">$</span>year),<span class="dt">step=</span><span class="dv">2</span>,<span class="dt">area=</span><span class="dv">1</span>,<span class="dt">number=</span><span class="dv">1</span>),</span>
-<span id="cb155-3"><a href="getting-started-with-the-gadget-framework.html#cb155-3"></a>            <span class="dt">area_group =</span> <span class="kw">list</span>(<span class="st">`</span><span class="dt">1</span><span class="st">`</span> =<span class="st"> </span><span class="dv">1</span>)) </span></code></pre></div>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="getting-started-with-the-gadget-framework.html#cb154-1"></a>harvest.rate &lt;-<span class="st"> </span></span>
+<span id="cb154-2"><a href="getting-started-with-the-gadget-framework.html#cb154-2"></a><span class="st">  </span><span class="kw">structure</span>(<span class="kw">data.frame</span>(<span class="dt">year=</span><span class="kw">unique</span>(schedule<span class="op">$</span>year),<span class="dt">step=</span><span class="dv">2</span>,<span class="dt">area=</span><span class="dv">1</span>,<span class="dt">number=</span><span class="dv">1</span>),</span>
+<span id="cb154-3"><a href="getting-started-with-the-gadget-framework.html#cb154-3"></a>            <span class="dt">area_group =</span> <span class="kw">list</span>(<span class="st">`</span><span class="dt">1</span><span class="st">`</span> =<span class="st"> </span><span class="dv">1</span>)) </span></code></pre></div>
 <p>Note that the <code>harvest.rate</code> object is simply a data frame with an associated area
 attribute (<code>area_group</code>) translating the areas in the data frame to a model area.
 Adding these attributes using <code>structure</code> may seem a bit of a overkill for this
@@ -1301,67 +1301,67 @@ a fleet with the <code>gadgetfleet</code> command. There is however a minor diff
 multiple fleets can be defined in a single file. The fleet files can then be
 edited using the <code>gadget_update</code> function. So as in the case of creating a stock
 we will begin by creating an empty stock:</p>
-<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="getting-started-with-the-gadget-framework.html#cb156-1"></a><span class="kw">gadgetfleet</span>(<span class="st">&#39;Modelfiles/fleet&#39;</span>,gd,<span class="dt">missingOkay =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="getting-started-with-the-gadget-framework.html#cb155-1"></a><span class="kw">gadgetfleet</span>(<span class="st">&#39;Modelfiles/fleet&#39;</span>,gd,<span class="dt">missingOkay =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p>where the <code>missingOkay</code> switch means that the function should create a new file if
 missing. The <code>gadget_update</code> is then supplied with one of the fleet type listed
 above, which in this case will be the <code>LinearFleet</code> fleet type:</p>
-<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="getting-started-with-the-gadget-framework.html#cb157-1"></a><span class="kw">gadgetfleet</span>(<span class="st">&#39;Modelfiles/fleet&#39;</span>,gd,<span class="dt">missingOkay =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb157-2"><a href="getting-started-with-the-gadget-framework.html#cb157-2"></a><span class="st">    </span><span class="kw">gadget_update</span>(<span class="st">&#39;linearfleet&#39;</span>,</span>
-<span id="cb157-3"><a href="getting-started-with-the-gadget-framework.html#cb157-3"></a>                  <span class="dt">name =</span> <span class="st">&#39;simple_fleet&#39;</span>,</span>
-<span id="cb157-4"><a href="getting-started-with-the-gadget-framework.html#cb157-4"></a>                  <span class="dt">suitability =</span> </span>
-<span id="cb157-5"><a href="getting-started-with-the-gadget-framework.html#cb157-5"></a>                    <span class="kw">list</span>(<span class="dt">simple_stock=</span><span class="kw">list</span>(<span class="dt">type=</span><span class="st">&#39;function&#39;</span>,<span class="dt">suit_func =</span> <span class="st">&#39;constant&#39;</span>,<span class="dt">value=</span><span class="fl">0.2</span>)),</span>
-<span id="cb157-6"><a href="getting-started-with-the-gadget-framework.html#cb157-6"></a>                  <span class="dt">data =</span> harvest.rate) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb157-7"><a href="getting-started-with-the-gadget-framework.html#cb157-7"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span></code></pre></div>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="getting-started-with-the-gadget-framework.html#cb156-1"></a><span class="kw">gadgetfleet</span>(<span class="st">&#39;Modelfiles/fleet&#39;</span>,gd,<span class="dt">missingOkay =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb156-2"><a href="getting-started-with-the-gadget-framework.html#cb156-2"></a><span class="st">    </span><span class="kw">gadget_update</span>(<span class="st">&#39;linearfleet&#39;</span>,</span>
+<span id="cb156-3"><a href="getting-started-with-the-gadget-framework.html#cb156-3"></a>                  <span class="dt">name =</span> <span class="st">&#39;simple_fleet&#39;</span>,</span>
+<span id="cb156-4"><a href="getting-started-with-the-gadget-framework.html#cb156-4"></a>                  <span class="dt">suitability =</span> </span>
+<span id="cb156-5"><a href="getting-started-with-the-gadget-framework.html#cb156-5"></a>                    <span class="kw">list</span>(<span class="dt">simple_stock=</span><span class="kw">list</span>(<span class="dt">type=</span><span class="st">&#39;function&#39;</span>,<span class="dt">suit_func =</span> <span class="st">&#39;constant&#39;</span>,<span class="dt">value=</span><span class="fl">0.2</span>)),</span>
+<span id="cb156-6"><a href="getting-started-with-the-gadget-framework.html#cb156-6"></a>                  <span class="dt">data =</span> harvest.rate) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb156-7"><a href="getting-started-with-the-gadget-framework.html#cb156-7"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span></code></pre></div>
 <p>The suitabilty of each prey for removal by the fleet is defined as a list of all
 stocks caught by the fleet with a suitability function assigned to each of them,
 allowing for wholly different prey selection between the various stocks. In this
 case the <code>constant</code> selection function is used, where 20<span class="math inline">\(\%\)</span> of the whole stock
 at all sizes is available to the fleet.</p>
 <p>To see the effects of the fleet operations on our stock we can use the <code>gadget.fit</code> function:</p>
-<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="getting-started-with-the-gadget-framework.html#cb158-1"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, <span class="dt">gd =</span> gd, <span class="dt">params.file =</span> <span class="st">&#39;params.in&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="getting-started-with-the-gadget-framework.html#cb157-1"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, <span class="dt">gd =</span> gd, <span class="dt">params.file =</span> <span class="st">&#39;params.in&#39;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Reading input data&quot;
 ## [1] &quot;Running Gadget&quot;
 ## [1] &quot;Reading output files&quot;
 ## [1] &quot;Gathering results&quot;
 ## [1] &quot;Merging input and output&quot;</code></pre>
-<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="getting-started-with-the-gadget-framework.html#cb160-1"></a><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;num.total&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb160-2"><a href="getting-started-with-the-gadget-framework.html#cb160-2"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>)  </span>
-<span id="cb160-3"><a href="getting-started-with-the-gadget-framework.html#cb160-3"></a></span>
-<span id="cb160-4"><a href="getting-started-with-the-gadget-framework.html#cb160-4"></a><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;num.catch&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb160-5"><a href="getting-started-with-the-gadget-framework.html#cb160-5"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb159-1"><a href="getting-started-with-the-gadget-framework.html#cb159-1"></a><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;num.total&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb159-2"><a href="getting-started-with-the-gadget-framework.html#cb159-2"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>)  </span>
+<span id="cb159-3"><a href="getting-started-with-the-gadget-framework.html#cb159-3"></a></span>
+<span id="cb159-4"><a href="getting-started-with-the-gadget-framework.html#cb159-4"></a><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;num.catch&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb159-5"><a href="getting-started-with-the-gadget-framework.html#cb159-5"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>) </span></code></pre></div>
 <p><img src="getting_started_files/figure-html/unnamed-chunk-36-1.png" width="50%" /><img src="getting_started_files/figure-html/unnamed-chunk-36-2.png" width="50%" /></p>
 <p>This formulation of the fleet assumes that a fixed harvest rate is applied for
 all years. This is probably not representative of reality, so Gadget allows the
 user do define varying rates by year. To do that you simply edit the harvest rate
 data frame above and update the fleet file accordingly:</p>
-<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="getting-started-with-the-gadget-framework.html#cb161-1"></a>harvest.rate &lt;-<span class="st"> </span></span>
-<span id="cb161-2"><a href="getting-started-with-the-gadget-framework.html#cb161-2"></a><span class="st">  </span><span class="kw">structure</span>(<span class="kw">data.frame</span>(<span class="dt">year=</span><span class="kw">unique</span>(schedule<span class="op">$</span>year),<span class="dt">step=</span><span class="dv">2</span>,<span class="dt">area=</span><span class="dv">1</span>,</span>
-<span id="cb161-3"><a href="getting-started-with-the-gadget-framework.html#cb161-3"></a>                       <span class="co">## HR are now random variations around 1</span></span>
-<span id="cb161-4"><a href="getting-started-with-the-gadget-framework.html#cb161-4"></a>                       <span class="dt">number=</span> <span class="kw">exp</span>(<span class="kw">rnorm</span>(<span class="kw">length</span>(<span class="kw">unique</span>(schedule<span class="op">$</span>year))))),</span>
-<span id="cb161-5"><a href="getting-started-with-the-gadget-framework.html#cb161-5"></a>            <span class="dt">area_group =</span> <span class="kw">list</span>(<span class="st">`</span><span class="dt">1</span><span class="st">`</span> =<span class="st"> </span><span class="dv">1</span>)) </span>
-<span id="cb161-6"><a href="getting-started-with-the-gadget-framework.html#cb161-6"></a></span>
-<span id="cb161-7"><a href="getting-started-with-the-gadget-framework.html#cb161-7"></a><span class="co">## update the fleet file</span></span>
-<span id="cb161-8"><a href="getting-started-with-the-gadget-framework.html#cb161-8"></a><span class="kw">gadgetfleet</span>(<span class="st">&#39;Modelfiles/fleet&#39;</span>,gd,<span class="dt">missingOkay =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb161-9"><a href="getting-started-with-the-gadget-framework.html#cb161-9"></a><span class="st">    </span><span class="kw">gadget_update</span>(<span class="st">&#39;linearfleet&#39;</span>,</span>
-<span id="cb161-10"><a href="getting-started-with-the-gadget-framework.html#cb161-10"></a>                  <span class="dt">name =</span> <span class="st">&#39;simple_fleet&#39;</span>,</span>
-<span id="cb161-11"><a href="getting-started-with-the-gadget-framework.html#cb161-11"></a>                  <span class="dt">suitability =</span> </span>
-<span id="cb161-12"><a href="getting-started-with-the-gadget-framework.html#cb161-12"></a>                    <span class="kw">list</span>(<span class="dt">simple_stock=</span><span class="kw">list</span>(<span class="dt">type=</span><span class="st">&#39;function&#39;</span>,<span class="dt">suit_func =</span> <span class="st">&#39;constant&#39;</span>,<span class="dt">value=</span><span class="fl">0.2</span>)),</span>
-<span id="cb161-13"><a href="getting-started-with-the-gadget-framework.html#cb161-13"></a>                  <span class="dt">data =</span> harvest.rate) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb161-14"><a href="getting-started-with-the-gadget-framework.html#cb161-14"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
-<span id="cb161-15"><a href="getting-started-with-the-gadget-framework.html#cb161-15"></a></span>
-<span id="cb161-16"><a href="getting-started-with-the-gadget-framework.html#cb161-16"></a><span class="co">## And re-run</span></span>
-<span id="cb161-17"><a href="getting-started-with-the-gadget-framework.html#cb161-17"></a></span>
-<span id="cb161-18"><a href="getting-started-with-the-gadget-framework.html#cb161-18"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, <span class="dt">gd =</span> gd, <span class="dt">params.file =</span> <span class="st">&#39;params.in&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="getting-started-with-the-gadget-framework.html#cb160-1"></a>harvest.rate &lt;-<span class="st"> </span></span>
+<span id="cb160-2"><a href="getting-started-with-the-gadget-framework.html#cb160-2"></a><span class="st">  </span><span class="kw">structure</span>(<span class="kw">data.frame</span>(<span class="dt">year=</span><span class="kw">unique</span>(schedule<span class="op">$</span>year),<span class="dt">step=</span><span class="dv">2</span>,<span class="dt">area=</span><span class="dv">1</span>,</span>
+<span id="cb160-3"><a href="getting-started-with-the-gadget-framework.html#cb160-3"></a>                       <span class="co">## HR are now random variations around 1</span></span>
+<span id="cb160-4"><a href="getting-started-with-the-gadget-framework.html#cb160-4"></a>                       <span class="dt">number=</span> <span class="kw">exp</span>(<span class="kw">rnorm</span>(<span class="kw">length</span>(<span class="kw">unique</span>(schedule<span class="op">$</span>year))))),</span>
+<span id="cb160-5"><a href="getting-started-with-the-gadget-framework.html#cb160-5"></a>            <span class="dt">area_group =</span> <span class="kw">list</span>(<span class="st">`</span><span class="dt">1</span><span class="st">`</span> =<span class="st"> </span><span class="dv">1</span>)) </span>
+<span id="cb160-6"><a href="getting-started-with-the-gadget-framework.html#cb160-6"></a></span>
+<span id="cb160-7"><a href="getting-started-with-the-gadget-framework.html#cb160-7"></a><span class="co">## update the fleet file</span></span>
+<span id="cb160-8"><a href="getting-started-with-the-gadget-framework.html#cb160-8"></a><span class="kw">gadgetfleet</span>(<span class="st">&#39;Modelfiles/fleet&#39;</span>,gd,<span class="dt">missingOkay =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb160-9"><a href="getting-started-with-the-gadget-framework.html#cb160-9"></a><span class="st">    </span><span class="kw">gadget_update</span>(<span class="st">&#39;linearfleet&#39;</span>,</span>
+<span id="cb160-10"><a href="getting-started-with-the-gadget-framework.html#cb160-10"></a>                  <span class="dt">name =</span> <span class="st">&#39;simple_fleet&#39;</span>,</span>
+<span id="cb160-11"><a href="getting-started-with-the-gadget-framework.html#cb160-11"></a>                  <span class="dt">suitability =</span> </span>
+<span id="cb160-12"><a href="getting-started-with-the-gadget-framework.html#cb160-12"></a>                    <span class="kw">list</span>(<span class="dt">simple_stock=</span><span class="kw">list</span>(<span class="dt">type=</span><span class="st">&#39;function&#39;</span>,<span class="dt">suit_func =</span> <span class="st">&#39;constant&#39;</span>,<span class="dt">value=</span><span class="fl">0.2</span>)),</span>
+<span id="cb160-13"><a href="getting-started-with-the-gadget-framework.html#cb160-13"></a>                  <span class="dt">data =</span> harvest.rate) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb160-14"><a href="getting-started-with-the-gadget-framework.html#cb160-14"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
+<span id="cb160-15"><a href="getting-started-with-the-gadget-framework.html#cb160-15"></a></span>
+<span id="cb160-16"><a href="getting-started-with-the-gadget-framework.html#cb160-16"></a><span class="co">## And re-run</span></span>
+<span id="cb160-17"><a href="getting-started-with-the-gadget-framework.html#cb160-17"></a></span>
+<span id="cb160-18"><a href="getting-started-with-the-gadget-framework.html#cb160-18"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, <span class="dt">gd =</span> gd, <span class="dt">params.file =</span> <span class="st">&#39;params.in&#39;</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Reading input data&quot;
 ## [1] &quot;Running Gadget&quot;
 ## [1] &quot;Reading output files&quot;
 ## [1] &quot;Gathering results&quot;
 ## [1] &quot;Merging input and output&quot;</code></pre>
-<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="getting-started-with-the-gadget-framework.html#cb163-1"></a><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;num.total&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb163-2"><a href="getting-started-with-the-gadget-framework.html#cb163-2"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>)  </span>
-<span id="cb163-3"><a href="getting-started-with-the-gadget-framework.html#cb163-3"></a></span>
-<span id="cb163-4"><a href="getting-started-with-the-gadget-framework.html#cb163-4"></a><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;num.catch&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb163-5"><a href="getting-started-with-the-gadget-framework.html#cb163-5"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="getting-started-with-the-gadget-framework.html#cb162-1"></a><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;num.total&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb162-2"><a href="getting-started-with-the-gadget-framework.html#cb162-2"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>)  </span>
+<span id="cb162-3"><a href="getting-started-with-the-gadget-framework.html#cb162-3"></a></span>
+<span id="cb162-4"><a href="getting-started-with-the-gadget-framework.html#cb162-4"></a><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;num.catch&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb162-5"><a href="getting-started-with-the-gadget-framework.html#cb162-5"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>) </span></code></pre></div>
 <p><img src="getting_started_files/figure-html/unnamed-chunk-37-1.png" width="50%" /><img src="getting_started_files/figure-html/unnamed-chunk-37-2.png" width="50%" /></p>
 <div id="excercise" class="section level3">
 <h3><span class="header-section-number">4.7.1</span> Excercise</h3>
@@ -1372,33 +1372,33 @@ Gadget how many fish or how many kilograms are consumed by the fleet. Redo the
 example above with either of the fleet types, but make sure you do not overconsume
 (i.e., don’t take more that is available).</li>
 </ul>
-<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="getting-started-with-the-gadget-framework.html#cb164-1"></a>catch &lt;-<span class="st"> </span></span>
-<span id="cb164-2"><a href="getting-started-with-the-gadget-framework.html#cb164-2"></a><span class="st">  </span><span class="kw">structure</span>(<span class="kw">data.frame</span>(<span class="dt">year=</span><span class="kw">unique</span>(schedule<span class="op">$</span>year),<span class="dt">step=</span><span class="dv">2</span>,<span class="dt">area=</span><span class="dv">1</span>,</span>
-<span id="cb164-3"><a href="getting-started-with-the-gadget-framework.html#cb164-3"></a>                       <span class="dt">number=</span> <span class="dv">500</span>,</span>
-<span id="cb164-4"><a href="getting-started-with-the-gadget-framework.html#cb164-4"></a>            <span class="dt">area_group =</span> <span class="kw">list</span>(<span class="st">`</span><span class="dt">1</span><span class="st">`</span> =<span class="st"> </span><span class="dv">1</span>)) </span>
-<span id="cb164-5"><a href="getting-started-with-the-gadget-framework.html#cb164-5"></a></span>
-<span id="cb164-6"><a href="getting-started-with-the-gadget-framework.html#cb164-6"></a><span class="co">## update the fleet file</span></span>
-<span id="cb164-7"><a href="getting-started-with-the-gadget-framework.html#cb164-7"></a><span class="kw">gadgetfleet</span>(<span class="st">&#39;Modelfiles/fleet&#39;</span>,gd,<span class="dt">missingOkay =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb164-8"><a href="getting-started-with-the-gadget-framework.html#cb164-8"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;numberfleet&#39;</span>,</span>
-<span id="cb164-9"><a href="getting-started-with-the-gadget-framework.html#cb164-9"></a>                <span class="dt">name =</span> <span class="st">&#39;simple_fleet&#39;</span>,</span>
-<span id="cb164-10"><a href="getting-started-with-the-gadget-framework.html#cb164-10"></a>                <span class="dt">suitability =</span> </span>
-<span id="cb164-11"><a href="getting-started-with-the-gadget-framework.html#cb164-11"></a>                  <span class="kw">list</span>(<span class="dt">simple_stock=</span><span class="kw">list</span>(<span class="dt">type=</span><span class="st">&#39;function&#39;</span>,<span class="dt">suit_func =</span> <span class="st">&#39;constant&#39;</span>,<span class="dt">value=</span><span class="fl">0.2</span>)),</span>
-<span id="cb164-12"><a href="getting-started-with-the-gadget-framework.html#cb164-12"></a>                <span class="dt">data =</span> catch) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb164-13"><a href="getting-started-with-the-gadget-framework.html#cb164-13"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
-<span id="cb164-14"><a href="getting-started-with-the-gadget-framework.html#cb164-14"></a></span>
-<span id="cb164-15"><a href="getting-started-with-the-gadget-framework.html#cb164-15"></a><span class="co">## And re-run</span></span>
-<span id="cb164-16"><a href="getting-started-with-the-gadget-framework.html#cb164-16"></a></span>
-<span id="cb164-17"><a href="getting-started-with-the-gadget-framework.html#cb164-17"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, <span class="dt">gd =</span> gd, <span class="dt">params.file =</span> <span class="st">&#39;params.in&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="getting-started-with-the-gadget-framework.html#cb163-1"></a>catch &lt;-<span class="st"> </span></span>
+<span id="cb163-2"><a href="getting-started-with-the-gadget-framework.html#cb163-2"></a><span class="st">  </span><span class="kw">structure</span>(<span class="kw">data.frame</span>(<span class="dt">year=</span><span class="kw">unique</span>(schedule<span class="op">$</span>year),<span class="dt">step=</span><span class="dv">2</span>,<span class="dt">area=</span><span class="dv">1</span>,</span>
+<span id="cb163-3"><a href="getting-started-with-the-gadget-framework.html#cb163-3"></a>                       <span class="dt">number=</span> <span class="dv">500</span>,</span>
+<span id="cb163-4"><a href="getting-started-with-the-gadget-framework.html#cb163-4"></a>            <span class="dt">area_group =</span> <span class="kw">list</span>(<span class="st">`</span><span class="dt">1</span><span class="st">`</span> =<span class="st"> </span><span class="dv">1</span>)) </span>
+<span id="cb163-5"><a href="getting-started-with-the-gadget-framework.html#cb163-5"></a></span>
+<span id="cb163-6"><a href="getting-started-with-the-gadget-framework.html#cb163-6"></a><span class="co">## update the fleet file</span></span>
+<span id="cb163-7"><a href="getting-started-with-the-gadget-framework.html#cb163-7"></a><span class="kw">gadgetfleet</span>(<span class="st">&#39;Modelfiles/fleet&#39;</span>,gd,<span class="dt">missingOkay =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb163-8"><a href="getting-started-with-the-gadget-framework.html#cb163-8"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;numberfleet&#39;</span>,</span>
+<span id="cb163-9"><a href="getting-started-with-the-gadget-framework.html#cb163-9"></a>                <span class="dt">name =</span> <span class="st">&#39;simple_fleet&#39;</span>,</span>
+<span id="cb163-10"><a href="getting-started-with-the-gadget-framework.html#cb163-10"></a>                <span class="dt">suitability =</span> </span>
+<span id="cb163-11"><a href="getting-started-with-the-gadget-framework.html#cb163-11"></a>                  <span class="kw">list</span>(<span class="dt">simple_stock=</span><span class="kw">list</span>(<span class="dt">type=</span><span class="st">&#39;function&#39;</span>,<span class="dt">suit_func =</span> <span class="st">&#39;constant&#39;</span>,<span class="dt">value=</span><span class="fl">0.2</span>)),</span>
+<span id="cb163-12"><a href="getting-started-with-the-gadget-framework.html#cb163-12"></a>                <span class="dt">data =</span> catch) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb163-13"><a href="getting-started-with-the-gadget-framework.html#cb163-13"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
+<span id="cb163-14"><a href="getting-started-with-the-gadget-framework.html#cb163-14"></a></span>
+<span id="cb163-15"><a href="getting-started-with-the-gadget-framework.html#cb163-15"></a><span class="co">## And re-run</span></span>
+<span id="cb163-16"><a href="getting-started-with-the-gadget-framework.html#cb163-16"></a></span>
+<span id="cb163-17"><a href="getting-started-with-the-gadget-framework.html#cb163-17"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, <span class="dt">gd =</span> gd, <span class="dt">params.file =</span> <span class="st">&#39;params.in&#39;</span>)</span></code></pre></div>
 <ul>
 <li>Where do you think it is possible to define model variables in the definition
 of the fleet file? Change as much as you can so the model can be controlled by
 the parameter file.</li>
 </ul>
-<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="getting-started-with-the-gadget-framework.html#cb165-1"></a>catch &lt;-<span class="st"> </span></span>
-<span id="cb165-2"><a href="getting-started-with-the-gadget-framework.html#cb165-2"></a><span class="st">  </span><span class="kw">structure</span>(<span class="kw">data.frame</span>(<span class="dt">year=</span><span class="kw">unique</span>(schedule<span class="op">$</span>year),<span class="dt">step=</span><span class="dv">2</span>,<span class="dt">area=</span><span class="dv">1</span>,</span>
-<span id="cb165-3"><a href="getting-started-with-the-gadget-framework.html#cb165-3"></a>                       <span class="co">## put a gadget parameter for each year</span></span>
-<span id="cb165-4"><a href="getting-started-with-the-gadget-framework.html#cb165-4"></a>                       <span class="dt">number=</span> <span class="kw">sprintf</span>(<span class="st">&#39;#catch.%s&#39;</span>,<span class="kw">unique</span>(schedule<span class="op">$</span>year))),</span>
-<span id="cb165-5"><a href="getting-started-with-the-gadget-framework.html#cb165-5"></a>                       <span class="dt">area_group =</span> <span class="kw">list</span>(<span class="st">`</span><span class="dt">1</span><span class="st">`</span> =<span class="st"> </span><span class="dv">1</span>)) </span></code></pre></div>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="getting-started-with-the-gadget-framework.html#cb164-1"></a>catch &lt;-<span class="st"> </span></span>
+<span id="cb164-2"><a href="getting-started-with-the-gadget-framework.html#cb164-2"></a><span class="st">  </span><span class="kw">structure</span>(<span class="kw">data.frame</span>(<span class="dt">year=</span><span class="kw">unique</span>(schedule<span class="op">$</span>year),<span class="dt">step=</span><span class="dv">2</span>,<span class="dt">area=</span><span class="dv">1</span>,</span>
+<span id="cb164-3"><a href="getting-started-with-the-gadget-framework.html#cb164-3"></a>                       <span class="co">## put a gadget parameter for each year</span></span>
+<span id="cb164-4"><a href="getting-started-with-the-gadget-framework.html#cb164-4"></a>                       <span class="dt">number=</span> <span class="kw">sprintf</span>(<span class="st">&#39;#catch.%s&#39;</span>,<span class="kw">unique</span>(schedule<span class="op">$</span>year))),</span>
+<span id="cb164-5"><a href="getting-started-with-the-gadget-framework.html#cb164-5"></a>                       <span class="dt">area_group =</span> <span class="kw">list</span>(<span class="st">`</span><span class="dt">1</span><span class="st">`</span> =<span class="st"> </span><span class="dv">1</span>)) </span></code></pre></div>
 </div>
 </div>
 <div id="recruitment" class="section level2">
@@ -1414,33 +1414,33 @@ recruited into the stock at any time, area and age. This is done by setting up a
 schema not unlike the one used for the initial conditions with the addition of the
 timing of the recuitment. For our simple model we will start by defining a data frame
 with the recruits:</p>
-<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="getting-started-with-the-gadget-framework.html#cb166-1"></a>recruits &lt;-<span class="st"> </span></span>
-<span id="cb166-2"><a href="getting-started-with-the-gadget-framework.html#cb166-2"></a><span class="st">  </span><span class="kw">tibble</span>(<span class="dt">year =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="co">## Year of recruitment,</span></span>
-<span id="cb166-3"><a href="getting-started-with-the-gadget-framework.html#cb166-3"></a>         <span class="dt">step =</span> <span class="dv">1</span>, <span class="co">## timing of recruitment (q1)</span></span>
-<span id="cb166-4"><a href="getting-started-with-the-gadget-framework.html#cb166-4"></a>         <span class="dt">area =</span> <span class="dv">1</span>, <span class="co">## where does the rec. take place</span></span>
-<span id="cb166-5"><a href="getting-started-with-the-gadget-framework.html#cb166-5"></a>         <span class="dt">age =</span> <span class="dv">1</span>, <span class="co">## age of recruits</span></span>
-<span id="cb166-6"><a href="getting-started-with-the-gadget-framework.html#cb166-6"></a>         <span class="dt">number =</span> <span class="dv">1</span>, <span class="co">## num. of recruits (x10 000)</span></span>
-<span id="cb166-7"><a href="getting-started-with-the-gadget-framework.html#cb166-7"></a>         <span class="dt">mean =</span> <span class="dv">1</span>, <span class="co">## mean length</span></span>
-<span id="cb166-8"><a href="getting-started-with-the-gadget-framework.html#cb166-8"></a>         <span class="dt">stddev =</span> <span class="fl">.1</span>, <span class="co">## std in length</span></span>
-<span id="cb166-9"><a href="getting-started-with-the-gadget-framework.html#cb166-9"></a>         <span class="dt">alpha =</span> <span class="dv">1</span>, <span class="co">## a in w = aL^b</span></span>
-<span id="cb166-10"><a href="getting-started-with-the-gadget-framework.html#cb166-10"></a>         <span class="dt">beta =</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="getting-started-with-the-gadget-framework.html#cb165-1"></a>recruits &lt;-<span class="st"> </span></span>
+<span id="cb165-2"><a href="getting-started-with-the-gadget-framework.html#cb165-2"></a><span class="st">  </span><span class="kw">tibble</span>(<span class="dt">year =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="co">## Year of recruitment,</span></span>
+<span id="cb165-3"><a href="getting-started-with-the-gadget-framework.html#cb165-3"></a>         <span class="dt">step =</span> <span class="dv">1</span>, <span class="co">## timing of recruitment (q1)</span></span>
+<span id="cb165-4"><a href="getting-started-with-the-gadget-framework.html#cb165-4"></a>         <span class="dt">area =</span> <span class="dv">1</span>, <span class="co">## where does the rec. take place</span></span>
+<span id="cb165-5"><a href="getting-started-with-the-gadget-framework.html#cb165-5"></a>         <span class="dt">age =</span> <span class="dv">1</span>, <span class="co">## age of recruits</span></span>
+<span id="cb165-6"><a href="getting-started-with-the-gadget-framework.html#cb165-6"></a>         <span class="dt">number =</span> <span class="dv">1</span>, <span class="co">## num. of recruits (x10 000)</span></span>
+<span id="cb165-7"><a href="getting-started-with-the-gadget-framework.html#cb165-7"></a>         <span class="dt">mean =</span> <span class="dv">1</span>, <span class="co">## mean length</span></span>
+<span id="cb165-8"><a href="getting-started-with-the-gadget-framework.html#cb165-8"></a>         <span class="dt">stddev =</span> <span class="fl">.1</span>, <span class="co">## std in length</span></span>
+<span id="cb165-9"><a href="getting-started-with-the-gadget-framework.html#cb165-9"></a>         <span class="dt">alpha =</span> <span class="dv">1</span>, <span class="co">## a in w = aL^b</span></span>
+<span id="cb165-10"><a href="getting-started-with-the-gadget-framework.html#cb165-10"></a>         <span class="dt">beta =</span> <span class="dv">1</span>)</span></code></pre></div>
 <p>This table will add 10 000 individuals at age 1 to our simulation every year. To add this to our model we need to update the stock file:</p>
-<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="getting-started-with-the-gadget-framework.html#cb167-1"></a><span class="kw">gadgetstock</span>(<span class="st">&#39;simple_stock&#39;</span>,gd) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb167-2"><a href="getting-started-with-the-gadget-framework.html#cb167-2"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesrenew&#39;</span>,</span>
-<span id="cb167-3"><a href="getting-started-with-the-gadget-framework.html#cb167-3"></a>                <span class="dt">normalparam =</span> recruits) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb167-4"><a href="getting-started-with-the-gadget-framework.html#cb167-4"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span></code></pre></div>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="getting-started-with-the-gadget-framework.html#cb166-1"></a><span class="kw">gadgetstock</span>(<span class="st">&#39;simple_stock&#39;</span>,gd) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb166-2"><a href="getting-started-with-the-gadget-framework.html#cb166-2"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesrenew&#39;</span>,</span>
+<span id="cb166-3"><a href="getting-started-with-the-gadget-framework.html#cb166-3"></a>                <span class="dt">normalparam =</span> recruits) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb166-4"><a href="getting-started-with-the-gadget-framework.html#cb166-4"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span></code></pre></div>
 <p>and we can now re-run the model to see the effects of the recruitment to the abundance in the stock:</p>
-<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="getting-started-with-the-gadget-framework.html#cb168-1"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, <span class="dt">params.file =</span> <span class="st">&#39;params.in&#39;</span>,<span class="dt">gd=</span>gd)</span></code></pre></div>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="getting-started-with-the-gadget-framework.html#cb167-1"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, <span class="dt">params.file =</span> <span class="st">&#39;params.in&#39;</span>,<span class="dt">gd=</span>gd)</span></code></pre></div>
 <pre><code>## [1] &quot;Reading input data&quot;
 ## [1] &quot;Running Gadget&quot;
 ## [1] &quot;Reading output files&quot;
 ## [1] &quot;Gathering results&quot;
 ## [1] &quot;Merging input and output&quot;</code></pre>
-<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="getting-started-with-the-gadget-framework.html#cb170-1"></a><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;num.total&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb170-2"><a href="getting-started-with-the-gadget-framework.html#cb170-2"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>)  </span>
-<span id="cb170-3"><a href="getting-started-with-the-gadget-framework.html#cb170-3"></a></span>
-<span id="cb170-4"><a href="getting-started-with-the-gadget-framework.html#cb170-4"></a><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;num.catch&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
-<span id="cb170-5"><a href="getting-started-with-the-gadget-framework.html#cb170-5"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="getting-started-with-the-gadget-framework.html#cb169-1"></a><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;num.total&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb169-2"><a href="getting-started-with-the-gadget-framework.html#cb169-2"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>)  </span>
+<span id="cb169-3"><a href="getting-started-with-the-gadget-framework.html#cb169-3"></a></span>
+<span id="cb169-4"><a href="getting-started-with-the-gadget-framework.html#cb169-4"></a><span class="kw">plot</span>(fit,<span class="dt">data =</span> <span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;num.catch&#39;</span>) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb169-5"><a href="getting-started-with-the-gadget-framework.html#cb169-5"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>) </span></code></pre></div>
 <p><img src="getting_started_files/figure-html/unnamed-chunk-42-1.png" width="50%" /><img src="getting_started_files/figure-html/unnamed-chunk-42-2.png" width="50%" /></p>
 <div id="exercise-1" class="section level3">
 <h3><span class="header-section-number">4.8.1</span> Exercise</h3>
@@ -1449,27 +1449,27 @@ created. Below are a couple of ideas to play with the model:</p>
 <ul>
 <li>Try to insert model variables where ever you can.</li>
 </ul>
-<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="getting-started-with-the-gadget-framework.html#cb171-1"></a>stock <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb171-2"><a href="getting-started-with-the-gadget-framework.html#cb171-2"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesrenew&#39;</span>,</span>
-<span id="cb171-3"><a href="getting-started-with-the-gadget-framework.html#cb171-3"></a>                <span class="dt">normalparam =</span> <span class="kw">tibble</span>(<span class="dt">year =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="co">## Year of recruitment,</span></span>
-<span id="cb171-4"><a href="getting-started-with-the-gadget-framework.html#cb171-4"></a>                                     <span class="dt">step =</span> <span class="dv">1</span>, <span class="co">## timing of recruitment (q1)</span></span>
-<span id="cb171-5"><a href="getting-started-with-the-gadget-framework.html#cb171-5"></a>                                     <span class="dt">area =</span> <span class="dv">1</span>, <span class="co">## where does the rec. take place</span></span>
-<span id="cb171-6"><a href="getting-started-with-the-gadget-framework.html#cb171-6"></a>                                     <span class="dt">age =</span> <span class="dv">1</span>, <span class="co">## age of recruits</span></span>
-<span id="cb171-7"><a href="getting-started-with-the-gadget-framework.html#cb171-7"></a>                                     <span class="dt">number =</span> <span class="kw">sprintf</span>(<span class="st">&#39;#rec.%s&#39;</span>,year), <span class="co">## num. of recruits (x10 000)</span></span>
-<span id="cb171-8"><a href="getting-started-with-the-gadget-framework.html#cb171-8"></a>                                     <span class="dt">mean =</span> <span class="st">&#39;#ml&#39;</span>, <span class="co">## mean length</span></span>
-<span id="cb171-9"><a href="getting-started-with-the-gadget-framework.html#cb171-9"></a>                                     <span class="dt">stddev =</span> <span class="st">&#39;#sdl&#39;</span>, <span class="co">## std in length</span></span>
-<span id="cb171-10"><a href="getting-started-with-the-gadget-framework.html#cb171-10"></a>                                     <span class="dt">alpha =</span> <span class="st">&#39;#alpha&#39;</span>, <span class="co">## a in w = aL^b</span></span>
-<span id="cb171-11"><a href="getting-started-with-the-gadget-framework.html#cb171-11"></a>                                     <span class="dt">beta =</span> <span class="st">&#39;#beta&#39;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb171-12"><a href="getting-started-with-the-gadget-framework.html#cb171-12"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span></code></pre></div>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="getting-started-with-the-gadget-framework.html#cb170-1"></a>stock <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb170-2"><a href="getting-started-with-the-gadget-framework.html#cb170-2"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesrenew&#39;</span>,</span>
+<span id="cb170-3"><a href="getting-started-with-the-gadget-framework.html#cb170-3"></a>                <span class="dt">normalparam =</span> <span class="kw">tibble</span>(<span class="dt">year =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="co">## Year of recruitment,</span></span>
+<span id="cb170-4"><a href="getting-started-with-the-gadget-framework.html#cb170-4"></a>                                     <span class="dt">step =</span> <span class="dv">1</span>, <span class="co">## timing of recruitment (q1)</span></span>
+<span id="cb170-5"><a href="getting-started-with-the-gadget-framework.html#cb170-5"></a>                                     <span class="dt">area =</span> <span class="dv">1</span>, <span class="co">## where does the rec. take place</span></span>
+<span id="cb170-6"><a href="getting-started-with-the-gadget-framework.html#cb170-6"></a>                                     <span class="dt">age =</span> <span class="dv">1</span>, <span class="co">## age of recruits</span></span>
+<span id="cb170-7"><a href="getting-started-with-the-gadget-framework.html#cb170-7"></a>                                     <span class="dt">number =</span> <span class="kw">sprintf</span>(<span class="st">&#39;#rec.%s&#39;</span>,year), <span class="co">## num. of recruits (x10 000)</span></span>
+<span id="cb170-8"><a href="getting-started-with-the-gadget-framework.html#cb170-8"></a>                                     <span class="dt">mean =</span> <span class="st">&#39;#ml&#39;</span>, <span class="co">## mean length</span></span>
+<span id="cb170-9"><a href="getting-started-with-the-gadget-framework.html#cb170-9"></a>                                     <span class="dt">stddev =</span> <span class="st">&#39;#sdl&#39;</span>, <span class="co">## std in length</span></span>
+<span id="cb170-10"><a href="getting-started-with-the-gadget-framework.html#cb170-10"></a>                                     <span class="dt">alpha =</span> <span class="st">&#39;#alpha&#39;</span>, <span class="co">## a in w = aL^b</span></span>
+<span id="cb170-11"><a href="getting-started-with-the-gadget-framework.html#cb170-11"></a>                                     <span class="dt">beta =</span> <span class="st">&#39;#beta&#39;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb170-12"><a href="getting-started-with-the-gadget-framework.html#cb170-12"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span></code></pre></div>
 <ul>
 <li>Investigate how you can introduce randomness into the model, e.g variability in recruitment and fishing effort.</li>
 </ul>
-<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="getting-started-with-the-gadget-framework.html#cb172-1"></a><span class="kw">gadget_evaluate</span>(gd)</span>
-<span id="cb172-2"><a href="getting-started-with-the-gadget-framework.html#cb172-2"></a></span>
-<span id="cb172-3"><a href="getting-started-with-the-gadget-framework.html#cb172-3"></a><span class="kw">read.gadget.parameters</span>(<span class="st">&#39;simple_model/params.out&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb172-4"><a href="getting-started-with-the-gadget-framework.html#cb172-4"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;rec.+&#39;</span>,<span class="dt">value =</span> <span class="dv">6</span><span class="op">*</span><span class="kw">rlnorm</span>(<span class="dv">10</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb172-5"><a href="getting-started-with-the-gadget-framework.html#cb172-5"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;catch.+&#39;</span>, <span class="dt">value =</span> <span class="dv">3</span><span class="op">*</span><span class="kw">rlnorm</span>(<span class="dv">10</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb172-6"><a href="getting-started-with-the-gadget-framework.html#cb172-6"></a><span class="st">  </span><span class="kw">write.gadget.parameters</span>(<span class="st">&#39;simple_model/params.in&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="getting-started-with-the-gadget-framework.html#cb171-1"></a><span class="kw">gadget_evaluate</span>(gd)</span>
+<span id="cb171-2"><a href="getting-started-with-the-gadget-framework.html#cb171-2"></a></span>
+<span id="cb171-3"><a href="getting-started-with-the-gadget-framework.html#cb171-3"></a><span class="kw">read.gadget.parameters</span>(<span class="st">&#39;simple_model/params.out&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb171-4"><a href="getting-started-with-the-gadget-framework.html#cb171-4"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;rec.+&#39;</span>,<span class="dt">value =</span> <span class="dv">6</span><span class="op">*</span><span class="kw">rlnorm</span>(<span class="dv">10</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb171-5"><a href="getting-started-with-the-gadget-framework.html#cb171-5"></a><span class="st">  </span><span class="kw">init_guess</span>(<span class="st">&#39;catch.+&#39;</span>, <span class="dt">value =</span> <span class="dv">3</span><span class="op">*</span><span class="kw">rlnorm</span>(<span class="dv">10</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb171-6"><a href="getting-started-with-the-gadget-framework.html#cb171-6"></a><span class="st">  </span><span class="kw">write.gadget.parameters</span>(<span class="st">&#39;simple_model/params.in&#39;</span>)</span></code></pre></div>
 <ul>
 <li>Change the time horizon, i.e run the model for 50 years, and investigate the
 effects of different harvest rates on the biomass levels.

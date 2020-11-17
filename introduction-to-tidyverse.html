@@ -365,10 +365,12 @@ represented a variety of ways in tables for visualization, but for data manipula
 and analysis, there is only one format that is much easier to use than others.
 Therefore, all data should be transformed into this format before analyzing. This
 format is called the ‘tidy’ dataset in tidyverse, and following three rules make a
-dataset ‘tidy’:
-1. Each variable must have its own column.
-2. Each observation must have its own row.
-3. Each value must have its own cell.</p>
+dataset ‘tidy’:</p>
+<ol style="list-style-type: decimal">
+<li>Each variable must have its own column.</li>
+<li>Each observation must have its own row.</li>
+<li>Each value must have its own cell.</li>
+</ol>
 <p>If, for example, the flights dataset were organized such that each carrier, origin, or
 dest had their own sets of columns, the data would no longer be tidy.</p>
 <div id="piping" class="section level3">
@@ -785,7 +787,7 @@ later point.</p>
 <span id="cb51-4"><a href="introduction-to-tidyverse.html#cb51-4"></a><span class="st">  </span><span class="kw">scale_colour_brewer</span>(<span class="dt">palette =</span> <span class="st">&quot;Set1&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning in RColorBrewer::brewer.pal(n, pal): n too large, allowed maximum for palette Set1 is 9
 ## Returning the palette you asked for with that many colors</code></pre>
-<pre><code>## Warning: Removed 79 rows containing missing values (geom_point).</code></pre>
+<pre><code>## Warning: Removed 73 rows containing missing values (geom_point).</code></pre>
 <p><img src="Tidyverse_files/figure-html/unnamed-chunk-7-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-7-2.png" width="50%" /></p>
 <p>Note, to view all the brewer palettes do:</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="introduction-to-tidyverse.html#cb54-1"></a>RColorBrewer<span class="op">::</span><span class="kw">display.brewer.all</span>()</span></code></pre></div>
@@ -913,7 +915,7 @@ later point.</p>
 <pre><code>## Warning: `fun.ymin` is deprecated. Use `fun.min` instead.</code></pre>
 <pre><code>## Warning: `fun.ymax` is deprecated. Use `fun.max` instead.</code></pre>
 <div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="introduction-to-tidyverse.html#cb87-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> <span class="st">&quot;mean_se&quot;</span>)</span></code></pre></div>
-<pre><code>## Warning: Removed 41 rows containing missing values (geom_segment).</code></pre>
+<pre><code>## Warning: Removed 26 rows containing missing values (geom_segment).</code></pre>
 <div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="introduction-to-tidyverse.html#cb89-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">stat_summary</span>(<span class="dt">fun.data =</span> <span class="st">&quot;mean_cl_boot&quot;</span>)</span></code></pre></div>
 <pre><code>## Warning: Computation failed in `stat_summary()`:
 ## Hmisc package required for this function</code></pre>
@@ -951,7 +953,6 @@ later point.</p>
 <div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="introduction-to-tidyverse.html#cb94-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">ylim</span>(<span class="dv">100</span>, <span class="dv">500</span>)</span></code></pre></div>
 <pre><code>## Warning: Removed 32 rows containing missing values (geom_point).</code></pre>
 <div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="introduction-to-tidyverse.html#cb96-1"></a>p <span class="op">+</span><span class="st"> </span><span class="kw">ylim</span>(<span class="ot">NA</span>, <span class="dv">500</span>) <span class="co"># setting only upper limit</span></span></code></pre></div>
-<pre><code>## Warning: Removed 2 rows containing missing values (geom_point).</code></pre>
 <p><img src="Tidyverse_files/figure-html/unnamed-chunk-29-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-29-2.png" width="50%" /></p>
 </div>
 </div>

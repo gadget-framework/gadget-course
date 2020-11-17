@@ -75,6 +75,7 @@ and analysis, there is only one format that is much easier to use than others.
 Therefore, all data should be transformed into this format before analyzing. This 
 format is called the 'tidy' dataset in tidyverse, and following three rules make a 
 dataset 'tidy':
+
 1. Each variable must have its own column.
 2. Each observation must have its own row.
 3. Each value must have its own cell.
@@ -646,7 +647,7 @@ p + geom_point(aes(colour = dest)) +
 ```
 
 ```
-## Warning: Removed 79 rows containing missing values (geom_point).
+## Warning: Removed 73 rows containing missing values (geom_point).
 ```
 
 <img src="Tidyverse_files/figure-html/unnamed-chunk-7-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-7-2.png" width="50%" />
@@ -915,7 +916,7 @@ p + stat_summary(fun.data = "mean_se")
 ```
 
 ```
-## Warning: Removed 41 rows containing missing values (geom_segment).
+## Warning: Removed 26 rows containing missing values (geom_segment).
 ```
 
 ```r
@@ -982,10 +983,6 @@ p + ylim(100, 500)
 
 ```r
 p + ylim(NA, 500) # setting only upper limit
-```
-
-```
-## Warning: Removed 2 rows containing missing values (geom_point).
 ```
 
 <img src="Tidyverse_files/figure-html/unnamed-chunk-29-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-29-2.png" width="50%" />

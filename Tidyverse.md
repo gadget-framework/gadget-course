@@ -646,7 +646,7 @@ p + geom_point(aes(colour = dest)) +
 ```
 
 ```
-## Warning: Removed 64 rows containing missing values (geom_point).
+## Warning: Removed 76 rows containing missing values (geom_point).
 ```
 
 <img src="Tidyverse_files/figure-html/unnamed-chunk-7-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-7-2.png" width="50%" />
@@ -915,7 +915,7 @@ p + stat_summary(fun.data = "mean_se")
 ```
 
 ```
-## Warning: Removed 42 rows containing missing values (geom_segment).
+## Warning: Removed 39 rows containing missing values (geom_segment).
 ```
 
 ```r
@@ -977,7 +977,7 @@ p + ylim(100, 500)
 ```
 
 ```
-## Warning: Removed 36 rows containing missing values (geom_point).
+## Warning: Removed 30 rows containing missing values (geom_point).
 ```
 
 ```r

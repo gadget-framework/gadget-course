@@ -1,5 +1,8 @@
 ---
 title: "Building models using the Gadget framework"
+bibliography: [library.bib]
+biblio-style: apalike
+link-citations: yes
 ---
 
 ```{r setup, include=FALSE}

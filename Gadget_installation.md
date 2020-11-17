@@ -18,7 +18,7 @@ or if you need the bleeding edge version of Gadget you can also install it direc
 devtools::install_github('hafro/gadget2')
 ```
 
-Windows users note that you may want to install the `icesTAF` R package to be able to convert Windows line-endings to unix line-endings with the `dos2unix` function, which when not corrected could cause all kinds of grieve. 
+Windows users note that you may want to install the `icesTAF` R package to be able to convert Windows line-endings to unix line-endings with the `dos2unix` function, which when not corrected could cause all kinds of grief. 
 
 
 ## Command line version

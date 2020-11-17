@@ -49,7 +49,7 @@ Please also have the most recent version of [R](https://cran.r-project.org/) and
 
 In addition, if you plan to run a simple model using your own data, please:
 
-1. familiarize yourself with [tidyverse programming](Tidyverse.html)
+1. familiarize yourself with [tidyverse programming](introduction-to-tidyverse.html)
 
 2. think about your model structure/ aggregation level and have R scripts ready that 
 aggregate your data into an appropriately formatted data frame (i.e., columns of :

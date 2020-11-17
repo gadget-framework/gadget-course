@@ -62,6 +62,7 @@ and analysis, there is only one format that is much easier to use than others.
 Therefore, all data should be transformed into this format before analyzing. This 
 format is called the 'tidy' dataset in tidyverse, and following three rules make a 
 dataset 'tidy':
+
 1. Each variable must have its own column.
 2. Each observation must have its own row.
 3. Each value must have its own cell.

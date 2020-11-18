@@ -11,16 +11,18 @@ First step is to print a log from a Gadget run, but ONLY when Gadget is running 
 
 
 
-### File / data / Gadget cannot be found
+## File / data / Gadget cannot be found
 
 Look for the file that is missing according to the log and make a note of its locatino. Then check all directories involved to see that it matches the search directories:
+
 * What is your current R working directory in relation to your file paths?
 * What is your Gadget working directory in relation to your  model? Set the via Gadget using `Sys.setenv(GADGET_WORKING_DIR=normalizePath(pathname))`.
 * Where is your Gadget executable in relation to where callGadget thinks it is? The default can be found and changed under the `gadget.exe` argument within callGadget.
 
-### Fleet / Data / Likelihood problems
 
-#### Fleet does not exist in an area
+## Fleet / Data / Likelihood problems
+
+### Fleet does not exist in an area
 
 You may get an error whenever there are data assigned to a fleet that came from
 an area where that fleet does not exist. When using Rgadget, fleet catch/landings data frames need to have an attribute assigned to them that specifies the areas *in which the fleet exists*. This information is used to assign fleets to areas in
@@ -28,7 +30,7 @@ the model. Note that it *does not matter whether data from all areas where the f
 & 2 can have data only coming from area 1, but a fleet assigned only to area 1
 cannot also have data coming from area 2. 
 
-#### Certain likelihood scores or values are not being calculated
+### Certain likelihood scores or values are not being calculated
 
 If you find that a likelihood component is not returning realistic values, it is wise first to check that temporal and spatial the structure of your model and the structure of your data match. It is also important to check that different sources of data are consistent. For example, you will run into problems if you have a catchdistribution likelihood component with catchdistribution data that comes from a time and place that does not match any catch data being extracted.
 
@@ -58,7 +60,7 @@ difficult to figure out, but here are a few known bugs that may be causing it.
 This is most likely to be a programming error in an Rgadget script that has caused strange input or
 settings, so the first step is to carefully check over the Gadget files. The most likely culprits are
 *trying to include the same parameter in multiple places, but accidentally naming it incorrectly (thereby generating an additional poorly specified parameter)
-*wrongly specified likelihood component names that end up not grouped within the call to `gadget.reiterative`
+*wrongly specified likelihood component names that end up not grouped within the call to `gadget.iterative`
 
 ### Old files hanging around in the Gadget model directory
 If nothing is obvious, delete all Gadget files in the project, check all working directories, and rewrite the Gadget files. Perhaps some old model specifications were not rewritten by new ones, or old likelihood components that were written by a previous version are still hanging around in the folders. In general, when developing a set of Rgadget script of a single Gadget model, it is best practice to delete all
@@ -81,8 +83,9 @@ B's working directory when running project B, then you may start including proje
 and likelihood components into a project B model run. More on file and path organization can be found in the Gadget User Guide section 1.3 'Running Gadget'.
 
 ### Your model is not good
-If these errors are ruled out, you will have to look at the model results themselves. Some starting 
+If these errors are ruled out, you will have to look at the model results themselves. Some starting
 places:
+
 * Did your model converge? If no, increase optimisation length or change optimisation parameters or methods. In complex models or those no age data, it has been observed that the simulated annealing algorithm needs to run for a long time to avoid landing in local optimum.
 * Is there understocking? Try restricting parameter bounds so that the model begins in a more realistic starting point.
 * Are parameter bound constricting? Loosen them if necessary.

@@ -155,11 +155,11 @@ If you want areas to be part of multiple divisions, then you can use `mfdb_impor
 
 In the case of the area around Iceland the grid cells are defined from coordinates $(x,y)$ using the following formula:
 
-$$\Gamma(x,y) = 10*\left(100*(\lfloor{2*y}\rfloor/2 - 60) + \lfloor{x}\rfloor \right) + \begin{cases} 0 &  s(-(x - \lfloor{2*x}\rfloor/2) \in \{2,4,6\} \\ 
-1 & s(-(x - \lfloor{2*x}\rfloor/2) = 4\\
-2 & s(-(x - \lfloor{2*x}\rfloor/2) = 1\\
-3 & s(-(x - \lfloor{2*x}\rfloor/2) = 7\\
-4 & s(-(x - \lfloor{2*x}\rfloor/2) = 3\\
+$$\Gamma(x,y) = 10*\left(100*(\lfloor{2*y}\rfloor/2 - 60) + \lfloor{x}\rfloor \right) + \begin{cases} 0 &  s(-(x - \lfloor{2*x}\rfloor/2)) \in \{2,4,6\} \\ 
+1 & s(-(x - \lfloor{2*x}\rfloor/2)) = 4\\
+2 & s(-(x - \lfloor{2*x}\rfloor/2)) = 1\\
+3 & s(-(x - \lfloor{2*x}\rfloor/2)) = 7\\
+4 & s(-(x - \lfloor{2*x}\rfloor/2)) = 3\\
 \end{cases}  $$
 
 and this is implemented in the `d2sr` function from the `geo`-package:

@@ -35,6 +35,7 @@ the main form of data storage, called a tibble:
 ```{r tidyverse, eval = FALSE, echo = FALSE, results = FALSE, message = FALSE}
 install.packages('tidyverse')
 install.packages('nycflights13') # this is an example data package
+install.packages('DT') # temporarily necessary to display tibbles correctly on web page
 ```
 
 ```{r tibble, echo = FALSE, results = FALSE, message = FALSE}
@@ -136,7 +137,7 @@ using tidyverse commands, as well as functions such as 'aggregate' using 'group_
   select(air_time, distance) %>% 
   summarise(mn_airtime = mean(air_time, na.rm = T),
             mn_distance = mean(distance)) %>% 
-  group_by(mn_airtime) #this last line not necessary - helps with printing to web page
+  DT::datatable(.) #this last line not necessary - helps with printing to web page
 
  # or if the operation should occur by groupings:
   flights %>%
@@ -144,7 +145,7 @@ using tidyverse commands, as well as functions such as 'aggregate' using 'group_
   group_by(dest) %>% 
   summarise(mn_airtime = mean(air_time, na.rm = T),
             mn_distance = mean(distance)) %>% 
-  group_by(mn_airtime) #this last line not necessary - helps with printing to web page
+  DT::datatable(.) #this last line not necessary - helps with printing to web page
 
 
 ```
@@ -155,48 +156,67 @@ Here is a smattering of demonstrations on how to use the other important functio
 ```{r smat filter}
 
 #filter()
-flights[flights$month==3 & flights$dest=="DEN",]
+flights[flights$month==3 & flights$dest=="DEN",] %>% 
+  DT::datatable(.) #this last line not necessary - helps with printing to web page
+
 
 flights %>% 
-  filter(month == 3, dest == "DEN")
+  filter(month == 3, dest == "DEN") %>% 
+  DT::datatable(.) #this last line not necessary - helps with printing to web page
+
 ```
 
 #### arrange()
 ```{r smat arrange}
 o <- order(flights$distance)
-flights[o,c('year','month','day','distance')]
-flights[rev(o),c('year','month','day','distance')]
+flights[o,c('year','month','day','distance')]%>% 
+  DT::datatable(.) #this last line not necessary - helps with printing to web page
+
+flights[rev(o),c('year','month','day','distance')]%>% 
+  DT::datatable(.) #this last line not necessary - helps with printing to web page
+
 
 flights %>% 
   select(year, month, day, distance) %>% 
-  arrange(distance)
+  arrange(distance) %>% 
+  DT::datatable(.) #this last line not necessary - helps with printing to web page
+
 
 flights %>% 
   select(year, month, day, distance) %>% 
-  arrange(desc(distance))
+  arrange(desc(distance)) %>% 
+  DT::datatable(.) #this last line not necessary - helps with printing to web page
+
 ```
 
 #### rename()
 ```{r smat rename}
 flights2 <- data.frame(flights, year2 = flights$year)
 flights2 <- as_tibble(flights2[c(dim(flights2)[2],2:(dim(flights2)[2]-1))])
-flights2
+flights2 %>% 
+  DT::datatable(.) #this last line not necessary - helps with printing to web page
+
 
 flights2 <- 
   flights %>% 
   rename(year2 = year)
-flights2
+flights2  %>% 
+  DT::datatable(.)  #this last line not necessary - helps with printing to web page
 ```
 
 #### mutate()
 ```{r smat mutate}
-flights2 <- as_tibble(data.frame(flights, air_time_hr = flights$air_time/60, distance_1000m = flights$distance/1000))
+flights2 <- as_tibble(data.frame(flights, air_time_hr = flights$air_time/60, distance_1000m = flights$distance/1000)) %>% 
+  DT::datatable(.) #this last line not necessary - helps with printing to web page
+
 
 
 flights2 <-
-  flights %>% 
+  flights %>%  
   mutate(air_time_hr = air_time/60, distance_1000m = distance/1000)
-flights2
+flights2 %>% 
+  DT::datatable(.) #this last line not necessary - helps with printing to web page
+
 ```
 #### group_by() with count()
 ```{r smat count}
@@ -204,13 +224,15 @@ flights2
 #count() with group_by()
 #this yields data in a 'long' format
 flights2a <- t(table(flights[,c('origin', 'dest')]))
-head(flights2a)
+head(flights2a) #this last line not necessary - helps with printing to web page
+
 #this yields 'tidy' data
 flights2 <- 
   flights %>% 
   group_by(origin, dest) %>% 
   count()
-flights2
+flights2    %>% 
+  DT::datatable(.)  #this last line not necessary - helps with printing to web page
 ```
 #### spread() / gather() to convert between long and tidy formats:
 ```{r smat spread}
@@ -221,13 +243,15 @@ flights2b <-
   spread(key = origin, value = n, fill = 0)
 
 #result in the same formats 
-flights2b
+flights2b  %>% 
+  DT::datatable(.)  #this last line not necessary - helps with printing to web page
 head(flights2a) 
 
 flights2b %>% 
   gather(key = origin, value = n, -dest) %>% 
   filter(n!=0)
-head(flights2)
+head(flights2  %>% 
+  DT::datatable(.))
 
 ```
 
@@ -242,7 +266,7 @@ is that to take advantage of the full power and flexibility of ggplot2 requires 
 knowledge of what is available as options to include in graphics, and therefore involve
 a long learning curve. However, the ultimate results are well worth the 
 learning investment. For a basic explanation and cheat sheet see
-[here](https://ggplot2.tidyverse.org/)
+[here.](https://ggplot2.tidyverse.org/)
 
 ### ggplot: Key components
 
@@ -361,7 +385,7 @@ ggplot(sub) +
 
 ### Adding layers
 
-The power of ggplot comes into place when one adds layers on top of other layers. Let's for now look at only at two examples.
+The power of ggplot comes into play when one adds layers on top of other layers. Let's for now look at only at two examples.
 
 ### Add a line to a scatterplot
 

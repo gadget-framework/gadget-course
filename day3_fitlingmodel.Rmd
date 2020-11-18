@@ -474,7 +474,8 @@ structure containing all the parameters specified throughout the Gadget model fi
 
 ```{r}
 gadget_evaluate(gd,log = 'ling_log')
-read.gadget.parameters(paste0(gd,'/params.out'))
+read.gadget.parameters(paste0(gd,'/params.out'))  %>% 
+  DT::datatable(.)  #this last line not necessary - helps with printing to web page
 ```
 
 Now that the structure is set, it is much easier to change the bounds and starting 
@@ -505,7 +506,8 @@ read.gadget.parameters(sprintf('%s/params.out',gd)) %>%
   init_guess('init.F',0.4,0.1,1,1) %>% 
   write.gadget.parameters(.,file=sprintf('%s/params.in',gd))
 
-read.gadget.parameters(sprintf('%s/params.in',gd))
+read.gadget.parameters(sprintf('%s/params.in',gd))  %>% 
+  DT::datatable(.)  #this last line not necessary - helps with printing to web page
 
 ```
 
@@ -811,7 +813,8 @@ fit %>% names()
 
 and one can access those data.frames simply by calling their name:
 ```{r}
-fit$sidat
+fit$sidat  %>% 
+  DT::datatable(.)  #this last line not necessary - helps with printing to web page
 ```
 
 For further information on what the relevant data.frames contain refer to the help page for `gadget.fit`. 

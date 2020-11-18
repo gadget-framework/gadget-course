@@ -31,28 +31,8 @@ aids reproducability of any project as well as the ability to collaborate on a p
 First we need to install and load Tidyverse. After that we can have a look at what at 
 the main form of data storage, called a tibble:
 
-```r
-install.packages('tidyverse')
-install.packages('nycflights13') # this is an example data package
-```
 
 
-```
-## ── [1mAttaching packages[22m ─────────────────────────────────────── tidyverse 1.3.0 ──
-```
-
-```
-## [32m✔[39m [34mggplot2[39m 3.3.2     [32m✔[39m [34mpurrr  [39m 0.3.4
-## [32m✔[39m [34mtibble [39m 3.0.4     [32m✔[39m [34mdplyr  [39m 1.0.2
-## [32m✔[39m [34mtidyr  [39m 1.1.2     [32m✔[39m [34mstringr[39m 1.4.0
-## [32m✔[39m [34mreadr  [39m 1.4.0     [32m✔[39m [34mforcats[39m 0.5.0
-```
-
-```
-## ── [1mConflicts[22m ────────────────────────────────────────── tidyverse_conflicts() ──
-## [31m✖[39m [34mdplyr[39m::[32mfilter()[39m masks [34mstats[39m::filter()
-## [31m✖[39m [34mdplyr[39m::[32mlag()[39m    masks [34mstats[39m::lag()
-```
 
 
 ```r
@@ -128,6 +108,7 @@ packages that implement more advanced piping-compatible functions that speed the
 manipulation of large data sets in particular (e.g., dbplyr, purrrlyr). 
 
 The most commonly used tidyverse commands, with a brief description, include:
+
 * select() - select columns
 * filter() - retain rows according to boolean criteria
 * arrange() - sorts data
@@ -150,11 +131,13 @@ using tidyverse commands, as well as functions such as 'aggregate' using 'group_
   flights %>%
   select(air_time, distance) %>% 
   summarise(mn_airtime = mean(air_time, na.rm = T),
-            mn_distance = mean(distance))
+            mn_distance = mean(distance)) %>% 
+  group_by(mn_airtime) #this last line not necessary - helps with printing to web page
 ```
 
 ```
 ## [90m# A tibble: 1 x 2[39m
+## [90m# Groups:   mn_airtime [1][39m
 ##   mn_airtime mn_distance
 ##        [3m[90m<dbl>[39m[23m       [3m[90m<dbl>[39m[23m
 ## [90m1[39m       151.       [4m1[24m040.
@@ -166,7 +149,8 @@ using tidyverse commands, as well as functions such as 'aggregate' using 'group_
   select(dest, air_time, distance) %>%
   group_by(dest) %>% 
   summarise(mn_airtime = mean(air_time, na.rm = T),
-            mn_distance = mean(distance))
+            mn_distance = mean(distance)) %>% 
+  group_by(mn_airtime) #this last line not necessary - helps with printing to web page
 ```
 
 ```
@@ -175,6 +159,7 @@ using tidyverse commands, as well as functions such as 'aggregate' using 'group_
 
 ```
 ## [90m# A tibble: 105 x 3[39m
+## [90m# Groups:   mn_airtime [105][39m
 ##    dest  mn_airtime mn_distance
 ##    [3m[90m<chr>[39m[23m      [3m[90m<dbl>[39m[23m       [3m[90m<dbl>[39m[23m
 ## [90m 1[39m ABQ        249.        [4m1[24m826 
@@ -647,7 +632,7 @@ p + geom_point(aes(colour = dest)) +
 ```
 
 ```
-## Warning: Removed 74 rows containing missing values (geom_point).
+## Warning: Removed 67 rows containing missing values (geom_point).
 ```
 
 <img src="Tidyverse_files/figure-html/unnamed-chunk-7-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-7-2.png" width="50%" />
@@ -916,7 +901,7 @@ p + stat_summary(fun.data = "mean_se")
 ```
 
 ```
-## Warning: Removed 36 rows containing missing values (geom_segment).
+## Warning: Removed 28 rows containing missing values (geom_segment).
 ```
 
 ```r
@@ -978,15 +963,11 @@ p + ylim(100, 500)
 ```
 
 ```
-## Warning: Removed 37 rows containing missing values (geom_point).
+## Warning: Removed 25 rows containing missing values (geom_point).
 ```
 
 ```r
 p + ylim(NA, 500) # setting only upper limit
-```
-
-```
-## Warning: Removed 1 rows containing missing values (geom_point).
 ```
 
 <img src="Tidyverse_files/figure-html/unnamed-chunk-29-1.png" width="50%" /><img src="Tidyverse_files/figure-html/unnamed-chunk-29-2.png" width="50%" />

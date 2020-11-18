@@ -673,7 +673,8 @@ setwd(gd)
 ## WARNING: Each time gadget.iterative runs with the given optinfofile,
 ## it takes 11 mins to run on a reasonably fast computer with 2 cores.
 timestamp() 
-run <- gadget.iterative()
+run <- gadget.iterative() # For linux, but Windows throws an error due to incompality in the parallel package
+#run <- gadget.iterative(run.serial = TRUE) #This will work, but will take twice as long to run
 timestamp()
 
 ```
@@ -720,7 +721,8 @@ run <- gadget.iterative(grouping = list(sind1=c('si.len20','si.len52','si.len60'
                                                 'si.len100'),
                                         comm=c('ldist.gil','ldist.bmt',
                                                'aldist.gil','aldist.bmt')),
-                        wgts = 'WGTS2')
+                        wgts = 'WGTS2') # if working on Windows, can run with argument run.serial = TRUE (see above)
+
 
 ```
 
@@ -733,7 +735,7 @@ for survey indices used for weight assignment. This is done using the
 
 ```{r eval=FALSE}
 run <- gadget.iterative(cv.floor = 0.2,
-                        wgts = 'WGTS3')
+                        wgts = 'WGTS3') # if working on Windows, can run with argument run.serial = TRUE (see above)
 ```
 
 The `cv.floor` argument is often used after the final optimisation 
@@ -744,7 +746,8 @@ assuming that the preceding steps have been completed:
 
 ```{r eval=FALSE}
 run <- gadget.iterative(resume.final = TRUE, cv.floor = 0.2,
-                        wgts = 'WGTS3')
+                        wgts = 'WGTS3')  # if working on Windows, can run with argument run.serial = TRUE (see above)
+
 ```
 
 Related to `resume.final` there are the `run.final` and `run.serial` arguments 
@@ -765,12 +768,12 @@ using a combination of the `comp` and `inverse` arguments:
 
 ## only want to fit to ldist.gil, all others discarded
 run <- gadget.iterative(comp = 'ldist.gil',
-                        wgts = 'WGTS3')
+                        wgts = 'WGTS3')  # if working on Windows, can run with argument run.serial = TRUE (see above)
 
 ## remove ldist.gil, all others kept
 run <- gadget.iterative(comp = 'ldist.gil', 
                         inverse = TRUE,
-                        wgts = 'WGTS3')
+                        wgts = 'WGTS3')  # if working on Windows, can run with argument run.serial = TRUE (see above)
 
 ```
 

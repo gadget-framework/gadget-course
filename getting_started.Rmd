@@ -826,7 +826,7 @@ example above with either of the fleet types, but make sure you do not overconsu
 
 catch <- 
   structure(data.frame(year=unique(schedule$year),step=2,area=1,
-                       number= 500,
+                       number= 500),
             area_group = list(`1` = 1)) 
 
 ## update the fleet file
@@ -934,6 +934,11 @@ stock %>%
                                      alpha = '#alpha', ## a in w = aL^b
                                      beta = '#beta')) %>% 
   write.gadget.file(gd)
+
+gadgetstock('simple_stock',gd) %>% 
+  gadget_update("iseaten",1) %>% 
+  write.gadget.file(gd)
+
 
 ```
 

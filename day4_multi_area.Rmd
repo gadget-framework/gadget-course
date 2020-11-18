@@ -348,7 +348,7 @@ surv.landings <- structure(
 
 lln.landings  %>% 
   DT::datatable(.)  #this last line not necessary - helps with printing to web page
-surv.landings  #%>% 
+surv.landings  %>% 
   DT::datatable(.)  #this last line not necessary - helps with printing to web page
 
 ```
@@ -849,8 +849,7 @@ read.gadget.parameters(sprintf('%s/params.out',gd)) %>%
   init_guess('mig',0.1,0.1,1,0) %>% 
   write.gadget.parameters(.,file=sprintf('%s/params.in',gd))
 
-read.gadget.parameters(sprintf('%s/params.in',gd))  #%>% 
- # DT::datatable(.)  #this last line not necessary - helps with printing to web page
+read.gadget.parameters(sprintf('%s/params.in',gd))  
 gadget_optimize(gd,params.in ='params.in',params.out = 'params.init')
 
 old <- getwd()

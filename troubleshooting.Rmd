@@ -10,7 +10,6 @@ something with a null status popped out. Now what?
 First step is to print a log from a Gadget run, but ONLY when Gadget is running a **simulation**. If run while optimising, you could end up with a crashed computer as well. Open the log and see what the last line tells you. Most often it tells you that a file or data can not be found. 
 
 
-
 ## File / data / Gadget cannot be found
 
 Look for the file that is missing according to the log and make a note of its locatino. Then check all directories involved to see that it matches the search directories:

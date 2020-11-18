@@ -346,10 +346,10 @@ surv.landings <- structure(
               mutate(area=2)),
             area_group = list(`1` = 1, `2` = 2))
 
-lln.landings  %>% 
-  DT::datatable(.)  #this last line not necessary - helps with printing to web page
-surv.landings  %>% 
-  DT::datatable(.)  #this last line not necessary - helps with printing to web page
+lln.landings  #%>% 
+  #DT::datatable(.)  #this last line not necessary - helps with printing to web page
+surv.landings  #%>% 
+  #DT::datatable(.)  #this last line not necessary - helps with printing to web page
 
 ```
 

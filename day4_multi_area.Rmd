@@ -346,10 +346,10 @@ surv.landings <- structure(
               mutate(area=2)),
             area_group = list(`1` = 1, `2` = 2))
 
-lln.landings  #%>% 
-  #DT::datatable(.)  #this last line not necessary - helps with printing to web page
+lln.landings  %>% 
+  DT::datatable(.)  #this last line not necessary - helps with printing to web page
 surv.landings  #%>% 
-  #DT::datatable(.)  #this last line not necessary - helps with printing to web page
+  DT::datatable(.)  #this last line not necessary - helps with printing to web page
 
 ```
 
@@ -849,8 +849,8 @@ read.gadget.parameters(sprintf('%s/params.out',gd)) %>%
   init_guess('mig',0.1,0.1,1,0) %>% 
   write.gadget.parameters(.,file=sprintf('%s/params.in',gd))
 
-read.gadget.parameters(sprintf('%s/params.in',gd))  %>% 
-  DT::datatable(.)  #this last line not necessary - helps with printing to web page
+read.gadget.parameters(sprintf('%s/params.in',gd))  #%>% 
+ # DT::datatable(.)  #this last line not necessary - helps with printing to web page
 gadget_optimize(gd,params.in ='params.in',params.out = 'params.init')
 
 old <- getwd()

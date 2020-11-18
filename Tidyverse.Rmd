@@ -32,12 +32,12 @@ aids reproducability of any project as well as the ability to collaborate on a p
 
 First we need to install and load Tidyverse. After that we can have a look at what at 
 the main form of data storage, called a tibble:
-```{r tidyverse, eval = FALSE}
+```{r tidyverse, eval = FALSE, echo = FALSE, results = FALSE, message = FALSE}
 install.packages('tidyverse')
 install.packages('nycflights13') # this is an example data package
 ```
 
-```{r tibble, echo = FALSE}
+```{r tibble, echo = FALSE, results = FALSE, message = FALSE}
 library(tidyverse)
 ```
 
@@ -113,6 +113,7 @@ packages that implement more advanced piping-compatible functions that speed the
 manipulation of large data sets in particular (e.g., dbplyr, purrrlyr). 
 
 The most commonly used tidyverse commands, with a brief description, include:
+
 * select() - select columns
 * filter() - retain rows according to boolean criteria
 * arrange() - sorts data
@@ -134,14 +135,18 @@ using tidyverse commands, as well as functions such as 'aggregate' using 'group_
   flights %>%
   select(air_time, distance) %>% 
   summarise(mn_airtime = mean(air_time, na.rm = T),
-            mn_distance = mean(distance))
+            mn_distance = mean(distance)) %>% 
+  group_by(mn_airtime) #this last line not necessary - helps with printing to web page
 
  # or if the operation should occur by groupings:
   flights %>%
   select(dest, air_time, distance) %>%
   group_by(dest) %>% 
   summarise(mn_airtime = mean(air_time, na.rm = T),
-            mn_distance = mean(distance))
+            mn_distance = mean(distance)) %>% 
+  group_by(mn_airtime) #this last line not necessary - helps with printing to web page
+
+
 ```
 
 Here is a smattering of demonstrations on how to use the other important functions and their equivalents in base R:

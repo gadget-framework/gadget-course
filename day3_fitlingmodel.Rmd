@@ -673,8 +673,8 @@ setwd(gd)
 ## WARNING: Each time gadget.iterative runs with the given optinfofile,
 ## it takes 11 mins to run on a reasonably fast computer with 2 cores.
 timestamp() 
-run <- gadget.iterative() # For linux, but Windows throws an error due to incompality in the parallel package
-#run <- gadget.iterative(run.serial = TRUE) #This will work, but will take twice as long to run
+run <- gadget.iterative() # This works for Linux or Mac, but Windows throws an error due to incompatability in the parallel package
+#run <- gadget.iterative(run.serial = TRUE) #This will work, but will take several times as long to run. For demonstration purposes, it is highly recommended to reduce the number of iterations in the optinfofile to a very small number for all algorithms.
 timestamp()
 
 ```
@@ -728,25 +728,25 @@ run <- gadget.iterative(grouping = list(sind1=c('si.len20','si.len52','si.len60'
 
 Note that if a likelihood component is not present in the defined 
 grouping list it is assumed that the component is treated individually. 
-Sometimes this is not enough to prevent overfitting and therefore the 
-user can define a maximum weight of sorts by defining the minimum CV 
-for survey indices used for weight assignment. This is done using the 
-`cv.floor` argument:
+<!-- Sometimes this is not enough to prevent overfitting and therefore the  -->
+<!-- user can define a maximum weight of sorts by defining the minimum CV  -->
+<!-- for survey indices used for weight assignment. This is done using the  -->
+<!-- `cv.floor` argument: -->
 
-```{r eval=FALSE}
-run <- gadget.iterative(cv.floor = 0.2,
-                        wgts = 'WGTS3') # if working on Windows, can run with argument run.serial = TRUE (see above)
-```
+<!-- ```{r eval=FALSE} -->
+<!-- run <- gadget.iterative(cv.floor = 0.2, -->
+<!--                         wgts = 'WGTS3') # if working on Windows, can run with argument run.serial = TRUE (see above) -->
+<!-- ``` -->
 
-The `cv.floor` argument is often used after the final optimisation 
-run has crashed so it is convenient to be able to pick up the "thread" 
+<!-- The `cv.floor` argument is often used after the final optimisation  -->
+If the final run has crashed it is convenient to be able to pick up the "thread" 
 where the run crashed and resume the final optimisation. The `resume.final` 
 switch allows for this and essentially only runs the last optimisation, thereby
 assuming that the preceding steps have been completed:
 
 ```{r eval=FALSE}
-run <- gadget.iterative(resume.final = TRUE, cv.floor = 0.2,
-                        wgts = 'WGTS3')  # if working on Windows, can run with argument run.serial = TRUE (see above)
+run <- gadget.iterative(resume.final = TRUE,
+                        wgts = 'WGTS')  # if working on Windows, can run with argument run.serial = TRUE (see above)
 
 ```
 
@@ -768,12 +768,12 @@ using a combination of the `comp` and `inverse` arguments:
 
 ## only want to fit to ldist.gil, all others discarded
 run <- gadget.iterative(comp = 'ldist.gil',
-                        wgts = 'WGTS3')  # if working on Windows, can run with argument run.serial = TRUE (see above)
+                        wgts = 'WGTS')  # if working on Windows, can run with argument run.serial = TRUE (see above)
 
 ## remove ldist.gil, all others kept
 run <- gadget.iterative(comp = 'ldist.gil', 
                         inverse = TRUE,
-                        wgts = 'WGTS3')  # if working on Windows, can run with argument run.serial = TRUE (see above)
+                        wgts = 'WGTS')  # if working on Windows, can run with argument run.serial = TRUE (see above)
 
 ```
 
@@ -788,7 +788,7 @@ but this can be changed. Here we load results from the first run of
 `gadget.iterative` where no grouping was implemented.
 
 ```{r,message=FALSE}
-setwd(gd)  # Make sure we are in gd first
+setwd(gd)  # Make sure we are in gd first, or put gd as an argument to gadget.fit
 fit <- gadget.fit()
 ```
 
@@ -914,5 +914,17 @@ plot(fit,data='res.by.year',type='total') + theme(legend.position = 'none') +
 * What information is stored under fit$SS?
 * Try changing the grouping structure above to one that makes more sense to you. Do model results fit any better?
 
+```{r, eval = FALSE}
+fit$sidat %>% 
+  select(lower, intercept) %>% 
+  distinct() %>% 
+  mutate(catchability = exp(intercept)) %>% 
+  ggplot(aes(x = lower, y = catchability)) + 
+  geom_line()
+
+fit$SS
+
+
+```
 
 

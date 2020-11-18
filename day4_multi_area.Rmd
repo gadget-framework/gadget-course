@@ -852,20 +852,20 @@ read.gadget.parameters(sprintf('%s/params.out',gd)) %>%
 read.gadget.parameters(sprintf('%s/params.in',gd))  
 gadget_optimize(gd,params.in ='params.in',params.out = 'params.init')
 
+
 old <- getwd()
 setwd(gd)
 
 unlink("WGTS", recursive=TRUE)
 timestamp() 
-run <- gadget.iterative()
+run <- gadget.iterative()# if working on Windows, can run with argument run.serial = TRUE (see previous section)
 timestamp()
 
 
 fit <- gadget.fit()
 plot(fit)
 tmp <- plot(fit,data = 'catchdist.fleets')
-tmp$ldist.lln  %>% 
-  DT::datatable(.)  #this last line not necessary - helps with printing to web page
+tmp$ldist.lln  
 
 ```
 

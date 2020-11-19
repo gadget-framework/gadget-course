@@ -46,6 +46,15 @@ library(tidyverse)
 library(nycflights13)
 ```
 
+```{r helper}
+present_table <- function(x){
+  x %>% 
+    slice(1:20) %>% 
+    DT::datatable()
+}
+```
+
+
 Note that a tibble is essentially the same as a data frame (for example made with data.frame) but with some useful information printed (e.g., dimensions and data types), as well as some restrictions placed on how it an be manipulated. These help prevent common errors. For example, recycling is possible as it is in data frames but less flexible:
 
 ```{r tibbleerror, eval=FALSE}
@@ -137,15 +146,15 @@ using tidyverse commands, as well as functions such as 'aggregate' using 'group_
   select(air_time, distance) %>% 
   summarise(mn_airtime = mean(air_time, na.rm = T),
             mn_distance = mean(distance)) %>% 
-  DT::datatable(.) #this last line not necessary - helps with printing to web page
+  present_table() #this last line not necessary - helps with printing to web page
 
  # or if the operation should occur by groupings:
   flights %>%
   select(dest, air_time, distance) %>%
   group_by(dest) %>% 
   summarise(mn_airtime = mean(air_time, na.rm = T),
-            mn_distance = mean(distance)) %>% 
-  DT::datatable(.) #this last line not necessary - helps with printing to web page
+            mn_distance = mean(distance)) %>%
+  present_table() #this last line not necessary - helps with printing to web page
 
 
 ```
@@ -157,12 +166,12 @@ Here is a smattering of demonstrations on how to use the other important functio
 
 #filter()
 flights[flights$month==3 & flights$dest=="DEN",] %>% 
-  DT::datatable(.) #this last line not necessary - helps with printing to web page
+  present_table() #this last line not necessary - helps with printing to web page
 
 
 flights %>% 
   filter(month == 3, dest == "DEN") %>% 
-  DT::datatable(.) #this last line not necessary - helps with printing to web page
+  present_table() #this last line not necessary - helps with printing to web page
 
 ```
 
@@ -170,22 +179,22 @@ flights %>%
 ```{r smat arrange}
 o <- order(flights$distance)
 flights[o,c('year','month','day','distance')]%>% 
-  DT::datatable(.) #this last line not necessary - helps with printing to web page
+  present_table() #this last line not necessary - helps with printing to web page
 
 flights[rev(o),c('year','month','day','distance')]%>% 
-  DT::datatable(.) #this last line not necessary - helps with printing to web page
+  present_table() #this last line not necessary - helps with printing to web page
 
 
 flights %>% 
   select(year, month, day, distance) %>% 
   arrange(distance) %>% 
-  DT::datatable(.) #this last line not necessary - helps with printing to web page
+  present_table() #this last line not necessary - helps with printing to web page
 
 
 flights %>% 
   select(year, month, day, distance) %>% 
   arrange(desc(distance)) %>% 
-  DT::datatable(.) #this last line not necessary - helps with printing to web page
+  present_table() #this last line not necessary - helps with printing to web page
 
 ```
 
@@ -194,20 +203,20 @@ flights %>%
 flights2 <- data.frame(flights, year2 = flights$year)
 flights2 <- as_tibble(flights2[c(dim(flights2)[2],2:(dim(flights2)[2]-1))])
 flights2 %>% 
-  DT::datatable(.) #this last line not necessary - helps with printing to web page
+  present_table() #this last line not necessary - helps with printing to web page
 
 
 flights2 <- 
   flights %>% 
   rename(year2 = year)
 flights2  %>% 
-  DT::datatable(.)  #this last line not necessary - helps with printing to web page
+  present_table()  #this last line not necessary - helps with printing to web page
 ```
 
 #### mutate()
 ```{r smat mutate}
 flights2 <- as_tibble(data.frame(flights, air_time_hr = flights$air_time/60, distance_1000m = flights$distance/1000)) %>% 
-  DT::datatable(.) #this last line not necessary - helps with printing to web page
+  present_table() #this last line not necessary - helps with printing to web page
 
 
 
@@ -215,7 +224,7 @@ flights2 <-
   flights %>%  
   mutate(air_time_hr = air_time/60, distance_1000m = distance/1000)
 flights2 %>% 
-  DT::datatable(.) #this last line not necessary - helps with printing to web page
+  present_table() #this last line not necessary - helps with printing to web page
 
 ```
 #### group_by() with count()
@@ -232,7 +241,7 @@ flights2 <-
   group_by(origin, dest) %>% 
   count()
 flights2    %>% 
-  DT::datatable(.)  #this last line not necessary - helps with printing to web page
+  present_table()  #this last line not necessary - helps with printing to web page
 ```
 #### spread() / gather() to convert between long and tidy formats:
 ```{r smat spread}
@@ -244,14 +253,14 @@ flights2b <-
 
 #result in the same formats 
 flights2b  %>% 
-  DT::datatable(.)  #this last line not necessary - helps with printing to web page
+  present_table()  #this last line not necessary - helps with printing to web page
 head(flights2a) 
 
 flights2b %>% 
   gather(key = origin, value = n, -dest) %>% 
   filter(n!=0)
-head(flights2  %>% 
-  DT::datatable(.))
+head(flights2)  %>% 
+  present_table()
 
 ```
 
@@ -477,8 +486,8 @@ ggplot(sub, aes(reorder(dest, air_time), air_time)) +
   geom_jitter(col = "red", alpha = 0.5, size = 1)
 ```
 
-</div>
-</div>
+
+
 ## Other statistical summaries
 
 Using `stat_summary` one can call specific summary statistics. Here are examples of 4 plots, going from top-left to bottom right we have:
@@ -488,7 +497,7 @@ Using `stat_summary` one can call specific summary statistics. Here are examples
 * A pointrange plot showing the mean and the standard error
 * A pointrange plot showing the bootstrap mean and standard error
 
-```{r, out.width = "50%", fig.show = "hold"}
+```{r, fig.show = "asis"}
 sub$distance <- round(sub$distance)
 p <- ggplot(sub, aes(distance, air_time))
 p + geom_point(alpha = 0.25) + stat_summary(fun.y = "median", geom = "point", colour = "red")
@@ -512,7 +521,7 @@ p + labs(x = "Distance (miles)", y = "Air time (minutes)",
 
 ### Legend position
 
-```{r, out.width = "50%", fig.show = "hold"}
+```{r,  fig.show = "asis"}
 p + theme(legend.position = "none")
 p <- p + theme(legend.position = c(0.8, 0.3))
 p
@@ -530,7 +539,7 @@ p +
 
 ### limits
 
-```{r, out.width = "50%", fig.show = "hold"}
+```{r,  fig.show = "asis"}
 p + ylim(100, 500)
 p + ylim(NA, 500) # setting only upper limit
 ```

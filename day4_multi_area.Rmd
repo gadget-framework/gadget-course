@@ -824,7 +824,7 @@ the procedure in day 3.
 * Now run gadget.fit on the results and create model fit figures that are area-specific.
 
 
-```{r, echo = FALSE}
+```{r, echo = FALSE, eval = FALSE}
 gadget_evaluate(gd,log = 'two_area_log')
 lw_pars <- c(0.00000228, 3.20) #same values as in day 2
 
@@ -856,16 +856,17 @@ gadget_optimize(gd,params.in ='params.in',params.out = 'params.init')
 old <- getwd()
 setwd(gd)
 
-unlink("WGTS", recursive=TRUE)
 timestamp() 
-run <- gadget.iterative()# if working on Windows, can run with argument run.serial = TRUE (see previous section)
+run <- gadget.iterative(wgts = 'WGTS3')# if working on Windows, can run with argument run.serial = TRUE (see previous section)
 timestamp()
 
 
-fit <- gadget.fit()
+fit <- gadget.fit(wgts = 'WGTS3')
 plot(fit)
 tmp <- plot(fit,data = 'catchdist.fleets')
 tmp$ldist.lln  
+
+setwd(old)
 
 ```
 

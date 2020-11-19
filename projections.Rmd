@@ -1,0 +1,101 @@
+---
+title: "Projections using Rgadget"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(Rgadget)
+library(tidyverse)
+```
+
+
+# Projections using Rgadget
+
+Creating Gadget projections can be as simple as modifying the appropriate time and data files to create a model that runs over a longer time period. However, Rgadget is also comes with a series of projection functions that are handy for ensuring internal consistency of model files and includes a series of features that are often useful to the stock assessment modeler. For example, it simplifies the process for adding various error sources and harvest control rules for testing via stochastic simulation in a management strategy evaluation framework. 
+
+## Example based on the ling assessment
+
+As usual we will start by setting up a Gadget model directory and use ling as an example:
+```{r}
+#assuming you are beginning in a fresh session; this information should be in an 
+#initialization script
+
+base_dir <- 'ling_model'
+vers <- c('01-base')
+gd <- gadget.variant.dir(sprintf(paste0("%s/",vers),base_dir))
+fit <- gadget.fit(gd = gd)
+
+```
+
+
+
+```{r}
+
+btrigger <- 6
+blim <- 4
+hrs <- c(0.2,0.4,0.6)
+nreps <- 10
+ny <-10
+# vd <-  getwd() %>%   #useful for having all operations done in a temporary directory
+#   stringr::str_count("/") %>% 
+#   rep("../", .) %>% 
+#   paste(collapse = "") %>%
+#   paste(tempdir(),"_1", sep = "") 
+vd <- 'TEST'
+
+
+      res <-
+        gadget_project_time(num_years = ny, 
+                            variant_dir = vd) %>%
+        gadget_project_stocks(imm.file = 'lingimm',mat.file = 'lingmat') %>%
+        # gadget_project_fleet(pre_fleet = 'lln',
+        #                       fleet_type = 'quotafleet',
+        #                       quotafunction = 'ices',
+        #                       biomasslevel = list(b0=0,b1=btrigger*1e6), 
+        #                       quotalevel = list(q0=0,q1=1,q2=1),
+        #                       selectstocks = 'lingmat'
+        # ) %>%
+        gadget_project_fleet(pre_fleet = 'lln', pre_proportion = 0.5) %>%
+        gadget_project_fleet(pre_fleet = 'bmt', pre_proportion = 0.3) %>%
+        gadget_project_fleet(pre_fleet = 'gil', pre_proportion = 0.2) %>%
+        gadget_evaluate(params.out = 
+                          paste(vd,
+                                'params.pre',sep='/'),
+                        params.in = 'WGTS/params.final') %>%
+        gadget_project_recruitment(stock = 'lingimm',
+                                   recruitment = fit$stock.recruitment %>%
+                                     filter(stock == 'lingimm'), 
+                                   method = "bootstrap",
+                                   params.file = paste(attr(.,'variant_dir'),'params.pre',sep='/'),
+                                   n_replicates = nreps) %>% 
+        gadget_project_ref_points(ref_points = tibble(tuskmat.blim = blim*1e6),
+                                 params.file = paste(attr(.,'variant_dir'),'params.pre',sep='/')) %>%
+        gadget_project_advice(pre_fleet = 'lln',
+                              harvest_rate = hrs,
+                              params.file = paste(attr(.,'variant_dir'),'params.pre',sep='/'),
+                              n_replicates = nreps,
+                              advice_cv = 0.2, 
+                              seed = 3423) %>%
+        gadget_project_advice(pre_fleet = 'bmt',
+                              harvest_rate = hrs,
+                              params.file = paste(attr(.,'variant_dir'),'params.pre',sep='/'),
+                              n_replicates = nreps,
+                              advice_cv = 0.2, 
+                              seed = 3423) %>%
+        gadget_project_advice(pre_fleet = 'gil',
+                              harvest_rate = hrs,
+                              params.file = paste(attr(.,'variant_dir'),'params.pre',sep='/'),
+                              n_replicates = nreps,
+                              advice_cv = 0.2, 
+                              seed = 3423) %>%
+        gadget_project_output(pre_fleets = c('bmt', 'lln', 'gil'), imm.file = 'lingimm',mat.file = 'lingmat') %>%
+        gadget_evaluate(params.in = paste(attr(.,'variant_dir'),'params.pre',sep='/'), params.out = 'params.out', log = 'log.tst') %>%
+        {read.printfiles(paste(attr(.,'variant_dir'),'out',sep='/'))} %>%
+        purrr::map(mutate, trial=cut(1:length(year),c(0,which(diff(year)<0),1e9),labels = FALSE)) %>%
+        set_names(c("catch.F","catch.lw",'imm.rec','mat.ssb')) %>%
+        purrr::map(left_join,tibble(trial=1:(length(hrs)*nreps),
+                                    harvest_rate = rep(hrs,nreps)
+                                    )
+                   )
+
+```

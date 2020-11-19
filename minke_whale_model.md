@@ -15,7 +15,7 @@ Marine mammals, like fish populations, can be modelled using the Gadget framewor
 * Less data
 * ...
 
-# Setting up a model for a hypothetical whale stock
+## Setting up a model for a hypothetical whale stock
 
 As usual we will start by setting up a Gadget model directory:
 
@@ -261,7 +261,7 @@ tmp %>%
   write.gadget.file(gd)
 ```
 
-### Run Gadget and set initial parameters
+## Run Gadget and set initial parameters
 
 
 ```r

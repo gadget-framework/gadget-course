@@ -17,8 +17,6 @@ filter
 arrange
 rename
 mutate
-group_by-with-count
-spread-gather-to-convert-between-long-and-tidy-formats
 plotting-in-tidyverse
 ggplot-key-components
 aesthetic

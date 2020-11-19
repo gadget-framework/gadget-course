@@ -59,6 +59,8 @@ aggregate your data into an appropriately formatted data frame (i.e., columns of
 year, time step, area, age bins, length bins, or age- and length-bins - have a sneak
 peak at our example model data [here](data_provided.zip))
 
+3. know where to find the [Gadget User Guide](https://hafro.github.io/gadget2/userguide/chap-stock.html#sec:stockgrowth)
+
 
 ## Reading material
 

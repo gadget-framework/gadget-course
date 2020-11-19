@@ -1041,8 +1041,8 @@ appropriate aggregation files. The following will use files that can be download
 
 ```r
 ## 
-download.file('https://heima.hafro.is/~bthe/data_provided.zip')
-unzip('data_provided')
+download.file('https://heima.hafro.is/~bthe/data_provided.zip', destfile = "data_provided.zip")
+unzip('data_provided.zip')
 ```
 
 

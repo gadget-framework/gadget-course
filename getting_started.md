@@ -527,7 +527,7 @@ read_lines(paste(gd,'simple_log',sep='/'))[-(58:175)]
 ```
 
 ```
-##  [1] "Gadget version 2.3.5 running on fv-az50-893 Wed Nov 18 10:49:27 2020"                      
+##  [1] "Gadget version 2.3.5 running on fv-az76-269 Thu Nov 19 10:46:59 2020"                      
 ##  [2] "Log file to record Gadget actions that take place during this run"                         
 ##  [3] ""                                                                                          
 ##  [4] "Starting Gadget from directory: /home/runner/work/gadget-course/gadget-course/simple_model"
@@ -734,7 +734,7 @@ After running this, assuming we did everything correctly, we should see that the
 file in the directory called `params.out` is no longer empty:
 
 ```
-## ; Gadget version 2.3.5 running on fv-az50-893 Wed Nov 18 10:49:28 2020
+## ; Gadget version 2.3.5 running on fv-az76-269 Thu Nov 19 10:47:00 2020
 ## ; a simulation run was performed giving a likelihood value of 0
 ## ; -- data --
 ## switch	value		lower	upper	optimise
@@ -1141,7 +1141,7 @@ example above with either of the fleet types, but make sure you do not overconsu
 ```r
 catch <- 
   structure(data.frame(year=unique(schedule$year),step=2,area=1,
-                       number= 500,
+                       number= 500),
             area_group = list(`1` = 1)) 
 
 ## update the fleet file
@@ -1257,6 +1257,10 @@ stock %>%
                                      stddev = '#sdl', ## std in length
                                      alpha = '#alpha', ## a in w = aL^b
                                      beta = '#beta')) %>% 
+  write.gadget.file(gd)
+
+gadgetstock('simple_stock',gd) %>% 
+  gadget_update("iseaten",1) %>% 
   write.gadget.file(gd)
 ```
 

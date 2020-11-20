@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>8 Projections using Rgadget | Building models using the Gadget framework</title>
+  <meta name="description" content="8 Projections using Rgadget | Building models using the Gadget framework" />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="8 Projections using Rgadget | Building models using the Gadget framework" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="8 Projections using Rgadget | Building models using the Gadget framework" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="fitting-a-model-to-data.html"/>
+<link rel="next" href="defining-multi-area-models.html"/>
+<script src="assets/jquery-2.2.3/jquery.min.js"></script>
+<link href="assets/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="assets/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="assets/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<link href="assets/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="assets/anchor-sections-1.0/anchor-sections.js"></script>
+<script src="assets/htmlwidgets-1.5.2/htmlwidgets.js"></script>
+<link href="assets/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet" />
+<script src="assets/datatables-binding-0.16/datatables.js"></script>
+<link href="assets/dt-core-1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="assets/dt-core-1.10.20/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="assets/dt-core-1.10.20/js/jquery.dataTables.min.js"></script>
+<link href="assets/crosstalk-1.1.0.1/css/crosstalk.css" rel="stylesheet" />
+<script src="assets/crosstalk-1.1.0.1/js/crosstalk.min.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><strong><a href="./">Building Gadget models</a></strong></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> About this course</a><ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#course-objectives"><i class="fa fa-check"></i><b>1.1</b> Course objectives</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#your-a-priori-homework"><i class="fa fa-check"></i><b>1.2</b> Your a priori homework</a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#reading-material"><i class="fa fa-check"></i><b>1.3</b> Reading material</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="general-context-of-gadget.html"><a href="general-context-of-gadget.html"><i class="fa fa-check"></i><b>2</b> General context of Gadget</a><ul>
+<li class="chapter" data-level="2.1" data-path="general-context-of-gadget.html"><a href="general-context-of-gadget.html#gadget-a-toolbox-for-fisheries-stock-assessments"><i class="fa fa-check"></i><b>2.1</b> Gadget – a toolbox for fisheries stock assessments</a></li>
+<li class="chapter" data-level="2.2" data-path="general-context-of-gadget.html"><a href="general-context-of-gadget.html#description-of-gadget"><i class="fa fa-check"></i><b>2.2</b> Description of Gadget</a></li>
+<li class="chapter" data-level="2.3" data-path="general-context-of-gadget.html"><a href="general-context-of-gadget.html#this-course"><i class="fa fa-check"></i><b>2.3</b> This course</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html"><i class="fa fa-check"></i><b>3</b> Introduction to Tidyverse</a><ul>
+<li class="chapter" data-level="3.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#idealogy-behind-r-for-data-science"><i class="fa fa-check"></i><b>3.1</b> Idealogy behind R for Data Science</a></li>
+<li class="chapter" data-level="3.2" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#the-foundation-tibbles-tidy-data-and-piping"><i class="fa fa-check"></i><b>3.2</b> The foundation: tibbles, tidy data, and piping</a><ul>
+<li class="chapter" data-level="3.2.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#tibbles"><i class="fa fa-check"></i><b>3.2.1</b> Tibbles</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#tidy-data"><i class="fa fa-check"></i><b>3.3</b> Tidy data</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#piping"><i class="fa fa-check"></i><b>3.3.1</b> Piping</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#the-power-of-tidyverse-all-you-need-in-a-handful-of-functions"><i class="fa fa-check"></i><b>3.4</b> The power of tidyverse: all you need in a handful of functions</a></li>
+<li class="chapter" data-level="3.5" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#plotting-in-tidyverse"><i class="fa fa-check"></i><b>3.5</b> Plotting in tidyverse</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#ggplot-key-components"><i class="fa fa-check"></i><b>3.5.1</b> ggplot: Key components</a></li>
+<li class="chapter" data-level="3.5.2" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#aesthetic"><i class="fa fa-check"></i><b>3.5.2</b> aesthetic</a></li>
+<li class="chapter" data-level="3.5.3" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#facetting"><i class="fa fa-check"></i><b>3.5.3</b> Facetting</a></li>
+<li class="chapter" data-level="3.5.4" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#adding-layers"><i class="fa fa-check"></i><b>3.5.4</b> Adding layers</a></li>
+<li class="chapter" data-level="3.5.5" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#add-a-line-to-a-scatterplot"><i class="fa fa-check"></i><b>3.5.5</b> Add a line to a scatterplot</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#statistical-summary-graphs"><i class="fa fa-check"></i><b>3.6</b> Statistical summary graphs</a></li>
+<li class="chapter" data-level="3.7" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#other-statistical-summaries"><i class="fa fa-check"></i><b>3.7</b> Other statistical summaries</a></li>
+<li class="chapter" data-level="3.8" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#some-controls"><i class="fa fa-check"></i><b>3.8</b> Some controls</a><ul>
+<li class="chapter" data-level="3.8.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#labels"><i class="fa fa-check"></i><b>3.8.1</b> labels</a></li>
+<li class="chapter" data-level="3.8.2" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#legend-position"><i class="fa fa-check"></i><b>3.8.2</b> Legend position</a></li>
+<li class="chapter" data-level="3.8.3" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#breaks"><i class="fa fa-check"></i><b>3.8.3</b> breaks</a></li>
+<li class="chapter" data-level="3.8.4" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#limits"><i class="fa fa-check"></i><b>3.8.4</b> limits</a></li>
+</ul></li>
+<li class="chapter" data-level="3.9" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#further-readings"><i class="fa fa-check"></i><b>3.9</b> Further readings</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html"><i class="fa fa-check"></i><b>4</b> Getting started with the Gadget framework</a><ul>
+<li class="chapter" data-level="4.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#what-is-rgadget"><i class="fa fa-check"></i><b>4.1</b> What is Rgadget?</a></li>
+<li class="chapter" data-level="4.2" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#using-rgadget"><i class="fa fa-check"></i><b>4.2</b> Using Rgadget</a></li>
+<li class="chapter" data-level="4.3" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#creating-model-input-files"><i class="fa fa-check"></i><b>4.3</b> Creating model input files</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#time-file"><i class="fa fa-check"></i><b>4.3.1</b> Time file</a></li>
+<li class="chapter" data-level="4.3.2" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#area-file"><i class="fa fa-check"></i><b>4.3.2</b> Area file</a></li>
+<li class="chapter" data-level="4.3.3" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#stockfiles"><i class="fa fa-check"></i><b>4.3.3</b> Stockfiles</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#starting-a-simulation"><i class="fa fa-check"></i><b>4.4</b> Starting a simulation</a></li>
+<li class="chapter" data-level="4.5" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#gadget-variables"><i class="fa fa-check"></i><b>4.5</b> Gadget variables</a></li>
+<li class="chapter" data-level="4.6" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#predation"><i class="fa fa-check"></i><b>4.6</b> Predation</a></li>
+<li class="chapter" data-level="4.7" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#fleet-operations"><i class="fa fa-check"></i><b>4.7</b> Fleet operations</a><ul>
+<li class="chapter" data-level="4.7.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#excercise"><i class="fa fa-check"></i><b>4.7.1</b> Excercise</a></li>
+</ul></li>
+<li class="chapter" data-level="4.8" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#recruitment"><i class="fa fa-check"></i><b>4.8</b> Recruitment</a><ul>
+<li class="chapter" data-level="4.8.1" data-path="getting-started-with-the-gadget-framework.html"><a href="getting-started-with-the-gadget-framework.html#exercise-1"><i class="fa fa-check"></i><b>4.8.1</b> Exercise</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html"><i class="fa fa-check"></i><b>5</b> Defining stock interations</a><ul>
+<li class="chapter" data-level="5.1" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#fish-recruits-into-a-stock"><i class="fa fa-check"></i><b>5.1</b> Fish recruits into a stock</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#excercise-1"><i class="fa fa-check"></i><b>5.1.1</b> Excercise</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#spawning"><i class="fa fa-check"></i><b>5.2</b> Spawning</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#time-variables"><i class="fa fa-check"></i><b>5.2.1</b> Time variables</a></li>
+<li class="chapter" data-level="5.2.2" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#excercise-2"><i class="fa fa-check"></i><b>5.2.2</b> Excercise</a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#consumption"><i class="fa fa-check"></i><b>5.3</b> Consumption</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="defining-stock-interations.html"><a href="defining-stock-interations.html#excercise-3"><i class="fa fa-check"></i><b>5.3.1</b> Excercise</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html"><i class="fa fa-check"></i><b>6</b> Building complex Gadget models</a><ul>
+<li class="chapter" data-level="6.1" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#defining-growth"><i class="fa fa-check"></i><b>6.1</b> Defining growth</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#growth"><i class="fa fa-check"></i><b>6.1.1</b> Growth</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#ling-stock-assessment-in-icelandic-waters"><i class="fa fa-check"></i><b>6.2</b> Ling stock assessment in Icelandic waters</a></li>
+<li class="chapter" data-level="6.3" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#model-initiation"><i class="fa fa-check"></i><b>6.3</b> Model initiation</a><ul>
+<li class="chapter" data-level="6.3.1" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#maturation-as-multi-stock-models"><i class="fa fa-check"></i><b>6.3.1</b> Maturation as multi-‘stock’ models</a></li>
+<li class="chapter" data-level="6.3.2" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#initial-conditions"><i class="fa fa-check"></i><b>6.3.2</b> Initial conditions</a></li>
+<li class="chapter" data-level="6.3.3" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#renewal"><i class="fa fa-check"></i><b>6.3.3</b> Renewal</a></li>
+<li class="chapter" data-level="6.3.4" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#reference-weight"><i class="fa fa-check"></i><b>6.3.4</b> Reference Weight</a></li>
+<li class="chapter" data-level="6.3.5" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#is-fished-eaten"><i class="fa fa-check"></i><b>6.3.5</b> Is fished / eaten</a></li>
+<li class="chapter" data-level="6.3.6" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#set-up-fleets-using-catch-or-effort-data"><i class="fa fa-check"></i><b>6.3.6</b> Set up fleets using catch or effort data</a></li>
+</ul></li>
+<li class="chapter" data-level="6.4" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#run-the-simulation-using-pre-determined-parameters"><i class="fa fa-check"></i><b>6.4</b> Run the simulation using pre-determined parameters</a></li>
+<li class="chapter" data-level="6.5" data-path="building-complex-gadget-models.html"><a href="building-complex-gadget-models.html#talking-points"><i class="fa fa-check"></i><b>6.5</b> Talking points</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html"><i class="fa fa-check"></i><b>7</b> Fitting a model to data</a><ul>
+<li class="chapter" data-level="7.1" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#introducing-likelihood-functions"><i class="fa fa-check"></i><b>7.1</b> Introducing likelihood functions</a></li>
+<li class="chapter" data-level="7.2" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#incorporating-data-ling-case-study-cont."><i class="fa fa-check"></i><b>7.2</b> Incorporating data (Ling case study cont.)</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#exercise-3"><i class="fa fa-check"></i><b>7.2.1</b> Exercise</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#setting-up-likelihood-components"><i class="fa fa-check"></i><b>7.3</b> Setting up likelihood components</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#setting-up-survey-indices"><i class="fa fa-check"></i><b>7.3.1</b> Setting up survey indices</a></li>
+<li class="chapter" data-level="7.3.2" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#penalty-functions"><i class="fa fa-check"></i><b>7.3.2</b> Penalty functions</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#fitting-a-gadget-model-to-data"><i class="fa fa-check"></i><b>7.4</b> Fitting a Gadget model to data</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#create-starting-values"><i class="fa fa-check"></i><b>7.4.1</b> Create starting values</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#set-optimisation-routine"><i class="fa fa-check"></i><b>7.5</b> Set optimisation routine</a></li>
+<li class="chapter" data-level="7.6" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#using-the-iterative-reweighting-function-to-fit-a-gadget-statistical-model"><i class="fa fa-check"></i><b>7.6</b> Using the iterative reweighting function to fit a Gadget statistical model</a></li>
+<li class="chapter" data-level="7.7" data-path="fitting-a-model-to-data.html"><a href="fitting-a-model-to-data.html#visualize-gadget-statistical-model-fit"><i class="fa fa-check"></i><b>7.7</b> Visualize Gadget statistical model fit</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="projections-using-rgadget.html"><a href="projections-using-rgadget.html"><i class="fa fa-check"></i><b>8</b> Projections using Rgadget</a><ul>
+<li class="chapter" data-level="8.1" data-path="projections-using-rgadget.html"><a href="projections-using-rgadget.html#example-based-on-the-ling-assessment"><i class="fa fa-check"></i><b>8.1</b> Example based on the ling assessment</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="defining-multi-area-models.html"><a href="defining-multi-area-models.html"><i class="fa fa-check"></i><b>9</b> Defining multi area models</a><ul>
+<li class="chapter" data-level="9.1" data-path="defining-multi-area-models.html"><a href="defining-multi-area-models.html#alternate-structures-multiple-areas"><i class="fa fa-check"></i><b>9.1</b> Alternate structures: multiple areas</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="defining-multi-area-models.html"><a href="defining-multi-area-models.html#migration"><i class="fa fa-check"></i><b>9.1.1</b> Migration</a></li>
+<li class="chapter" data-level="9.1.2" data-path="defining-multi-area-models.html"><a href="defining-multi-area-models.html#using-data-from-multiple-areas"><i class="fa fa-check"></i><b>9.1.2</b> Using data from multiple areas</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="marine-mammals.html"><a href="marine-mammals.html"><i class="fa fa-check"></i><b>10</b> Marine mammals</a><ul>
+<li class="chapter" data-level="10.1" data-path="marine-mammals.html"><a href="marine-mammals.html#setting-up-a-model-for-a-hypothetical-whale-stock"><i class="fa fa-check"></i><b>10.1</b> Setting up a model for a hypothetical whale stock</a></li>
+<li class="chapter" data-level="10.2" data-path="marine-mammals.html"><a href="marine-mammals.html#run-gadget-and-set-initial-parameters"><i class="fa fa-check"></i><b>10.2</b> Run Gadget and set initial parameters</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html"><i class="fa fa-check"></i><b>11</b> Processing input data with MFDB</a><ul>
+<li class="chapter" data-level="11.1" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#working-with-data"><i class="fa fa-check"></i><b>11.1</b> Working with data</a></li>
+<li class="chapter" data-level="11.2" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#description-of-the-mfdb-system"><i class="fa fa-check"></i><b>11.2</b> Description of the MFDB system</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#installing-mfdb"><i class="fa fa-check"></i><b>11.2.1</b> Installing MFDB</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#importing-data"><i class="fa fa-check"></i><b>11.3</b> Importing data</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#connect-to-database"><i class="fa fa-check"></i><b>11.3.1</b> Connect to database</a></li>
+<li class="chapter" data-level="11.3.2" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#defining-taxonomies"><i class="fa fa-check"></i><b>11.3.2</b> Defining taxonomies</a></li>
+<li class="chapter" data-level="11.3.3" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#define-areas-divisions"><i class="fa fa-check"></i><b>11.3.3</b> Define areas &amp; divisions</a></li>
+<li class="chapter" data-level="11.3.4" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#define-sampling-types"><i class="fa fa-check"></i><b>11.3.4</b> Define sampling types</a></li>
+<li class="chapter" data-level="11.3.5" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#define-vessel-taxonomy"><i class="fa fa-check"></i><b>11.3.5</b> Define vessel taxonomy</a></li>
+<li class="chapter" data-level="11.3.6" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#define-tow-taxonomy"><i class="fa fa-check"></i><b>11.3.6</b> Define tow taxonomy</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#importing-data-1"><i class="fa fa-check"></i><b>11.4</b> Importing data</a><ul>
+<li class="chapter" data-level="11.4.1" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#import-temperature-data"><i class="fa fa-check"></i><b>11.4.1</b> Import temperature data</a></li>
+<li class="chapter" data-level="11.4.2" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#importing-surveycommercial-samples"><i class="fa fa-check"></i><b>11.4.2</b> Importing survey/commercial samples</a></li>
+<li class="chapter" data-level="11.4.3" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#import-stomach-survey"><i class="fa fa-check"></i><b>11.4.3</b> Import stomach survey</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#querying-data"><i class="fa fa-check"></i><b>11.5</b> Querying data</a></li>
+<li class="chapter" data-level="11.6" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#uploading-the-datras-database-to-mfdb"><i class="fa fa-check"></i><b>11.6</b> Uploading the DATRAS database to MFDB</a></li>
+<li class="chapter" data-level="11.7" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#dumping-restoring-a-db"><i class="fa fa-check"></i><b>11.7</b> Dumping / Restoring a DB</a></li>
+</ul></li>
+<li class="appendix"><span><b>Appendix</b></span></li>
+<li class="chapter" data-level="A" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html"><i class="fa fa-check"></i><b>A</b> Installing Gadget from source</a><ul>
+<li class="chapter" data-level="A.1" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#command-line-version"><i class="fa fa-check"></i><b>A.1</b> Command line version</a><ul>
+<li class="chapter" data-level="A.1.1" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#linux"><i class="fa fa-check"></i><b>A.1.1</b> Linux</a></li>
+<li class="chapter" data-level="A.1.2" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#mac"><i class="fa fa-check"></i><b>A.1.2</b> Mac</a></li>
+<li class="chapter" data-level="A.1.3" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#windows"><i class="fa fa-check"></i><b>A.1.3</b> Windows</a></li>
+</ul></li>
+<li class="chapter" data-level="A.2" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#download-compile-and-install"><i class="fa fa-check"></i><b>A.2</b> Download, compile and install</a><ul>
+<li class="chapter" data-level="A.2.1" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#standard-procedure"><i class="fa fa-check"></i><b>A.2.1</b> Standard procedure</a></li>
+<li class="chapter" data-level="A.2.2" data-path="installing-gadget-from-source.html"><a href="installing-gadget-from-source.html#recommended-via-git"><i class="fa fa-check"></i><b>A.2.2</b> Recommended: via Git</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="B" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html"><i class="fa fa-check"></i><b>B</b> Troubleshooting Gadget models</a><ul>
+<li class="chapter" data-level="B.1" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#file-data-gadget-cannot-be-found"><i class="fa fa-check"></i><b>B.1</b> File / data / Gadget cannot be found</a></li>
+<li class="chapter" data-level="B.2" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#fleet-data-likelihood-problems"><i class="fa fa-check"></i><b>B.2</b> Fleet / Data / Likelihood problems</a><ul>
+<li class="chapter" data-level="B.2.1" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#fleet-does-not-exist-in-an-area"><i class="fa fa-check"></i><b>B.2.1</b> Fleet does not exist in an area</a></li>
+<li class="chapter" data-level="B.2.2" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#certain-likelihood-scores-or-values-are-not-being-calculated"><i class="fa fa-check"></i><b>B.2.2</b> Certain likelihood scores or values are not being calculated</a></li>
+<li class="chapter" data-level="B.2.3" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#starting-value-is-outside-the-bounds-of-the-parameter"><i class="fa fa-check"></i><b>B.2.3</b> Starting value is outside the bounds of the parameter</a></li>
+<li class="chapter" data-level="B.2.4" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#update-gadget-and-rgadget-restart-the-rsession"><i class="fa fa-check"></i><b>B.2.4</b> Update Gadget and Rgadget, restart the Rsession</a></li>
+</ul></li>
+<li class="chapter" data-level="B.3" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#list-of-known-gadget-quirks"><i class="fa fa-check"></i><b>B.3</b> List of known Gadget quirks</a></li>
+<li class="chapter" data-level="B.4" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#gadget-is-working-properly-but-results-are-strange"><i class="fa fa-check"></i><b>B.4</b> Gadget is working properly, but results are strange</a><ul>
+<li class="chapter" data-level="B.4.1" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#programming-errors"><i class="fa fa-check"></i><b>B.4.1</b> Programming errors</a></li>
+<li class="chapter" data-level="B.4.2" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#old-files-hanging-around-in-the-gadget-model-directory"><i class="fa fa-check"></i><b>B.4.2</b> Old files hanging around in the Gadget model directory</a></li>
+<li class="chapter" data-level="B.4.3" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#gadget-iterative-gives-errors"><i class="fa fa-check"></i><b>B.4.3</b> Gadget iterative gives errors</a></li>
+<li class="chapter" data-level="B.4.4" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#the-gadget-working-directory-is-incorporating-files-from-another-gadget-model"><i class="fa fa-check"></i><b>B.4.4</b> The Gadget working directory is incorporating files from another Gadget model</a></li>
+<li class="chapter" data-level="B.4.5" data-path="troubleshooting-gadget-models.html"><a href="troubleshooting-gadget-models.html#your-model-is-not-good"><i class="fa fa-check"></i><b>B.4.5</b> Your model is not good</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="C" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>C</b> References</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Building models using the Gadget framework</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="projections-using-rgadget" class="section level1">
+<h1><span class="header-section-number">8</span> Projections using Rgadget</h1>
+<p>Creating Gadget projections can be as simple as modifying the appropriate time and data files to create a model that runs over a longer time period. However, Rgadget is also comes with a series of projection functions that are handy for ensuring internal consistency of model files and includes a series of features that are often useful to the stock assessment modeler. For example, it simplifies the process for adding various error sources and harvest control rules for testing via stochastic simulation in a management strategy evaluation framework.</p>
+<div id="example-based-on-the-ling-assessment" class="section level2">
+<h2><span class="header-section-number">8.1</span> Example based on the ling assessment</h2>
+<p>As usual we will start by setting up a Gadget model directory and use ling as an example:</p>
+<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="projections-using-rgadget.html#cb299-1"></a><span class="co">#assuming you are beginning in a fresh session; this information should be in an </span></span>
+<span id="cb299-2"><a href="projections-using-rgadget.html#cb299-2"></a><span class="co">#initialization script</span></span>
+<span id="cb299-3"><a href="projections-using-rgadget.html#cb299-3"></a></span>
+<span id="cb299-4"><a href="projections-using-rgadget.html#cb299-4"></a>base_dir &lt;-<span class="st"> &#39;ling_model&#39;</span></span>
+<span id="cb299-5"><a href="projections-using-rgadget.html#cb299-5"></a>vers &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;01-base&#39;</span>)</span>
+<span id="cb299-6"><a href="projections-using-rgadget.html#cb299-6"></a>gd &lt;-<span class="st"> </span><span class="kw">gadget.variant.dir</span>(<span class="kw">sprintf</span>(<span class="kw">paste0</span>(<span class="st">&quot;%s/&quot;</span>,vers),base_dir))</span>
+<span id="cb299-7"><a href="projections-using-rgadget.html#cb299-7"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">gd =</span> gd)</span></code></pre></div>
+<pre><code>## Warning in if (class(tmp) != &quot;list&quot;) {: the condition has length &gt; 1 and only
+## the first element will be used
+
+## Warning in if (class(tmp) != &quot;list&quot;) {: the condition has length &gt; 1 and only
+## the first element will be used
+
+## Warning in if (class(tmp) != &quot;list&quot;) {: the condition has length &gt; 1 and only
+## the first element will be used
+
+## Warning in if (class(tmp) != &quot;list&quot;) {: the condition has length &gt; 1 and only
+## the first element will be used
+
+## Warning in if (class(tmp) != &quot;list&quot;) {: the condition has length &gt; 1 and only
+## the first element will be used
+
+## Warning in if (class(tmp) != &quot;list&quot;) {: the condition has length &gt; 1 and only
+## the first element will be used</code></pre>
+<pre><code>## [1] &quot;Reading input data&quot;
+## [1] &quot;Running Gadget&quot;
+## [1] &quot;Reading output files&quot;
+## [1] &quot;Gathering results&quot;
+## [1] &quot;Merging input and output&quot;</code></pre>
+<p>Projections are based on a series of functions that work together to produce a model with an extended time series and other modifications. These functions are under development, so may change in significant ways in the future. If you plan to use them, please make sure Rgadget is kept up to date.</p>
+<p>The general design of the functions sets up a procedure that:</p>
+<ol style="list-style-type: decimal">
+<li>sets the length of time of projections and directory where projection files will be stored using <code>gadget_project_time</code>.</li>
+<li>indicates the template stocks on which stock biological parameterisations will be based in projections in <code>gadget_project_stocks</code>. Using the original as a template rather than directly in simulations allows more flexibility in allowing for novel biological scenarios to be explored without disturbing the original model construct. Note that <code>gadget_project_stocks</code> is only built to project the immature and mature portions of the stock. In a multi-species model, one would use multiple calls to <code>gadget_project_stocks</code> for each species.</li>
+<li>indicates the template fleets on which fleet parameterisations will be based in projections using <code>gadget_project_fleet</code>. A single call to this function is used for each fleet. In management strategy evaluation, it is often the case that the projected fleet may need to respond to a harvest control rule or other have other modifications to its fishing behavior (e.g., input or output regulations, split effort / quota among fleets). Therefore this function has several built in features that aid with these implementations, but is often under development to improve functionality.</li>
+<li>uses <code>gadget_evaluate</code> to set up a projection parameter file. (‘params.pre’ below) with all the same parameterisations as the template parameterisation file from the original model (‘WGTS/params.final’). Note that the resulting ‘params.pre’ parameter file is in a ‘wide’ format that is understood by Gadget (switch names in one row, values in another row), which is more efficient in a framework where several simulations will be run.</li>
+<li>modifies the ‘params.pre’ file by adding a recruitment series. There are currently a few different options for generating a recruitment series, including setting a constant value, using a block bootstrap re-sampling method, or generating a series from an auto-regressive time series model (lag 1). Creating replicates of different recruitment series is also possible at this point.</li>
+<li>modifies the ‘params.pre’ file by adding reference points used to control fishing behavior via <code>gadget_project_ref_points</code>. Reference points are then used by processes controlled by <code>gadget_project_fleet</code>.</li>
+<li>modifies the ‘params.pre’ file via <code>gadget_project_advice</code> by setting 2 important components of the management process: harvest levels and errors around those harvest levels (advice/assessment error). It needs to be applied once by fleet, like <code>gadget_project_fleet</code>. Both components are added to the params file, or modify parameter values for parameters that were created during fleet definitions in <code>project_gadget_fleet</code>. The arguments <code>advice_cv</code> and <code>advice_rho</code> define a lag 1 auto-regressive model from which a series of errors are randomly drawn. It is also possible to add replication at this stage (and therefore several rows of parameter values). However, note that this replication does not extend replication generated by recruitment, but instead applies replication across recruitment replicates.</li>
+<li>creates printer files that define output succinctly via <code>gadget_project_output</code>. This function was specifically created for output useful in a management strategy evaluation of harvest controls, and controls what files are available to be read by the later <code>read.printfiles</code> function call, so may need to be custom-built for other purposes.</li>
+<li>creates final simulation output via <code>gadget_evaluate</code>, where the final ‘params.pre’ file is inputted and model file output printed according to printer file specifications. The log file argument is optional and should only be used during debugging - be careful to remove it during runs involving many simulations or it may slow down processing.</li>
+</ol>
+<p>Functions are joined via piping, but the only information being passed from function to function is a gadget variant directory (modified slightly from the user-defined directory inputted to <code>gadget_project_time</code>. All function calls after the final <code>gadget_evaluate</code> are examples of file and data management - reading in the outputted printer files, organise and labelling data (similar to what <code>gadget.fit</code> does), and storing under ‘res’ object.</p>
+<div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb302-1"><a href="projections-using-rgadget.html#cb302-1"></a>btrigger &lt;-<span class="st"> </span><span class="dv">6</span></span>
+<span id="cb302-2"><a href="projections-using-rgadget.html#cb302-2"></a>blim &lt;-<span class="st"> </span><span class="dv">4</span></span>
+<span id="cb302-3"><a href="projections-using-rgadget.html#cb302-3"></a>hrs &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="fl">0.2</span>, <span class="fl">0.02</span>)</span>
+<span id="cb302-4"><a href="projections-using-rgadget.html#cb302-4"></a>nreps &lt;-<span class="st"> </span><span class="dv">10</span></span>
+<span id="cb302-5"><a href="projections-using-rgadget.html#cb302-5"></a>ny &lt;-<span class="dv">20</span></span>
+<span id="cb302-6"><a href="projections-using-rgadget.html#cb302-6"></a><span class="co"># vd &lt;-  getwd() %&gt;%   #useful for having all operations done in a temporary directory</span></span>
+<span id="cb302-7"><a href="projections-using-rgadget.html#cb302-7"></a><span class="co">#   stringr::str_count(&quot;/&quot;) %&gt;% </span></span>
+<span id="cb302-8"><a href="projections-using-rgadget.html#cb302-8"></a><span class="co">#   rep(&quot;../&quot;, .) %&gt;% </span></span>
+<span id="cb302-9"><a href="projections-using-rgadget.html#cb302-9"></a><span class="co">#   paste(collapse = &quot;&quot;) %&gt;%</span></span>
+<span id="cb302-10"><a href="projections-using-rgadget.html#cb302-10"></a><span class="co">#   paste(tempdir(),&quot;_1&quot;, sep = &quot;&quot;) </span></span>
+<span id="cb302-11"><a href="projections-using-rgadget.html#cb302-11"></a>vd &lt;-<span class="st"> &#39;TEST&#39;</span></span>
+<span id="cb302-12"><a href="projections-using-rgadget.html#cb302-12"></a></span>
+<span id="cb302-13"><a href="projections-using-rgadget.html#cb302-13"></a>      res &lt;-</span>
+<span id="cb302-14"><a href="projections-using-rgadget.html#cb302-14"></a><span class="st">        </span><span class="kw">gadget_project_time</span>(gd,</span>
+<span id="cb302-15"><a href="projections-using-rgadget.html#cb302-15"></a>                            <span class="dt">num_years =</span> ny, </span>
+<span id="cb302-16"><a href="projections-using-rgadget.html#cb302-16"></a>                            <span class="dt">variant_dir =</span> vd) <span class="op">%&gt;%</span></span>
+<span id="cb302-17"><a href="projections-using-rgadget.html#cb302-17"></a><span class="st">        </span><span class="kw">gadget_project_stocks</span>(<span class="dt">imm.file =</span> <span class="st">&#39;lingimm&#39;</span>,<span class="dt">mat.file =</span> <span class="st">&#39;lingmat&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb302-18"><a href="projections-using-rgadget.html#cb302-18"></a><span class="st">        </span><span class="co"># gadget_project_fleet(pre_fleet = &#39;lln&#39;,</span></span>
+<span id="cb302-19"><a href="projections-using-rgadget.html#cb302-19"></a><span class="st">        </span><span class="co">#                      fleet_type = &#39;quotafleet&#39;,</span></span>
+<span id="cb302-20"><a href="projections-using-rgadget.html#cb302-20"></a><span class="st">        </span><span class="co">#                      quotafunction = &#39;ices&#39;,</span></span>
+<span id="cb302-21"><a href="projections-using-rgadget.html#cb302-21"></a><span class="st">        </span><span class="co">#                      biomasslevel = list(b0=0,b1=btrigger*1e6),</span></span>
+<span id="cb302-22"><a href="projections-using-rgadget.html#cb302-22"></a><span class="st">        </span><span class="co">#                      quotalevel = list(q0=0,q1=1,q2=1),</span></span>
+<span id="cb302-23"><a href="projections-using-rgadget.html#cb302-23"></a><span class="st">        </span><span class="co">#                      selectstocks = &#39;lingmat&#39;,</span></span>
+<span id="cb302-24"><a href="projections-using-rgadget.html#cb302-24"></a><span class="st">        </span><span class="co">#                      pre_proportion = 0.5</span></span>
+<span id="cb302-25"><a href="projections-using-rgadget.html#cb302-25"></a><span class="st">        </span><span class="co"># ) %&gt;%</span></span>
+<span id="cb302-26"><a href="projections-using-rgadget.html#cb302-26"></a><span class="st">        </span><span class="co"># gadget_project_fleet(pre_fleet = &#39;bmt&#39;,</span></span>
+<span id="cb302-27"><a href="projections-using-rgadget.html#cb302-27"></a><span class="st">        </span><span class="co">#                      fleet_type = &#39;quotafleet&#39;,</span></span>
+<span id="cb302-28"><a href="projections-using-rgadget.html#cb302-28"></a><span class="st">        </span><span class="co">#                      quotafunction = &#39;ices&#39;,</span></span>
+<span id="cb302-29"><a href="projections-using-rgadget.html#cb302-29"></a><span class="st">        </span><span class="co">#                      biomasslevel = list(b0=0,b1=btrigger*1e6),</span></span>
+<span id="cb302-30"><a href="projections-using-rgadget.html#cb302-30"></a><span class="st">        </span><span class="co">#                      quotalevel = list(q0=0,q1=1,q2=1),</span></span>
+<span id="cb302-31"><a href="projections-using-rgadget.html#cb302-31"></a><span class="st">        </span><span class="co">#                      selectstocks = &#39;lingmat&#39;,</span></span>
+<span id="cb302-32"><a href="projections-using-rgadget.html#cb302-32"></a><span class="st">        </span><span class="co">#                      pre_proportion = 0.3</span></span>
+<span id="cb302-33"><a href="projections-using-rgadget.html#cb302-33"></a><span class="st">        </span><span class="co"># ) %&gt;%</span></span>
+<span id="cb302-34"><a href="projections-using-rgadget.html#cb302-34"></a><span class="st">        </span><span class="co"># gadget_project_fleet(pre_fleet = &#39;gil&#39;,</span></span>
+<span id="cb302-35"><a href="projections-using-rgadget.html#cb302-35"></a><span class="st">        </span><span class="co">#                      fleet_type = &#39;quotafleet&#39;,</span></span>
+<span id="cb302-36"><a href="projections-using-rgadget.html#cb302-36"></a><span class="st">        </span><span class="co">#                      quotafunction = &#39;ices&#39;,</span></span>
+<span id="cb302-37"><a href="projections-using-rgadget.html#cb302-37"></a><span class="st">        </span><span class="co">#                      biomasslevel = list(b0=0,b1=btrigger*1e6),</span></span>
+<span id="cb302-38"><a href="projections-using-rgadget.html#cb302-38"></a><span class="st">        </span><span class="co">#                      quotalevel = list(q0=0,q1=1,q2=1),</span></span>
+<span id="cb302-39"><a href="projections-using-rgadget.html#cb302-39"></a><span class="st">        </span><span class="co">#                      selectstocks = &#39;lingmat&#39;,</span></span>
+<span id="cb302-40"><a href="projections-using-rgadget.html#cb302-40"></a><span class="st">        </span><span class="co">#                      pre_proportion = 0.5</span></span>
+<span id="cb302-41"><a href="projections-using-rgadget.html#cb302-41"></a><span class="st">        </span><span class="co"># ) %&gt;%</span></span>
+<span id="cb302-42"><a href="projections-using-rgadget.html#cb302-42"></a><span class="st">        </span><span class="kw">gadget_project_fleet</span>(<span class="dt">pre_fleet =</span> <span class="st">&#39;lln&#39;</span>, <span class="dt">pre_proportion =</span> <span class="fl">0.5</span>, <span class="dt">common_mult =</span> <span class="st">&#39;ling_hr.pre&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb302-43"><a href="projections-using-rgadget.html#cb302-43"></a><span class="st">        </span><span class="kw">gadget_project_fleet</span>(<span class="dt">pre_fleet =</span> <span class="st">&#39;bmt&#39;</span>, <span class="dt">pre_proportion =</span> <span class="fl">0.3</span>, <span class="dt">common_mult =</span> <span class="st">&#39;ling_hr.pre&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb302-44"><a href="projections-using-rgadget.html#cb302-44"></a><span class="st">        </span><span class="kw">gadget_project_fleet</span>(<span class="dt">pre_fleet =</span> <span class="st">&#39;gil&#39;</span>, <span class="dt">pre_proportion =</span> <span class="fl">0.2</span>, <span class="dt">common_mult =</span> <span class="st">&#39;ling_hr.pre&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb302-45"><a href="projections-using-rgadget.html#cb302-45"></a><span class="st">        </span><span class="kw">gadget_evaluate</span>(<span class="dt">params.out =</span> <span class="kw">paste</span>(vd, <span class="st">&#39;params.pre&#39;</span>,<span class="dt">sep=</span><span class="st">&#39;/&#39;</span>),</span>
+<span id="cb302-46"><a href="projections-using-rgadget.html#cb302-46"></a>                        <span class="dt">params.in =</span> <span class="st">&#39;WGTS/params.final&#39;</span>, <span class="dt">log =</span> <span class="st">&#39;TEST/log&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb302-47"><a href="projections-using-rgadget.html#cb302-47"></a><span class="st">        </span><span class="kw">gadget_project_recruitment</span>(<span class="dt">stock =</span> <span class="st">&#39;lingimm&#39;</span>,</span>
+<span id="cb302-48"><a href="projections-using-rgadget.html#cb302-48"></a>                                   <span class="dt">recruitment =</span> fit<span class="op">$</span>stock.recruitment <span class="op">%&gt;%</span></span>
+<span id="cb302-49"><a href="projections-using-rgadget.html#cb302-49"></a><span class="st">                                     </span><span class="kw">filter</span>(stock <span class="op">==</span><span class="st"> &#39;lingimm&#39;</span>), </span>
+<span id="cb302-50"><a href="projections-using-rgadget.html#cb302-50"></a>                                   <span class="dt">method =</span> <span class="st">&quot;bootstrap&quot;</span>,</span>
+<span id="cb302-51"><a href="projections-using-rgadget.html#cb302-51"></a>                                   <span class="dt">params.file =</span> <span class="kw">paste</span>(<span class="kw">attr</span>(.,<span class="st">&#39;variant_dir&#39;</span>),<span class="st">&#39;params.pre&#39;</span>,<span class="dt">sep=</span><span class="st">&#39;/&#39;</span>),</span>
+<span id="cb302-52"><a href="projections-using-rgadget.html#cb302-52"></a>                                   <span class="dt">n_replicates =</span> nreps) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb302-53"><a href="projections-using-rgadget.html#cb302-53"></a><span class="st">        </span><span class="kw">gadget_project_ref_points</span>(<span class="dt">ref_points =</span> <span class="kw">tibble</span>(<span class="dt">lingmat.blim =</span> blim<span class="op">*</span><span class="fl">1e6</span>),</span>
+<span id="cb302-54"><a href="projections-using-rgadget.html#cb302-54"></a>                                  <span class="dt">params.file =</span> <span class="kw">paste</span>(<span class="kw">attr</span>(.,<span class="st">&#39;variant_dir&#39;</span>),<span class="st">&#39;params.pre&#39;</span>,<span class="dt">sep=</span><span class="st">&#39;/&#39;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb302-55"><a href="projections-using-rgadget.html#cb302-55"></a><span class="st">        </span><span class="kw">gadget_project_advice</span>(<span class="dt">pre_fleet =</span> <span class="st">&#39;ling_hr&#39;</span>,</span>
+<span id="cb302-56"><a href="projections-using-rgadget.html#cb302-56"></a>                              <span class="dt">harvest_rate =</span> hrs,</span>
+<span id="cb302-57"><a href="projections-using-rgadget.html#cb302-57"></a>                              <span class="dt">params.file =</span> <span class="kw">paste</span>(<span class="kw">attr</span>(.,<span class="st">&#39;variant_dir&#39;</span>),<span class="st">&#39;params.pre&#39;</span>,<span class="dt">sep=</span><span class="st">&#39;/&#39;</span>),</span>
+<span id="cb302-58"><a href="projections-using-rgadget.html#cb302-58"></a>                              <span class="dt">n_replicates =</span> nreps,</span>
+<span id="cb302-59"><a href="projections-using-rgadget.html#cb302-59"></a>                              <span class="dt">advice_cv =</span> <span class="fl">0.2</span>, </span>
+<span id="cb302-60"><a href="projections-using-rgadget.html#cb302-60"></a>                              <span class="dt">post_fix =</span> <span class="st">&#39;pre&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb302-61"><a href="projections-using-rgadget.html#cb302-61"></a><span class="st">        </span><span class="kw">gadget_project_output</span>(<span class="dt">pre_fleets =</span> <span class="kw">c</span>(<span class="st">&#39;bmt&#39;</span>, <span class="st">&#39;lln&#39;</span>, <span class="st">&#39;gil&#39;</span>), <span class="dt">imm.file =</span> <span class="st">&#39;lingimm&#39;</span>,<span class="dt">mat.file =</span> <span class="st">&#39;lingmat&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb302-62"><a href="projections-using-rgadget.html#cb302-62"></a><span class="st">        </span><span class="kw">gadget_evaluate</span>(<span class="dt">params.in =</span> <span class="kw">paste</span>(<span class="kw">attr</span>(.,<span class="st">&#39;variant_dir&#39;</span>),<span class="st">&#39;params.pre&#39;</span>,<span class="dt">sep=</span><span class="st">&#39;/&#39;</span>), <span class="dt">params.out =</span> <span class="st">&#39;params.out&#39;</span>, <span class="dt">log =</span> <span class="kw">paste</span>(vd,<span class="st">&#39;log.test&#39;</span>,<span class="dt">sep=</span><span class="st">&#39;/&#39;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb302-63"><a href="projections-using-rgadget.html#cb302-63"></a><span class="st">        </span>{<span class="kw">read.printfiles</span>(<span class="kw">paste</span>(.,<span class="kw">attr</span>(.,<span class="st">&#39;variant_dir&#39;</span>),<span class="st">&#39;out&#39;</span>,<span class="dt">sep=</span><span class="st">&#39;/&#39;</span>))} <span class="op">%&gt;%</span></span>
+<span id="cb302-64"><a href="projections-using-rgadget.html#cb302-64"></a><span class="st">        </span>purrr<span class="op">::</span><span class="kw">map</span>(mutate, <span class="dt">trial=</span><span class="kw">cut</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(year),<span class="kw">c</span>(<span class="dv">0</span>,<span class="kw">which</span>(<span class="kw">diff</span>(year)<span class="op">&lt;</span><span class="dv">0</span>),<span class="fl">1e9</span>),<span class="dt">labels =</span> <span class="ot">FALSE</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb302-65"><a href="projections-using-rgadget.html#cb302-65"></a><span class="st">        </span><span class="kw">set_names</span>(<span class="kw">c</span>(<span class="st">&quot;catch.F&quot;</span>,<span class="st">&quot;catch.lw&quot;</span>,<span class="st">&#39;imm.rec&#39;</span>,<span class="st">&#39;mat.ssb&#39;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb302-66"><a href="projections-using-rgadget.html#cb302-66"></a><span class="st">        </span>purrr<span class="op">::</span><span class="kw">map</span>(left_join,<span class="kw">tibble</span>(<span class="dt">trial=</span><span class="dv">1</span><span class="op">:</span>(<span class="kw">length</span>(hrs)<span class="op">*</span>nreps),</span>
+<span id="cb302-67"><a href="projections-using-rgadget.html#cb302-67"></a>                                    <span class="dt">harvest_rate =</span> <span class="kw">rep</span>(hrs,nreps)</span>
+<span id="cb302-68"><a href="projections-using-rgadget.html#cb302-68"></a>                                    )</span>
+<span id="cb302-69"><a href="projections-using-rgadget.html#cb302-69"></a>                   )</span></code></pre></div>
+<pre><code>## 
+## [36m──[39m [1m[1mColumn specification[1m[22m [36m────────────────────────────────────────────────────────[39m
+## cols(
+##   year = [32mcol_double()[39m,
+##   step = [32mcol_double()[39m,
+##   area = [32mcol_double()[39m
+## )
+## 
+## 
+## [36m──[39m [1m[1mColumn specification[1m[22m [36m────────────────────────────────────────────────────────[39m
+## cols(
+##   year = [32mcol_double()[39m,
+##   step = [32mcol_double()[39m,
+##   area = [32mcol_double()[39m
+## )
+## 
+## 
+## [36m──[39m [1m[1mColumn specification[1m[22m [36m────────────────────────────────────────────────────────[39m
+## cols(
+##   year = [32mcol_double()[39m,
+##   step = [32mcol_double()[39m,
+##   area = [32mcol_double()[39m
+## )
+## 
+## 
+## [36m──[39m [1m[1mColumn specification[1m[22m [36m────────────────────────────────────────────────────────[39m
+## cols(
+##   year = [32mcol_double()[39m,
+##   step = [32mcol_double()[39m,
+##   area = [32mcol_double()[39m
+## )
+## 
+## 
+## [36m──[39m [1m[1mColumn specification[1m[22m [36m────────────────────────────────────────────────────────[39m
+## cols(
+##   year = [32mcol_double()[39m,
+##   step = [32mcol_double()[39m,
+##   area = [32mcol_double()[39m
+## )</code></pre>
+<pre><code>## Registered S3 method overwritten by &#39;quantmod&#39;:
+##   method            from
+##   as.zoo.data.frame zoo</code></pre>
+<pre><code>## 
+## [36m──[39m [1m[1mColumn specification[1m[22m [36m────────────────────────────────────────────────────────[39m
+## cols(
+##   year = [32mcol_double()[39m,
+##   step = [32mcol_double()[39m,
+##   area = [32mcol_double()[39m
+## )</code></pre>
+<pre><code>## Joining, by = &quot;trial&quot;
+## Joining, by = &quot;trial&quot;
+## Joining, by = &quot;trial&quot;
+## Joining, by = &quot;trial&quot;</code></pre>
+<p>The above sequence can be used to implement error in recruitment and advice, but model error can also be implemented by first generating a series of input parameter files, each with a series of parameter values modified by some error. A call to one of these parameter files would replace ‘WGTS/params.final’ in the first <code>gadget_evaluate</code> function call. Running the above code in parallel, one for each of the generated parameter files with model error included, could then be accomplished for example via the <code>parallel</code> package.</p>
+<p>Below are some examples of useful plots that can be generated from the above output.</p>
+<div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb307-1"><a href="projections-using-rgadget.html#cb307-1"></a>yield_curve &lt;-</span>
+<span id="cb307-2"><a href="projections-using-rgadget.html#cb307-2"></a><span class="st">  </span>res<span class="op">$</span>catch.lw <span class="op">%&gt;%</span></span>
+<span id="cb307-3"><a href="projections-using-rgadget.html#cb307-3"></a><span class="st">  </span><span class="kw">filter</span>(year<span class="op">&gt;</span><span class="dv">2020</span>) <span class="op">%&gt;%</span></span>
+<span id="cb307-4"><a href="projections-using-rgadget.html#cb307-4"></a><span class="st">  </span><span class="kw">group_by</span>(trial,harvest_rate,year) <span class="op">%&gt;%</span></span>
+<span id="cb307-5"><a href="projections-using-rgadget.html#cb307-5"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">c=</span><span class="kw">sum</span>(biomass_consumed)<span class="op">/</span><span class="fl">1e6</span>) <span class="op">%&gt;%</span></span>
+<span id="cb307-6"><a href="projections-using-rgadget.html#cb307-6"></a><span class="st">  </span><span class="kw">group_by</span>(harvest_rate) <span class="op">%&gt;%</span></span>
+<span id="cb307-7"><a href="projections-using-rgadget.html#cb307-7"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">m=</span><span class="kw">median</span>(c),<span class="dt">u=</span><span class="kw">quantile</span>(c,<span class="fl">0.95</span>),<span class="dt">l=</span><span class="kw">quantile</span>(c,<span class="fl">0.05</span>), <span class="dt">uu =</span> <span class="kw">quantile</span>(c,<span class="fl">0.85</span>), <span class="dt">ll =</span> <span class="kw">quantile</span>(c,<span class="fl">0.15</span>), <span class="dt">uuu =</span> <span class="kw">quantile</span>(c,<span class="fl">0.75</span>), <span class="dt">lll =</span> <span class="kw">quantile</span>(c,<span class="fl">0.25</span>))</span></code></pre></div>
+<pre><code>## `summarise()` regrouping output by &#39;trial&#39;, &#39;harvest_rate&#39; (override with `.groups` argument)</code></pre>
+<pre><code>## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<div class="sourceCode" id="cb310"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb310-1"><a href="projections-using-rgadget.html#cb310-1"></a>ssb_curve &lt;-</span>
+<span id="cb310-2"><a href="projections-using-rgadget.html#cb310-2"></a><span class="st">  </span>res<span class="op">$</span>mat.ssb <span class="op">%&gt;%</span></span>
+<span id="cb310-3"><a href="projections-using-rgadget.html#cb310-3"></a><span class="st">  </span><span class="kw">filter</span>(year<span class="op">&gt;</span><span class="dv">2020</span>) <span class="op">%&gt;%</span></span>
+<span id="cb310-4"><a href="projections-using-rgadget.html#cb310-4"></a><span class="st">  </span><span class="kw">group_by</span>(trial,harvest_rate,year) <span class="op">%&gt;%</span></span>
+<span id="cb310-5"><a href="projections-using-rgadget.html#cb310-5"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">c=</span><span class="kw">median</span>(number<span class="op">*</span>mean_weight)<span class="op">/</span><span class="fl">1e6</span>) <span class="op">%&gt;%</span></span>
+<span id="cb310-6"><a href="projections-using-rgadget.html#cb310-6"></a><span class="st">  </span><span class="kw">group_by</span>(harvest_rate) <span class="op">%&gt;%</span></span>
+<span id="cb310-7"><a href="projections-using-rgadget.html#cb310-7"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">m=</span><span class="kw">median</span>(c),<span class="dt">u=</span><span class="kw">quantile</span>(c,<span class="fl">0.95</span>),<span class="dt">l=</span><span class="kw">quantile</span>(c,<span class="fl">0.05</span>), <span class="dt">uu =</span> <span class="kw">quantile</span>(c,<span class="fl">0.85</span>), <span class="dt">ll =</span> <span class="kw">quantile</span>(c,<span class="fl">0.15</span>), <span class="dt">uuu =</span> <span class="kw">quantile</span>(c,<span class="fl">0.75</span>), <span class="dt">lll =</span> <span class="kw">quantile</span>(c,<span class="fl">0.25</span>))</span></code></pre></div>
+<pre><code>## `summarise()` regrouping output by &#39;trial&#39;, &#39;harvest_rate&#39; (override with `.groups` argument)
+## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<div class="sourceCode" id="cb312"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb312-1"><a href="projections-using-rgadget.html#cb312-1"></a>ssb_res_<span class="dv">05</span> &lt;-</span>
+<span id="cb312-2"><a href="projections-using-rgadget.html#cb312-2"></a><span class="st">  </span>res<span class="op">$</span>mat.ssb <span class="op">%&gt;%</span></span>
+<span id="cb312-3"><a href="projections-using-rgadget.html#cb312-3"></a><span class="st">  </span><span class="kw">filter</span>(year<span class="op">&gt;</span><span class="dv">2020</span>) <span class="op">%&gt;%</span></span>
+<span id="cb312-4"><a href="projections-using-rgadget.html#cb312-4"></a><span class="st">  </span><span class="kw">group_by</span>(trial,harvest_rate,year) <span class="op">%&gt;%</span></span>
+<span id="cb312-5"><a href="projections-using-rgadget.html#cb312-5"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">percyrsdropped =</span> <span class="kw">sum</span>(<span class="kw">ifelse</span>(number<span class="op">*</span>mean_weight<span class="op">/</span><span class="fl">1e6</span> <span class="op">&lt;</span><span class="st"> </span>blim, <span class="dv">1</span>, <span class="dv">0</span>))<span class="op">/</span><span class="kw">n</span>(),</span>
+<span id="cb312-6"><a href="projections-using-rgadget.html#cb312-6"></a>            <span class="dt">ssb =</span> <span class="kw">median</span>(number<span class="op">*</span>mean_weight<span class="op">/</span><span class="fl">1e6</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb312-7"><a href="projections-using-rgadget.html#cb312-7"></a><span class="st">  </span><span class="kw">group_by</span>(harvest_rate) <span class="op">%&gt;%</span></span>
+<span id="cb312-8"><a href="projections-using-rgadget.html#cb312-8"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">pcrash=</span><span class="kw">sum</span>(<span class="kw">ifelse</span>(percyrsdropped<span class="op">&gt;</span><span class="fl">0.05</span>, <span class="dv">1</span>, <span class="dv">0</span>))<span class="op">/</span><span class="kw">n</span>(),</span>
+<span id="cb312-9"><a href="projections-using-rgadget.html#cb312-9"></a>            <span class="dt">ssb05 =</span> <span class="kw">min</span>(ssb<span class="op">*</span><span class="kw">ifelse</span>(percyrsdropped<span class="op">&lt;</span><span class="fl">0.05</span>, <span class="dv">1</span>, <span class="ot">NA</span>), <span class="dt">na.rm =</span> T)) </span></code></pre></div>
+<pre><code>## `summarise()` regrouping output by &#39;trial&#39;, &#39;harvest_rate&#39; (override with `.groups` argument)
+## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<div class="sourceCode" id="cb314"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb314-1"><a href="projections-using-rgadget.html#cb314-1"></a>f.curve &lt;-</span>
+<span id="cb314-2"><a href="projections-using-rgadget.html#cb314-2"></a><span class="st">  </span>res<span class="op">$</span>catch.F <span class="op">%&gt;%</span></span>
+<span id="cb314-3"><a href="projections-using-rgadget.html#cb314-3"></a><span class="st">  </span><span class="kw">filter</span>(year<span class="op">&gt;</span><span class="dv">2020</span>) <span class="op">%&gt;%</span></span>
+<span id="cb314-4"><a href="projections-using-rgadget.html#cb314-4"></a><span class="st">  </span><span class="co">#group_by(year, step, area, length, trial, harvest_rate) %&gt;%</span></span>
+<span id="cb314-5"><a href="projections-using-rgadget.html#cb314-5"></a><span class="st">  </span><span class="co">#summarise(mortality = mean(mortality)) %&gt;%</span></span>
+<span id="cb314-6"><a href="projections-using-rgadget.html#cb314-6"></a><span class="st">  </span><span class="kw">group_by</span>(trial,harvest_rate,year) <span class="op">%&gt;%</span></span>
+<span id="cb314-7"><a href="projections-using-rgadget.html#cb314-7"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">c=</span><span class="kw">median</span>(mortality)) <span class="op">%&gt;%</span></span>
+<span id="cb314-8"><a href="projections-using-rgadget.html#cb314-8"></a><span class="st">  </span><span class="kw">group_by</span>(harvest_rate) <span class="op">%&gt;%</span></span>
+<span id="cb314-9"><a href="projections-using-rgadget.html#cb314-9"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">m=</span><span class="kw">median</span>(c),<span class="dt">u=</span><span class="kw">quantile</span>(c,<span class="fl">0.95</span>),<span class="dt">l=</span><span class="kw">quantile</span>(c,<span class="fl">0.05</span>), <span class="dt">uu =</span> <span class="kw">quantile</span>(c,<span class="fl">0.85</span>), <span class="dt">ll =</span> <span class="kw">quantile</span>(c,<span class="fl">0.15</span>), <span class="dt">uuu =</span> <span class="kw">quantile</span>(c,<span class="fl">0.75</span>), <span class="dt">lll =</span> <span class="kw">quantile</span>(c,<span class="fl">0.25</span>))</span></code></pre></div>
+<pre><code>## `summarise()` regrouping output by &#39;trial&#39;, &#39;harvest_rate&#39; (override with `.groups` argument)
+## `summarise()` ungrouping output (override with `.groups` argument)</code></pre>
+<div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb316-1"><a href="projections-using-rgadget.html#cb316-1"></a>hr_msy &lt;-</span>
+<span id="cb316-2"><a href="projections-using-rgadget.html#cb316-2"></a><span class="st">  </span>yield_curve <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(m<span class="op">==</span><span class="kw">max</span>(m)) <span class="op">%&gt;%</span><span class="st"> </span>.<span class="op">$</span>harvest_rate</span>
+<span id="cb316-3"><a href="projections-using-rgadget.html#cb316-3"></a></span>
+<span id="cb316-4"><a href="projections-using-rgadget.html#cb316-4"></a>f.msy &lt;-</span>
+<span id="cb316-5"><a href="projections-using-rgadget.html#cb316-5"></a><span class="st">  </span>f.curve <span class="op">%&gt;%</span></span>
+<span id="cb316-6"><a href="projections-using-rgadget.html#cb316-6"></a><span class="st">  </span><span class="kw">filter</span>(harvest_rate <span class="op">==</span><span class="st"> </span>hr_msy) <span class="op">%&gt;%</span></span>
+<span id="cb316-7"><a href="projections-using-rgadget.html#cb316-7"></a><span class="st">  </span>.<span class="op">$</span>m</span>
+<span id="cb316-8"><a href="projections-using-rgadget.html#cb316-8"></a></span>
+<span id="cb316-9"><a href="projections-using-rgadget.html#cb316-9"></a>hr_msy;f.msy</span></code></pre></div>
+<pre><code>## [1] 0.16</code></pre>
+<pre><code>## [1] 0.1801737</code></pre>
+<div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb319-1"><a href="projections-using-rgadget.html#cb319-1"></a>yield_curve</span></code></pre></div>
+<pre><code>## [90m# A tibble: 11 x 8[39m
+##    harvest_rate     m     u     l    uu    ll   uuu   lll
+##           [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m
+## [90m 1[39m         0     0      0    0     0     0     0     0   
+## [90m 2[39m         0.02  7.59  11.1  4.35  9.89  5.53  9.31  6.27
+## [90m 3[39m         0.04 13.1   19.2  7.58 17.3   9.63 16.3  11.0 
+## [90m 4[39m         0.06 17.6   26.2  9.99 22.8  12.6  21.1  14.4 
+## [90m 5[39m         0.08 20.5   32.8 11.5  27.1  14.6  23.9  16.6 
+## [90m 6[39m         0.1  22.2   38.4 12.6  30.8  16.0  26.1  18.2 
+## [90m 7[39m         0.12 23.6   43.4 13.4  33.2  16.6  28.6  18.9 
+## [90m 8[39m         0.14 23.9   47.7 13.8  35.2  16.8  30.3  19.1 
+## [90m 9[39m         0.16 23.9   51.3 14.0  36.1  16.7  31.1  19.4 
+## [90m10[39m         0.18 23.7   54.4 14.1  36.9  16.8  31.5  19.4 
+## [90m11[39m         0.2  23.5   56.9 14.2  36.8  16.5  31.6  19.3</code></pre>
+<div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb321-1"><a href="projections-using-rgadget.html#cb321-1"></a>yield_plot &lt;-</span>
+<span id="cb321-2"><a href="projections-using-rgadget.html#cb321-2"></a><span class="st">  </span>yield_curve <span class="op">%&gt;%</span></span>
+<span id="cb321-3"><a href="projections-using-rgadget.html#cb321-3"></a><span class="st">  </span><span class="kw">left_join</span>(f.curve <span class="op">%&gt;%</span></span>
+<span id="cb321-4"><a href="projections-using-rgadget.html#cb321-4"></a><span class="st">              </span><span class="kw">select</span>(harvest_rate,<span class="dt">F=</span>m)) <span class="op">%&gt;%</span></span>
+<span id="cb321-5"><a href="projections-using-rgadget.html#cb321-5"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(F,m)) <span class="op">+</span></span>
+<span id="cb321-6"><a href="projections-using-rgadget.html#cb321-6"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin=</span>l,<span class="dt">ymax=</span>u),<span class="dt">fill =</span> <span class="st">&#39;gold&#39;</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>, <span class="dt">colour =</span> <span class="st">&#39;orange&#39;</span>, <span class="dt">linetype =</span> <span class="dv">2</span>) <span class="op">+</span><span class="st">  </span></span>
+<span id="cb321-7"><a href="projections-using-rgadget.html#cb321-7"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin=</span>ll,<span class="dt">ymax=</span>uu),<span class="dt">fill =</span> <span class="st">&#39;gold&#39;</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>, <span class="dt">colour =</span> <span class="st">&#39;orange&#39;</span>, <span class="dt">linetype =</span> <span class="dv">2</span>) <span class="op">+</span><span class="st">  </span></span>
+<span id="cb321-8"><a href="projections-using-rgadget.html#cb321-8"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin=</span>lll,<span class="dt">ymax=</span>uuu),<span class="dt">fill =</span> <span class="st">&#39;gold&#39;</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>, <span class="dt">colour =</span> <span class="st">&#39;orange&#39;</span>, <span class="dt">linetype =</span> <span class="dv">2</span>) <span class="op">+</span><span class="st">  </span></span>
+<span id="cb321-9"><a href="projections-using-rgadget.html#cb321-9"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
+<span id="cb321-10"><a href="projections-using-rgadget.html#cb321-10"></a><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="kw">min</span>(<span class="kw">c</span>(f.msy)),<span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&#39;blue&#39;</span>) <span class="op">+</span></span>
+<span id="cb321-11"><a href="projections-using-rgadget.html#cb321-11"></a><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&#39;F (fully selected)&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&#39;Yield (000s tonnes)&#39;</span>) </span></code></pre></div>
+<pre><code>## Joining, by = &quot;harvest_rate&quot;</code></pre>
+<div class="sourceCode" id="cb323"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb323-1"><a href="projections-using-rgadget.html#cb323-1"></a>ssb_plot &lt;-</span>
+<span id="cb323-2"><a href="projections-using-rgadget.html#cb323-2"></a><span class="st">  </span>ssb_curve <span class="op">%&gt;%</span></span>
+<span id="cb323-3"><a href="projections-using-rgadget.html#cb323-3"></a><span class="st">  </span><span class="kw">left_join</span>(ssb_res_<span class="dv">05</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb323-4"><a href="projections-using-rgadget.html#cb323-4"></a><span class="st">  </span><span class="kw">left_join</span>(f.curve <span class="op">%&gt;%</span></span>
+<span id="cb323-5"><a href="projections-using-rgadget.html#cb323-5"></a><span class="st">              </span><span class="kw">select</span>(harvest_rate,<span class="dt">F=</span>m)) <span class="op">%&gt;%</span></span>
+<span id="cb323-6"><a href="projections-using-rgadget.html#cb323-6"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(F,m)) <span class="op">+</span></span>
+<span id="cb323-7"><a href="projections-using-rgadget.html#cb323-7"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin=</span>l,<span class="dt">ymax=</span>u),<span class="dt">fill =</span> <span class="st">&#39;gold&#39;</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>, <span class="dt">colour =</span> <span class="st">&#39;orange&#39;</span>, <span class="dt">linetype =</span> <span class="dv">2</span>) <span class="op">+</span><span class="st">  </span></span>
+<span id="cb323-8"><a href="projections-using-rgadget.html#cb323-8"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin=</span>ll,<span class="dt">ymax=</span>uu),<span class="dt">fill =</span> <span class="st">&#39;gold&#39;</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>, <span class="dt">colour =</span> <span class="st">&#39;orange&#39;</span>, <span class="dt">linetype =</span> <span class="dv">2</span>) <span class="op">+</span><span class="st">  </span></span>
+<span id="cb323-9"><a href="projections-using-rgadget.html#cb323-9"></a><span class="st">  </span><span class="kw">geom_ribbon</span>(<span class="kw">aes</span>(<span class="dt">ymin=</span>lll,<span class="dt">ymax=</span>uuu),<span class="dt">fill =</span> <span class="st">&#39;gold&#39;</span>, <span class="dt">alpha =</span> <span class="fl">0.4</span>, <span class="dt">colour =</span> <span class="st">&#39;orange&#39;</span>, <span class="dt">linetype =</span> <span class="dv">2</span>) <span class="op">+</span><span class="st">  </span></span>
+<span id="cb323-10"><a href="projections-using-rgadget.html#cb323-10"></a><span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
+<span id="cb323-11"><a href="projections-using-rgadget.html#cb323-11"></a><span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">xintercept =</span> <span class="kw">min</span>(<span class="kw">c</span>(f.msy)),<span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">col =</span> <span class="st">&#39;blue&#39;</span>) <span class="op">+</span></span>
+<span id="cb323-12"><a href="projections-using-rgadget.html#cb323-12"></a><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&#39;F (fully selected)&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">ylab</span>(<span class="st">&#39;SSB (000s tonnes)&#39;</span>)</span></code></pre></div>
+<pre><code>## Joining, by = &quot;harvest_rate&quot;
+## Joining, by = &quot;harvest_rate&quot;</code></pre>
+<div class="sourceCode" id="cb325"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb325-1"><a href="projections-using-rgadget.html#cb325-1"></a>yield_plot</span></code></pre></div>
+<p><img src="projections_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<div class="sourceCode" id="cb326"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb326-1"><a href="projections-using-rgadget.html#cb326-1"></a>ssb_plot</span></code></pre></div>
+<p><img src="projections_files/figure-html/unnamed-chunk-4-2.png" width="672" /></p>
+<div class="sourceCode" id="cb327"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb327-1"><a href="projections-using-rgadget.html#cb327-1"></a>btrigger &lt;-<span class="st"> </span><span class="dv">6</span></span>
+<span id="cb327-2"><a href="projections-using-rgadget.html#cb327-2"></a>blim &lt;-<span class="st"> </span><span class="dv">4</span></span>
+<span id="cb327-3"><a href="projections-using-rgadget.html#cb327-3"></a>hrs &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dv">0</span>, <span class="fl">0.2</span>, <span class="fl">0.02</span>)</span>
+<span id="cb327-4"><a href="projections-using-rgadget.html#cb327-4"></a>nreps &lt;-<span class="st"> </span><span class="dv">10</span></span>
+<span id="cb327-5"><a href="projections-using-rgadget.html#cb327-5"></a>ny &lt;-<span class="dv">20</span></span>
+<span id="cb327-6"><a href="projections-using-rgadget.html#cb327-6"></a><span class="co"># vd &lt;-  getwd() %&gt;%   #useful for having all operations done in a temporary directory</span></span>
+<span id="cb327-7"><a href="projections-using-rgadget.html#cb327-7"></a><span class="co">#   stringr::str_count(&quot;/&quot;) %&gt;% </span></span>
+<span id="cb327-8"><a href="projections-using-rgadget.html#cb327-8"></a><span class="co">#   rep(&quot;../&quot;, .) %&gt;% </span></span>
+<span id="cb327-9"><a href="projections-using-rgadget.html#cb327-9"></a><span class="co">#   paste(collapse = &quot;&quot;) %&gt;%</span></span>
+<span id="cb327-10"><a href="projections-using-rgadget.html#cb327-10"></a><span class="co">#   paste(tempdir(),&quot;_1&quot;, sep = &quot;&quot;) </span></span>
+<span id="cb327-11"><a href="projections-using-rgadget.html#cb327-11"></a>vd &lt;-<span class="st"> &#39;TEST&#39;</span></span>
+<span id="cb327-12"><a href="projections-using-rgadget.html#cb327-12"></a></span>
+<span id="cb327-13"><a href="projections-using-rgadget.html#cb327-13"></a>      res &lt;-</span>
+<span id="cb327-14"><a href="projections-using-rgadget.html#cb327-14"></a><span class="st">        </span><span class="kw">gadget_project_time</span>(<span class="dt">num_years =</span> ny, </span>
+<span id="cb327-15"><a href="projections-using-rgadget.html#cb327-15"></a>                            <span class="dt">variant_dir =</span> vd) <span class="op">%&gt;%</span></span>
+<span id="cb327-16"><a href="projections-using-rgadget.html#cb327-16"></a><span class="st">        </span><span class="kw">gadget_project_stocks</span>(<span class="dt">imm.file =</span> <span class="st">&#39;lingimm&#39;</span>,<span class="dt">mat.file =</span> <span class="st">&#39;lingmat&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb327-17"><a href="projections-using-rgadget.html#cb327-17"></a><span class="st">        </span><span class="co"># gadget_project_fleet(pre_fleet = &#39;lln&#39;,</span></span>
+<span id="cb327-18"><a href="projections-using-rgadget.html#cb327-18"></a><span class="st">        </span><span class="co">#                      fleet_type = &#39;quotafleet&#39;,</span></span>
+<span id="cb327-19"><a href="projections-using-rgadget.html#cb327-19"></a><span class="st">        </span><span class="co">#                      quotafunction = &#39;ices&#39;,</span></span>
+<span id="cb327-20"><a href="projections-using-rgadget.html#cb327-20"></a><span class="st">        </span><span class="co">#                      biomasslevel = list(b0=0,b1=btrigger*1e6),</span></span>
+<span id="cb327-21"><a href="projections-using-rgadget.html#cb327-21"></a><span class="st">        </span><span class="co">#                      quotalevel = list(q0=0,q1=1,q2=1),</span></span>
+<span id="cb327-22"><a href="projections-using-rgadget.html#cb327-22"></a><span class="st">        </span><span class="co">#                      selectstocks = &#39;lingmat&#39;,</span></span>
+<span id="cb327-23"><a href="projections-using-rgadget.html#cb327-23"></a><span class="st">        </span><span class="co">#                      pre_proportion = 0.5</span></span>
+<span id="cb327-24"><a href="projections-using-rgadget.html#cb327-24"></a><span class="st">        </span><span class="co"># ) %&gt;%</span></span>
+<span id="cb327-25"><a href="projections-using-rgadget.html#cb327-25"></a><span class="st">        </span><span class="co"># gadget_project_fleet(pre_fleet = &#39;bmt&#39;,</span></span>
+<span id="cb327-26"><a href="projections-using-rgadget.html#cb327-26"></a><span class="st">        </span><span class="co">#                      fleet_type = &#39;quotafleet&#39;,</span></span>
+<span id="cb327-27"><a href="projections-using-rgadget.html#cb327-27"></a><span class="st">        </span><span class="co">#                      quotafunction = &#39;ices&#39;,</span></span>
+<span id="cb327-28"><a href="projections-using-rgadget.html#cb327-28"></a><span class="st">        </span><span class="co">#                      biomasslevel = list(b0=0,b1=btrigger*1e6),</span></span>
+<span id="cb327-29"><a href="projections-using-rgadget.html#cb327-29"></a><span class="st">        </span><span class="co">#                      quotalevel = list(q0=0,q1=1,q2=1),</span></span>
+<span id="cb327-30"><a href="projections-using-rgadget.html#cb327-30"></a><span class="st">        </span><span class="co">#                      selectstocks = &#39;lingmat&#39;,</span></span>
+<span id="cb327-31"><a href="projections-using-rgadget.html#cb327-31"></a><span class="st">        </span><span class="co">#                      pre_proportion = 0.3</span></span>
+<span id="cb327-32"><a href="projections-using-rgadget.html#cb327-32"></a><span class="st">        </span><span class="co"># ) %&gt;%</span></span>
+<span id="cb327-33"><a href="projections-using-rgadget.html#cb327-33"></a><span class="st">        </span><span class="co"># gadget_project_fleet(pre_fleet = &#39;gil&#39;,</span></span>
+<span id="cb327-34"><a href="projections-using-rgadget.html#cb327-34"></a><span class="st">        </span><span class="co">#                      fleet_type = &#39;quotafleet&#39;,</span></span>
+<span id="cb327-35"><a href="projections-using-rgadget.html#cb327-35"></a><span class="st">        </span><span class="co">#                      quotafunction = &#39;ices&#39;,</span></span>
+<span id="cb327-36"><a href="projections-using-rgadget.html#cb327-36"></a><span class="st">        </span><span class="co">#                      biomasslevel = list(b0=0,b1=btrigger*1e6),</span></span>
+<span id="cb327-37"><a href="projections-using-rgadget.html#cb327-37"></a><span class="st">        </span><span class="co">#                      quotalevel = list(q0=0,q1=1,q2=1),</span></span>
+<span id="cb327-38"><a href="projections-using-rgadget.html#cb327-38"></a><span class="st">        </span><span class="co">#                      selectstocks = &#39;lingmat&#39;,</span></span>
+<span id="cb327-39"><a href="projections-using-rgadget.html#cb327-39"></a><span class="st">        </span><span class="co">#                      pre_proportion = 0.5</span></span>
+<span id="cb327-40"><a href="projections-using-rgadget.html#cb327-40"></a><span class="st">        </span><span class="co"># ) %&gt;%</span></span>
+<span id="cb327-41"><a href="projections-using-rgadget.html#cb327-41"></a><span class="st">        </span><span class="kw">gadget_project_fleet</span>(<span class="dt">pre_fleet =</span> <span class="st">&#39;lln&#39;</span>, <span class="dt">pre_proportion =</span> <span class="fl">0.5</span>, <span class="dt">common_mult =</span> <span class="st">&#39;ling_hr&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb327-42"><a href="projections-using-rgadget.html#cb327-42"></a><span class="st">        </span><span class="kw">gadget_project_fleet</span>(<span class="dt">pre_fleet =</span> <span class="st">&#39;bmt&#39;</span>, <span class="dt">pre_proportion =</span> <span class="fl">0.3</span>, <span class="dt">common_mult =</span> <span class="st">&#39;ling_hr&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb327-43"><a href="projections-using-rgadget.html#cb327-43"></a><span class="st">        </span><span class="kw">gadget_project_fleet</span>(<span class="dt">pre_fleet =</span> <span class="st">&#39;gil&#39;</span>, <span class="dt">pre_proportion =</span> <span class="fl">0.2</span>, <span class="dt">common_mult =</span> <span class="st">&#39;ling_hr&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb327-44"><a href="projections-using-rgadget.html#cb327-44"></a><span class="st">        </span><span class="kw">gadget_evaluate</span>(<span class="dt">params.out =</span> </span>
+<span id="cb327-45"><a href="projections-using-rgadget.html#cb327-45"></a>                          <span class="kw">paste</span>(vd, <span class="st">&#39;params.pre&#39;</span>,<span class="dt">sep=</span><span class="st">&#39;/&#39;</span>),</span>
+<span id="cb327-46"><a href="projections-using-rgadget.html#cb327-46"></a>                        <span class="dt">params.in =</span> <span class="st">&#39;WGTS/params.final&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb327-47"><a href="projections-using-rgadget.html#cb327-47"></a><span class="st">        </span><span class="kw">gadget_project_recruitment</span>(<span class="dt">stock =</span> <span class="st">&#39;lingimm&#39;</span>,</span>
+<span id="cb327-48"><a href="projections-using-rgadget.html#cb327-48"></a>                                   <span class="dt">recruitment =</span> fit<span class="op">$</span>stock.recruitment <span class="op">%&gt;%</span></span>
+<span id="cb327-49"><a href="projections-using-rgadget.html#cb327-49"></a><span class="st">                                     </span><span class="kw">filter</span>(stock <span class="op">==</span><span class="st"> &#39;lingimm&#39;</span>), </span>
+<span id="cb327-50"><a href="projections-using-rgadget.html#cb327-50"></a>                                   <span class="dt">method =</span> <span class="st">&quot;bootstrap&quot;</span>,</span>
+<span id="cb327-51"><a href="projections-using-rgadget.html#cb327-51"></a>                                   <span class="dt">params.file =</span> <span class="kw">paste</span>(<span class="kw">attr</span>(.,<span class="st">&#39;variant_dir&#39;</span>),<span class="st">&#39;params.pre&#39;</span>,<span class="dt">sep=</span><span class="st">&#39;/&#39;</span>),</span>
+<span id="cb327-52"><a href="projections-using-rgadget.html#cb327-52"></a>                                   <span class="dt">n_replicates =</span> nreps) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb327-53"><a href="projections-using-rgadget.html#cb327-53"></a><span class="st">        </span><span class="kw">gadget_project_ref_points</span>(<span class="dt">ref_points =</span> <span class="kw">tibble</span>(<span class="dt">tuskmat.blim =</span> blim<span class="op">*</span><span class="fl">1e6</span>),</span>
+<span id="cb327-54"><a href="projections-using-rgadget.html#cb327-54"></a>                                 <span class="dt">params.file =</span> <span class="kw">paste</span>(<span class="kw">attr</span>(.,<span class="st">&#39;variant_dir&#39;</span>),<span class="st">&#39;params.pre&#39;</span>,<span class="dt">sep=</span><span class="st">&#39;/&#39;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb327-55"><a href="projections-using-rgadget.html#cb327-55"></a><span class="st">        </span><span class="kw">gadget_project_advice</span>(<span class="dt">pre_fleet =</span> <span class="st">&#39;ling_hr&#39;</span>,</span>
+<span id="cb327-56"><a href="projections-using-rgadget.html#cb327-56"></a>                              <span class="dt">harvest_rate =</span> hrs,</span>
+<span id="cb327-57"><a href="projections-using-rgadget.html#cb327-57"></a>                              <span class="dt">params.file =</span> <span class="kw">paste</span>(<span class="kw">attr</span>(.,<span class="st">&#39;variant_dir&#39;</span>),<span class="st">&#39;params.pre&#39;</span>,<span class="dt">sep=</span><span class="st">&#39;/&#39;</span>),</span>
+<span id="cb327-58"><a href="projections-using-rgadget.html#cb327-58"></a>                              <span class="dt">n_replicates =</span> nreps,</span>
+<span id="cb327-59"><a href="projections-using-rgadget.html#cb327-59"></a>                              <span class="dt">advice_cv =</span> <span class="fl">0.2</span>, </span>
+<span id="cb327-60"><a href="projections-using-rgadget.html#cb327-60"></a>                              <span class="dt">seed =</span> <span class="dv">3423</span>) <span class="op">%&gt;%</span></span>
+<span id="cb327-61"><a href="projections-using-rgadget.html#cb327-61"></a><span class="st">        </span><span class="kw">gadget_project_output</span>(<span class="dt">pre_fleets =</span> <span class="kw">c</span>(<span class="st">&#39;bmt&#39;</span>, <span class="st">&#39;lln&#39;</span>, <span class="st">&#39;gil&#39;</span>), <span class="dt">imm.file =</span> <span class="st">&#39;lingimm&#39;</span>,<span class="dt">mat.file =</span> <span class="st">&#39;lingmat&#39;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb327-62"><a href="projections-using-rgadget.html#cb327-62"></a><span class="st">        </span><span class="kw">gadget_evaluate</span>(<span class="dt">params.in =</span> <span class="kw">paste</span>(<span class="kw">attr</span>(.,<span class="st">&#39;variant_dir&#39;</span>),<span class="st">&#39;params.pre&#39;</span>,<span class="dt">sep=</span><span class="st">&#39;/&#39;</span>), <span class="dt">params.out =</span> <span class="st">&#39;params.out&#39;</span>, <span class="dt">log =</span> <span class="kw">paste</span>(vd,<span class="st">&#39;log.test&#39;</span>,<span class="dt">sep=</span><span class="st">&#39;/&#39;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb327-63"><a href="projections-using-rgadget.html#cb327-63"></a><span class="st">        </span>{<span class="kw">read.printfiles</span>(<span class="kw">paste</span>(<span class="kw">attr</span>(.,<span class="st">&#39;variant_dir&#39;</span>),<span class="st">&#39;out&#39;</span>,<span class="dt">sep=</span><span class="st">&#39;/&#39;</span>))} <span class="op">%&gt;%</span></span>
+<span id="cb327-64"><a href="projections-using-rgadget.html#cb327-64"></a><span class="st">        </span>purrr<span class="op">::</span><span class="kw">map</span>(mutate, <span class="dt">trial=</span><span class="kw">cut</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(year),<span class="kw">c</span>(<span class="dv">0</span>,<span class="kw">which</span>(<span class="kw">diff</span>(year)<span class="op">&lt;</span><span class="dv">0</span>),<span class="fl">1e9</span>),<span class="dt">labels =</span> <span class="ot">FALSE</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb327-65"><a href="projections-using-rgadget.html#cb327-65"></a><span class="st">        </span><span class="kw">set_names</span>(<span class="kw">c</span>(<span class="st">&quot;catch.F&quot;</span>,<span class="st">&quot;catch.lw&quot;</span>,<span class="st">&#39;imm.rec&#39;</span>,<span class="st">&#39;mat.ssb&#39;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb327-66"><a href="projections-using-rgadget.html#cb327-66"></a><span class="st">        </span>purrr<span class="op">::</span><span class="kw">map</span>(left_join,<span class="kw">tibble</span>(<span class="dt">trial=</span><span class="dv">1</span><span class="op">:</span>(<span class="kw">length</span>(hrs)<span class="op">*</span>nreps),</span>
+<span id="cb327-67"><a href="projections-using-rgadget.html#cb327-67"></a>                                    <span class="dt">harvest_rate =</span> <span class="kw">rep</span>(hrs,nreps)</span>
+<span id="cb327-68"><a href="projections-using-rgadget.html#cb327-68"></a>                                    )</span>
+<span id="cb327-69"><a href="projections-using-rgadget.html#cb327-69"></a>                   )</span></code></pre></div>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="fitting-a-model-to-data.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="defining-multi-area-models.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="assets/gitbook-2.6.7/js/app.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/lunr.js"></script>
+<script src="assets/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="assets/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="assets/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/hafro/gadget-course/edit/master/projections.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": "https://github.com/hafro/gadget-course/blob/master/projections.Rmd",
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "section"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

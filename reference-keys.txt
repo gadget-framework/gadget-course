@@ -94,6 +94,8 @@ exercise-5
 using-the-iterative-reweighting-function-to-fit-a-gadget-statistical-model
 visualize-gadget-statistical-model-fit
 exercise-6
+projections-using-rgadget
+example-based-on-the-ling-assessment
 defining-multi-area-models
 alternate-structures-multiple-areas
 migration

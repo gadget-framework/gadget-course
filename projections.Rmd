@@ -62,7 +62,8 @@ vd <- 'TEST'
 
 
       res <-
-        gadget_project_time(num_years = ny, 
+        gadget_project_time(gd,
+                            num_years = ny, 
                             variant_dir = vd) %>%
         gadget_project_stocks(imm.file = 'lingimm',mat.file = 'lingmat') %>%
         # gadget_project_fleet(pre_fleet = 'lln',
@@ -89,41 +90,28 @@ vd <- 'TEST'
         #                      selectstocks = 'lingmat',
         #                      pre_proportion = 0.5
         # ) %>%
-        gadget_project_fleet(pre_fleet = 'lln', pre_proportion = 0.5) %>%
-        gadget_project_fleet(pre_fleet = 'bmt', pre_proportion = 0.3) %>%
-        gadget_project_fleet(pre_fleet = 'gil', pre_proportion = 0.2) %>%
-        gadget_evaluate(params.out = 
-                          paste(vd, 'params.pre',sep='/'),
-                        params.in = 'WGTS/params.final') %>%
+        gadget_project_fleet(pre_fleet = 'lln', pre_proportion = 0.5, common_mult = 'ling_hr.pre') %>%
+        gadget_project_fleet(pre_fleet = 'bmt', pre_proportion = 0.3, common_mult = 'ling_hr.pre') %>%
+        gadget_project_fleet(pre_fleet = 'gil', pre_proportion = 0.2, common_mult = 'ling_hr.pre') %>%
+        gadget_evaluate(params.out = paste(vd, 'params.pre',sep='/'),
+                        params.in = 'WGTS/params.final', log = 'TEST/log') %>%
         gadget_project_recruitment(stock = 'lingimm',
                                    recruitment = fit$stock.recruitment %>%
                                      filter(stock == 'lingimm'), 
                                    method = "bootstrap",
                                    params.file = paste(attr(.,'variant_dir'),'params.pre',sep='/'),
                                    n_replicates = nreps) %>% 
-        gadget_project_ref_points(ref_points = tibble(tuskmat.blim = blim*1e6),
-                                 params.file = paste(attr(.,'variant_dir'),'params.pre',sep='/')) %>%
-        gadget_project_advice(pre_fleet = 'lln',
+        gadget_project_ref_points(ref_points = tibble(lingmat.blim = blim*1e6),
+                                  params.file = paste(attr(.,'variant_dir'),'params.pre',sep='/')) %>%
+        gadget_project_advice(pre_fleet = 'ling_hr',
                               harvest_rate = hrs,
                               params.file = paste(attr(.,'variant_dir'),'params.pre',sep='/'),
                               n_replicates = nreps,
                               advice_cv = 0.2, 
-                              seed = 3423) %>%
-        gadget_project_advice(pre_fleet = 'bmt',
-                              harvest_rate = hrs,
-                              params.file = paste(attr(.,'variant_dir'),'params.pre',sep='/'),
-                              n_replicates = nreps,
-                              advice_cv = 0.2, 
-                              seed = 3423) %>%
-        gadget_project_advice(pre_fleet = 'gil',
-                              harvest_rate = hrs,
-                              params.file = paste(attr(.,'variant_dir'),'params.pre',sep='/'),
-                              n_replicates = nreps,
-                              advice_cv = 0.2, 
-                              seed = 3423) %>%
+                              post_fix = 'pre') %>%
         gadget_project_output(pre_fleets = c('bmt', 'lln', 'gil'), imm.file = 'lingimm',mat.file = 'lingmat') %>%
         gadget_evaluate(params.in = paste(attr(.,'variant_dir'),'params.pre',sep='/'), params.out = 'params.out', log = paste(vd,'log.test',sep='/')) %>%
-        {read.printfiles(paste(attr(.,'variant_dir'),'out',sep='/'))} %>%
+        {read.printfiles(paste(.,attr(.,'variant_dir'),'out',sep='/'))} %>%
         purrr::map(mutate, trial=cut(1:length(year),c(0,which(diff(year)<0),1e9),labels = FALSE)) %>%
         set_names(c("catch.F","catch.lw",'imm.rec','mat.ssb')) %>%
         purrr::map(left_join,tibble(trial=1:(length(hrs)*nreps),
@@ -224,7 +212,7 @@ ssb_plot
 ```
 
 
-```{r}
+```{r eval=FALSE}
 
 btrigger <- 6
 blim <- 4

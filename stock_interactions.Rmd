@@ -403,7 +403,7 @@ fit$res.by.year %>%
   expand_limits(y=0)
 ```
 
-### Excercise
+### Exercise
 
 * Modify the code above such that the spawning is split into two stocks, representing e.g. either the male or female part of the stock.
 * Using the simple stock template define an auto-spawning stock, i.e. a stock that spawns into it self. 

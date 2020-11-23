@@ -146,7 +146,7 @@ p_{la} = \frac{1}{1+e^{-\alpha(l - l_{50}) - \beta(a - a_{50})}}
 $$
 For a stock to mature you need to set `doesmature`,`maturityfunction` and `maturityfile`. The `maturityfile` defines the maturation function parameters and to which stock(s) the immmature stock matures into. Gadget has three additional functions you can use to define movement from an immmature to a mature stock:
 
-* `constant` which is essentially the same as the `continous` function apart from the definition of the `maturitysteps`, i.e. when the maturation takes place.
+* `constant` which is essentially the same as the `continuous` function apart from the definition of the `maturitysteps`, i.e. when the maturation takes place.
 * `constantweight` same as above but the probability of maturation is now also a function of the body condition:
 $$ 
 p_{la} = \frac{1}{1+e^{-\alpha(l - l_{50}) - \beta(a - a_{50}) - \gamma(k-k_{50})}}

@@ -71,9 +71,9 @@ gadgetstock('test',gd,missingOkay = TRUE)
 
 However, growth is the exception: `doesgrow` is turned on (value set to 1) with the growth
 function `lengthvbsimple` implemented and parameters supplied to that function as 
-'test.Linf', 'test.k' (multiplied by 0.001 to keep it help the optimisation routine by 
-placing it on a similar scale to other parameters), 'test.walpha', 'test.wbeta', 
-'test.bbin' (also multiplied by a scalar), and a constant value for `maxlengthgroupgrowth`.
+`test.Linf`, `test.k` (multiplied by 0.001 to keep it help the optimisation routine by 
+placing it on a similar scale to other parameters), `test.walpha`, `test.wbeta`, 
+`test.bbin` (also multiplied by a scalar), and a constant value for `maxlengthgroupgrowth`.
 
 ### Growth
 
@@ -91,12 +91,12 @@ exponential relationship is used to represent growth, using the automatically na
 `test.walpha` and `test.wbeta` parameters. Because they are by default supplied here and 
 supplied as switches with '#' preceding them, they will be automatically 
 generated in the parameter file when an initial Gadget simulation is run, and their values can 
-then be controlled from this file (as demonstrated in Day 1 material). Beyond `lengthvbsimple`,
+then be controlled from this file (as demonstrated [here](https://hafro.github.io/gadget-course/getting-started-with-the-gadget-framework.html#gadget-variables)). Beyond `lengthvbsimple`,
 there are a variety of other growth functions that can be implemented, 
 including those that implement starvation, time- and area- dependent growth, or reading weights 
 from a length-weight key. These are described in the [Gadget User Guide](https://hafro.github.io/gadget2/userguide/chap-stock.html#sec:stockgrowth).
 
-The second process is implemented in the default by providing a single switch 'test.bbin' 
+The second process is implemented in the default by providing a single switch `test.bbin` 
 parameter to the beta-binomial distribution, along with a constant value for 
 `maxlengthgroupgrowth`. The beta-binomial distribution is implemented in Gadget because high
 flexibility in the distribution of growth deviations is provided by changing only a single
@@ -110,18 +110,17 @@ Gadget. The first is that the implementation of the Von Bertalanffy growth curve
 are based on predicting changes in length over a time step, based on the length at the end of 
 the previous time step and the length of the time step. Therefore, length is not directly 
 associated with age. This is a useful property when Gadget is being used for estimation, because
-it implies that age data are not a prerequisite to estimating growth (although it does help a 
-lot). However, it also implies that the parameter values obtained when estimating (i.e., the 
-length at infinity and growth rate parameters) are not directly comparable to those estimated
-when using length and age data in non-linear models estimation (standard methods). In particular, 
-length at infinity using standard estimation methods with age data would represent the mean 
+it implies that age data are not a prerequisite to estimating growth (although it does help). 
+However, it also implies that the parameter values obtained when estimating (i.e., the 
+length at infinity $L_\infty$ and growth rate $k$ parameters) are not directly comparable to those estimated
+when using length and age data in non-linear model estimation (standard methods). In particular, 
+$L_\infty$ using standard estimation methods with age data would represent the mean 
 length attainable at infinity, but in Gadget it represents the maximal length that could be 
 expected at infinity, and therefore almost all fish tracked in the model should actually be 
-below this value. If individuals happen to surpass length at infinity in one time step due to  variability in 
+below this value. If individuals happen to surpass $L_\infty$ in one time step due to variability in 
 growth implemented via the beta binomial distribution, those individuals will exhibit negative 
 growth in the next time step. This process is not represented by standard methods of 
-estimation using age data. Therefore, care should be taken that any final values used for length
-at infinity within Gadget should be roughly above that expected of most fish observed, in order
+estimation using age data. Therefore, care should be taken that any final values used for $L_\infty$ within Gadget should be roughly above that expected of most fish observed, in order
 to avoid accidentally implementing unexpected and unrealistic negative growth.
 
 The second word of caution is that although the beta-binomial distribution has proven to be a very useful
@@ -221,7 +220,7 @@ fit$stock.full %>%
 
 ```
 
-#### Excercise 
+#### Exercise 
 
 * Investigate what are the effects of different growth rates ($k$) and $L_\infty$ on the length distribution.
 
@@ -229,7 +228,7 @@ fit$stock.full %>%
 
 ## Ling stock assessment in Icelandic waters
 
-As touched on in the [Introduction](introduction.html), Gadget is particularly useful in a stock
+Gadget is particularly useful in a stock
 assessment setting when age data are absent or sparse. In these cases,
 parameterising age-based stock assessement models may require a lot of
 pre-processing based on sparse age data to calculate the model input (e.g., catch 
@@ -354,7 +353,7 @@ value in both stocks, so that both stocks are governed by the same growth equati
 An alternative way of implementing this would have been to keep the default parameter
 names, but supply the same parameter value within the parameter file. Also notice 
 that although it is necessary to define the structural arguments listed above
-(minage, maxage, minlength, maxlength, dl, and livesonareas), updating the 'stock' 
+(`minage`, `maxage`, `minlength`, `maxlength`, `dl` and `livesonareas`), updating the 'stock' 
 component with gadget_update also sets up a few more convenient default settings in the 
 gadget stock file.
 
@@ -381,11 +380,11 @@ automatically generated once the stock file is written [check it out in your fol
 This new aggregation file (or 'Aggfile') is required by Gadget, and contains information
 on how to aggregate true lengths into length bins as individuals are tracked through the
 model. Aggregation files also become important for the purposes of comparing 
-simulations to data, so they will be revisited later on Day 3 when model-fitting 
+simulations to data, so they will be revisited later when model-fitting 
 procedures are introduced. 
 
 In addition, natural mortality parameters have been supplied as automatically
-named switches ('lingimm.M' or 'lingmat.M') for every age. In the default case, 
+named switches (`lingimm.M` or `lingmat.M`) for every age. In the default case, 
 mortality is not age-dependent, so the same parameter is provided for every age.
 
 #### Maturation process and timing
@@ -492,7 +491,7 @@ some level of variability around that mean.
 These two attributes, numbers for each age x area group and distribution of those numbers
 across length bins, are controlled by using `gadget_update` to modify the `initialconditions`
 component of the stock file. In our ling example, this is done by supplying a data frame to an
-argument called `normparam`. Calling the `normparam` argument specifies the distribution of
+argument called `normparam`. Calling the `normalparam` argument specifies the distribution of
 lengths to be according to a normal parameteric distribution, and that body weights calculated
 from these are according to an exponential equation of the same form as supplied in under the
 section **Growth**. Alternatively, it is possible to implement weights according to condition
@@ -511,9 +510,9 @@ length and standard deviation that will be used to distribute lengths for that a
 combination. Note that although different lengths at age could in theory be supplied for 
 different areas, only one growth function is supplied for all areas, so justifying the utility 
 of different lengths at age among different areas for only the initial time step may be 
-difficult. Standard deviations of length are supplied by age age x area groups. 
+difficult. Standard deviations of lengths are supplied by age age x area groups. 
 
-The data frame described above can be filled with constants, but as we saw on Day 1, we can
+The data frame described above can be filled with constants, but as we saw [here](https://hafro.github.io/gadget-course/getting-started-with-the-gadget-framework.html#gadget-variables), we can
 also replace these constants with parameter switches whose values can be controlled within the
 parameter file, or even formulas containing constants, switches, or both. For example, both the 
 parameters used to describe the exponential length-weight relationship (alpha and beta, last
@@ -526,8 +525,8 @@ according to a total mortality experienced by the population at the beginning of
 series. Second, we would like to set mean lengths of the age groups to be those expected by the
 same Von Bertalanffy relationship implemented under the **Growth** section. 
 
-To implement the first pattern via the age.factor column, a different equation per age is supplied. Each equation is based on an age-specific initial number parameter (e.g.,
-`lingimm.init.3` for age 3), which is then multiplied times the exponent of negative total
+To implement the first pattern via the `age.factor` column, a different equation per age is supplied. Each equation is based on an age-specific initial number parameter (e.g.,
+`lingimm.init.3` for age 3), which is then multiplied with the exponent of negative total
 mortality rate times the number of annual time steps since recruitment (i.e., the age). This
 ensures that the distribution in numbers among ages will be close to that expected simply 
 from natural mortality. In addition, the pre-supplied natural mortality parameter `lingimm.M` 
@@ -557,7 +556,7 @@ von_b_formula(3,linf='ling.Linf',k='ling.k',recl='ling.recl')
 
 
 To be internally consistent, the parameters supplied to this convenience function, as well as
-the alpha and beta columns defined in the `normalparam` data frame, are set to be the same as
+the `alpha` and `beta` columns defined in the `normalparam` data frame, are set to be the same as
 those used when implementing growth in the `doesgrow` component above. Notice one more
 parameter called `ling.recl` is also supplied for internal consistency with recruitment
 settings, which are explained in the next section.
@@ -616,9 +615,9 @@ numbers-at-age and their length distributions being needed for all ages in the f
 step of the model, each year forward also needs individuals to populate the youngest age 
 of each stock. Mature stocks are populated by the immature stocks through maturation, but 
 the immature stocks requires inputted individuals from a recruitment process. Remember from 
-day 1 that this can be accomplished either through renewal, in which a number is added to a
+[here](https://hafro.github.io/gadget-course/getting-started-with-the-gadget-framework.html#recruitment) that this can be accomplished either through renewal, in which a number is added to a
 certain age at a certain time step in every year, or it can occur via a stock-recruitment
-relationship, which is covered in day 4 material.  For ling we keep it 
+relationship (see [here](https://hafro.github.io/gadget-course/getting-started-with-the-gadget-framework.html#recruitment)).  For ling we keep it 
 simple and  provide switches for each year's number at the youngest age. That way, 
 these can either be inputted as values through a paramater file or they can be estimated at a
 later stage. 
@@ -708,7 +707,7 @@ are created to hold the information in the data frames.
 ### Is fished / eaten
 
 Finally, it is important to designate the component `iseaten` to have
-a value of 1, if the stock is to be consumed by other species or by 
+a value of 1, if the stock is to be consumed by other species or 
 fished by fleets. In Gadget, fishing is considered to be one of many forms of 
 consumption.
 
@@ -743,7 +742,7 @@ to have the same selectivity as the longline fleet). The survey is also
 treated as a fleet here so that it too can have a different selectivity curve implemented.
 However, note that because we don't want the survey to actually have any fishing impact on 
 the population, but we still want to use biological 'fishery data' resulting from the 
-survey's catches, we 'trick' Gadget by only allowing it to have a 1 kg catch in within each 
+survey's catches, we 'trick' Gadget by only allowing it to have a 1 kg catch within each 
 step / year combination. Gadget will give an error if there exists no catch in the time steps and areas when/where biological fishery data originate.
 
 Also notice that the attribute `area_group` needs to be applied to the data frame using the 
@@ -909,7 +908,7 @@ params.forsim %>%
 
 fit <- gadget.fit(gd = gd, wgts = NULL, params.file = 'params.forsim')
 
-## standard ICES plot
+## standard ICES plots
 
 library(patchwork)
 plot(fit, data = 'res.by.year',type='catch') + 

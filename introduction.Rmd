@@ -103,9 +103,9 @@ project [@dst2].
 
 The dst$^2$ project was multi-objective project funded by the European
 Union and began in 1999. The basic
-idea was to ''develop fisheries science as far as information will
-support'' the development of statistically sound models of marine
-ecological processes, ''but strictly no further''. Four main
+idea was to "develop fisheries science as far as information will
+support" the development of statistically sound models of marine
+ecological processes, "but strictly no further". Four main
 objectives were the following:
 
 * Collect relevant data and provide objective means to analyse

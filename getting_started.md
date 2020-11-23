@@ -91,7 +91,7 @@ the tutorial.
 Here we will focus on setting up a simple dummy model using the `gadgetfile` function and
 functions that are its derivatives. The `gadgetfile` function is low level function that
 creates an R object that can be exported to files that coheres to the Gadget file format,
-described in the [Gadget userguide](https://hafro.github.io/gadget/docs/userguide). Essentially a
+described in the [Gadget User Guide](https://hafro.github.io/gadget/docs/userguide). Essentially a
 Gadget file is structured by a list of named components and within those components there
 are named settings. As an example of this you can create your own custom Gadget file by
 specifying the components as named lists embedded within a named list:
@@ -116,7 +116,7 @@ dummy
 You will note that when calling the `gadgetfile` object the printed output will be in
 the same format as the resulting Gadget file. This for our mainly convenience as you 
 will be able to directly see if the format is incorrect, by comparing it to the format
-described in the [userguide](https://hafro.github.io/gadget/docs/userguide), before
+described in the [User Guide](https://hafro.github.io/gadget/docs/userguide), before
 writing it to file. If you need however to access individual components of you can of
 course do so by calling the name of the component directly:
 
@@ -511,7 +511,7 @@ your Gadget run did
 not work. At this stage in the tutorial, it is likely becuase you have previously run 
 later code from the next section, which has provided additional old files to your 
 Gadget model directory (see above) that do not match the specifications above. 
-This can be easily fixed by deleting the 'simple_log' directory and then rerunning 
+This can be easily fixed by deleting the 'simple_model' directory and then rerunning 
 the code on this page from the point of defining `gd`.
 
 After running Gadget we see that two new files have been 
@@ -527,7 +527,7 @@ read_lines(paste(gd,'simple_log',sep='/'))[-(58:175)]
 ```
 
 ```
-##  [1] "Gadget version 2.3.5 running on fv-az32-114 Fri Nov 20 16:58:11 2020"                      
+##  [1] "Gadget version 2.3.7 running on fv-az76-269 Mon Nov 23 16:32:39 2020"                      
 ##  [2] "Log file to record Gadget actions that take place during this run"                         
 ##  [3] ""                                                                                          
 ##  [4] "Starting Gadget from directory: /home/runner/work/gadget-course/gadget-course/simple_model"
@@ -734,7 +734,7 @@ After running this, assuming we did everything correctly, we should see that the
 file in the directory called `params.out` is no longer empty:
 
 ```
-## ; Gadget version 2.3.5 running on fv-az32-114 Fri Nov 20 16:58:13 2020
+## ; Gadget version 2.3.7 running on fv-az76-269 Mon Nov 23 16:32:40 2020
 ## ; a simulation run was performed giving a likelihood value of 0
 ## ; -- data --
 ## switch	value		lower	upper	optimise

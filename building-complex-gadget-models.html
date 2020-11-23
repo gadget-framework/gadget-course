@@ -162,7 +162,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.4" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#the-power-of-tidyverse-all-you-need-in-a-handful-of-functions"><i class="fa fa-check"></i><b>3.4</b> The power of tidyverse: all you need in a handful of functions</a></li>
 <li class="chapter" data-level="3.5" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#plotting-in-tidyverse"><i class="fa fa-check"></i><b>3.5</b> Plotting in tidyverse</a><ul>
 <li class="chapter" data-level="3.5.1" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#ggplot-key-components"><i class="fa fa-check"></i><b>3.5.1</b> ggplot: Key components</a></li>
-<li class="chapter" data-level="3.5.2" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#aesthetic"><i class="fa fa-check"></i><b>3.5.2</b> aesthetic</a></li>
+<li class="chapter" data-level="3.5.2" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#aesthetic-mapping"><i class="fa fa-check"></i><b>3.5.2</b> Aesthetic mapping</a></li>
 <li class="chapter" data-level="3.5.3" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#facetting"><i class="fa fa-check"></i><b>3.5.3</b> Facetting</a></li>
 <li class="chapter" data-level="3.5.4" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#adding-layers"><i class="fa fa-check"></i><b>3.5.4</b> Adding layers</a></li>
 <li class="chapter" data-level="3.5.5" data-path="introduction-to-tidyverse.html"><a href="introduction-to-tidyverse.html#add-a-line-to-a-scatterplot"><i class="fa fa-check"></i><b>3.5.5</b> Add a line to a scatterplot</a></li>
@@ -1155,7 +1155,7 @@ survey’s catches, we ‘trick’ Gadget by only allowing it to have a 1 kg cat
 step / year combination. Gadget will give an error if there exists no catch in the time steps and areas when/where biological fishery data originate.</p>
 <p>Also notice that the attribute <code>area_group</code> needs to be applied to the data frame using the
 function <code>structure</code>. These attributes are called on by Rgadget when creating the
-appropriate aggregation files. The following will use files that can be downloaded <a href="data_provided.zip">here</a></p>
+appropriate aggregation files. The following will use files that can be downloaded <a href="https://heima.hafro.is/~bthe/data_provided.zip">here</a></p>
 <div class="sourceCode" id="cb223"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb223-1"><a href="building-complex-gadget-models.html#cb223-1"></a><span class="co">## </span></span>
 <span id="cb223-2"><a href="building-complex-gadget-models.html#cb223-2"></a><span class="kw">download.file</span>(<span class="st">&#39;https://heima.hafro.is/~bthe/data_provided.zip&#39;</span>, <span class="dt">destfile =</span> <span class="st">&quot;data_provided.zip&quot;</span>)</span>
 <span id="cb223-3"><a href="building-complex-gadget-models.html#cb223-3"></a><span class="kw">unzip</span>(<span class="st">&#39;data_provided.zip&#39;</span>)</span></code></pre></div>

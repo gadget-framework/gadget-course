@@ -154,7 +154,7 @@ p_{la} = \frac{1}{1+e^{-\alpha(l - l_{50}) - \beta(a - a_{50})}}
 $$
 For a stock to mature you need to set `doesmature`,`maturityfunction` and `maturityfile`. The `maturityfile` defines the maturation function parameters and to which stock(s) the immmature stock matures into. Gadget has three additional functions you can use to define movement from an immmature to a mature stock:
 
-* `constant` which is essentially the same as the `continous` function apart from the definition of the `maturitysteps`, i.e. when the maturation takes place.
+* `constant` which is essentially the same as the `continuous` function apart from the definition of the `maturitysteps`, i.e. when the maturation takes place.
 * `constantweight` same as above but the probability of maturation is now also a function of the body condition:
 $$ 
 p_{la} = \frac{1}{1+e^{-\alpha(l - l_{50}) - \beta(a - a_{50}) - \gamma(k-k_{50})}}
@@ -354,36 +354,36 @@ mu_time
 ## 	mu_time
 ## data
 ## ; year	step	value
-## 1	1	2.04638069324936
-## 2	1	1.81289608406505
-## 3	1	1.60592085336136
-## 4	1	2.14892739924929
-## 5	1	1.93628948563799
-## 6	1	1.65223598418835
-## 7	1	2.71914161826878
-## 8	1	2.34449043245918
-## 9	1	1.68767536370527
-## 10	1	1.63194990570293
-## 11	1	2.08641124475699
-## 12	1	2.05035500058808
-## 13	1	2.07621523958015
-## 14	1	2.00287320739854
-## 15	1	1.75584142499942
-## 16	1	1.83809421687581
-## 17	1	2.48295182702322
-## 18	1	1.7362584507987
-## 19	1	2.23274200805511
-## 20	1	2.14962481337941
-## 21	1	1.71529650123985
-## 22	1	1.84992979697547
-## 23	1	2.03598629974356
-## 24	1	2.36348498644159
-## 25	1	1.66905696166393
-## 26	1	1.6511265305476
-## 27	1	1.77514568694941
-## 28	1	1.9082217174491
-## 29	1	3.20773699009173
-## 30	1	1.80756579822851
+## 1	1	1.79871564823437
+## 2	1	1.3815422226696
+## 3	1	2.07522975248472
+## 4	1	1.77512084349861
+## 5	1	1.68683675428539
+## 6	1	2.33775604999861
+## 7	1	1.35218114488481
+## 8	1	2.85441257794876
+## 9	1	2.09653519974097
+## 10	1	1.99136371909877
+## 11	1	1.78915714648686
+## 12	1	1.91823710388622
+## 13	1	2.28787021292424
+## 14	1	2.08696243287028
+## 15	1	1.65053999292807
+## 16	1	2.43917112099039
+## 17	1	2.61959282165747
+## 18	1	2.53258664068202
+## 19	1	2.0285110816703
+## 20	1	2.07088917531168
+## 21	1	2.34953467668634
+## 22	1	2.00411596898739
+## 23	1	2.0552092331921
+## 24	1	1.79364849058758
+## 25	1	1.84986991552425
+## 26	1	2.62848066548603
+## 27	1	1.7684668470271
+## 28	1	2.24505867474763
+## 29	1	2.19987175087372
+## 30	1	2.45086330748821
 ```
 
 and then we need to replace value for $\mu$ with this file:

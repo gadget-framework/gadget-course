@@ -19,7 +19,7 @@ rename
 mutate
 plotting-in-tidyverse
 ggplot-key-components
-aesthetic
+aesthetic-mapping
 colour
 shape
 size

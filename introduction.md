@@ -64,7 +64,7 @@ comparisons to real data. Estimates of process parameters are far from
 trivial in this setting, both in terms of available data and more
 importantly computation time. A fullblown Atlantis model will
 generally take a substantial time for a single simulation and as such
-not obvious how one would obtain an ``optimal'' fit in a statistical
+not obvious how one would obtain an "optimal" fit in a statistical
 sense. That said, these types of model can provide valuable insight
 into how an ecosystems would behave. In particular one could study
 certain performance metrics, such as ecosystem indicators [as
@@ -100,10 +100,10 @@ merged back with Bormicon to form Gadget as part of the dst$^2$
 project [@dst2].
 
 The dst$^2$ project was multi-objective project funded by the European
-Union and began in 1999. The bas
-idea was to ``develop fisheries science as far as information will
-support'' the development of statistically sound models of marine
-ecological processes, ``but strictly no further''. Four main
+Union and began in 1999. The basic
+idea was to "develop fisheries science as far as information will
+support" the development of statistically sound models of marine
+ecological processes, "but strictly no further". Four main
 objectives were the following:
 
 * Collect relevant data and provide objective means to analyse

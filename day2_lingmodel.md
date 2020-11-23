@@ -1036,7 +1036,7 @@ step / year combination. Gadget will give an error if there exists no catch in t
 
 Also notice that the attribute `area_group` needs to be applied to the data frame using the 
 function `structure`. These attributes are called on by Rgadget when creating the
-appropriate aggregation files. The following will use files that can be downloaded [here](data_provided.zip)
+appropriate aggregation files. The following will use files that can be downloaded [here](https://heima.hafro.is/~bthe/data_provided.zip)
 
 
 ```r

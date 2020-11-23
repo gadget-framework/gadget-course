@@ -140,11 +140,11 @@ plot(fit,data='res.by.year',type='num.total')
 plot(fit,data='stock.std') + scale_fill_crayola()
 ```
 
-And this process can of course continue further. Two processes allow the user to define movement based on size or age. These are the maturation process and the straying process. These behave in a similar manner but there are key differences, in particular how you can define the movement. In the ling example the maturity process was a continuous process where the probability of a maturing at a certain length or age was determing using the following equation:
+And this process can of course continue further. Two processes allow the user to define movement based on size or age. These are the maturation process and the straying process. These behave in a similar manner but there are key differences, in particular how you can define the movement. In the ling example the maturity process will be shown as a continuous process where the probability of a maturing at a certain length or age was determing using the following equation:
 $$ 
 p_{la} = \frac{1}{1+e^{-\alpha(l - l_{50}) - \beta(a - a_{50})}}
 $$
-For a stock to mature you need to set `doesmature`,`maturityfunction` and `maturityfile`. The `maturityfile` defines the maturation function parameters and to which stock(s) the immmature stock matures into. Gadget has three additional functions you can use to define movement from an immmature to a mature stock:
+For a stock to mature you need to set `doesmature`,`maturityfunction` and `maturityfile`. The `maturityfile` defines the maturation function parameters and to which stock(s) the immature stock matures into. Gadget has three additional functions you can use to define movement from an immmature to a mature stock:
 
 * `constant` which is essentially the same as the `continuous` function apart from the definition of the `maturitysteps`, i.e. when the maturation takes place.
 * `constantweight` same as above but the probability of maturation is now also a function of the body condition:
@@ -154,7 +154,7 @@ $$
 where the body condition, $k$, is determined by dividing the reference weight to the modelled weight
 * `fixedlength` which is a knife-edge selection in terms of length. You need to define the `maturitysteps` and `maturitylengths`. 
 
-The straying process is slightly different as it is thought of as the means to provide mechanisms to define processes such as dispersal between breeding components and different growth rates within the same stock due to different enviromental factors. To setup the straying process you will need to define when the straying occurs, where it occurs (i.e. what area) and what fish strays. The fish that strays is defined by specific length selection listed below:
+The straying process is slightly different as it provides mechanisms to define processes such as dispersal between components representing different breeding segments or different stock segments with growth rates that vary with environmental factors. To setup the straying process you will need to define when the straying occurs, where it occurs (i.e. what area) and what fish strays. The fish that strays is defined by specific length selection listed below:
 
 * `constant`: $S_l = \alpha$
 * `straightline`: $S_l = \alpha l + \beta$
@@ -264,10 +264,10 @@ fit$res.by.year %>%
 ```
 
 
-### Excercise 
+### Exercise 
 
-* Depletion of stock components is often a concern. Using the straying mechanism set up a three stock model where individual are slowly dispersed between all three components. Define a fishing fleet that targets only one of the stocks and investigate how different dispersion levels affect the depletion of all stocks. 
-* Gadget allow you to set up a catch at age model. Use the movement mechanism to define a model with a maximum age of 10, where each age is a separate stock. How would you define the fleets for this model so you could use commercial catch at age directly into the model? 
+* Depletion of stock components is often a concern. Using the straying mechanism set up a three-stock model where individuals are slowly dispersed among all three components. Define a fishing fleet that targets only one of the stocks and investigate how different dispersion levels affect the depletion of all stocks. 
+* Gadget allows you to set up a catch-at-age model. Use the movement mechanism to define a model with a maximum age of 10, where each age is a separate stock. How would you define the fleets for this model so you could use commercial catch-at-age directly into the model? 
 
 ## Spawning
 
@@ -282,7 +282,7 @@ R_0,&\text{If } B_{lim} \leq S \\
 \frac{R_0S}{B_{lim}} & \text{If } 0 \leq S \leq B_{lim}
 \end{cases}  $$
 
-In addition the user can define using the same length based selection function as for straying which of the stock "spawns" and what happens to them, i.e. what mortalities are applied to the stock and changes in condition. The spawning stock is updated according to the following equations:
+In addition, the user can define, using the same-length based selection function as for straying, which portion of the stock "spawns" and what happens to them during spawning, i.e. what mortalities are applied to the stock and changes in body condition. The spawning stock is updated according to the following equations:
 $$ N_l = N_l(1 + P_l(e^{-m_l} - 1)) $$
 $$ W_l = W_l\frac{1 + P_l((2-w_l)e^{-m_l} -1)}{(1 + P_l(2e^{-m_l} -1))} $$
 where $P_l$ is proportion that will spawn, $m_l$ is the mortality for and $w_l$ is the weight loss for length group $l$. To illustrate how to set up spawning for a particular stock we will use the simple stock templates from above and use those to define parent and offspring stocks:
@@ -353,11 +353,11 @@ fit$res.by.year %>%
 
 ```
 
-The code above defines a Ricker recruitment function between the parent and offspring stocks. As evident from the graph above the relationship between the two stocks is a fairly deterministic. This type of relationship, however, is hardly ever observed without error (both in process and observation). To include process variation into the model Gadget has another trick up its sleave, Time variables.
+The code above defines a Ricker recruitment function between the parent and offspring stocks. As evident from the graph above the relationship between the two stocks is a fairly deterministic. This type of relationship, however, is hardly ever observed without error (both in process and observation). To include process variation into the model Gadget has another trick up its sleeve: Time variables.
 
 ### Time variables
 
-Time variables allow Gadget to change the value of parameters with time. They are an extension to the Gadget formulae functionality and can be use (almost) where ever you can use Gadget formulae. To define a time variable you will need to define a data frame with the start time for a particular value, which will be valid until the next change. Example uses might be shifts fleet selection due to changes in regulation and temperature effects in growth. In the case of the simple stock recruitment relationship above we may want change the value for $\mu$ with time. To introduce time variables into this model you will need to create a special file:
+Time variables allow Gadget to change the value of parameters with time. They are an extension to the Gadget formulae functionality and can be used (almost) wherever you can use Gadget formulae. To define a time variable you will need to define a data frame with the start time for a particular value, which will be valid until the next change. Example uses might be shifts in fleet selection over time due to changes in regulation and temperature effects on growth. In the case of the simple stock recruitment relationship above we may want change the value for $\mu$ with time. To introduce time variables into this model you will need to create a special file:
 
 ```{r}
 mu_time <- 
@@ -374,7 +374,7 @@ mu_time %>%
 mu_time
 ```
 
-and then we need to replace value for $\mu$ with this file:
+and then we need to replace the value for $\mu$ with this file:
 ```{r}
 parent <- 
   parent %>% 
@@ -406,16 +406,16 @@ fit$res.by.year %>%
 ### Excercise
 
 * Modify the code above such that the spawning is split into two stocks, representing e.g. either the male or female part of the stock.
-* Using the simple stock template define a auto-spawning stock, i.e. a stock that spawns into it self. 
+* Using the simple stock template define an auto-spawning stock, i.e. a stock that spawns into it self. 
 * Instead of the Ricker function try to parametrise the Beverton and Holt recruitment function for the example above. 
-* In the ling example consider how you would project the recruitment into the future.
+* In the ling example, consider how you would project the recruitment into the future.
 
 ## Consumption 
 
 
 In Gadget there are a number of predator-prey relations that can be defined. They include the obvious case where one substock predates the other. Additionally a cannibalistic relationship can be defined if the substocks are modelled as an immature and a mature part of the same species. The predation in Gadget is implemented as follows. Each predator will conceptually be assigned **availability** of a certain prey in comparison with other food sources and a **feeding level**, i.e., fraction of available food the predator wants to consume. Combining these two terms the amount that the predator wants to consume is calculated.
 
-The availability of a certain prey $p$ for a predator $P$ is determined by the prey biomass per length group ($N_{l}W_{l}$, where $W_l$ is the weight at length $l$) and a length based suitability function listed [here](getting_started.html#predation).
+The availability of a certain prey $p$ for a predator $P$ is determined by the prey biomass per length group ($N_{l}W_{l}$, where $W_l$ is the weight at length $l$) and a length based suitability function listed [here](https://hafro.github.io/gadget-course/getting-started-with-the-gadget-framework.html#predation).
 
 In the simple predator-prey relation between the substocks in Gadget the prey availability to a predator becomes
 $$\frac{F_{Ll}}{\sum_{l'}F_{Ll'}+OA}$$
@@ -444,7 +444,7 @@ prey <-
                 ## define how many KJ per gram
                 energycontent = 1) 
 ```
-We also have to define something called "Otherfood". Otherfood refers to other non-dynamic food items that the predator consumes. It is usually defined in order for the stock to consume something else in the absense of the prey. 
+We also have to define something called "Otherfood". Otherfood refers to other non-dynamic food items that the predator consumes. It is usually defined in order for the stock to consume something else in the absence of the prey. 
 ```{r}
 otherfood <- 
   gadgetfile('Modelfiles/otherfood',
@@ -497,7 +497,7 @@ fit$predator.prey %>%
   ggplot(aes(year,num)) + geom_line()
 ```
 
-### Excercise
+### Exercise
 
 * In the example above, insert variable names instead of direct numbers for the selection and predation parameters. Investigate the effects of changing the selection parameter has on the consumption. E.g:
   + Change the otherfood time series such that it is more variable

@@ -14,7 +14,7 @@ As we have already seen there are a number of ways we can define interactions be
 
 * Fish entering stock due to a process in a related stock
   + This can be either movement between stocks or spawning
-* Fish is removed from a stock due to predation
+* Fish are removed from a stock due to predation
 
 We will illustrate these processes using a simple multistock model:
 
@@ -80,9 +80,9 @@ We will use the stock template to define multiple stocks to illustrate the vario
 
 ## Fish recruits into a stock
 
-We have already seen how to implment the most straitforward version of recruitment into a stock, that is the renewal process. To recap, the renewal process adds fish into a stock based on a predefined schedule on the number and age of fish at a given time step. The most obvious use of this feature is to define a non-parametric recruitment to a stock a the minimum age of the stock. However one can use it also to add migrations from a related to stock, where the dynamics of the related stock is not modelled. An example of this would be the sporadic migrations of cod from Greenlandic waters into Icelandic waters. 
+We have already seen how to implement the most straightforward version of recruitment into a stock, that is the renewal process. To recap, the renewal process adds fish into a stock based on a predefined schedule on the number and age of fish at a given time step. The most obvious use of this feature is to define a non-parametric recruitment to a stock a the minimum age of the stock. However one can use it also to add migrations from a related to stock, where the dynamics of the related stock is not modelled. An example of this would be the sporadic migrations of cod from Greenlandic waters into Icelandic waters. 
 
-Movement between stocks can however be defined to more elaborate. We have already seen how maturation can be modelled as a two step approach, that is a combination of Maturation and Movement. Movement is the simplest approach as it simply takes the oldest fish of one stock and pushes it into a another stock, provided that this other stocks age range includes the maximum age of the first stock. 
+Movement between stocks can however be defined to more elaborate. We have already seen how maturation can be modelled as a two step approach, that is a combination of Maturation and Movement. Movement is the simplest approach as it simply takes the oldest fish of one stock and pushes it into a another stock, provided that this other stock's age range includes the maximum age of the first stock's. 
 
 
 ```{r out.width = "50%", fig.show = "hold"}

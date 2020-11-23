@@ -93,7 +93,7 @@ of that function is assigned to a new object.
 sub <- apply(flights[,c(15:16)], 2, mean, na.rm = T)
 ```
 
-Piping, or using '%>%' to pass objects from one function to the next, introduces a
+Piping, or using `%>%` to pass objects from one function to the next, introduces a
 programming method that makes the process more intuitive by alligning the code with the
 order of operation:
 
@@ -103,19 +103,19 @@ flights %>%
   apply(., 2, mean, na.rm = T) -> sub
 ```
 In the above code, the flight tibble was piped into the 'select' function, which indexed
-its 15th and 16th rows only. 'Select' does not require an argument where flights is
+its 15th and 16th rows only. `Select` does not require an argument where flights is
 referenced because it was built to accept a piped argument implicitly. Note that
 selecting by column name (no quotations needed) is also possible and
 more useful in most cases. After being piped to 'select', the result was then piped to 
-the function 'apply'. 'Apply' is an older function that is not built to implicitly
-accept piped objects; therefore, it requires the placeholder '.' to be placed 
+the function `apply`. `Apply` is an older function that is not built to implicitly
+accept piped objects; therefore, it requires the placeholder `.` to be placed 
 where the input data frame is expected. Finally, this modified data frame 
 is assigned to 'sub' at the end, but alternatively it could have been assigned at the 
 beginning as in the non-piped version.
 
 ## The power of tidyverse: all you need in a handful of functions
 
-As in the 'select' function, there are a variety of functions that come with the
+As in the `select` function, there are a variety of functions that come with the
 tidyverse package, but only a small set are needed to do almost any kind of data 
 wrangling that you ever wanted to do. These are the only functions we touch on in this
 brief introduction. However, beyond tidyverse, there are also a variety of 
@@ -138,8 +138,8 @@ defines the aggregation level) and along with functions that define how to aggre
 certain criteria that define how rows are compatible (i.e., joining in relational 
 databases)
 
-Below is an example of how the function 'apply' in the previous example can be replaced
-using tidyverse commands, as well as functions such as 'aggregate' using 'group_by' and 'summarise'
+Below is an example of how the function `apply` in the previous example can be replaced
+using tidyverse commands, as well as functions such as `aggregate` using `group_by` and `summarise`
 
 ```{r replace}
   flights %>%
@@ -231,11 +231,11 @@ flights2 %>%
 ```{r smat count}
 
 #count() with group_by()
-#this yields data in a `long` format
+#this yields data in a `wide` format
 flights2a <- t(table(flights[,c('origin', 'dest')]))
 head(flights2a) #this last line not necessary - helps with printing to web page
 
-#this yields 'tidy' data
+#this yields 'tidy' 'long' data
 flights2 <- 
   flights %>% 
   group_by(origin, dest) %>% 

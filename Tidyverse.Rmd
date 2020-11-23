@@ -323,9 +323,9 @@ The structure (a bit of Latin - not run here):
 str(p)
 ```
 
-### aesthetic
+### Aesthetic mapping
 
-Adding more variables to a two dimensional scatterplot can be done by mapping the variables to an aesthetic (colour, fill, size, shape, alpha)
+Adding more variables to a two dimensional scatterplot can be done by mapping the variables to aesthetics (colour, fill, size, shape, alpha)
 
 #### colour
 

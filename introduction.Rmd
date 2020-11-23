@@ -66,7 +66,7 @@ comparisons to real data. Estimates of process parameters are far from
 trivial in this setting, both in terms of available data and more
 importantly computation time. A fullblown Atlantis model will
 generally take a substantial time for a single simulation and as such
-not obvious how one would obtain an ''optimal'' fit in a statistical
+not obvious how one would obtain an "optimal" fit in a statistical
 sense. That said, these types of model can provide valuable insight
 into how an ecosystems would behave. In particular one could study
 certain performance metrics, such as ecosystem indicators [as

@@ -10,7 +10,7 @@ As we have already seen there are a number of ways we can define interactions be
 
 * Fish entering stock due to a process in a related stock
   + This can be either movement between stocks or spawning
-* Fish is removed from a stock due to predation
+* Fish are removed from a stock due to predation
 
 We will illustrate these processes using a simple multistock model:
 
@@ -76,9 +76,9 @@ We will use the stock template to define multiple stocks to illustrate the vario
 
 ## Fish recruits into a stock
 
-We have already seen how to implment the most straitforward version of recruitment into a stock, that is the renewal process. To recap, the renewal process adds fish into a stock based on a predefined schedule on the number and age of fish at a given time step. The most obvious use of this feature is to define a non-parametric recruitment to a stock a the minimum age of the stock. However one can use it also to add migrations from a related to stock, where the dynamics of the related stock is not modelled. An example of this would be the sporadic migrations of cod from Greenlandic waters into Icelandic waters. 
+We have already seen how to implement the most straightforward version of recruitment into a stock, that is the renewal process. To recap, the renewal process adds fish into a stock based on a predefined schedule on the number and age of fish at a given time step. The most obvious use of this feature is to define a non-parametric recruitment to a stock a the minimum age of the stock. However one can use it also to add migrations from a related to stock, where the dynamics of the related stock is not modelled. An example of this would be the sporadic migrations of cod from Greenlandic waters into Icelandic waters. 
 
-Movement between stocks can however be defined to more elaborate. We have already seen how maturation can be modelled as a two step approach, that is a combination of Maturation and Movement. Movement is the simplest approach as it simply takes the oldest fish of one stock and pushes it into a another stock, provided that this other stocks age range includes the maximum age of the first stock. 
+Movement between stocks can however be defined to more elaborate. We have already seen how maturation can be modelled as a two step approach, that is a combination of Maturation and Movement. Movement is the simplest approach as it simply takes the oldest fish of one stock and pushes it into a another stock, provided that this other stock's age range includes the maximum age of the first stock's. 
 
 
 
@@ -354,36 +354,36 @@ mu_time
 ## 	mu_time
 ## data
 ## ; year	step	value
-## 1	1	1.79871564823437
-## 2	1	1.3815422226696
-## 3	1	2.07522975248472
-## 4	1	1.77512084349861
-## 5	1	1.68683675428539
-## 6	1	2.33775604999861
-## 7	1	1.35218114488481
-## 8	1	2.85441257794876
-## 9	1	2.09653519974097
-## 10	1	1.99136371909877
-## 11	1	1.78915714648686
-## 12	1	1.91823710388622
-## 13	1	2.28787021292424
-## 14	1	2.08696243287028
-## 15	1	1.65053999292807
-## 16	1	2.43917112099039
-## 17	1	2.61959282165747
-## 18	1	2.53258664068202
-## 19	1	2.0285110816703
-## 20	1	2.07088917531168
-## 21	1	2.34953467668634
-## 22	1	2.00411596898739
-## 23	1	2.0552092331921
-## 24	1	1.79364849058758
-## 25	1	1.84986991552425
-## 26	1	2.62848066548603
-## 27	1	1.7684668470271
-## 28	1	2.24505867474763
-## 29	1	2.19987175087372
-## 30	1	2.45086330748821
+## 1	1	1.53698318270851
+## 2	1	2.12389043310532
+## 3	1	1.78279845767757
+## 4	1	1.83986706832961
+## 5	1	2.83387761164508
+## 6	1	1.97281983078801
+## 7	1	2.6497230796263
+## 8	1	1.81934206187511
+## 9	1	1.84500269652952
+## 10	1	2.10258733027767
+## 11	1	1.1545611658117
+## 12	1	1.67123122243971
+## 13	1	2.23694134803612
+## 14	1	1.41536380220195
+## 15	1	1.61200735435458
+## 16	1	2.21047570419406
+## 17	1	2.11176490688421
+## 18	1	2.37060816454621
+## 19	1	2.1404902986373
+## 20	1	1.80487621185069
+## 21	1	1.88742567556868
+## 22	1	2.71149235348395
+## 23	1	1.97357507008687
+## 24	1	2.110558772731
+## 25	1	1.19846759627698
+## 26	1	1.36789474737533
+## 27	1	1.9571247074527
+## 28	1	1.71017455602223
+## 29	1	2.12496538746136
+## 30	1	2.31843632550179
 ```
 
 and then we need to replace value for $\mu$ with this file:

@@ -133,7 +133,7 @@ The most commonly used tidyverse commands, with a brief description, include:
 * summarise() - reduces dataset to an aggregated leve. Used after grouping (which 
 defines the aggregation level) and along with functions that define how to aggregate
 (e.g., count(), n(), sum(), mean()).
-* gather() / spread() - converts data between the tidy format and 'long' formats
+* gather() / spread() - converts data between the `wide` and 'long' formats
 * full_join(), left_join(), etc. - joins data contained in two data frames according to
 certain criteria that define how rows are compatible (i.e., joining in relational 
 databases)

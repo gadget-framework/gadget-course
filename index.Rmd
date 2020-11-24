@@ -74,6 +74,8 @@ peak at our example model data [here](https://heima.hafro.is/~bthe/data_provided
 * [CAPAM talk on the Rgadget environment](http://capamresearch.org/sites/default/files/gadget_pre_Bjarki.pdf)
 * [Length-based assessments](docs/lba.pdf)
 * [Talk on ling MSE](docs/ling_pre.pdf)
+* [DST2: vol 2](https://www.hafogvatn.is/static/research/files/fjolrit-118.pdf)
+* [DST2: vol 2](https://www.hafogvatn.is/static/research/files/fjolrit-119.pdf)
 * Assessments that use Gadget:
   + [Ling in 5a](http://www.ices.dk/sites/pub/Publication%20Reports/Stock%20Annexes/2017/lin.27.5a_SA.pdf)
   + [Tusk in 5a and 14](http://www.ices.dk/sites/pub/Publication%20Reports/Stock%20Annexes/2017/lin.27.5a_SA.pdf)

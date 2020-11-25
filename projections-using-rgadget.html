@@ -251,6 +251,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="10" data-path="marine-mammals.html"><a href="marine-mammals.html"><i class="fa fa-check"></i><b>10</b> Marine mammals</a><ul>
 <li class="chapter" data-level="10.1" data-path="marine-mammals.html"><a href="marine-mammals.html#setting-up-a-model-for-a-hypothetical-whale-stock"><i class="fa fa-check"></i><b>10.1</b> Setting up a model for a hypothetical whale stock</a></li>
 <li class="chapter" data-level="10.2" data-path="marine-mammals.html"><a href="marine-mammals.html#run-gadget-and-set-initial-parameters"><i class="fa fa-check"></i><b>10.2</b> Run Gadget and set initial parameters</a></li>
+<li class="chapter" data-level="10.3" data-path="marine-mammals.html"><a href="marine-mammals.html#more-complicated-stock-structures"><i class="fa fa-check"></i><b>10.3</b> More complicated stock structures</a></li>
 </ul></li>
 <li class="chapter" data-level="11" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html"><i class="fa fa-check"></i><b>11</b> Processing input data with MFDB</a><ul>
 <li class="chapter" data-level="11.1" data-path="processing-input-data-with-mfdb.html"><a href="processing-input-data-with-mfdb.html#working-with-data"><i class="fa fa-check"></i><b>11.1</b> Working with data</a></li>
@@ -544,22 +545,22 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb316-8"><a href="projections-using-rgadget.html#cb316-8"></a></span>
 <span id="cb316-9"><a href="projections-using-rgadget.html#cb316-9"></a>hr_msy;f.msy</span></code></pre></div>
 <pre><code>## [1] 0.2</code></pre>
-<pre><code>## [1] 0.1610888</code></pre>
+<pre><code>## [1] 0.195543</code></pre>
 <div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb319-1"><a href="projections-using-rgadget.html#cb319-1"></a>yield_curve</span></code></pre></div>
 <pre><code>## [90m# A tibble: 11 x 8[39m
 ##    harvest_rate     m     u     l    uu    ll   uuu   lll
 ##           [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m
-## [90m 1[39m         0     0      0    0     0     0     0     0   
-## [90m 2[39m         0.02  6.34  10.5  3.64  8.39  4.55  7.46  4.98
-## [90m 3[39m         0.04 11.6   19.1  6.73 14.8   7.72 13.3   8.86
-## [90m 4[39m         0.06 15.2   25.8  9.36 19.9  10.2  17.8  11.6 
-## [90m 5[39m         0.08 17.8   30.9 11.5  23.6  12.4  22.0  13.5 
-## [90m 6[39m         0.1  19.7   35.0 13.0  26.8  14.0  25.4  15.1 
-## [90m 7[39m         0.12 21.2   38.2 13.4  30.2  15.5  27.5  16.6 
-## [90m 8[39m         0.14 22.4   40.3 13.6  33.6  16.6  28.8  17.4 
-## [90m 9[39m         0.16 23.3   42.0 13.6  35.4  17.1  29.8  18.2 
-## [90m10[39m         0.18 23.7   43.1 13.5  36.6  17.3  30.3  19.1 
-## [90m11[39m         0.2  23.9   43.8 13.5  37.8  17.3  30.5  19.4</code></pre>
+## [90m 1[39m         0     0      0    0      0    0     0     0   
+## [90m 2[39m         0.02  6.63  12.8  4.35  10.3  4.82  8.74  5.49
+## [90m 3[39m         0.04 11.8   22.0  8.45  17.2  9.10 15.1   9.80
+## [90m 4[39m         0.06 16.2   28.9 11.9   22.2 12.7  19.5  13.2 
+## [90m 5[39m         0.08 19.1   33.5 14.7   26.1 15.3  22.7  16.1 
+## [90m 6[39m         0.1  21.3   37.3 16.1   28.0 17.4  25.1  18.7 
+## [90m 7[39m         0.12 23.2   40.0 16.6   30.4 18.9  26.9  20.9 
+## [90m 8[39m         0.14 25.1   41.9 16.8   31.5 19.7  28.3  21.3 
+## [90m 9[39m         0.16 26.8   42.6 16.8   33.3 19.5  30.2  21.9 
+## [90m10[39m         0.18 27.9   42.8 16.7   34.1 19.2  31.2  22.0 
+## [90m11[39m         0.2  28.4   42.6 16.4   35.4 18.7  32.7  22.2</code></pre>
 <div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb321-1"><a href="projections-using-rgadget.html#cb321-1"></a>yield_plot &lt;-</span>
 <span id="cb321-2"><a href="projections-using-rgadget.html#cb321-2"></a><span class="st">  </span>yield_curve <span class="op">%&gt;%</span></span>
 <span id="cb321-3"><a href="projections-using-rgadget.html#cb321-3"></a><span class="st">  </span><span class="kw">left_join</span>(f.curve <span class="op">%&gt;%</span></span>

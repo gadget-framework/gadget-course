@@ -28,7 +28,7 @@ and typically we are working with a longer time horizon for whales:
 
 ```r
 schedule <- 
-  expand.grid(year = 1880:2020, step = 1:4) %>% 
+  expand_grid(year = 1880:2020, step = 1:4) %>% 
   arrange(year)
 
 gadgetfile('Modelfiles/time',
@@ -55,18 +55,8 @@ gadgetfile('Modelfiles/area',
   write.gadget.file(gd)
 ```
 
-To mimic the population dynamics we need to split each stock into two stock components, males and females:
+To mimic the population dynamics we need to split each stock into two stock components, males and females, and the size of the female population governs the amount of whales birthed into the stock. 
 
-
-You need to know the initial number at age when at carrying capacity. 
-
-$$ N_{a0} = N_0 e^{-aM}$$ 
-where 
-
-$$ K = \sum_a N_{a0} = N_0 \frac{1-e^{-aM}}{1-e^{-M}}$$
-so 
-$$N_0 = K\frac{1-e^{-M}}{1-e^{-aM}}$$
-so in the initial conditions we will specify the age factor to be $e^{-aM}$ and the area factor as $N_0$.
 
 ```r
 lw.constants <- list(estimate=c(0.001, 3)) ## arbitrary lw coeffs
@@ -89,7 +79,46 @@ whale_m <-
                                    alpha = '#whale_m.walpha',
                                    beta = '#whale_m.wbeta'),
                 maxlengthgroupgrowth = 2,
-                beta = to.gadget.formulae(quote(10*whale.bbin))) %>% 
+                beta = to.gadget.formulae(quote(10*whale.bbin)))
+
+
+whale_f <- 
+  gadgetstock('whale_f',gd, missingOkay = TRUE) %>% 
+  gadget_update('stock',
+                livesonareas = 1:5,
+                minage = 0,
+                maxage = 40,
+                minlength = 50,
+                maxlength = 1200,
+                dl = 50) %>% 
+  gadget_update('iseaten', 1) %>% 
+  #gadget_update('naturalmortality', sprintf("#%s.M.%s", .[[1]]$stockname, .[[1]]$minage:.[[1]]$maxage)) %>% 
+  gadget_update('doesgrow', ## note to self the order of these parameters make difference
+                growthparameters=c(linf='#whale_f.Linf', 
+                                   k=to.gadget.formulae(quote(0.001*whale_f.k)),
+                                   alpha = '#whale_f.walpha',
+                                   beta = '#whale_f.wbeta'),
+                maxlengthgroupgrowth = 2,
+                beta = to.gadget.formulae(quote(10*whale.bbin)))
+```
+
+
+
+The simulation will start with a virgin population, i.e. start at the carrying capacity of the stock. To start the stock simulation the equilibrium age distribution needs to be calculated. So assuming that all year classes in the equilibrium stock are equal in abundance the year when they are born, i.e. $N_{0t} = B_0$ then the equilibrium age distribution at the start of the simulations, assuming constant natural mortality, is: 
+
+$$ N_{a0} = A_0 e^{-aM}$$ 
+and then carrying capacity is then:
+
+$$ K = \sum_a N_{a0} = \sum_a A_0 e^{-aM}$$ 
+and note this is a geometric series the carrying capacity is: 
+$$ K = A_0 \frac{1-e^{-aM}}{1-e^{-M}}$$
+so we can then solve for $A_0$ and find 
+$$A_0 = K\frac{1-e^{-M}}{1-e^{-aM}}$$
+Writing this into initial abundance at age in so in the initial conditions we will specify the age factor to be $e^{-aM}$ and the area factor as $A_0$.
+
+```r
+whale_m <- 
+  whale_m %>% 
   gadget_update('initialconditions',
                 normalparam = tibble(age = .[[1]]$minage:.[[1]]$maxage,
                                      area = 1,
@@ -109,25 +138,8 @@ whale_m <-
   gadget_update('refweight',
                 data=tibble(length=seq(.[[1]]$minlength,.[[1]]$maxlength,.[[1]]$dl),
                             mean=lw.constants$estimate[1]*length^lw.constants$estimate[2]))
-
 whale_f <- 
-  gadgetstock('whale_f',gd, missingOkay = TRUE) %>% 
-  gadget_update('stock',
-                livesonareas = 1:5,
-                minage = 0,
-                maxage = 40,
-                minlength = 50,
-                maxlength = 1200,
-                dl = 50) %>% 
-  gadget_update('iseaten', 1) %>% 
-  #gadget_update('naturalmortality', sprintf("#%s.M.%s", .[[1]]$stockname, .[[1]]$minage:.[[1]]$maxage)) %>% 
-  gadget_update('doesgrow', ## note to self the order of these parameters make difference
-                growthparameters=c(linf='#whale_f.Linf', 
-                                   k=to.gadget.formulae(quote(0.001*whale_f.k)),
-                                   alpha = '#whale_f.walpha',
-                                   beta = '#whale_f.wbeta'),
-                maxlengthgroupgrowth = 2,
-                beta = to.gadget.formulae(quote(10*whale.bbin))) %>% 
+  whale_f %>% 
   gadget_update('initialconditions',
                 normalparam = tibble(age = .[[1]]$minage:.[[1]]$maxage,
                                      area = 1,
@@ -149,7 +161,7 @@ whale_f <-
                             mean=lw.constants$estimate[1]*length^lw.constants$estimate[2]))
 ```
 
-This sets up two stock, male and female part of the stocks. Two important parts remain in the population dynamics to capture what is needed, migration and births. Let's start with the birth function. Only females give birth so the birth process only applies to that stock:
+This sets up two stock, male and female part of the stocks. Two important parts remain in the population dynamics to capture what is needed, migration and births. Let's start with the birth function. Only females give birth so the birth process only applies to that stock. The birth function used for this examples is 
 
 
 ```r
@@ -238,26 +250,45 @@ gadgetfile('Modelfiles/migrationtime',
 Setting up fleets with random numbers
 
 ```r
-whale_catch <- 
+whale_catch_a3 <- 
   schedule %>% 
   mutate(area = 3, 
          number = rbinom(n(),50,runif(n())),
          number = ifelse(step == 1, 0, number))
-whale_catch <- 
-  structure(whale_catch,area_group = list(`3`= 3))
+whale_catch_a3 <- 
+  structure(whale_catch_a3,area = list(`1`= 1,`2`=2,`3`=3))
+
+whale_catch_a2 <- 
+  schedule %>% 
+  mutate(area = 2, 
+         number = rbinom(n(),200,runif(n())),
+         number = ifelse(step == 1, 0, number))
+whale_catch_a2 <- 
+  structure(whale_catch_a2,area = list(`1`= 1,`2`=2,`3`=3))
+
 
 
 gadgetfleet('Modelfiles/fleet',gd,missingOkay = TRUE) %>% 
   gadget_update('numberfleet',
-                name = 'whale_fleet',
-                livesonareas = 3,
+                name = 'whale_fleet_a3',
                 suitability = 
-                  list(whale_m=list(type='function',suit_func = 'exponentiall50',alpha = "#whale_fleet.alpha", l50 = "#whale_fleet.l50"),
-                       whale_f=list(type='function',suit_func = 'exponentiall50',alpha = "#whale_fleet.alpha", l50 = "#whale_fleet.l50")),
-                data = whale_catch) -> tmp
-tmp$component$livesonareas <- 3 # weird bug
-tmp$component$amount$data$area <- 3
-tmp %>% 
+                  list(whale_m=list(type='function',
+                                    suit_func = 'exponentiall50',
+                                    alpha = "#whale_fleet.alpha", l50 = "#whale_fleet.l50"),
+                       whale_f=list(type='function',
+                                    suit_func = 'exponentiall50',
+                                    alpha = "#whale_fleet.alpha", l50 = "#whale_fleet.l50")),
+                data = whale_catch_a3) %>% 
+    gadget_update('numberfleet',
+                name = 'whale_fleet_a2',
+                suitability = 
+                  list(whale_m=list(type='function',
+                                    suit_func = 'exponentiall50',
+                                    alpha = "#whale_fleet.alpha", l50 = "#whale_fleet.l50"),
+                       whale_f=list(type='function',
+                                    suit_func = 'exponentiall50',
+                                    alpha = "#whale_fleet.alpha", l50 = "#whale_fleet.l50")),
+                data = whale_catch_a2) %>% 
   write.gadget.file(gd)
 ```
 
@@ -300,15 +331,12 @@ read.gadget.parameters(paste(gd,'params.out',sep='/')) %>%
   init_guess('fleet.alpha',0.08,lower = 0, upper = 1, optimise = 1) %>% 
   init_guess('fleet.l50',300,lower = 150, upper = 600, optimise = 1) %>% 
   write.gadget.parameters(paste(gd,'params.in',sep='/'))
+```
 
 
 
 
-
-
-
-
-
+```r
 gadget_evaluate(gd,params.in = 'params.in', log = 'run.log')
 ```
 
@@ -333,8 +361,18 @@ fit <- gadget.fit(gd = gd, wgts = NULL, params.file = 'params.in')
 ```
 
 ```r
-plot(fit, data= 'res.by.year', type = 'num.total')
+plot(fit, data= 'res.by.year', type = 'num.total') + facet_wrap(~area)
 ```
 
-<img src="minke_whale_model_files/figure-html/unnamed-chunk-11-1.png" width="672" />
+<img src="minke_whale_model_files/figure-html/unnamed-chunk-13-1.png" width="672" />
+
+```r
+plot(fit, data= 'res.by.year', type = 'num.catch') + facet_wrap(~area)
+```
+
+<img src="minke_whale_model_files/figure-html/unnamed-chunk-13-2.png" width="672" />
+
+## More complicated stock structures
+
+<img src="minke_whale_model_files/figure-html/unnamed-chunk-14-1.png" width="672" />
 

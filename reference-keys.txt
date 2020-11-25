@@ -104,6 +104,7 @@ exercise-11
 marine-mammals
 setting-up-a-model-for-a-hypothetical-whale-stock
 run-gadget-and-set-initial-parameters
+more-complicated-stock-structures
 processing-input-data-with-mfdb
 working-with-data
 description-of-the-mfdb-system

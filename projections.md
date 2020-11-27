@@ -20,22 +20,10 @@ As usual we will start by setting up a Gadget model directory and use ling as an
 base_dir <- 'ling_model'
 vers <- c('01-base')
 gd <- gadget.variant.dir(sprintf(paste0("%s/",vers),base_dir))
-fit <- gadget.fit(gd = gd)
+fit <- gadget.fit(gd = gd, wgts = NULL, params.file = 'params.forsim')
 ```
 
 ```
-## Warning in if (class(tmp) != "list") {: the condition has length > 1 and only
-## the first element will be used
-
-## Warning in if (class(tmp) != "list") {: the condition has length > 1 and only
-## the first element will be used
-
-## Warning in if (class(tmp) != "list") {: the condition has length > 1 and only
-## the first element will be used
-
-## Warning in if (class(tmp) != "list") {: the condition has length > 1 and only
-## the first element will be used
-
 ## Warning in if (class(tmp) != "list") {: the condition has length > 1 and only
 ## the first element will be used
 
@@ -70,10 +58,34 @@ Functions are joined via piping, but the only information being passed from func
 
 
 
+```r
+fit$res.by.year %>% 
+  filter(stock == 'lingmat') %>% 
+  select(year, ssb = total.biomass) %>% 
+  left_join(fit$res.by.year %>% 
+              filter(stock == 'lingimm') %>% 
+              select(year, recruitment) %>% 
+              mutate(year = year - 3)) %>% 
+  ggplot(aes(ssb, recruitment, label = year)) + geom_text() +
+  expand_limits(y=0, x=0)
+```
+
+```
+## Joining, by = "year"
+```
+
+```
+## Warning: Removed 3 rows containing missing values (geom_text).
+```
+
+<img src="projections_files/figure-html/unnamed-chunk-2-1.png" width="672" />
+
+
+
 
 ```r
-btrigger <- 6
-blim <- 4
+btrigger <- 6 ## break point for the harvest control rule
+blim <- 4 ## break point for the hockey stick recruitment
 hrs <- seq(0, 0.2, 0.02)
 nreps <- 10
 ny <-20
@@ -117,14 +129,16 @@ vd <- 'TEST'
         gadget_project_fleet(pre_fleet = 'bmt', pre_proportion = 0.3, common_mult = 'ling_hr.pre') %>%
         gadget_project_fleet(pre_fleet = 'gil', pre_proportion = 0.2, common_mult = 'ling_hr.pre') %>%
         gadget_evaluate(params.out = paste(vd, 'params.pre',sep='/'),
-                        params.in = 'WGTS/params.final', log = 'TEST/log') %>%
+                        params.in = 'params.forsim', log = 'TEST/log') %>%
         gadget_project_recruitment(stock = 'lingimm',
                                    recruitment = fit$stock.recruitment %>%
-                                     filter(stock == 'lingimm'), 
+                                     filter(stock == 'lingimm', year %in% 1982:2000), 
                                    method = "bootstrap",
                                    params.file = paste(attr(.,'variant_dir'),'params.pre',sep='/'),
                                    n_replicates = nreps) %>% 
-        gadget_project_ref_points(ref_points = tibble(lingmat.blim = blim*1e6),
+        gadget_project_ref_points(ref_points = tibble(lingmat.blim = blim*1e6,
+                                                      lingmat.walpha = 2.2756744e-06,
+                                                      lingmat.wbeta = 3),
                                   params.file = paste(attr(.,'variant_dir'),'params.pre',sep='/')) %>%
         gadget_project_advice(pre_fleet = 'ling_hr',
                               harvest_rate = hrs,
@@ -294,11 +308,11 @@ hr_msy;f.msy
 ```
 
 ```
-## [1] 0.18
+## [1] 0.14
 ```
 
 ```
-## [1] 0.1777979
+## [1] 0.1590235
 ```
 
 ```r
@@ -309,17 +323,17 @@ yield_curve
 ## [90m# A tibble: 11 x 8[39m
 ##    harvest_rate     m     u     l    uu    ll   uuu   lll
 ##           [3m[90m<dbl>[39m[23m [3m[90m<dbl>[39m[23m [3m[90m<dbl>[39m[23m [3m[90m<dbl>[39m[23m [3m[90m<dbl>[39m[23m [3m[90m<dbl>[39m[23m [3m[90m<dbl>[39m[23m [3m[90m<dbl>[39m[23m
-## [90m 1[39m         0     0      0    0     0     0     0     0   
-## [90m 2[39m         0.02  6.45  10.0  4.02  8.83  4.56  7.71  5.18
-## [90m 3[39m         0.04 11.1   18.6  6.78 15.6   7.54 13.5   8.72
-## [90m 4[39m         0.06 14.7   25.9  8.69 20.6   9.54 17.8  11.1 
-## [90m 5[39m         0.08 17.2   32.2  9.76 24.1  10.9  21.3  12.6 
-## [90m 6[39m         0.1  18.9   37.7 10.5  27.4  11.7  23.7  13.5 
-## [90m 7[39m         0.12 19.7   42.4 11.0  29.8  12.2  25.0  14.1 
-## [90m 8[39m         0.14 20.7   46.6 11.2  31.2  12.6  26.1  14.5 
-## [90m 9[39m         0.16 21.1   50.5 11.3  32.0  12.8  26.7  14.6 
-## [90m10[39m         0.18 21.1   54.1 11.3  32.3  13.0  26.6  14.8 
-## [90m11[39m         0.2  21.0   57.2 11.2  32.5  12.8  26.7  14.9
+## [90m 1[39m         0     0      0    0      0    0      0    0   
+## [90m 2[39m         0.02  8.90  20.4  6.18  16.5  7.28  14.5  8.09
+## [90m 3[39m         0.04 14.6   37.3 10.1   31.4 11.8   24.9 13.1 
+## [90m 4[39m         0.06 18.0   51.1 12.5   44.2 14.7   32.0 16.2 
+## [90m 5[39m         0.08 20.1   62.2 13.9   55.3 16.6   36.8 18.1 
+## [90m 6[39m         0.1  21.2   71.0 14.8   64.9 17.7   40.1 19.4 
+## [90m 7[39m         0.12 21.8   81.6 15.3   73.0 18.4   42.2 20.1 
+## [90m 8[39m         0.14 21.9   91.5 15.5   80.0 18.9   42.8 20.3 
+## [90m 9[39m         0.16 21.8  101.  15.7   85.7 19.0   42.7 20.1 
+## [90m10[39m         0.18 21.7  109.  15.7   89.5 19.1   42.1 20.0 
+## [90m11[39m         0.2  21.7  116.  15.7   90.9 18.8   41.1 19.7
 ```
 
 
@@ -365,13 +379,52 @@ ssb_plot <-
 yield_plot
 ```
 
-<img src="projections_files/figure-html/unnamed-chunk-4-1.png" width="672" />
+<img src="projections_files/figure-html/unnamed-chunk-5-1.png" width="672" />
 
 ```r
 ssb_plot
 ```
 
-<img src="projections_files/figure-html/unnamed-chunk-4-2.png" width="672" />
+<img src="projections_files/figure-html/unnamed-chunk-5-2.png" width="672" />
+
+
+```r
+res$mat.ssb %>% 
+  ggplot(aes(year + (step -1)/4, number*mean_weight,
+             col = harvest_rate,
+             group = interaction(harvest_rate, trial))) + 
+  geom_line()
+```
+
+<img src="projections_files/figure-html/unnamed-chunk-6-1.png" width="672" />
+
+```r
+res$catch.lw %>% 
+  group_by(year,area,trial,harvest_rate) %>% 
+  summarise(c = sum(biomass_consumed)) %>% 
+  ggplot(aes(year, c,
+             col = harvest_rate,
+             group = interaction(harvest_rate, trial))) + 
+  geom_line()
+```
+
+```
+## `summarise()` regrouping output by 'year', 'area', 'trial' (override with `.groups` argument)
+```
+
+<img src="projections_files/figure-html/unnamed-chunk-6-2.png" width="672" />
+
+```r
+res$imm.rec %>% 
+  ggplot(aes(year, number,
+             col = harvest_rate,
+             group = interaction(harvest_rate, trial))) + 
+  geom_line()
+```
+
+<img src="projections_files/figure-html/unnamed-chunk-6-3.png" width="672" />
+
+
 
 
 

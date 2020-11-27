@@ -884,7 +884,7 @@ added to the directory, the parameter file (<code>params.out</code>) and the log
 sections but for now lets look at the log file:</p>
 <p><strong>If and when you have errors, such as the ‘…status 1’ error above, the log file is the best place to start trying to figure out why the error occurs.</strong></p>
 <div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="getting-started-with-the-gadget-framework.html#cb107-1"></a><span class="kw">read_lines</span>(<span class="kw">paste</span>(gd,<span class="st">&#39;simple_log&#39;</span>,<span class="dt">sep=</span><span class="st">&#39;/&#39;</span>))[<span class="op">-</span>(<span class="dv">58</span><span class="op">:</span><span class="dv">175</span>)] </span></code></pre></div>
-<pre><code>##  [1] &quot;Gadget version 2.3.7 running on fv-az139-939 Fri Nov 27 13:56:44 2020&quot;                     
+<pre><code>##  [1] &quot;Gadget version 2.3.7 running on fv-az176-372 Fri Nov 27 14:53:42 2020&quot;                     
 ##  [2] &quot;Log file to record Gadget actions that take place during this run&quot;                         
 ##  [3] &quot;&quot;                                                                                          
 ##  [4] &quot;Starting Gadget from directory: /home/runner/work/gadget-course/gadget-course/simple_model&quot;
@@ -1051,7 +1051,7 @@ Now write this to file and rerun run Gadget.</p>
 ## [1] &quot;gadget.variant&quot; &quot;list&quot;</code></pre>
 <p>After running this, assuming we did everything correctly, we should see that the
 file in the directory called <code>params.out</code> is no longer empty:</p>
-<pre><code>## ; Gadget version 2.3.7 running on fv-az139-939 Fri Nov 27 13:56:45 2020
+<pre><code>## ; Gadget version 2.3.7 running on fv-az176-372 Fri Nov 27 14:53:43 2020
 ## ; a simulation run was performed giving a likelihood value of 0
 ## ; -- data --
 ## switch   value       lower   upper   optimise

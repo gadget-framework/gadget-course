@@ -23,7 +23,7 @@ As usual we will start by setting up a Gadget model directory and use ling as an
 base_dir <- 'ling_model'
 vers <- c('01-base')
 gd <- gadget.variant.dir(sprintf(paste0("%s/",vers),base_dir))
-fit <- gadget.fit(gd = gd)
+fit <- gadget.fit(gd = gd, wgts = NULL, params.file = 'params.forsim')
 
 ```
 
@@ -45,11 +45,24 @@ The general design of the functions sets up a procedure that:
 Functions are joined via piping, but the only information being passed from function to function is a gadget variant directory (modified slightly from the user-defined directory inputted to `gadget_project_time`. All function calls after the final `gadget_evaluate` are examples of file and data management - reading in the outputted printer files, organise and labelling data (similar to what `gadget.fit` does), and storing under 'res' object.
 
 
+```{r}
+fit$res.by.year %>% 
+  filter(stock == 'lingmat') %>% 
+  select(year, ssb = total.biomass) %>% 
+  left_join(fit$res.by.year %>% 
+              filter(stock == 'lingimm') %>% 
+              select(year, recruitment) %>% 
+              mutate(year = year - 3)) %>% 
+  ggplot(aes(ssb, recruitment, label = year)) + geom_text() +
+  expand_limits(y=0, x=0)
+```
+
+
 
 ```{r}
 
-btrigger <- 6
-blim <- 4
+btrigger <- 6 ## break point for the harvest control rule
+blim <- 4 ## break point for the hockey stick recruitment
 hrs <- seq(0, 0.2, 0.02)
 nreps <- 10
 ny <-20
@@ -94,14 +107,16 @@ vd <- 'TEST'
         gadget_project_fleet(pre_fleet = 'bmt', pre_proportion = 0.3, common_mult = 'ling_hr.pre') %>%
         gadget_project_fleet(pre_fleet = 'gil', pre_proportion = 0.2, common_mult = 'ling_hr.pre') %>%
         gadget_evaluate(params.out = paste(vd, 'params.pre',sep='/'),
-                        params.in = 'WGTS/params.final', log = 'TEST/log') %>%
+                        params.in = 'params.forsim', log = 'TEST/log') %>%
         gadget_project_recruitment(stock = 'lingimm',
                                    recruitment = fit$stock.recruitment %>%
-                                     filter(stock == 'lingimm'), 
+                                     filter(stock == 'lingimm', year %in% 1982:2000), 
                                    method = "bootstrap",
                                    params.file = paste(attr(.,'variant_dir'),'params.pre',sep='/'),
                                    n_replicates = nreps) %>% 
-        gadget_project_ref_points(ref_points = tibble(lingmat.blim = blim*1e6),
+        gadget_project_ref_points(ref_points = tibble(lingmat.blim = blim*1e6,
+                                                      lingmat.walpha = 2.2756744e-06,
+                                                      lingmat.wbeta = 3),
                                   params.file = paste(attr(.,'variant_dir'),'params.pre',sep='/')) %>%
         gadget_project_advice(pre_fleet = 'ling_hr',
                               harvest_rate = hrs,
@@ -210,6 +225,31 @@ yield_plot
 ssb_plot
 
 ```
+
+```{r}
+res$mat.ssb %>% 
+  ggplot(aes(year + (step -1)/4, number*mean_weight,
+             col = harvest_rate,
+             group = interaction(harvest_rate, trial))) + 
+  geom_line()
+
+res$catch.lw %>% 
+  group_by(year,area,trial,harvest_rate) %>% 
+  summarise(c = sum(biomass_consumed)) %>% 
+  ggplot(aes(year, c,
+             col = harvest_rate,
+             group = interaction(harvest_rate, trial))) + 
+  geom_line()
+
+
+res$imm.rec %>% 
+  ggplot(aes(year, number,
+             col = harvest_rate,
+             group = interaction(harvest_rate, trial))) + 
+  geom_line()
+```
+
+
 
 
 ```{r eval=FALSE}

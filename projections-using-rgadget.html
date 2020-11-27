@@ -544,23 +544,23 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <span id="cb316-7"><a href="projections-using-rgadget.html#cb316-7"></a><span class="st">  </span>.<span class="op">$</span>m</span>
 <span id="cb316-8"><a href="projections-using-rgadget.html#cb316-8"></a></span>
 <span id="cb316-9"><a href="projections-using-rgadget.html#cb316-9"></a>hr_msy;f.msy</span></code></pre></div>
-<pre><code>## [1] 0.2</code></pre>
-<pre><code>## [1] 0.195543</code></pre>
+<pre><code>## [1] 0.18</code></pre>
+<pre><code>## [1] 0.1777979</code></pre>
 <div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb319-1"><a href="projections-using-rgadget.html#cb319-1"></a>yield_curve</span></code></pre></div>
 <pre><code>## [90m# A tibble: 11 x 8[39m
 ##    harvest_rate     m     u     l    uu    ll   uuu   lll
 ##           [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m [3m[90m&lt;dbl&gt;[39m[23m
-## [90m 1[39m         0     0      0    0      0    0     0     0   
-## [90m 2[39m         0.02  6.63  12.8  4.35  10.3  4.82  8.74  5.49
-## [90m 3[39m         0.04 11.8   22.0  8.45  17.2  9.10 15.1   9.80
-## [90m 4[39m         0.06 16.2   28.9 11.9   22.2 12.7  19.5  13.2 
-## [90m 5[39m         0.08 19.1   33.5 14.7   26.1 15.3  22.7  16.1 
-## [90m 6[39m         0.1  21.3   37.3 16.1   28.0 17.4  25.1  18.7 
-## [90m 7[39m         0.12 23.2   40.0 16.6   30.4 18.9  26.9  20.9 
-## [90m 8[39m         0.14 25.1   41.9 16.8   31.5 19.7  28.3  21.3 
-## [90m 9[39m         0.16 26.8   42.6 16.8   33.3 19.5  30.2  21.9 
-## [90m10[39m         0.18 27.9   42.8 16.7   34.1 19.2  31.2  22.0 
-## [90m11[39m         0.2  28.4   42.6 16.4   35.4 18.7  32.7  22.2</code></pre>
+## [90m 1[39m         0     0      0    0     0     0     0     0   
+## [90m 2[39m         0.02  6.45  10.0  4.02  8.83  4.56  7.71  5.18
+## [90m 3[39m         0.04 11.1   18.6  6.78 15.6   7.54 13.5   8.72
+## [90m 4[39m         0.06 14.7   25.9  8.69 20.6   9.54 17.8  11.1 
+## [90m 5[39m         0.08 17.2   32.2  9.76 24.1  10.9  21.3  12.6 
+## [90m 6[39m         0.1  18.9   37.7 10.5  27.4  11.7  23.7  13.5 
+## [90m 7[39m         0.12 19.7   42.4 11.0  29.8  12.2  25.0  14.1 
+## [90m 8[39m         0.14 20.7   46.6 11.2  31.2  12.6  26.1  14.5 
+## [90m 9[39m         0.16 21.1   50.5 11.3  32.0  12.8  26.7  14.6 
+## [90m10[39m         0.18 21.1   54.1 11.3  32.3  13.0  26.6  14.8 
+## [90m11[39m         0.2  21.0   57.2 11.2  32.5  12.8  26.7  14.9</code></pre>
 <div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb321-1"><a href="projections-using-rgadget.html#cb321-1"></a>yield_plot &lt;-</span>
 <span id="cb321-2"><a href="projections-using-rgadget.html#cb321-2"></a><span class="st">  </span>yield_curve <span class="op">%&gt;%</span></span>
 <span id="cb321-3"><a href="projections-using-rgadget.html#cb321-3"></a><span class="st">  </span><span class="kw">left_join</span>(f.curve <span class="op">%&gt;%</span></span>

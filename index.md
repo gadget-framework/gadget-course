@@ -82,4 +82,5 @@ peak at our example model data [here](https://heima.hafro.is/~bthe/data_provided
   + [Atlantic wolffish in Icelandic waters](https://www.hafogvatn.is/static/extras/images/09-AtlanticWolffish_TR%20(1)1141513.pdf)
   + [Greenland halibut in the Northeast Artic](http://ices.dk/sites/pub/Publication%20Reports/Stock%20Annexes/2015/ghl-arct_SA.pdf)
   + [Southern hake](http://www.ices.dk/sites/pub/Publication%20Reports/Stock%20Annexes/2017/hke-soth_SA.pdf)
+* Source-code repository [on github](http://github.com/fishvice/gadget-models/)
  

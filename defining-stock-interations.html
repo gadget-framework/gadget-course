@@ -333,120 +333,120 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Fish are removed from a stock due to predation</li>
 </ul>
 <p>We will illustrate these processes using a simple multistock model:</p>
-<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="defining-stock-interations.html#cb157-1"></a>gd &lt;-<span class="st"> </span><span class="kw">gadget.variant.dir</span>(<span class="st">&#39;simple_multistock_model&#39;</span>)</span>
-<span id="cb157-2"><a href="defining-stock-interations.html#cb157-2"></a></span>
-<span id="cb157-3"><a href="defining-stock-interations.html#cb157-3"></a>schedule &lt;-<span class="st"> </span></span>
-<span id="cb157-4"><a href="defining-stock-interations.html#cb157-4"></a><span class="st">  </span><span class="kw">expand.grid</span>(<span class="dt">year =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">30</span>, <span class="dt">step =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb157-5"><a href="defining-stock-interations.html#cb157-5"></a><span class="st">  </span><span class="kw">arrange</span>(year)</span>
-<span id="cb157-6"><a href="defining-stock-interations.html#cb157-6"></a></span>
-<span id="cb157-7"><a href="defining-stock-interations.html#cb157-7"></a><span class="kw">gadgetfile</span>(<span class="st">&#39;Modelfiles/area&#39;</span>,</span>
-<span id="cb157-8"><a href="defining-stock-interations.html#cb157-8"></a>           <span class="dt">file_type =</span> <span class="st">&#39;area&#39;</span>,</span>
-<span id="cb157-9"><a href="defining-stock-interations.html#cb157-9"></a>           <span class="dt">components =</span> <span class="kw">list</span>(<span class="kw">list</span>(<span class="dt">areas =</span> <span class="dv">1</span>,</span>
-<span id="cb157-10"><a href="defining-stock-interations.html#cb157-10"></a>                                  <span class="dt">size =</span> <span class="dv">1</span>,</span>
-<span id="cb157-11"><a href="defining-stock-interations.html#cb157-11"></a>                                  <span class="dt">temperature =</span> schedule <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb157-12"><a href="defining-stock-interations.html#cb157-12"></a><span class="st">                                    </span><span class="kw">mutate</span>(<span class="dt">area =</span> <span class="dv">1</span>, <span class="dt">temperature =</span> <span class="dv">5</span>)))) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb157-13"><a href="defining-stock-interations.html#cb157-13"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
-<span id="cb157-14"><a href="defining-stock-interations.html#cb157-14"></a></span>
-<span id="cb157-15"><a href="defining-stock-interations.html#cb157-15"></a><span class="kw">gadgetfile</span>(<span class="st">&#39;Modelfiles/time&#39;</span>,</span>
-<span id="cb157-16"><a href="defining-stock-interations.html#cb157-16"></a>           <span class="dt">file_type =</span> <span class="st">&#39;time&#39;</span>,</span>
-<span id="cb157-17"><a href="defining-stock-interations.html#cb157-17"></a>           <span class="dt">components =</span> <span class="kw">list</span>(<span class="kw">list</span>(<span class="dt">firstyear =</span> <span class="kw">min</span>(schedule<span class="op">$</span>year),</span>
-<span id="cb157-18"><a href="defining-stock-interations.html#cb157-18"></a>                                  <span class="dt">firststep=</span><span class="dv">1</span>,</span>
-<span id="cb157-19"><a href="defining-stock-interations.html#cb157-19"></a>                                  <span class="dt">lastyear=</span><span class="kw">max</span>(schedule<span class="op">$</span>year),</span>
-<span id="cb157-20"><a href="defining-stock-interations.html#cb157-20"></a>                                  <span class="dt">laststep=</span><span class="dv">4</span>,</span>
-<span id="cb157-21"><a href="defining-stock-interations.html#cb157-21"></a>                                  <span class="dt">notimesteps=</span><span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>)))) <span class="op">%&gt;%</span><span class="st"> </span><span class="co">## number of time steps and step length in months</span></span>
-<span id="cb157-22"><a href="defining-stock-interations.html#cb157-22"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
-<span id="cb157-23"><a href="defining-stock-interations.html#cb157-23"></a></span>
-<span id="cb157-24"><a href="defining-stock-interations.html#cb157-24"></a>stock_template &lt;-<span class="st"> </span></span>
-<span id="cb157-25"><a href="defining-stock-interations.html#cb157-25"></a><span class="st">  </span><span class="kw">gadgetstock</span>(<span class="st">&#39;stock_1&#39;</span>,gd,<span class="dt">missingOkay =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb157-26"><a href="defining-stock-interations.html#cb157-26"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
-<span id="cb157-27"><a href="defining-stock-interations.html#cb157-27"></a>                <span class="dt">livesonareas =</span> <span class="dv">1</span>,</span>
-<span id="cb157-28"><a href="defining-stock-interations.html#cb157-28"></a>                <span class="dt">maxage =</span> <span class="dv">1</span>,</span>
-<span id="cb157-29"><a href="defining-stock-interations.html#cb157-29"></a>                <span class="dt">minage =</span> <span class="dv">1</span>,</span>
-<span id="cb157-30"><a href="defining-stock-interations.html#cb157-30"></a>                <span class="dt">minlength =</span> <span class="dv">0</span>,</span>
-<span id="cb157-31"><a href="defining-stock-interations.html#cb157-31"></a>                <span class="dt">maxlength =</span> <span class="dv">2</span>,</span>
-<span id="cb157-32"><a href="defining-stock-interations.html#cb157-32"></a>                <span class="dt">dl =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb157-33"><a href="defining-stock-interations.html#cb157-33"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesgrow&#39;</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb157-34"><a href="defining-stock-interations.html#cb157-34"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;naturalmortality&#39;</span>, <span class="fl">0.2</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb157-35"><a href="defining-stock-interations.html#cb157-35"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;refweight&#39;</span>,<span class="dt">data=</span><span class="kw">tibble</span>(<span class="dt">length=</span><span class="dv">0</span><span class="op">:</span><span class="dv">2</span>,<span class="dt">mean=</span><span class="dv">0</span><span class="op">:</span><span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb157-36"><a href="defining-stock-interations.html#cb157-36"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;initialconditions&#39;</span>,</span>
-<span id="cb157-37"><a href="defining-stock-interations.html#cb157-37"></a>                <span class="dt">normalparam =</span> <span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">1</span>,</span>
-<span id="cb157-38"><a href="defining-stock-interations.html#cb157-38"></a>                                     <span class="dt">area =</span> <span class="dv">1</span>,</span>
-<span id="cb157-39"><a href="defining-stock-interations.html#cb157-39"></a>                                     <span class="dt">age.factor =</span> <span class="dv">0</span>,   </span>
-<span id="cb157-40"><a href="defining-stock-interations.html#cb157-40"></a>                                     <span class="dt">area.factor =</span><span class="dv">1</span>,</span>
-<span id="cb157-41"><a href="defining-stock-interations.html#cb157-41"></a>                                     <span class="dt">mean =</span> <span class="dv">1</span>,</span>
-<span id="cb157-42"><a href="defining-stock-interations.html#cb157-42"></a>                                     <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
-<span id="cb157-43"><a href="defining-stock-interations.html#cb157-43"></a>                                     <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
-<span id="cb157-44"><a href="defining-stock-interations.html#cb157-44"></a>                                     <span class="dt">beta =</span> <span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb157-45"><a href="defining-stock-interations.html#cb157-45"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesrenew&#39;</span>,</span>
-<span id="cb157-46"><a href="defining-stock-interations.html#cb157-46"></a>                <span class="dt">normalparam =</span> schedule <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb157-47"><a href="defining-stock-interations.html#cb157-47"></a><span class="st">                  </span><span class="kw">filter</span>(step <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb157-48"><a href="defining-stock-interations.html#cb157-48"></a><span class="st">                  </span><span class="kw">mutate</span>(<span class="dt">area =</span> <span class="dv">1</span>, <span class="co">## where does the rec. take place</span></span>
-<span id="cb157-49"><a href="defining-stock-interations.html#cb157-49"></a>                         <span class="dt">age =</span> <span class="dv">1</span>, <span class="co">## age of recruits</span></span>
-<span id="cb157-50"><a href="defining-stock-interations.html#cb157-50"></a>                         <span class="dt">number =</span> <span class="dv">1</span>, <span class="co">## num. of recruits (x10 000)</span></span>
-<span id="cb157-51"><a href="defining-stock-interations.html#cb157-51"></a>                         <span class="dt">mean =</span> <span class="dv">1</span>, <span class="co">## mean length</span></span>
-<span id="cb157-52"><a href="defining-stock-interations.html#cb157-52"></a>                         <span class="dt">stddev =</span> <span class="fl">.1</span>, <span class="co">## std in length</span></span>
-<span id="cb157-53"><a href="defining-stock-interations.html#cb157-53"></a>                         <span class="dt">alpha =</span> <span class="dv">1</span>, <span class="co">## a in w = aL^b</span></span>
-<span id="cb157-54"><a href="defining-stock-interations.html#cb157-54"></a>                         <span class="dt">beta =</span> <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="defining-stock-interations.html#cb156-1"></a>gd &lt;-<span class="st"> </span><span class="kw">gadget.variant.dir</span>(<span class="st">&#39;simple_multistock_model&#39;</span>)</span>
+<span id="cb156-2"><a href="defining-stock-interations.html#cb156-2"></a></span>
+<span id="cb156-3"><a href="defining-stock-interations.html#cb156-3"></a>schedule &lt;-<span class="st"> </span></span>
+<span id="cb156-4"><a href="defining-stock-interations.html#cb156-4"></a><span class="st">  </span><span class="kw">expand.grid</span>(<span class="dt">year =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">30</span>, <span class="dt">step =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb156-5"><a href="defining-stock-interations.html#cb156-5"></a><span class="st">  </span><span class="kw">arrange</span>(year)</span>
+<span id="cb156-6"><a href="defining-stock-interations.html#cb156-6"></a></span>
+<span id="cb156-7"><a href="defining-stock-interations.html#cb156-7"></a><span class="kw">gadgetfile</span>(<span class="st">&#39;Modelfiles/area&#39;</span>,</span>
+<span id="cb156-8"><a href="defining-stock-interations.html#cb156-8"></a>           <span class="dt">file_type =</span> <span class="st">&#39;area&#39;</span>,</span>
+<span id="cb156-9"><a href="defining-stock-interations.html#cb156-9"></a>           <span class="dt">components =</span> <span class="kw">list</span>(<span class="kw">list</span>(<span class="dt">areas =</span> <span class="dv">1</span>,</span>
+<span id="cb156-10"><a href="defining-stock-interations.html#cb156-10"></a>                                  <span class="dt">size =</span> <span class="dv">1</span>,</span>
+<span id="cb156-11"><a href="defining-stock-interations.html#cb156-11"></a>                                  <span class="dt">temperature =</span> schedule <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb156-12"><a href="defining-stock-interations.html#cb156-12"></a><span class="st">                                    </span><span class="kw">mutate</span>(<span class="dt">area =</span> <span class="dv">1</span>, <span class="dt">temperature =</span> <span class="dv">5</span>)))) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb156-13"><a href="defining-stock-interations.html#cb156-13"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
+<span id="cb156-14"><a href="defining-stock-interations.html#cb156-14"></a></span>
+<span id="cb156-15"><a href="defining-stock-interations.html#cb156-15"></a><span class="kw">gadgetfile</span>(<span class="st">&#39;Modelfiles/time&#39;</span>,</span>
+<span id="cb156-16"><a href="defining-stock-interations.html#cb156-16"></a>           <span class="dt">file_type =</span> <span class="st">&#39;time&#39;</span>,</span>
+<span id="cb156-17"><a href="defining-stock-interations.html#cb156-17"></a>           <span class="dt">components =</span> <span class="kw">list</span>(<span class="kw">list</span>(<span class="dt">firstyear =</span> <span class="kw">min</span>(schedule<span class="op">$</span>year),</span>
+<span id="cb156-18"><a href="defining-stock-interations.html#cb156-18"></a>                                  <span class="dt">firststep=</span><span class="dv">1</span>,</span>
+<span id="cb156-19"><a href="defining-stock-interations.html#cb156-19"></a>                                  <span class="dt">lastyear=</span><span class="kw">max</span>(schedule<span class="op">$</span>year),</span>
+<span id="cb156-20"><a href="defining-stock-interations.html#cb156-20"></a>                                  <span class="dt">laststep=</span><span class="dv">4</span>,</span>
+<span id="cb156-21"><a href="defining-stock-interations.html#cb156-21"></a>                                  <span class="dt">notimesteps=</span><span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>,<span class="dv">3</span>)))) <span class="op">%&gt;%</span><span class="st"> </span><span class="co">## number of time steps and step length in months</span></span>
+<span id="cb156-22"><a href="defining-stock-interations.html#cb156-22"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
+<span id="cb156-23"><a href="defining-stock-interations.html#cb156-23"></a></span>
+<span id="cb156-24"><a href="defining-stock-interations.html#cb156-24"></a>stock_template &lt;-<span class="st"> </span></span>
+<span id="cb156-25"><a href="defining-stock-interations.html#cb156-25"></a><span class="st">  </span><span class="kw">gadgetstock</span>(<span class="st">&#39;stock_1&#39;</span>,gd,<span class="dt">missingOkay =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb156-26"><a href="defining-stock-interations.html#cb156-26"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
+<span id="cb156-27"><a href="defining-stock-interations.html#cb156-27"></a>                <span class="dt">livesonareas =</span> <span class="dv">1</span>,</span>
+<span id="cb156-28"><a href="defining-stock-interations.html#cb156-28"></a>                <span class="dt">maxage =</span> <span class="dv">1</span>,</span>
+<span id="cb156-29"><a href="defining-stock-interations.html#cb156-29"></a>                <span class="dt">minage =</span> <span class="dv">1</span>,</span>
+<span id="cb156-30"><a href="defining-stock-interations.html#cb156-30"></a>                <span class="dt">minlength =</span> <span class="dv">0</span>,</span>
+<span id="cb156-31"><a href="defining-stock-interations.html#cb156-31"></a>                <span class="dt">maxlength =</span> <span class="dv">2</span>,</span>
+<span id="cb156-32"><a href="defining-stock-interations.html#cb156-32"></a>                <span class="dt">dl =</span> <span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb156-33"><a href="defining-stock-interations.html#cb156-33"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesgrow&#39;</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb156-34"><a href="defining-stock-interations.html#cb156-34"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;naturalmortality&#39;</span>, <span class="fl">0.2</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb156-35"><a href="defining-stock-interations.html#cb156-35"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;refweight&#39;</span>,<span class="dt">data=</span><span class="kw">tibble</span>(<span class="dt">length=</span><span class="dv">0</span><span class="op">:</span><span class="dv">2</span>,<span class="dt">mean=</span><span class="dv">0</span><span class="op">:</span><span class="dv">2</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb156-36"><a href="defining-stock-interations.html#cb156-36"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;initialconditions&#39;</span>,</span>
+<span id="cb156-37"><a href="defining-stock-interations.html#cb156-37"></a>                <span class="dt">normalparam =</span> <span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">1</span>,</span>
+<span id="cb156-38"><a href="defining-stock-interations.html#cb156-38"></a>                                     <span class="dt">area =</span> <span class="dv">1</span>,</span>
+<span id="cb156-39"><a href="defining-stock-interations.html#cb156-39"></a>                                     <span class="dt">age.factor =</span> <span class="dv">0</span>,   </span>
+<span id="cb156-40"><a href="defining-stock-interations.html#cb156-40"></a>                                     <span class="dt">area.factor =</span><span class="dv">1</span>,</span>
+<span id="cb156-41"><a href="defining-stock-interations.html#cb156-41"></a>                                     <span class="dt">mean =</span> <span class="dv">1</span>,</span>
+<span id="cb156-42"><a href="defining-stock-interations.html#cb156-42"></a>                                     <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
+<span id="cb156-43"><a href="defining-stock-interations.html#cb156-43"></a>                                     <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
+<span id="cb156-44"><a href="defining-stock-interations.html#cb156-44"></a>                                     <span class="dt">beta =</span> <span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb156-45"><a href="defining-stock-interations.html#cb156-45"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesrenew&#39;</span>,</span>
+<span id="cb156-46"><a href="defining-stock-interations.html#cb156-46"></a>                <span class="dt">normalparam =</span> schedule <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb156-47"><a href="defining-stock-interations.html#cb156-47"></a><span class="st">                  </span><span class="kw">filter</span>(step <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb156-48"><a href="defining-stock-interations.html#cb156-48"></a><span class="st">                  </span><span class="kw">mutate</span>(<span class="dt">area =</span> <span class="dv">1</span>, <span class="co">## where does the rec. take place</span></span>
+<span id="cb156-49"><a href="defining-stock-interations.html#cb156-49"></a>                         <span class="dt">age =</span> <span class="dv">1</span>, <span class="co">## age of recruits</span></span>
+<span id="cb156-50"><a href="defining-stock-interations.html#cb156-50"></a>                         <span class="dt">number =</span> <span class="dv">1</span>, <span class="co">## num. of recruits (x10 000)</span></span>
+<span id="cb156-51"><a href="defining-stock-interations.html#cb156-51"></a>                         <span class="dt">mean =</span> <span class="dv">1</span>, <span class="co">## mean length</span></span>
+<span id="cb156-52"><a href="defining-stock-interations.html#cb156-52"></a>                         <span class="dt">stddev =</span> <span class="fl">.1</span>, <span class="co">## std in length</span></span>
+<span id="cb156-53"><a href="defining-stock-interations.html#cb156-53"></a>                         <span class="dt">alpha =</span> <span class="dv">1</span>, <span class="co">## a in w = aL^b</span></span>
+<span id="cb156-54"><a href="defining-stock-interations.html#cb156-54"></a>                         <span class="dt">beta =</span> <span class="dv">1</span>))</span></code></pre></div>
 <p>We will use the stock template to define multiple stocks to illustrate the various possible interactions the user is able to define in a Gadget model.</p>
 <div id="fish-recruits-into-a-stock" class="section level2">
 <h2><span class="header-section-number">5.1</span> Fish recruits into a stock</h2>
 <p>We have already seen how to implement the most straightforward version of recruitment into a stock, that is the renewal process. To recap, the renewal process adds fish into a stock based on a predefined schedule on the number and age of fish at a given time step. The most obvious use of this feature is to define a non-parametric recruitment to a stock a the minimum age of the stock. However one can use it also to add migrations from a related to stock, where the dynamics of the related stock is not modelled. An example of this would be the sporadic migrations of cod from Greenlandic waters into Icelandic waters.</p>
 <p>Movement between stocks can however be defined to more elaborate. We have already seen how maturation can be modelled as a two step approach, that is a combination of Maturation and Movement. Movement is the simplest approach as it simply takes the oldest fish of one stock and pushes it into a another stock, provided that this other stock’s age range includes the maximum age of the first stock’s.</p>
-<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="defining-stock-interations.html#cb158-1"></a>young_stock &lt;-<span class="st"> </span></span>
-<span id="cb158-2"><a href="defining-stock-interations.html#cb158-2"></a><span class="st">  </span>stock_template <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb158-3"><a href="defining-stock-interations.html#cb158-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
-<span id="cb158-4"><a href="defining-stock-interations.html#cb158-4"></a>                <span class="dt">stockname =</span> <span class="st">&#39;young_stock&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb158-5"><a href="defining-stock-interations.html#cb158-5"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesmove&#39;</span>,</span>
-<span id="cb158-6"><a href="defining-stock-interations.html#cb158-6"></a>                <span class="co">## be careful how you spell this</span></span>
-<span id="cb158-7"><a href="defining-stock-interations.html#cb158-7"></a>                <span class="dt">transitionstocksandratios =</span> <span class="kw">list</span>(<span class="dt">stock=</span><span class="st">&#39;old_stock&#39;</span>,<span class="dt">ratio =</span> <span class="dv">1</span>),</span>
-<span id="cb158-8"><a href="defining-stock-interations.html#cb158-8"></a>                <span class="dt">transitionstep =</span> <span class="dv">4</span>)</span>
-<span id="cb158-9"><a href="defining-stock-interations.html#cb158-9"></a></span>
-<span id="cb158-10"><a href="defining-stock-interations.html#cb158-10"></a>old_stock &lt;-<span class="st"> </span></span>
-<span id="cb158-11"><a href="defining-stock-interations.html#cb158-11"></a><span class="st">  </span>stock_template <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb158-12"><a href="defining-stock-interations.html#cb158-12"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
-<span id="cb158-13"><a href="defining-stock-interations.html#cb158-13"></a>                <span class="dt">stockname =</span> <span class="st">&#39;old_stock&#39;</span>,</span>
-<span id="cb158-14"><a href="defining-stock-interations.html#cb158-14"></a>                <span class="dt">minage =</span> <span class="dv">2</span>,</span>
-<span id="cb158-15"><a href="defining-stock-interations.html#cb158-15"></a>                <span class="dt">maxage =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb158-16"><a href="defining-stock-interations.html#cb158-16"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesrenew&#39;</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb158-17"><a href="defining-stock-interations.html#cb158-17"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;naturalmortality&#39;</span>, <span class="fl">0.2</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb158-18"><a href="defining-stock-interations.html#cb158-18"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;initialconditions&#39;</span>,</span>
-<span id="cb158-19"><a href="defining-stock-interations.html#cb158-19"></a>                <span class="dt">normalparam =</span> <span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">2</span>,</span>
-<span id="cb158-20"><a href="defining-stock-interations.html#cb158-20"></a>                                     <span class="dt">area =</span> <span class="dv">1</span>,</span>
-<span id="cb158-21"><a href="defining-stock-interations.html#cb158-21"></a>                                     <span class="dt">age.factor =</span> <span class="dv">0</span>,   </span>
-<span id="cb158-22"><a href="defining-stock-interations.html#cb158-22"></a>                                     <span class="dt">area.factor =</span><span class="dv">1</span>,</span>
-<span id="cb158-23"><a href="defining-stock-interations.html#cb158-23"></a>                                     <span class="dt">mean =</span> <span class="dv">1</span>,</span>
-<span id="cb158-24"><a href="defining-stock-interations.html#cb158-24"></a>                                     <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
-<span id="cb158-25"><a href="defining-stock-interations.html#cb158-25"></a>                                     <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
-<span id="cb158-26"><a href="defining-stock-interations.html#cb158-26"></a>                                     <span class="dt">beta =</span> <span class="dv">1</span>))</span>
-<span id="cb158-27"><a href="defining-stock-interations.html#cb158-27"></a></span>
-<span id="cb158-28"><a href="defining-stock-interations.html#cb158-28"></a></span>
-<span id="cb158-29"><a href="defining-stock-interations.html#cb158-29"></a>young_stock <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb158-30"><a href="defining-stock-interations.html#cb158-30"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
-<span id="cb158-31"><a href="defining-stock-interations.html#cb158-31"></a></span>
-<span id="cb158-32"><a href="defining-stock-interations.html#cb158-32"></a>old_stock <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb158-33"><a href="defining-stock-interations.html#cb158-33"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
-<span id="cb158-34"><a href="defining-stock-interations.html#cb158-34"></a></span>
-<span id="cb158-35"><a href="defining-stock-interations.html#cb158-35"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>,<span class="dt">gd=</span>gd,<span class="dt">steps =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="defining-stock-interations.html#cb157-1"></a>young_stock &lt;-<span class="st"> </span></span>
+<span id="cb157-2"><a href="defining-stock-interations.html#cb157-2"></a><span class="st">  </span>stock_template <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb157-3"><a href="defining-stock-interations.html#cb157-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
+<span id="cb157-4"><a href="defining-stock-interations.html#cb157-4"></a>                <span class="dt">stockname =</span> <span class="st">&#39;young_stock&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb157-5"><a href="defining-stock-interations.html#cb157-5"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesmove&#39;</span>,</span>
+<span id="cb157-6"><a href="defining-stock-interations.html#cb157-6"></a>                <span class="co">## be careful how you spell this</span></span>
+<span id="cb157-7"><a href="defining-stock-interations.html#cb157-7"></a>                <span class="dt">transitionstocksandratios =</span> <span class="kw">list</span>(<span class="dt">stock=</span><span class="st">&#39;old_stock&#39;</span>,<span class="dt">ratio =</span> <span class="dv">1</span>),</span>
+<span id="cb157-8"><a href="defining-stock-interations.html#cb157-8"></a>                <span class="dt">transitionstep =</span> <span class="dv">4</span>)</span>
+<span id="cb157-9"><a href="defining-stock-interations.html#cb157-9"></a></span>
+<span id="cb157-10"><a href="defining-stock-interations.html#cb157-10"></a>old_stock &lt;-<span class="st"> </span></span>
+<span id="cb157-11"><a href="defining-stock-interations.html#cb157-11"></a><span class="st">  </span>stock_template <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb157-12"><a href="defining-stock-interations.html#cb157-12"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
+<span id="cb157-13"><a href="defining-stock-interations.html#cb157-13"></a>                <span class="dt">stockname =</span> <span class="st">&#39;old_stock&#39;</span>,</span>
+<span id="cb157-14"><a href="defining-stock-interations.html#cb157-14"></a>                <span class="dt">minage =</span> <span class="dv">2</span>,</span>
+<span id="cb157-15"><a href="defining-stock-interations.html#cb157-15"></a>                <span class="dt">maxage =</span> <span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb157-16"><a href="defining-stock-interations.html#cb157-16"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesrenew&#39;</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb157-17"><a href="defining-stock-interations.html#cb157-17"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;naturalmortality&#39;</span>, <span class="fl">0.2</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb157-18"><a href="defining-stock-interations.html#cb157-18"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;initialconditions&#39;</span>,</span>
+<span id="cb157-19"><a href="defining-stock-interations.html#cb157-19"></a>                <span class="dt">normalparam =</span> <span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">2</span>,</span>
+<span id="cb157-20"><a href="defining-stock-interations.html#cb157-20"></a>                                     <span class="dt">area =</span> <span class="dv">1</span>,</span>
+<span id="cb157-21"><a href="defining-stock-interations.html#cb157-21"></a>                                     <span class="dt">age.factor =</span> <span class="dv">0</span>,   </span>
+<span id="cb157-22"><a href="defining-stock-interations.html#cb157-22"></a>                                     <span class="dt">area.factor =</span><span class="dv">1</span>,</span>
+<span id="cb157-23"><a href="defining-stock-interations.html#cb157-23"></a>                                     <span class="dt">mean =</span> <span class="dv">1</span>,</span>
+<span id="cb157-24"><a href="defining-stock-interations.html#cb157-24"></a>                                     <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
+<span id="cb157-25"><a href="defining-stock-interations.html#cb157-25"></a>                                     <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
+<span id="cb157-26"><a href="defining-stock-interations.html#cb157-26"></a>                                     <span class="dt">beta =</span> <span class="dv">1</span>))</span>
+<span id="cb157-27"><a href="defining-stock-interations.html#cb157-27"></a></span>
+<span id="cb157-28"><a href="defining-stock-interations.html#cb157-28"></a></span>
+<span id="cb157-29"><a href="defining-stock-interations.html#cb157-29"></a>young_stock <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb157-30"><a href="defining-stock-interations.html#cb157-30"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
+<span id="cb157-31"><a href="defining-stock-interations.html#cb157-31"></a></span>
+<span id="cb157-32"><a href="defining-stock-interations.html#cb157-32"></a>old_stock <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb157-33"><a href="defining-stock-interations.html#cb157-33"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
+<span id="cb157-34"><a href="defining-stock-interations.html#cb157-34"></a></span>
+<span id="cb157-35"><a href="defining-stock-interations.html#cb157-35"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>,<span class="dt">gd=</span>gd,<span class="dt">steps =</span> <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Reading input data&quot;
 ## [1] &quot;Running Gadget&quot;
 ## [1] &quot;Reading output files&quot;
 ## [1] &quot;Gathering results&quot;
 ## [1] &quot;Merging input and output&quot;</code></pre>
-<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="defining-stock-interations.html#cb160-1"></a><span class="co">## better color scheme</span></span>
-<span id="cb160-2"><a href="defining-stock-interations.html#cb160-2"></a></span>
-<span id="cb160-3"><a href="defining-stock-interations.html#cb160-3"></a>scale_fill_crayola &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">n =</span> <span class="dv">100</span>, ...) {</span>
-<span id="cb160-4"><a href="defining-stock-interations.html#cb160-4"></a>  </span>
-<span id="cb160-5"><a href="defining-stock-interations.html#cb160-5"></a>  <span class="co"># taken from RColorBrewer::brewer.pal(12, &quot;Paired&quot;)</span></span>
-<span id="cb160-6"><a href="defining-stock-interations.html#cb160-6"></a>  pal &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#A6CEE3&quot;</span>, <span class="st">&quot;#1F78B4&quot;</span>, <span class="st">&quot;#B2DF8A&quot;</span>, <span class="st">&quot;#33A02C&quot;</span>,</span>
-<span id="cb160-7"><a href="defining-stock-interations.html#cb160-7"></a>           <span class="st">&quot;#FB9A99&quot;</span>, <span class="st">&quot;#E31A1C&quot;</span>, <span class="st">&quot;#FDBF6F&quot;</span>, <span class="st">&quot;#FF7F00&quot;</span>,</span>
-<span id="cb160-8"><a href="defining-stock-interations.html#cb160-8"></a>           <span class="st">&quot;#CAB2D6&quot;</span>, <span class="st">&quot;#6A3D9A&quot;</span>, <span class="st">&quot;#FFFF99&quot;</span>, <span class="st">&quot;#B15928&quot;</span>)</span>
-<span id="cb160-9"><a href="defining-stock-interations.html#cb160-9"></a>  pal &lt;-<span class="st"> </span><span class="kw">rep</span>(pal, n)</span>
-<span id="cb160-10"><a href="defining-stock-interations.html#cb160-10"></a>  ggplot2<span class="op">::</span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> pal, ...)</span>
-<span id="cb160-11"><a href="defining-stock-interations.html#cb160-11"></a>  </span>
-<span id="cb160-12"><a href="defining-stock-interations.html#cb160-12"></a>}</span>
-<span id="cb160-13"><a href="defining-stock-interations.html#cb160-13"></a></span>
-<span id="cb160-14"><a href="defining-stock-interations.html#cb160-14"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;num.total&#39;</span>)</span>
-<span id="cb160-15"><a href="defining-stock-interations.html#cb160-15"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;stock.std&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">scale_fill_crayola</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb159-1"><a href="defining-stock-interations.html#cb159-1"></a><span class="co">## better color scheme</span></span>
+<span id="cb159-2"><a href="defining-stock-interations.html#cb159-2"></a></span>
+<span id="cb159-3"><a href="defining-stock-interations.html#cb159-3"></a>scale_fill_crayola &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">n =</span> <span class="dv">100</span>, ...) {</span>
+<span id="cb159-4"><a href="defining-stock-interations.html#cb159-4"></a>  </span>
+<span id="cb159-5"><a href="defining-stock-interations.html#cb159-5"></a>  <span class="co"># taken from RColorBrewer::brewer.pal(12, &quot;Paired&quot;)</span></span>
+<span id="cb159-6"><a href="defining-stock-interations.html#cb159-6"></a>  pal &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;#A6CEE3&quot;</span>, <span class="st">&quot;#1F78B4&quot;</span>, <span class="st">&quot;#B2DF8A&quot;</span>, <span class="st">&quot;#33A02C&quot;</span>,</span>
+<span id="cb159-7"><a href="defining-stock-interations.html#cb159-7"></a>           <span class="st">&quot;#FB9A99&quot;</span>, <span class="st">&quot;#E31A1C&quot;</span>, <span class="st">&quot;#FDBF6F&quot;</span>, <span class="st">&quot;#FF7F00&quot;</span>,</span>
+<span id="cb159-8"><a href="defining-stock-interations.html#cb159-8"></a>           <span class="st">&quot;#CAB2D6&quot;</span>, <span class="st">&quot;#6A3D9A&quot;</span>, <span class="st">&quot;#FFFF99&quot;</span>, <span class="st">&quot;#B15928&quot;</span>)</span>
+<span id="cb159-9"><a href="defining-stock-interations.html#cb159-9"></a>  pal &lt;-<span class="st"> </span><span class="kw">rep</span>(pal, n)</span>
+<span id="cb159-10"><a href="defining-stock-interations.html#cb159-10"></a>  ggplot2<span class="op">::</span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> pal, ...)</span>
+<span id="cb159-11"><a href="defining-stock-interations.html#cb159-11"></a>  </span>
+<span id="cb159-12"><a href="defining-stock-interations.html#cb159-12"></a>}</span>
+<span id="cb159-13"><a href="defining-stock-interations.html#cb159-13"></a></span>
+<span id="cb159-14"><a href="defining-stock-interations.html#cb159-14"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;res.by.year&#39;</span>,<span class="dt">type=</span><span class="st">&#39;num.total&#39;</span>)</span>
+<span id="cb159-15"><a href="defining-stock-interations.html#cb159-15"></a><span class="kw">plot</span>(fit,<span class="dt">data=</span><span class="st">&#39;stock.std&#39;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">scale_fill_crayola</span>()</span></code></pre></div>
 <p><img src="stock_interactions_files/figure-html/unnamed-chunk-2-1.png" width="50%" /><img src="stock_interactions_files/figure-html/unnamed-chunk-2-2.png" width="50%" /></p>
 <p>And this process can of course continue further. Two processes allow the user to define movement based on size or age. These are the maturation process and the straying process. These behave in a similar manner but there are key differences, in particular how you can define the movement. In the ling example the maturity process will be shown as a continuous process where the probability of a maturing at a certain length or age was determing using the following equation:
 <span class="math display">\[ 
@@ -469,46 +469,46 @@ where the body condition, <span class="math inline">\(k\)</span>, is determined 
 <li><code>exponential</code>: <span class="math inline">\(S_l = \frac{1}{1+e^{\alpha(l-l_{50})}}\)</span></li>
 </ul>
 <p>For our simple model we will define 20<span class="math inline">\(\%\)</span> straying between two stock components, from <code>stock_a</code> to <code>stock_b</code>:</p>
-<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="defining-stock-interations.html#cb161-1"></a>stock_a &lt;-<span class="st"> </span></span>
-<span id="cb161-2"><a href="defining-stock-interations.html#cb161-2"></a><span class="st">  </span>stock_template <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb161-3"><a href="defining-stock-interations.html#cb161-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
-<span id="cb161-4"><a href="defining-stock-interations.html#cb161-4"></a>                <span class="dt">stockname =</span> <span class="st">&#39;stock_a&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb161-5"><a href="defining-stock-interations.html#cb161-5"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesstray&#39;</span>,</span>
-<span id="cb161-6"><a href="defining-stock-interations.html#cb161-6"></a>                <span class="dt">straysteps =</span> <span class="dv">3</span>,</span>
-<span id="cb161-7"><a href="defining-stock-interations.html#cb161-7"></a>                <span class="dt">strayareas =</span> <span class="dv">1</span>,</span>
-<span id="cb161-8"><a href="defining-stock-interations.html#cb161-8"></a>                <span class="dt">straystocksandratios =</span> <span class="kw">list</span>(<span class="dt">stock=</span><span class="st">&#39;stock_b&#39;</span>,<span class="dt">ratio =</span> <span class="dv">1</span>),</span>
-<span id="cb161-9"><a href="defining-stock-interations.html#cb161-9"></a>                <span class="dt">proportionfunction =</span> <span class="kw">list</span>(<span class="dt">sel_function=</span><span class="st">&#39;constant&#39;</span>,<span class="dt">alpha =</span> <span class="fl">0.2</span>))</span>
-<span id="cb161-10"><a href="defining-stock-interations.html#cb161-10"></a></span>
-<span id="cb161-11"><a href="defining-stock-interations.html#cb161-11"></a>stock_b &lt;-<span class="st"> </span></span>
-<span id="cb161-12"><a href="defining-stock-interations.html#cb161-12"></a><span class="st">  </span>stock_template <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb161-13"><a href="defining-stock-interations.html#cb161-13"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
-<span id="cb161-14"><a href="defining-stock-interations.html#cb161-14"></a>                <span class="dt">stockname =</span> <span class="st">&#39;stock_b&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb161-15"><a href="defining-stock-interations.html#cb161-15"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesrenew&#39;</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb161-16"><a href="defining-stock-interations.html#cb161-16"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;initialconditions&#39;</span>,</span>
-<span id="cb161-17"><a href="defining-stock-interations.html#cb161-17"></a>                <span class="dt">normalparam =</span> <span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">1</span>,</span>
-<span id="cb161-18"><a href="defining-stock-interations.html#cb161-18"></a>                                     <span class="dt">area =</span> <span class="dv">1</span>,</span>
-<span id="cb161-19"><a href="defining-stock-interations.html#cb161-19"></a>                                     <span class="dt">age.factor =</span> <span class="fl">.1</span>,   </span>
-<span id="cb161-20"><a href="defining-stock-interations.html#cb161-20"></a>                                     <span class="dt">area.factor =</span><span class="dv">1</span>,</span>
-<span id="cb161-21"><a href="defining-stock-interations.html#cb161-21"></a>                                     <span class="dt">mean =</span> <span class="dv">1</span>,</span>
-<span id="cb161-22"><a href="defining-stock-interations.html#cb161-22"></a>                                     <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
-<span id="cb161-23"><a href="defining-stock-interations.html#cb161-23"></a>                                     <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
-<span id="cb161-24"><a href="defining-stock-interations.html#cb161-24"></a>                                     <span class="dt">beta =</span> <span class="dv">1</span>))</span>
-<span id="cb161-25"><a href="defining-stock-interations.html#cb161-25"></a></span>
-<span id="cb161-26"><a href="defining-stock-interations.html#cb161-26"></a>stock_a <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb161-27"><a href="defining-stock-interations.html#cb161-27"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
-<span id="cb161-28"><a href="defining-stock-interations.html#cb161-28"></a></span>
-<span id="cb161-29"><a href="defining-stock-interations.html#cb161-29"></a>stock_b <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb161-30"><a href="defining-stock-interations.html#cb161-30"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
-<span id="cb161-31"><a href="defining-stock-interations.html#cb161-31"></a></span>
-<span id="cb161-32"><a href="defining-stock-interations.html#cb161-32"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>,<span class="dt">gd=</span>gd,<span class="dt">steps =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="defining-stock-interations.html#cb160-1"></a>stock_a &lt;-<span class="st"> </span></span>
+<span id="cb160-2"><a href="defining-stock-interations.html#cb160-2"></a><span class="st">  </span>stock_template <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb160-3"><a href="defining-stock-interations.html#cb160-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
+<span id="cb160-4"><a href="defining-stock-interations.html#cb160-4"></a>                <span class="dt">stockname =</span> <span class="st">&#39;stock_a&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb160-5"><a href="defining-stock-interations.html#cb160-5"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesstray&#39;</span>,</span>
+<span id="cb160-6"><a href="defining-stock-interations.html#cb160-6"></a>                <span class="dt">straysteps =</span> <span class="dv">3</span>,</span>
+<span id="cb160-7"><a href="defining-stock-interations.html#cb160-7"></a>                <span class="dt">strayareas =</span> <span class="dv">1</span>,</span>
+<span id="cb160-8"><a href="defining-stock-interations.html#cb160-8"></a>                <span class="dt">straystocksandratios =</span> <span class="kw">list</span>(<span class="dt">stock=</span><span class="st">&#39;stock_b&#39;</span>,<span class="dt">ratio =</span> <span class="dv">1</span>),</span>
+<span id="cb160-9"><a href="defining-stock-interations.html#cb160-9"></a>                <span class="dt">proportionfunction =</span> <span class="kw">list</span>(<span class="dt">sel_function=</span><span class="st">&#39;constant&#39;</span>,<span class="dt">alpha =</span> <span class="fl">0.2</span>))</span>
+<span id="cb160-10"><a href="defining-stock-interations.html#cb160-10"></a></span>
+<span id="cb160-11"><a href="defining-stock-interations.html#cb160-11"></a>stock_b &lt;-<span class="st"> </span></span>
+<span id="cb160-12"><a href="defining-stock-interations.html#cb160-12"></a><span class="st">  </span>stock_template <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb160-13"><a href="defining-stock-interations.html#cb160-13"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
+<span id="cb160-14"><a href="defining-stock-interations.html#cb160-14"></a>                <span class="dt">stockname =</span> <span class="st">&#39;stock_b&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb160-15"><a href="defining-stock-interations.html#cb160-15"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesrenew&#39;</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb160-16"><a href="defining-stock-interations.html#cb160-16"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;initialconditions&#39;</span>,</span>
+<span id="cb160-17"><a href="defining-stock-interations.html#cb160-17"></a>                <span class="dt">normalparam =</span> <span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">1</span>,</span>
+<span id="cb160-18"><a href="defining-stock-interations.html#cb160-18"></a>                                     <span class="dt">area =</span> <span class="dv">1</span>,</span>
+<span id="cb160-19"><a href="defining-stock-interations.html#cb160-19"></a>                                     <span class="dt">age.factor =</span> <span class="fl">.1</span>,   </span>
+<span id="cb160-20"><a href="defining-stock-interations.html#cb160-20"></a>                                     <span class="dt">area.factor =</span><span class="dv">1</span>,</span>
+<span id="cb160-21"><a href="defining-stock-interations.html#cb160-21"></a>                                     <span class="dt">mean =</span> <span class="dv">1</span>,</span>
+<span id="cb160-22"><a href="defining-stock-interations.html#cb160-22"></a>                                     <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
+<span id="cb160-23"><a href="defining-stock-interations.html#cb160-23"></a>                                     <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
+<span id="cb160-24"><a href="defining-stock-interations.html#cb160-24"></a>                                     <span class="dt">beta =</span> <span class="dv">1</span>))</span>
+<span id="cb160-25"><a href="defining-stock-interations.html#cb160-25"></a></span>
+<span id="cb160-26"><a href="defining-stock-interations.html#cb160-26"></a>stock_a <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb160-27"><a href="defining-stock-interations.html#cb160-27"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
+<span id="cb160-28"><a href="defining-stock-interations.html#cb160-28"></a></span>
+<span id="cb160-29"><a href="defining-stock-interations.html#cb160-29"></a>stock_b <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb160-30"><a href="defining-stock-interations.html#cb160-30"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
+<span id="cb160-31"><a href="defining-stock-interations.html#cb160-31"></a></span>
+<span id="cb160-32"><a href="defining-stock-interations.html#cb160-32"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>,<span class="dt">gd=</span>gd,<span class="dt">steps =</span> <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Reading input data&quot;
 ## [1] &quot;Running Gadget&quot;
 ## [1] &quot;Reading output files&quot;
 ## [1] &quot;Gathering results&quot;
 ## [1] &quot;Merging input and output&quot;</code></pre>
-<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="defining-stock-interations.html#cb163-1"></a>fit<span class="op">$</span>res.by.year <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb163-2"><a href="defining-stock-interations.html#cb163-2"></a><span class="st">  </span><span class="kw">filter</span>(stock <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;stock_a&#39;</span>,<span class="st">&#39;stock_b&#39;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb163-3"><a href="defining-stock-interations.html#cb163-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(year,total.number,<span class="dt">lty =</span> stock)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="defining-stock-interations.html#cb162-1"></a>fit<span class="op">$</span>res.by.year <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb162-2"><a href="defining-stock-interations.html#cb162-2"></a><span class="st">  </span><span class="kw">filter</span>(stock <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;stock_a&#39;</span>,<span class="st">&#39;stock_b&#39;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb162-3"><a href="defining-stock-interations.html#cb162-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(year,total.number,<span class="dt">lty =</span> stock)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
 <p><img src="stock_interactions_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <div id="exercise-2" class="section level3">
 <h3><span class="header-section-number">5.1.1</span> Exercise</h3>
@@ -535,153 +535,153 @@ R_0,&amp;\text{If } B_{lim} \leq S \\
 <span class="math display">\[ N_l = N_l(1 + P_l(e^{-m_l} - 1)) \]</span>
 <span class="math display">\[ W_l = W_l\frac{1 + P_l((2-w_l)e^{-m_l} -1)}{(1 + P_l(2e^{-m_l} -1))} \]</span>
 where <span class="math inline">\(P_l\)</span> is proportion that will spawn, <span class="math inline">\(m_l\)</span> is the mortality for and <span class="math inline">\(w_l\)</span> is the weight loss for length group <span class="math inline">\(l\)</span>. To illustrate how to set up spawning for a particular stock we will use the simple stock templates from above and use those to define parent and offspring stocks:</p>
-<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="defining-stock-interations.html#cb164-1"></a>parent &lt;-<span class="st"> </span></span>
-<span id="cb164-2"><a href="defining-stock-interations.html#cb164-2"></a><span class="st">  </span>stock_template <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb164-3"><a href="defining-stock-interations.html#cb164-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
-<span id="cb164-4"><a href="defining-stock-interations.html#cb164-4"></a>                <span class="dt">stockname =</span> <span class="st">&#39;parent&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb164-5"><a href="defining-stock-interations.html#cb164-5"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesrenew&#39;</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb164-6"><a href="defining-stock-interations.html#cb164-6"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesspawn&#39;</span>,</span>
-<span id="cb164-7"><a href="defining-stock-interations.html#cb164-7"></a>                <span class="dt">spawnsteps =</span> <span class="dv">1</span>, </span>
-<span id="cb164-8"><a href="defining-stock-interations.html#cb164-8"></a>                <span class="dt">spawnareas =</span> <span class="dv">1</span>,</span>
-<span id="cb164-9"><a href="defining-stock-interations.html#cb164-9"></a>                <span class="dt">firstspawnyear =</span> <span class="dv">1</span>,</span>
-<span id="cb164-10"><a href="defining-stock-interations.html#cb164-10"></a>                <span class="dt">lastspawnyear =</span> <span class="dv">30</span>,</span>
-<span id="cb164-11"><a href="defining-stock-interations.html#cb164-11"></a>                <span class="dt">spawnstocksandratios =</span> <span class="kw">list</span>(<span class="dt">stock=</span><span class="st">&#39;offspring&#39;</span>, <span class="dt">ratio =</span> <span class="dv">1</span>),</span>
-<span id="cb164-12"><a href="defining-stock-interations.html#cb164-12"></a>                <span class="dt">proportionfunction =</span> <span class="kw">list</span>(<span class="dt">sel_func =</span> <span class="st">&#39;constant&#39;</span>, <span class="dt">alpha =</span> <span class="dv">1</span>),</span>
-<span id="cb164-13"><a href="defining-stock-interations.html#cb164-13"></a>                <span class="dt">mortalityfunction =</span> <span class="kw">list</span>(<span class="dt">sel_func =</span> <span class="st">&#39;constant&#39;</span>, <span class="dt">alpha =</span> <span class="dv">0</span>),</span>
-<span id="cb164-14"><a href="defining-stock-interations.html#cb164-14"></a>                <span class="dt">weightlossfunction =</span> <span class="kw">list</span>(<span class="dt">sel_func =</span> <span class="st">&#39;constant&#39;</span>, <span class="dt">alpha =</span> <span class="dv">0</span>),</span>
-<span id="cb164-15"><a href="defining-stock-interations.html#cb164-15"></a>                <span class="dt">recruitment =</span> <span class="kw">list</span>(<span class="dt">spawn_function =</span> <span class="st">&#39;ricker&#39;</span>, <span class="dt">mu =</span> <span class="dv">2</span>, <span class="dt">lambda =</span> <span class="fl">1e-4</span>), </span>
-<span id="cb164-16"><a href="defining-stock-interations.html#cb164-16"></a>                <span class="dt">stockparameters =</span> <span class="kw">list</span>(<span class="dt">mean =</span> <span class="dv">1</span>,</span>
-<span id="cb164-17"><a href="defining-stock-interations.html#cb164-17"></a>                                       <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
-<span id="cb164-18"><a href="defining-stock-interations.html#cb164-18"></a>                                       <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
-<span id="cb164-19"><a href="defining-stock-interations.html#cb164-19"></a>                                       <span class="dt">beta =</span> <span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb164-20"><a href="defining-stock-interations.html#cb164-20"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;initialconditions&#39;</span>,</span>
-<span id="cb164-21"><a href="defining-stock-interations.html#cb164-21"></a>                <span class="dt">normalparam =</span> <span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">1</span>,</span>
-<span id="cb164-22"><a href="defining-stock-interations.html#cb164-22"></a>                                     <span class="dt">area =</span> <span class="dv">1</span>,</span>
-<span id="cb164-23"><a href="defining-stock-interations.html#cb164-23"></a>                                     <span class="dt">age.factor =</span> <span class="dv">1</span>,   </span>
-<span id="cb164-24"><a href="defining-stock-interations.html#cb164-24"></a>                                     <span class="dt">area.factor =</span> <span class="fl">.1</span>,</span>
-<span id="cb164-25"><a href="defining-stock-interations.html#cb164-25"></a>                                     <span class="dt">mean =</span> <span class="dv">1</span>,</span>
-<span id="cb164-26"><a href="defining-stock-interations.html#cb164-26"></a>                                     <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
-<span id="cb164-27"><a href="defining-stock-interations.html#cb164-27"></a>                                     <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
-<span id="cb164-28"><a href="defining-stock-interations.html#cb164-28"></a>                                     <span class="dt">beta =</span> <span class="dv">1</span>))</span>
-<span id="cb164-29"><a href="defining-stock-interations.html#cb164-29"></a></span>
-<span id="cb164-30"><a href="defining-stock-interations.html#cb164-30"></a></span>
-<span id="cb164-31"><a href="defining-stock-interations.html#cb164-31"></a>offspring &lt;-<span class="st"> </span></span>
-<span id="cb164-32"><a href="defining-stock-interations.html#cb164-32"></a><span class="st">  </span>stock_template <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb164-33"><a href="defining-stock-interations.html#cb164-33"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
-<span id="cb164-34"><a href="defining-stock-interations.html#cb164-34"></a>                <span class="dt">stockname =</span> <span class="st">&#39;offspring&#39;</span>,</span>
-<span id="cb164-35"><a href="defining-stock-interations.html#cb164-35"></a>                <span class="dt">minage =</span> <span class="dv">0</span>,</span>
-<span id="cb164-36"><a href="defining-stock-interations.html#cb164-36"></a>                <span class="dt">maxage =</span> <span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb164-37"><a href="defining-stock-interations.html#cb164-37"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;initialconditions&#39;</span>,</span>
-<span id="cb164-38"><a href="defining-stock-interations.html#cb164-38"></a>                <span class="dt">normalparam =</span> <span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">0</span>,</span>
-<span id="cb164-39"><a href="defining-stock-interations.html#cb164-39"></a>                                     <span class="dt">area =</span> <span class="dv">1</span>,</span>
-<span id="cb164-40"><a href="defining-stock-interations.html#cb164-40"></a>                                     <span class="dt">age.factor =</span> <span class="dv">0</span>,   </span>
-<span id="cb164-41"><a href="defining-stock-interations.html#cb164-41"></a>                                     <span class="dt">area.factor =</span> <span class="dv">0</span>,</span>
-<span id="cb164-42"><a href="defining-stock-interations.html#cb164-42"></a>                                     <span class="dt">mean =</span> <span class="dv">1</span>,</span>
-<span id="cb164-43"><a href="defining-stock-interations.html#cb164-43"></a>                                     <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
-<span id="cb164-44"><a href="defining-stock-interations.html#cb164-44"></a>                                     <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
-<span id="cb164-45"><a href="defining-stock-interations.html#cb164-45"></a>                                     <span class="dt">beta =</span> <span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb164-46"><a href="defining-stock-interations.html#cb164-46"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesrenew&#39;</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb164-47"><a href="defining-stock-interations.html#cb164-47"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesmove&#39;</span>,</span>
-<span id="cb164-48"><a href="defining-stock-interations.html#cb164-48"></a>                <span class="dt">transitionsteps =</span> <span class="dv">4</span>,</span>
-<span id="cb164-49"><a href="defining-stock-interations.html#cb164-49"></a>                <span class="dt">transitionstocksandratios =</span> <span class="kw">list</span>(<span class="dt">stock=</span><span class="st">&#39;parent&#39;</span>,<span class="dt">ratio=</span><span class="dv">1</span>))</span>
-<span id="cb164-50"><a href="defining-stock-interations.html#cb164-50"></a></span>
-<span id="cb164-51"><a href="defining-stock-interations.html#cb164-51"></a></span>
-<span id="cb164-52"><a href="defining-stock-interations.html#cb164-52"></a>parent <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb164-53"><a href="defining-stock-interations.html#cb164-53"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
-<span id="cb164-54"><a href="defining-stock-interations.html#cb164-54"></a>offspring <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb164-55"><a href="defining-stock-interations.html#cb164-55"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
-<span id="cb164-56"><a href="defining-stock-interations.html#cb164-56"></a></span>
-<span id="cb164-57"><a href="defining-stock-interations.html#cb164-57"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, <span class="dt">gd =</span> gd, <span class="dt">steps =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="defining-stock-interations.html#cb163-1"></a>parent &lt;-<span class="st"> </span></span>
+<span id="cb163-2"><a href="defining-stock-interations.html#cb163-2"></a><span class="st">  </span>stock_template <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb163-3"><a href="defining-stock-interations.html#cb163-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
+<span id="cb163-4"><a href="defining-stock-interations.html#cb163-4"></a>                <span class="dt">stockname =</span> <span class="st">&#39;parent&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb163-5"><a href="defining-stock-interations.html#cb163-5"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesrenew&#39;</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb163-6"><a href="defining-stock-interations.html#cb163-6"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesspawn&#39;</span>,</span>
+<span id="cb163-7"><a href="defining-stock-interations.html#cb163-7"></a>                <span class="dt">spawnsteps =</span> <span class="dv">1</span>, </span>
+<span id="cb163-8"><a href="defining-stock-interations.html#cb163-8"></a>                <span class="dt">spawnareas =</span> <span class="dv">1</span>,</span>
+<span id="cb163-9"><a href="defining-stock-interations.html#cb163-9"></a>                <span class="dt">firstspawnyear =</span> <span class="dv">1</span>,</span>
+<span id="cb163-10"><a href="defining-stock-interations.html#cb163-10"></a>                <span class="dt">lastspawnyear =</span> <span class="dv">30</span>,</span>
+<span id="cb163-11"><a href="defining-stock-interations.html#cb163-11"></a>                <span class="dt">spawnstocksandratios =</span> <span class="kw">list</span>(<span class="dt">stock=</span><span class="st">&#39;offspring&#39;</span>, <span class="dt">ratio =</span> <span class="dv">1</span>),</span>
+<span id="cb163-12"><a href="defining-stock-interations.html#cb163-12"></a>                <span class="dt">proportionfunction =</span> <span class="kw">list</span>(<span class="dt">sel_func =</span> <span class="st">&#39;constant&#39;</span>, <span class="dt">alpha =</span> <span class="dv">1</span>),</span>
+<span id="cb163-13"><a href="defining-stock-interations.html#cb163-13"></a>                <span class="dt">mortalityfunction =</span> <span class="kw">list</span>(<span class="dt">sel_func =</span> <span class="st">&#39;constant&#39;</span>, <span class="dt">alpha =</span> <span class="dv">0</span>),</span>
+<span id="cb163-14"><a href="defining-stock-interations.html#cb163-14"></a>                <span class="dt">weightlossfunction =</span> <span class="kw">list</span>(<span class="dt">sel_func =</span> <span class="st">&#39;constant&#39;</span>, <span class="dt">alpha =</span> <span class="dv">0</span>),</span>
+<span id="cb163-15"><a href="defining-stock-interations.html#cb163-15"></a>                <span class="dt">recruitment =</span> <span class="kw">list</span>(<span class="dt">spawn_function =</span> <span class="st">&#39;ricker&#39;</span>, <span class="dt">mu =</span> <span class="dv">2</span>, <span class="dt">lambda =</span> <span class="fl">1e-4</span>), </span>
+<span id="cb163-16"><a href="defining-stock-interations.html#cb163-16"></a>                <span class="dt">stockparameters =</span> <span class="kw">list</span>(<span class="dt">mean =</span> <span class="dv">1</span>,</span>
+<span id="cb163-17"><a href="defining-stock-interations.html#cb163-17"></a>                                       <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
+<span id="cb163-18"><a href="defining-stock-interations.html#cb163-18"></a>                                       <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
+<span id="cb163-19"><a href="defining-stock-interations.html#cb163-19"></a>                                       <span class="dt">beta =</span> <span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb163-20"><a href="defining-stock-interations.html#cb163-20"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;initialconditions&#39;</span>,</span>
+<span id="cb163-21"><a href="defining-stock-interations.html#cb163-21"></a>                <span class="dt">normalparam =</span> <span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">1</span>,</span>
+<span id="cb163-22"><a href="defining-stock-interations.html#cb163-22"></a>                                     <span class="dt">area =</span> <span class="dv">1</span>,</span>
+<span id="cb163-23"><a href="defining-stock-interations.html#cb163-23"></a>                                     <span class="dt">age.factor =</span> <span class="dv">1</span>,   </span>
+<span id="cb163-24"><a href="defining-stock-interations.html#cb163-24"></a>                                     <span class="dt">area.factor =</span> <span class="fl">.1</span>,</span>
+<span id="cb163-25"><a href="defining-stock-interations.html#cb163-25"></a>                                     <span class="dt">mean =</span> <span class="dv">1</span>,</span>
+<span id="cb163-26"><a href="defining-stock-interations.html#cb163-26"></a>                                     <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
+<span id="cb163-27"><a href="defining-stock-interations.html#cb163-27"></a>                                     <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
+<span id="cb163-28"><a href="defining-stock-interations.html#cb163-28"></a>                                     <span class="dt">beta =</span> <span class="dv">1</span>))</span>
+<span id="cb163-29"><a href="defining-stock-interations.html#cb163-29"></a></span>
+<span id="cb163-30"><a href="defining-stock-interations.html#cb163-30"></a></span>
+<span id="cb163-31"><a href="defining-stock-interations.html#cb163-31"></a>offspring &lt;-<span class="st"> </span></span>
+<span id="cb163-32"><a href="defining-stock-interations.html#cb163-32"></a><span class="st">  </span>stock_template <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb163-33"><a href="defining-stock-interations.html#cb163-33"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
+<span id="cb163-34"><a href="defining-stock-interations.html#cb163-34"></a>                <span class="dt">stockname =</span> <span class="st">&#39;offspring&#39;</span>,</span>
+<span id="cb163-35"><a href="defining-stock-interations.html#cb163-35"></a>                <span class="dt">minage =</span> <span class="dv">0</span>,</span>
+<span id="cb163-36"><a href="defining-stock-interations.html#cb163-36"></a>                <span class="dt">maxage =</span> <span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb163-37"><a href="defining-stock-interations.html#cb163-37"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;initialconditions&#39;</span>,</span>
+<span id="cb163-38"><a href="defining-stock-interations.html#cb163-38"></a>                <span class="dt">normalparam =</span> <span class="kw">tibble</span>(<span class="dt">age =</span> <span class="dv">0</span>,</span>
+<span id="cb163-39"><a href="defining-stock-interations.html#cb163-39"></a>                                     <span class="dt">area =</span> <span class="dv">1</span>,</span>
+<span id="cb163-40"><a href="defining-stock-interations.html#cb163-40"></a>                                     <span class="dt">age.factor =</span> <span class="dv">0</span>,   </span>
+<span id="cb163-41"><a href="defining-stock-interations.html#cb163-41"></a>                                     <span class="dt">area.factor =</span> <span class="dv">0</span>,</span>
+<span id="cb163-42"><a href="defining-stock-interations.html#cb163-42"></a>                                     <span class="dt">mean =</span> <span class="dv">1</span>,</span>
+<span id="cb163-43"><a href="defining-stock-interations.html#cb163-43"></a>                                     <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
+<span id="cb163-44"><a href="defining-stock-interations.html#cb163-44"></a>                                     <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
+<span id="cb163-45"><a href="defining-stock-interations.html#cb163-45"></a>                                     <span class="dt">beta =</span> <span class="dv">1</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb163-46"><a href="defining-stock-interations.html#cb163-46"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesrenew&#39;</span>,<span class="dv">0</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb163-47"><a href="defining-stock-interations.html#cb163-47"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesmove&#39;</span>,</span>
+<span id="cb163-48"><a href="defining-stock-interations.html#cb163-48"></a>                <span class="dt">transitionsteps =</span> <span class="dv">4</span>,</span>
+<span id="cb163-49"><a href="defining-stock-interations.html#cb163-49"></a>                <span class="dt">transitionstocksandratios =</span> <span class="kw">list</span>(<span class="dt">stock=</span><span class="st">&#39;parent&#39;</span>,<span class="dt">ratio=</span><span class="dv">1</span>))</span>
+<span id="cb163-50"><a href="defining-stock-interations.html#cb163-50"></a></span>
+<span id="cb163-51"><a href="defining-stock-interations.html#cb163-51"></a></span>
+<span id="cb163-52"><a href="defining-stock-interations.html#cb163-52"></a>parent <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb163-53"><a href="defining-stock-interations.html#cb163-53"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
+<span id="cb163-54"><a href="defining-stock-interations.html#cb163-54"></a>offspring <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb163-55"><a href="defining-stock-interations.html#cb163-55"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
+<span id="cb163-56"><a href="defining-stock-interations.html#cb163-56"></a></span>
+<span id="cb163-57"><a href="defining-stock-interations.html#cb163-57"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, <span class="dt">gd =</span> gd, <span class="dt">steps =</span> <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Reading input data&quot;
 ## [1] &quot;Running Gadget&quot;
 ## [1] &quot;Reading output files&quot;
 ## [1] &quot;Gathering results&quot;
 ## [1] &quot;Merging input and output&quot;</code></pre>
-<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="defining-stock-interations.html#cb166-1"></a>fit<span class="op">$</span>res.by.year <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb166-2"><a href="defining-stock-interations.html#cb166-2"></a><span class="st">  </span><span class="kw">filter</span>(stock <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;parent&#39;</span>,<span class="st">&#39;offspring&#39;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb166-3"><a href="defining-stock-interations.html#cb166-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(year,total.number,<span class="dt">lty =</span> stock)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
-<span id="cb166-4"><a href="defining-stock-interations.html#cb166-4"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="defining-stock-interations.html#cb165-1"></a>fit<span class="op">$</span>res.by.year <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb165-2"><a href="defining-stock-interations.html#cb165-2"></a><span class="st">  </span><span class="kw">filter</span>(stock <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;parent&#39;</span>,<span class="st">&#39;offspring&#39;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb165-3"><a href="defining-stock-interations.html#cb165-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(year,total.number,<span class="dt">lty =</span> stock)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
+<span id="cb165-4"><a href="defining-stock-interations.html#cb165-4"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>)</span></code></pre></div>
 <p><img src="stock_interactions_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>The code above defines a Ricker recruitment function between the parent and offspring stocks. As evident from the graph above the relationship between the two stocks is a fairly deterministic. This type of relationship, however, is hardly ever observed without error (both in process and observation). To include process variation into the model Gadget has another trick up its sleeve: Time variables.</p>
 <div id="time-variables" class="section level3">
 <h3><span class="header-section-number">5.2.1</span> Time variables</h3>
 <p>Time variables allow Gadget to change the value of parameters with time. They are an extension to the Gadget formulae functionality and can be used (almost) wherever you can use Gadget formulae. To define a time variable you will need to define a data frame with the start time for a particular value, which will be valid until the next change. Example uses might be shifts in fleet selection over time due to changes in regulation and temperature effects on growth. In the case of the simple stock recruitment relationship above we may want change the value for <span class="math inline">\(\mu\)</span> with time. To introduce time variables into this model you will need to create a special file:</p>
-<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="defining-stock-interations.html#cb167-1"></a>mu_time &lt;-<span class="st"> </span></span>
-<span id="cb167-2"><a href="defining-stock-interations.html#cb167-2"></a><span class="st">  </span><span class="kw">gadgetfile</span>(<span class="st">&#39;Modelfiles/mu_time&#39;</span>,</span>
-<span id="cb167-3"><a href="defining-stock-interations.html#cb167-3"></a>             <span class="dt">file_type =</span> <span class="st">&#39;timevariable&#39;</span>,</span>
-<span id="cb167-4"><a href="defining-stock-interations.html#cb167-4"></a>             <span class="dt">components =</span> <span class="kw">list</span>(<span class="kw">list</span>(<span class="st">&#39;mu_time&#39;</span>,</span>
-<span id="cb167-5"><a href="defining-stock-interations.html#cb167-5"></a>                                    <span class="dt">data =</span> schedule <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb167-6"><a href="defining-stock-interations.html#cb167-6"></a><span class="st">                                      </span><span class="kw">filter</span>(step <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb167-7"><a href="defining-stock-interations.html#cb167-7"></a><span class="st">                                      </span><span class="kw">mutate</span>(<span class="dt">value =</span> <span class="dv">2</span><span class="op">*</span><span class="kw">rlnorm</span>(<span class="dt">n =</span> <span class="dv">30</span>, <span class="dt">sdlog =</span> <span class="fl">0.2</span>)))))</span>
-<span id="cb167-8"><a href="defining-stock-interations.html#cb167-8"></a></span>
-<span id="cb167-9"><a href="defining-stock-interations.html#cb167-9"></a>mu_time <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb167-10"><a href="defining-stock-interations.html#cb167-10"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
-<span id="cb167-11"><a href="defining-stock-interations.html#cb167-11"></a></span>
-<span id="cb167-12"><a href="defining-stock-interations.html#cb167-12"></a>mu_time</span></code></pre></div>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="defining-stock-interations.html#cb166-1"></a>mu_time &lt;-<span class="st"> </span></span>
+<span id="cb166-2"><a href="defining-stock-interations.html#cb166-2"></a><span class="st">  </span><span class="kw">gadgetfile</span>(<span class="st">&#39;Modelfiles/mu_time&#39;</span>,</span>
+<span id="cb166-3"><a href="defining-stock-interations.html#cb166-3"></a>             <span class="dt">file_type =</span> <span class="st">&#39;timevariable&#39;</span>,</span>
+<span id="cb166-4"><a href="defining-stock-interations.html#cb166-4"></a>             <span class="dt">components =</span> <span class="kw">list</span>(<span class="kw">list</span>(<span class="st">&#39;mu_time&#39;</span>,</span>
+<span id="cb166-5"><a href="defining-stock-interations.html#cb166-5"></a>                                    <span class="dt">data =</span> schedule <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb166-6"><a href="defining-stock-interations.html#cb166-6"></a><span class="st">                                      </span><span class="kw">filter</span>(step <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb166-7"><a href="defining-stock-interations.html#cb166-7"></a><span class="st">                                      </span><span class="kw">mutate</span>(<span class="dt">value =</span> <span class="dv">2</span><span class="op">*</span><span class="kw">rlnorm</span>(<span class="dt">n =</span> <span class="dv">30</span>, <span class="dt">sdlog =</span> <span class="fl">0.2</span>)))))</span>
+<span id="cb166-8"><a href="defining-stock-interations.html#cb166-8"></a></span>
+<span id="cb166-9"><a href="defining-stock-interations.html#cb166-9"></a>mu_time <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb166-10"><a href="defining-stock-interations.html#cb166-10"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
+<span id="cb166-11"><a href="defining-stock-interations.html#cb166-11"></a></span>
+<span id="cb166-12"><a href="defining-stock-interations.html#cb166-12"></a>mu_time</span></code></pre></div>
 <pre><code>## ; Generated by Rgadget 0.5
 ##  mu_time
 ## data
 ## ; year   step    value
-## 1    1   2.14655548946641
-## 2    1   2.36789231162132
-## 3    1   2.25053452817492
-## 4    1   2.18468394403474
-## 5    1   1.69730550112404
-## 6    1   2.01817786059072
-## 7    1   1.48242442579478
-## 8    1   2.55691484879911
-## 9    1   1.70613147011894
-## 10   1   1.37757562480638
-## 11   1   2.13776429444194
-## 12   1   1.71424633191784
-## 13   1   2.19734916829301
-## 14   1   1.45558157634009
-## 15   1   1.44840732164028
-## 16   1   2.05438738609356
-## 17   1   1.97291240332414
-## 18   1   2.9823555560242
-## 19   1   1.86128317604559
-## 20   1   1.77363085969231
-## 21   1   2.0449698977699
-## 22   1   1.168011005516
-## 23   1   1.80476904963438
-## 24   1   1.92467130557339
-## 25   1   1.83251638034315
-## 26   1   1.9640326784124
-## 27   1   1.82892357982318
-## 28   1   1.73244397696946
-## 29   1   2.06518979652712
-## 30   1   2.24692789792343</code></pre>
+## 1    1   2.3363118753577
+## 2    1   2.71185464182554
+## 3    1   2.35525308405989
+## 4    1   3.32247891224926
+## 5    1   1.74030457726767
+## 6    1   1.49083151272288
+## 7    1   2.55881373139559
+## 8    1   1.98041466499902
+## 9    1   1.76003167778135
+## 10   1   2.23963252580264
+## 11   1   1.86026772870368
+## 12   1   1.92868512420861
+## 13   1   2.43760678461216
+## 14   1   2.37699906915809
+## 15   1   1.89685820396216
+## 16   1   1.74554866628316
+## 17   1   1.74720653438276
+## 18   1   2.01900130481678
+## 19   1   1.77496506753474
+## 20   1   1.46842144798456
+## 21   1   2.09670703175521
+## 22   1   2.59620210373411
+## 23   1   1.42501573880947
+## 24   1   1.76420397382027
+## 25   1   1.51501468399067
+## 26   1   2.54167175871189
+## 27   1   1.90295265044779
+## 28   1   1.83695862870586
+## 29   1   2.30697335099802
+## 30   1   2.25798617192711</code></pre>
 <p>and then we need to replace the value for <span class="math inline">\(\mu\)</span> with this file:</p>
-<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="defining-stock-interations.html#cb169-1"></a>parent &lt;-<span class="st"> </span></span>
-<span id="cb169-2"><a href="defining-stock-interations.html#cb169-2"></a><span class="st">  </span>parent <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb169-3"><a href="defining-stock-interations.html#cb169-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesspawn&#39;</span>,</span>
-<span id="cb169-4"><a href="defining-stock-interations.html#cb169-4"></a>                <span class="dt">spawnsteps =</span> <span class="dv">1</span>, </span>
-<span id="cb169-5"><a href="defining-stock-interations.html#cb169-5"></a>                <span class="dt">spawnareas =</span> <span class="dv">1</span>,</span>
-<span id="cb169-6"><a href="defining-stock-interations.html#cb169-6"></a>                <span class="dt">firstspawnyear =</span> <span class="dv">1</span>,</span>
-<span id="cb169-7"><a href="defining-stock-interations.html#cb169-7"></a>                <span class="dt">lastspawnyear =</span> <span class="dv">30</span>,</span>
-<span id="cb169-8"><a href="defining-stock-interations.html#cb169-8"></a>                <span class="dt">spawnstocksandratios =</span> <span class="kw">list</span>(<span class="dt">stock=</span><span class="st">&#39;offspring&#39;</span>, <span class="dt">ratio =</span> <span class="dv">1</span>),</span>
-<span id="cb169-9"><a href="defining-stock-interations.html#cb169-9"></a>                <span class="dt">proportionfunction =</span> <span class="kw">list</span>(<span class="dt">sel_func =</span> <span class="st">&#39;constant&#39;</span>, <span class="dt">alpha =</span> <span class="dv">1</span>),</span>
-<span id="cb169-10"><a href="defining-stock-interations.html#cb169-10"></a>                <span class="dt">mortalityfunction =</span> <span class="kw">list</span>(<span class="dt">sel_func =</span> <span class="st">&#39;constant&#39;</span>, <span class="dt">alpha =</span> <span class="dv">0</span>),</span>
-<span id="cb169-11"><a href="defining-stock-interations.html#cb169-11"></a>                <span class="dt">weightlossfunction =</span> <span class="kw">list</span>(<span class="dt">sel_func =</span> <span class="st">&#39;constant&#39;</span>, <span class="dt">alpha =</span> <span class="dv">0</span>),</span>
-<span id="cb169-12"><a href="defining-stock-interations.html#cb169-12"></a>                <span class="dt">recruitment =</span> <span class="kw">list</span>(<span class="dt">spawn_function =</span> <span class="st">&#39;ricker&#39;</span>, <span class="dt">mu =</span> <span class="st">&quot;Modelfiles/mu_time&quot;</span>, <span class="dt">lambda =</span> <span class="fl">1e-4</span>), </span>
-<span id="cb169-13"><a href="defining-stock-interations.html#cb169-13"></a>                <span class="dt">stockparameters =</span> <span class="kw">list</span>(<span class="dt">mean =</span> <span class="dv">1</span>,</span>
-<span id="cb169-14"><a href="defining-stock-interations.html#cb169-14"></a>                                       <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
-<span id="cb169-15"><a href="defining-stock-interations.html#cb169-15"></a>                                       <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
-<span id="cb169-16"><a href="defining-stock-interations.html#cb169-16"></a>                                       <span class="dt">beta =</span> <span class="dv">1</span>))</span>
-<span id="cb169-17"><a href="defining-stock-interations.html#cb169-17"></a>parent <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb169-18"><a href="defining-stock-interations.html#cb169-18"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
-<span id="cb169-19"><a href="defining-stock-interations.html#cb169-19"></a></span>
-<span id="cb169-20"><a href="defining-stock-interations.html#cb169-20"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, <span class="dt">gd =</span> gd, <span class="dt">steps =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="defining-stock-interations.html#cb168-1"></a>parent &lt;-<span class="st"> </span></span>
+<span id="cb168-2"><a href="defining-stock-interations.html#cb168-2"></a><span class="st">  </span>parent <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb168-3"><a href="defining-stock-interations.html#cb168-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doesspawn&#39;</span>,</span>
+<span id="cb168-4"><a href="defining-stock-interations.html#cb168-4"></a>                <span class="dt">spawnsteps =</span> <span class="dv">1</span>, </span>
+<span id="cb168-5"><a href="defining-stock-interations.html#cb168-5"></a>                <span class="dt">spawnareas =</span> <span class="dv">1</span>,</span>
+<span id="cb168-6"><a href="defining-stock-interations.html#cb168-6"></a>                <span class="dt">firstspawnyear =</span> <span class="dv">1</span>,</span>
+<span id="cb168-7"><a href="defining-stock-interations.html#cb168-7"></a>                <span class="dt">lastspawnyear =</span> <span class="dv">30</span>,</span>
+<span id="cb168-8"><a href="defining-stock-interations.html#cb168-8"></a>                <span class="dt">spawnstocksandratios =</span> <span class="kw">list</span>(<span class="dt">stock=</span><span class="st">&#39;offspring&#39;</span>, <span class="dt">ratio =</span> <span class="dv">1</span>),</span>
+<span id="cb168-9"><a href="defining-stock-interations.html#cb168-9"></a>                <span class="dt">proportionfunction =</span> <span class="kw">list</span>(<span class="dt">sel_func =</span> <span class="st">&#39;constant&#39;</span>, <span class="dt">alpha =</span> <span class="dv">1</span>),</span>
+<span id="cb168-10"><a href="defining-stock-interations.html#cb168-10"></a>                <span class="dt">mortalityfunction =</span> <span class="kw">list</span>(<span class="dt">sel_func =</span> <span class="st">&#39;constant&#39;</span>, <span class="dt">alpha =</span> <span class="dv">0</span>),</span>
+<span id="cb168-11"><a href="defining-stock-interations.html#cb168-11"></a>                <span class="dt">weightlossfunction =</span> <span class="kw">list</span>(<span class="dt">sel_func =</span> <span class="st">&#39;constant&#39;</span>, <span class="dt">alpha =</span> <span class="dv">0</span>),</span>
+<span id="cb168-12"><a href="defining-stock-interations.html#cb168-12"></a>                <span class="dt">recruitment =</span> <span class="kw">list</span>(<span class="dt">spawn_function =</span> <span class="st">&#39;ricker&#39;</span>, <span class="dt">mu =</span> <span class="st">&quot;Modelfiles/mu_time&quot;</span>, <span class="dt">lambda =</span> <span class="fl">1e-4</span>), </span>
+<span id="cb168-13"><a href="defining-stock-interations.html#cb168-13"></a>                <span class="dt">stockparameters =</span> <span class="kw">list</span>(<span class="dt">mean =</span> <span class="dv">1</span>,</span>
+<span id="cb168-14"><a href="defining-stock-interations.html#cb168-14"></a>                                       <span class="dt">stddev =</span> <span class="fl">.1</span>,</span>
+<span id="cb168-15"><a href="defining-stock-interations.html#cb168-15"></a>                                       <span class="dt">alpha =</span> <span class="dv">1</span>,</span>
+<span id="cb168-16"><a href="defining-stock-interations.html#cb168-16"></a>                                       <span class="dt">beta =</span> <span class="dv">1</span>))</span>
+<span id="cb168-17"><a href="defining-stock-interations.html#cb168-17"></a>parent <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb168-18"><a href="defining-stock-interations.html#cb168-18"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
+<span id="cb168-19"><a href="defining-stock-interations.html#cb168-19"></a></span>
+<span id="cb168-20"><a href="defining-stock-interations.html#cb168-20"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, <span class="dt">gd =</span> gd, <span class="dt">steps =</span> <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Reading input data&quot;
 ## [1] &quot;Running Gadget&quot;
 ## [1] &quot;Reading output files&quot;
 ## [1] &quot;Gathering results&quot;
 ## [1] &quot;Merging input and output&quot;</code></pre>
-<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="defining-stock-interations.html#cb171-1"></a>fit<span class="op">$</span>res.by.year <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb171-2"><a href="defining-stock-interations.html#cb171-2"></a><span class="st">  </span><span class="kw">filter</span>(stock <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;parent&#39;</span>,<span class="st">&#39;offspring&#39;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb171-3"><a href="defining-stock-interations.html#cb171-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(year,total.number,<span class="dt">lty =</span> stock)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
-<span id="cb171-4"><a href="defining-stock-interations.html#cb171-4"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="defining-stock-interations.html#cb170-1"></a>fit<span class="op">$</span>res.by.year <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb170-2"><a href="defining-stock-interations.html#cb170-2"></a><span class="st">  </span><span class="kw">filter</span>(stock <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;parent&#39;</span>,<span class="st">&#39;offspring&#39;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb170-3"><a href="defining-stock-interations.html#cb170-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(year,total.number,<span class="dt">lty =</span> stock)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
+<span id="cb170-4"><a href="defining-stock-interations.html#cb170-4"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>)</span></code></pre></div>
 <p><img src="stock_interactions_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
 </div>
 <div id="exercise-3" class="section level3">
@@ -713,60 +713,60 @@ C_{L,l}&amp;=N_{L}\Psi_{L}\left[\frac{F_{Ll}}{\sum_{l&#39;}F_{Ll&#39;}+OA}\right
 \]</span>
 For each prey an upper limit needs to be set on the total amount consumed by all predators, including the fleets, to prevent more consumption than the available biomass. To prevent this overconsumption when fitting a Gadget model the <code>understocking</code> likelihood component is usually added to the likelihood.</p>
 <p>To illustrate how one can set up a predator prey relationship in Gadget we will take the simple case of one stock, <code>predator</code>, predating another, <code>prey</code>. First we will need to set up the prey stock:</p>
-<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="defining-stock-interations.html#cb172-1"></a>prey &lt;-<span class="st"> </span></span>
-<span id="cb172-2"><a href="defining-stock-interations.html#cb172-2"></a><span class="st">  </span>stock_template <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb172-3"><a href="defining-stock-interations.html#cb172-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
-<span id="cb172-4"><a href="defining-stock-interations.html#cb172-4"></a>                <span class="dt">stockname =</span> <span class="st">&#39;prey&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb172-5"><a href="defining-stock-interations.html#cb172-5"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;iseaten&#39;</span>,</span>
-<span id="cb172-6"><a href="defining-stock-interations.html#cb172-6"></a>                <span class="co">## define how many KJ per gram</span></span>
-<span id="cb172-7"><a href="defining-stock-interations.html#cb172-7"></a>                <span class="dt">energycontent =</span> <span class="dv">1</span>) </span></code></pre></div>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="defining-stock-interations.html#cb171-1"></a>prey &lt;-<span class="st"> </span></span>
+<span id="cb171-2"><a href="defining-stock-interations.html#cb171-2"></a><span class="st">  </span>stock_template <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb171-3"><a href="defining-stock-interations.html#cb171-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
+<span id="cb171-4"><a href="defining-stock-interations.html#cb171-4"></a>                <span class="dt">stockname =</span> <span class="st">&#39;prey&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb171-5"><a href="defining-stock-interations.html#cb171-5"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;iseaten&#39;</span>,</span>
+<span id="cb171-6"><a href="defining-stock-interations.html#cb171-6"></a>                <span class="co">## define how many KJ per gram</span></span>
+<span id="cb171-7"><a href="defining-stock-interations.html#cb171-7"></a>                <span class="dt">energycontent =</span> <span class="dv">1</span>) </span></code></pre></div>
 <p>We also have to define something called “Otherfood”. Otherfood refers to other non-dynamic food items that the predator consumes. It is usually defined in order for the stock to consume something else in the absence of the prey.</p>
-<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="defining-stock-interations.html#cb173-1"></a>otherfood &lt;-<span class="st"> </span></span>
-<span id="cb173-2"><a href="defining-stock-interations.html#cb173-2"></a><span class="st">  </span><span class="kw">gadgetfile</span>(<span class="st">&#39;Modelfiles/otherfood&#39;</span>,</span>
-<span id="cb173-3"><a href="defining-stock-interations.html#cb173-3"></a>             <span class="dt">file_type =</span> <span class="st">&#39;otherfood&#39;</span>,</span>
-<span id="cb173-4"><a href="defining-stock-interations.html#cb173-4"></a>             <span class="dt">components =</span> <span class="kw">list</span>(<span class="dt">component=</span><span class="kw">list</span>(<span class="dt">foodname =</span> <span class="st">&#39;otherfood&#39;</span>,</span>
-<span id="cb173-5"><a href="defining-stock-interations.html#cb173-5"></a>                                              <span class="dt">livesonareas =</span> <span class="dv">1</span>,</span>
-<span id="cb173-6"><a href="defining-stock-interations.html#cb173-6"></a>                                              <span class="dt">lengths =</span> <span class="kw">list</span>(<span class="dt">min =</span> <span class="dv">1</span>, <span class="dt">max =</span> <span class="dv">2</span>),</span>
-<span id="cb173-7"><a href="defining-stock-interations.html#cb173-7"></a>                                              <span class="dt">energycontent =</span> <span class="dv">1</span>,</span>
-<span id="cb173-8"><a href="defining-stock-interations.html#cb173-8"></a>                                              <span class="dt">amount =</span> <span class="kw">gadgetfile</span>(<span class="st">&#39;Data/otherfood&#39;</span>,</span>
-<span id="cb173-9"><a href="defining-stock-interations.html#cb173-9"></a>                                                                  <span class="dt">component =</span> <span class="kw">list</span>(schedule <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb173-10"><a href="defining-stock-interations.html#cb173-10"></a><span class="st">                                                                    </span><span class="kw">mutate</span>(<span class="dt">area =</span> <span class="dv">1</span>, <span class="dt">food_name =</span> <span class="st">&#39;otherfood&#39;</span>,<span class="dt">amount =</span> <span class="fl">1e6</span>))))))</span></code></pre></div>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="defining-stock-interations.html#cb172-1"></a>otherfood &lt;-<span class="st"> </span></span>
+<span id="cb172-2"><a href="defining-stock-interations.html#cb172-2"></a><span class="st">  </span><span class="kw">gadgetfile</span>(<span class="st">&#39;Modelfiles/otherfood&#39;</span>,</span>
+<span id="cb172-3"><a href="defining-stock-interations.html#cb172-3"></a>             <span class="dt">file_type =</span> <span class="st">&#39;otherfood&#39;</span>,</span>
+<span id="cb172-4"><a href="defining-stock-interations.html#cb172-4"></a>             <span class="dt">components =</span> <span class="kw">list</span>(<span class="dt">component=</span><span class="kw">list</span>(<span class="dt">foodname =</span> <span class="st">&#39;otherfood&#39;</span>,</span>
+<span id="cb172-5"><a href="defining-stock-interations.html#cb172-5"></a>                                              <span class="dt">livesonareas =</span> <span class="dv">1</span>,</span>
+<span id="cb172-6"><a href="defining-stock-interations.html#cb172-6"></a>                                              <span class="dt">lengths =</span> <span class="kw">list</span>(<span class="dt">min =</span> <span class="dv">1</span>, <span class="dt">max =</span> <span class="dv">2</span>),</span>
+<span id="cb172-7"><a href="defining-stock-interations.html#cb172-7"></a>                                              <span class="dt">energycontent =</span> <span class="dv">1</span>,</span>
+<span id="cb172-8"><a href="defining-stock-interations.html#cb172-8"></a>                                              <span class="dt">amount =</span> <span class="kw">gadgetfile</span>(<span class="st">&#39;Data/otherfood&#39;</span>,</span>
+<span id="cb172-9"><a href="defining-stock-interations.html#cb172-9"></a>                                                                  <span class="dt">component =</span> <span class="kw">list</span>(schedule <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb172-10"><a href="defining-stock-interations.html#cb172-10"></a><span class="st">                                                                    </span><span class="kw">mutate</span>(<span class="dt">area =</span> <span class="dv">1</span>, <span class="dt">food_name =</span> <span class="st">&#39;otherfood&#39;</span>,<span class="dt">amount =</span> <span class="fl">1e6</span>))))))</span></code></pre></div>
 <p>The predator stock is bit more involved:</p>
-<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="defining-stock-interations.html#cb174-1"></a>predator &lt;-</span>
-<span id="cb174-2"><a href="defining-stock-interations.html#cb174-2"></a><span class="st">  </span>stock_template <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb174-3"><a href="defining-stock-interations.html#cb174-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
-<span id="cb174-4"><a href="defining-stock-interations.html#cb174-4"></a>                <span class="dt">stockname =</span> <span class="st">&#39;predator&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb174-5"><a href="defining-stock-interations.html#cb174-5"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doeseat&#39;</span>,</span>
-<span id="cb174-6"><a href="defining-stock-interations.html#cb174-6"></a>                <span class="dt">suitability =</span> <span class="kw">list</span>(<span class="kw">paste</span>(<span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>,<span class="dt">prey =</span> <span class="st">&#39;prey&#39;</span>,<span class="dt">type=</span><span class="st">&#39;function&#39;</span>,<span class="dt">suit_func =</span> <span class="st">&#39;constant&#39;</span>, <span class="dt">alpha =</span> <span class="dv">1</span>,<span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>),</span>
-<span id="cb174-7"><a href="defining-stock-interations.html#cb174-7"></a>                                   <span class="kw">paste</span>(<span class="dt">prey =</span> <span class="st">&#39;otherfood&#39;</span>,<span class="dt">type=</span><span class="st">&#39;function&#39;</span>,<span class="dt">suit_func =</span> <span class="st">&#39;constant&#39;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>)),</span>
-<span id="cb174-8"><a href="defining-stock-interations.html#cb174-8"></a>                <span class="dt">preference =</span> <span class="kw">paste</span>(<span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>,<span class="st">&#39;prey&#39;</span>,<span class="dv">1</span>,<span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>,<span class="st">&#39;otherfood&#39;</span>, <span class="dv">1</span>),</span>
-<span id="cb174-9"><a href="defining-stock-interations.html#cb174-9"></a>                <span class="dt">maxconsumption =</span> <span class="kw">list</span>(<span class="dt">m0=</span><span class="dv">1</span>,<span class="dt">m1=</span><span class="dv">0</span>,<span class="dt">m2=</span><span class="dv">0</span>,<span class="dt">m3=</span><span class="dv">0</span>),</span>
-<span id="cb174-10"><a href="defining-stock-interations.html#cb174-10"></a>                <span class="dt">halffeedingvalue =</span> <span class="fl">0.2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb173"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb173-1"><a href="defining-stock-interations.html#cb173-1"></a>predator &lt;-</span>
+<span id="cb173-2"><a href="defining-stock-interations.html#cb173-2"></a><span class="st">  </span>stock_template <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb173-3"><a href="defining-stock-interations.html#cb173-3"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;stock&#39;</span>,</span>
+<span id="cb173-4"><a href="defining-stock-interations.html#cb173-4"></a>                <span class="dt">stockname =</span> <span class="st">&#39;predator&#39;</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb173-5"><a href="defining-stock-interations.html#cb173-5"></a><span class="st">  </span><span class="kw">gadget_update</span>(<span class="st">&#39;doeseat&#39;</span>,</span>
+<span id="cb173-6"><a href="defining-stock-interations.html#cb173-6"></a>                <span class="dt">suitability =</span> <span class="kw">list</span>(<span class="kw">paste</span>(<span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>,<span class="dt">prey =</span> <span class="st">&#39;prey&#39;</span>,<span class="dt">type=</span><span class="st">&#39;function&#39;</span>,<span class="dt">suit_func =</span> <span class="st">&#39;constant&#39;</span>, <span class="dt">alpha =</span> <span class="dv">1</span>,<span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>),</span>
+<span id="cb173-7"><a href="defining-stock-interations.html#cb173-7"></a>                                   <span class="kw">paste</span>(<span class="dt">prey =</span> <span class="st">&#39;otherfood&#39;</span>,<span class="dt">type=</span><span class="st">&#39;function&#39;</span>,<span class="dt">suit_func =</span> <span class="st">&#39;constant&#39;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">sep =</span> <span class="st">&#39;</span><span class="ch">\t</span><span class="st">&#39;</span>)),</span>
+<span id="cb173-8"><a href="defining-stock-interations.html#cb173-8"></a>                <span class="dt">preference =</span> <span class="kw">paste</span>(<span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>,<span class="st">&#39;prey&#39;</span>,<span class="dv">1</span>,<span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>,<span class="st">&#39;otherfood&#39;</span>, <span class="dv">1</span>),</span>
+<span id="cb173-9"><a href="defining-stock-interations.html#cb173-9"></a>                <span class="dt">maxconsumption =</span> <span class="kw">list</span>(<span class="dt">m0=</span><span class="dv">1</span>,<span class="dt">m1=</span><span class="dv">0</span>,<span class="dt">m2=</span><span class="dv">0</span>,<span class="dt">m3=</span><span class="dv">0</span>),</span>
+<span id="cb173-10"><a href="defining-stock-interations.html#cb173-10"></a>                <span class="dt">halffeedingvalue =</span> <span class="fl">0.2</span>)</span></code></pre></div>
 <p>Now save this all to file and run Gadget:</p>
-<div class="sourceCode" id="cb175"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb175-1"><a href="defining-stock-interations.html#cb175-1"></a>prey <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb175-2"><a href="defining-stock-interations.html#cb175-2"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
-<span id="cb175-3"><a href="defining-stock-interations.html#cb175-3"></a></span>
-<span id="cb175-4"><a href="defining-stock-interations.html#cb175-4"></a>predator <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb175-5"><a href="defining-stock-interations.html#cb175-5"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
-<span id="cb175-6"><a href="defining-stock-interations.html#cb175-6"></a></span>
-<span id="cb175-7"><a href="defining-stock-interations.html#cb175-7"></a>otherfood <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb175-8"><a href="defining-stock-interations.html#cb175-8"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
-<span id="cb175-9"><a href="defining-stock-interations.html#cb175-9"></a></span>
-<span id="cb175-10"><a href="defining-stock-interations.html#cb175-10"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, <span class="dt">gd =</span> gd, <span class="dt">steps =</span> <span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="defining-stock-interations.html#cb174-1"></a>prey <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb174-2"><a href="defining-stock-interations.html#cb174-2"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
+<span id="cb174-3"><a href="defining-stock-interations.html#cb174-3"></a></span>
+<span id="cb174-4"><a href="defining-stock-interations.html#cb174-4"></a>predator <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb174-5"><a href="defining-stock-interations.html#cb174-5"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
+<span id="cb174-6"><a href="defining-stock-interations.html#cb174-6"></a></span>
+<span id="cb174-7"><a href="defining-stock-interations.html#cb174-7"></a>otherfood <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb174-8"><a href="defining-stock-interations.html#cb174-8"></a><span class="st">  </span><span class="kw">write.gadget.file</span>(gd)</span>
+<span id="cb174-9"><a href="defining-stock-interations.html#cb174-9"></a></span>
+<span id="cb174-10"><a href="defining-stock-interations.html#cb174-10"></a>fit &lt;-<span class="st"> </span><span class="kw">gadget.fit</span>(<span class="dt">wgts =</span> <span class="ot">NULL</span>, <span class="dt">gd =</span> gd, <span class="dt">steps =</span> <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Reading input data&quot;
 ## [1] &quot;Running Gadget&quot;
 ## [1] &quot;Reading output files&quot;
 ## [1] &quot;Gathering results&quot;
 ## [1] &quot;Merging input and output&quot;</code></pre>
-<div class="sourceCode" id="cb177"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb177-1"><a href="defining-stock-interations.html#cb177-1"></a>fit<span class="op">$</span>res.by.year <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb177-2"><a href="defining-stock-interations.html#cb177-2"></a><span class="st">  </span><span class="kw">filter</span>(stock <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;predator&#39;</span>,<span class="st">&#39;prey&#39;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb177-3"><a href="defining-stock-interations.html#cb177-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(year,total.number,<span class="dt">lty =</span> stock)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
-<span id="cb177-4"><a href="defining-stock-interations.html#cb177-4"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>)</span>
-<span id="cb177-5"><a href="defining-stock-interations.html#cb177-5"></a></span>
-<span id="cb177-6"><a href="defining-stock-interations.html#cb177-6"></a>fit<span class="op">$</span>predator.prey <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb177-7"><a href="defining-stock-interations.html#cb177-7"></a><span class="st">  </span><span class="kw">group_by</span>(year) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb177-8"><a href="defining-stock-interations.html#cb177-8"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">num =</span> <span class="kw">sum</span>(number_consumed)) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb177-9"><a href="defining-stock-interations.html#cb177-9"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(year,num)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb176-1"><a href="defining-stock-interations.html#cb176-1"></a>fit<span class="op">$</span>res.by.year <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb176-2"><a href="defining-stock-interations.html#cb176-2"></a><span class="st">  </span><span class="kw">filter</span>(stock <span class="op">%in%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;predator&#39;</span>,<span class="st">&#39;prey&#39;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb176-3"><a href="defining-stock-interations.html#cb176-3"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(year,total.number,<span class="dt">lty =</span> stock)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>() <span class="op">+</span></span>
+<span id="cb176-4"><a href="defining-stock-interations.html#cb176-4"></a><span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y=</span><span class="dv">0</span>)</span>
+<span id="cb176-5"><a href="defining-stock-interations.html#cb176-5"></a></span>
+<span id="cb176-6"><a href="defining-stock-interations.html#cb176-6"></a>fit<span class="op">$</span>predator.prey <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb176-7"><a href="defining-stock-interations.html#cb176-7"></a><span class="st">  </span><span class="kw">group_by</span>(year) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb176-8"><a href="defining-stock-interations.html#cb176-8"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">num =</span> <span class="kw">sum</span>(number_consumed)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb176-9"><a href="defining-stock-interations.html#cb176-9"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(year,num)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_line</span>()</span></code></pre></div>
 <p><img src="stock_interactions_files/figure-html/unnamed-chunk-11-1.png" width="50%" /><img src="stock_interactions_files/figure-html/unnamed-chunk-11-2.png" width="50%" /></p>
 <div id="exercise-4" class="section level3">
 <h3><span class="header-section-number">5.3.1</span> Exercise</h3>

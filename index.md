@@ -37,15 +37,6 @@ so that a more complex ecosystem can be simulated
 
 ## Your a priori homework
 
-**Prior to the course** make sure your operating system is a unix derivative, 
-such as linux or macosx, as the code and examples in this course is only tested 
-against these operating systems. Windows should in theory work, but issues related 
-to Windows line endings are known to cause random issues in Gadget. For those who do 
-not want dual boot their computers they can install [VirtualBox](https://www.virtualbox.org/) 
-and install linux on a virtual machine (you can find a selection of pre-install images 
-[here](https://www.osboxes.org/virtualbox-images/) where it is recommended that you choose Ubuntu). 
-However if you insist on using Windows you should install the `icesTAF` R-package to handle all the file conversion issues.  
-
 To install Gadget follow the [installation guide](installing-gadget-from-source.html). 
 
 Please also have the most recent version of [R](https://cran.r-project.org/) and [Rstudio](https://www.rstudio.com/) installed.

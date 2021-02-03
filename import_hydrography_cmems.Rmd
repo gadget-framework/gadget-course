@@ -13,7 +13,7 @@ Hydrographic products are available from numerous sources. Here, we provide a wo
 
 
 # Download monthly hydrographic data
-CMEMS Baltic Sea Physical Reanalysis product provides a physical reanalysis for the whole Baltic Sea area from January 1993 and up to minus 1-1.5 year compared to real time. The product is produced by using the ice-ocean model NEMO-Nordic (based on NEMO-3.6, Nucleus for European Modelling of the Ocean) together with a LSEIK data assimilation scheme, https://resources.marine.copernicus.eu/?option=com_csw&view=details&product_id=BALTICSEA_REANALYSIS_PHY_003_011. As a demonstration we retrieve one year of already processed monthly means of bottom temperature (bottomT), but hydrographic products are also available for separate depth layers and at higher spatiotemporal resolution, and can be aggregated before import according to the needs. Note that an account ahs to be created to download data from Copernicus Marine Service.
+CMEMS Baltic Sea Physical Reanalysis product provides a physical reanalysis for the whole Baltic Sea area from January 1993 and up to minus 1-1.5 year compared to real time. The product is produced by using the ice-ocean model NEMO-Nordic (based on NEMO-3.6, Nucleus for European Modelling of the Ocean) together with a LSEIK data assimilation scheme, https://resources.marine.copernicus.eu/?option=com_csw&view=details&product_id=BALTICSEA_REANALYSIS_PHY_003_011. As a demonstration we retrieve one year of already processed monthly means of bottom temperature (bottomT), but hydrographic products are also available for separate depth layers and at higher spatiotemporal resolution, and can be aggregated before import according to the needs. Note that an account has to be created to download data from Copernicus Marine Service using the script below.
 
 
 ```{r eval=FALSE}
@@ -43,7 +43,7 @@ CMEMS.download(cfg,
                    ROI = c(17,20,56,58.5),
                    date.range = c(ISOdate(y,01,01), ISOdate(y,12,31)),
                    depth.range= c(10,500), # max depth Baltic 459 m
-                   out.path=paste("CMEMS_BAL_PHY_reanalysis_monthlymeans_",y,".nc",sep=""),
+                   out.path=paste("data_provided/CMEMS_BAL_PHY_reanalysis_monthlymeans_",y,".nc",sep=""),
                debug=FALSE)
 ```
 
@@ -51,8 +51,8 @@ CMEMS.download(cfg,
 
 ```{r eval=FALSE}
 download.file(url="https://gis.ices.dk/shapefiles/ICES_StatRec_mapto_ICES_Areas.zip",
-              destfile = "ices_rect.zip", mode = "wb")
-unzip("ices_rect.zip")
+              destfile = "data_provided/ices_rect.zip", mode = "wb")
+unzip("data_provided/ices_rect.zip")
 ```
 
 
@@ -67,10 +67,10 @@ library(lwgeom)
 library(ggplot2)
 
 # load ICES rect
-ices.rect <- st_read("StatRec_map_Areas_Full_20170124.dbf", quiet = TRUE)
+ices.rect <- st_read("data_provided/StatRec_map_Areas_Full_20170124.dbf", quiet = TRUE)
 
 # load bottom temperature (bottomT)
-rst <- brick(paste("CMEMS_BAL_PHY_reanalysis_monthlymeans_",y,".nc",sep=""), varname="bottomT", lvar=4)
+rst <- brick(paste("data_provided/CMEMS_BAL_PHY_reanalysis_monthlymeans_",y,".nc",sep=""), varname="bottomT", lvar=4)
 
 # calculate mean sob (raster) by ices rect (polygons)
 ov <- raster::extract(rst,ices.rect, fun=mean, na.rm=T, df=T)

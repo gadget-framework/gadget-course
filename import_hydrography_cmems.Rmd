@@ -50,9 +50,10 @@ CMEMS.download(cfg,
 # Download ICES rectangles
 
 ```{r eval=FALSE}
-download.file(url="https://gis.ices.dk/shapefiles/ICES_StatRec_mapto_ICES_Areas.zip",
-              destfile = "data_provided/ices_rect.zip", mode = "wb")
-unzip("data_provided/ices_rect.zip")
+temp <- tempfile()
+download.file(url="https://gis.ices.dk/shapefiles/ICES_StatRec_mapto_ICES_Areas.zip", temp)
+unzip(temp, exdir="data_provided/ices_rect")
+unlink(temp)
 ```
 
 
@@ -67,7 +68,7 @@ library(lwgeom)
 library(ggplot2)
 
 # load ICES rect
-ices.rect <- st_read("data_provided/StatRec_map_Areas_Full_20170124.dbf", quiet = TRUE)
+ices.rect <- st_read("data_provided/ices_rect/StatRec_map_Areas_Full_20170124.dbf", quiet = T)
 
 # load bottom temperature (bottomT)
 rst <- brick(paste("data_provided/CMEMS_BAL_PHY_reanalysis_monthlymeans_",y,".nc",sep=""), varname="bottomT", lvar=4)

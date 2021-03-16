@@ -147,11 +147,9 @@ Before you can upload any measurements, you have to define the areacells that th
 
 ```{R, eval=FALSE}
 mfdb_import_area(mdb, 
-                 data.frame(area = c('101', '102', '103', '401','402', '403'), 
-                            division = c('1', '1', '1', '4', '4', '4')))
+                 data.frame(name = c('101', '102', '103', '401','402', '403'), 
+                            size = c(1,2,3,4,5,6))
 ```
-
-If you want areas to be part of multiple divisions, then you can use `mfdb_import_division()` to import extra revisions.
 
 In the case of the area around Iceland the grid cells are defined from coordinates $(x,y)$ using the following formula:
 
